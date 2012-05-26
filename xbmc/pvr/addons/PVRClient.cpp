@@ -634,7 +634,7 @@ PVR_ERROR CPVRClient::RenameRecording(const CPVRRecording &recording)
   return retVal;
 }
 
-PVR_ERROR CPVRClient::SetRecordingLastWatchedPosition(const CPVRRecording &recording, int lastwatchedposition)
+PVR_ERROR CPVRClient::SetRecordingLastPlayedPosition(const CPVRRecording &recording, int lastplayedposition)
 {
   PVR_ERROR retVal = PVR_ERROR_UNKNOWN;
   if (!m_bReadyToUse)
@@ -648,7 +648,7 @@ PVR_ERROR CPVRClient::SetRecordingLastWatchedPosition(const CPVRRecording &recor
     PVR_RECORDING tag;
     PVRWriteClientRecordingInfo(recording, tag);
 
-    retVal = m_pStruct->SetRecordingLastWatchedPosition(tag, lastwatchedposition);
+    retVal = m_pStruct->SetRecordingLastPlayedPosition(tag, lastplayedposition);
 
     LogError(retVal, __FUNCTION__);
   }
@@ -661,7 +661,7 @@ PVR_ERROR CPVRClient::SetRecordingLastWatchedPosition(const CPVRRecording &recor
   return retVal;
 }
 
-int CPVRClient::GetRecordingLastWatchedPosition(const CPVRRecording &recording)
+int CPVRClient::GetRecordingLastPlayedPosition(const CPVRRecording &recording)
 {
   int iReturn = -1;
   if (!m_bReadyToUse)
@@ -675,11 +675,11 @@ int CPVRClient::GetRecordingLastWatchedPosition(const CPVRRecording &recording)
     PVR_RECORDING tag;
     PVRWriteClientRecordingInfo(recording, tag);
 
-    iReturn = m_pStruct->GetRecordingLastWatchedPosition(tag);
+    iReturn = m_pStruct->GetRecordingLastPlayedPosition(tag);
   }
   catch (exception &e)
   {
-    CLog::Log(LOGERROR, "PVRClient - %s - exception '%s' caught while trying to call GetRecordingLastWatchedPosition() on addon '%s'. please contact the developer of this addon: %s",
+    CLog::Log(LOGERROR, "PVRClient - %s - exception '%s' caught while trying to call GetRecordingLastPlayedPosition() on addon '%s'. please contact the developer of this addon: %s",
         __FUNCTION__, e.what(), GetFriendlyName().c_str(), Author().c_str());
   }
 

@@ -263,14 +263,14 @@ namespace PVR
     * @return PVR_ERROR_NO_ERROR if the position has been stored
     successfully.
     */
-    PVR_ERROR SetRecordingLastWatchedPosition(const CPVRRecording &recording, int lastwatchedposition);
+    PVR_ERROR SetRecordingLastPlayedPosition(const CPVRRecording &recording, int lastplayedposition);
 
     /*!
     * @brief Retrieve the last watched position of a recording on the backend.
     * @param recording The recording.
     * @return The last watched position in seconds or -1 on error
     */
-    int GetRecordingLastWatchedPosition(const CPVRRecording &recording);
+    int GetRecordingLastPlayedPosition(const CPVRRecording &recording);
 
     //@}
     /** @name PVR timer methods */
