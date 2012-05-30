@@ -580,4 +580,7 @@ void DemuxFlush(void) {}
 
 long long SeekLiveStream(long long pos, int whence) { return -1; }
 
+PVR_ERROR SetRecordingLastPlayedPosition(const PVR_RECORDING &recording, int lastplayedposition) { return PVR_ERROR_NOT_IMPLEMENTED; }
+int GetRecordingLastPlayedPosition(const PVR_RECORDING &recording) { return -1; }
+
 } //end extern "C"
