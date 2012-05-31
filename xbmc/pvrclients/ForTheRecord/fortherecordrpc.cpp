@@ -993,6 +993,7 @@ namespace ForTheRecord
     std::string arguments = recordingfilename;
 
     int retval = ForTheRecord::ForTheRecordJSONRPC(command, arguments, response);
+    if (retval == E_EMPTYRESPONSE) retval = 0;
     if (retval < 0)
     {
       XBMC->Log(LOG_DEBUG, "GetRecordingLastWatchedPosition failed. Return value: %i\n", retval);
