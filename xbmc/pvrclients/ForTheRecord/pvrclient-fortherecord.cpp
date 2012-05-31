@@ -751,11 +751,6 @@ PVR_ERROR cPVRClientForTheRecord::GetRecordings(PVR_HANDLE handle)
               std::string emptystring;
               emptystring.clear();
               tag.strStreamURL   = emptystring.c_str();
-//#ifdef _WIN32
-              //tag.strStreamURL   = recording.RecordingFileName();
-//#else
-//              tag.strStreamURL   = recording.CIFSRecordingFileName();
-//#endif
               PVR->TransferRecordingEntry(handle, &tag);
               iNumRecordings++;
             }
@@ -805,6 +800,58 @@ PVR_ERROR cPVRClientForTheRecord::DeleteRecording(const PVR_RECORDING &recinfo)
 PVR_ERROR cPVRClientForTheRecord::RenameRecording(const PVR_RECORDING &recinfo)
 {
   return PVR_ERROR_NO_ERROR;
+}
+
+PVR_ERROR cPVRClientForTheRecord::SetRecordingLastPlayedPosition(const PVR_RECORDING &recinfo, int lastplayedposition)
+{
+  XBMC->Log(LOG_DEBUG, "->SetRecordingLastPlayedPosition(index=%s)", recinfo.strRecordingId);
+  cRecording recording;
+  if (!FetchRecordingDetails(recinfo.strRecordingId, recording))
+  {
+    XBMC->Log(LOG_ERROR, "Unable to fetch recording details for %s", recinfo.strRecordingId);
+    return PVR_ERROR_SERVER_ERROR;
+  }
+
+  // JSONify the stream_url
+  Json::Value recordingname (recording.RecordingFileName());
+  Json::StyledWriter writer;
+  std::string jsonval = writer.write(recordingname);
+  int retval = ForTheRecord::SetRecordingLastWatchedPosition(jsonval, lastplayedposition);
+  if (retval < 0)
+  {
+    XBMC->Log(LOG_INFO, "Failed to set recording last watched position (%d)", retval);
+    return PVR_ERROR_SERVER_ERROR;
+  }
+
+  return PVR_ERROR_NO_ERROR;
+}
+
+int cPVRClientForTheRecord::GetRecordingLastPlayedPosition(const PVR_RECORDING &recinfo)
+{
+  XBMC->Log(LOG_DEBUG, "->GetRecordingLastPlayedPosition(index=%s)", recinfo.strRecordingId);
+  cRecording recording;
+  if (!FetchRecordingDetails(recinfo.strRecordingId, recording))
+  {
+    XBMC->Log(LOG_ERROR, "Unable to fetch recording details for %s", recinfo.strRecordingId);
+    return PVR_ERROR_SERVER_ERROR;
+  }
+
+  // JSONify the stream_url
+  Json::Value response;
+  Json::Value recordingname (recording.RecordingFileName());
+  Json::StyledWriter writer;
+  std::string jsonval = writer.write(recordingname);
+  int retval = ForTheRecord::GetRecordingLastWatchedPosition(jsonval, response);
+  if (retval < 0)
+  {
+    XBMC->Log(LOG_INFO, "Failed to get recording last watched position (%d)", retval);
+    return 0;
+  }
+
+  retval = response.asInt();
+  XBMC->Log(LOG_DEBUG, "GetRecordingLastPlayedPosition(index=%s) returns %d.\n", recinfo.strRecordingId, retval);
+
+  return retval;
 }
 
 
@@ -1477,6 +1524,7 @@ bool cPVRClientForTheRecord::OpenRecordedStream(const PVR_RECORDING &recinfo)
   Json::Value recordingname (recording.RecordingFileName());
   Json::StyledWriter writer;
   std::string jsonval = writer.write(recordingname);
+
   int retval = ForTheRecord::SetRecordingLastWatched(jsonval);
   if (retval < 0)
   {

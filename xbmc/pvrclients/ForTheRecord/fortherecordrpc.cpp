@@ -978,6 +978,44 @@ namespace ForTheRecord
     std::string arguments = recordingfilename;
 
     int retval = ForTheRecord::ForTheRecordRPC(command, arguments, response);
+    if (retval < 0)
+    {
+      XBMC->Log(LOG_DEBUG, "SetRecordingLastWatched failed. Return value: %i\n", retval);
+    }
+    return retval;
+  }
+
+  int GetRecordingLastWatchedPosition(const std::string& recordingfilename, Json::Value& response)
+  {
+    XBMC->Log(LOG_DEBUG, "GetRecordingLastWatchedPosition(\"%s\",...)", recordingfilename.c_str());
+
+    std::string command = "ForTheRecord/Control/RecordingLastWatchedPosition";
+    std::string arguments = recordingfilename;
+
+    int retval = ForTheRecord::ForTheRecordJSONRPC(command, arguments, response);
+    if (retval < 0)
+    {
+      XBMC->Log(LOG_DEBUG, "GetRecordingLastWatchedPosition failed. Return value: %i\n", retval);
+    }
+    return retval;
+  }
+
+  int SetRecordingLastWatchedPosition(const std::string& recordingfilename, int lastwatchedposition)
+  {
+    std::string response;
+    char tmp[512];
+
+    XBMC->Log(LOG_DEBUG, "SetRecordingLastWatchedPosition(\"%s\", %d)", recordingfilename.c_str(), lastwatchedposition);
+
+    snprintf(tmp, 512, "{\"LastWatchedPositionSeconds\":%d, \"RecordingFileName\":%s}", lastwatchedposition, recordingfilename.c_str());
+    std::string arguments = tmp;
+    std::string command = "ForTheRecord/Control/SetRecordingLastWatchedPosition";
+
+    int retval = ForTheRecord::ForTheRecordRPC(command, arguments, response);
+    if (retval < 0)
+    {
+      XBMC->Log(LOG_DEBUG, "SetRecordingLastWatchedPosition failed. Return value: %i\n", retval);
+    }
     return retval;
   }
 

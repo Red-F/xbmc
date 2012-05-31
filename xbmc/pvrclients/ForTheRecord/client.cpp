@@ -460,6 +460,16 @@ PVR_ERROR RenameRecording(const PVR_RECORDING &recording)
   return g_client->RenameRecording(recording);
 }
 
+PVR_ERROR SetRecordingLastPlayedPosition(const PVR_RECORDING &recording, int lastplayedposition)
+{
+  return g_client->SetRecordingLastPlayedPosition(recording, lastplayedposition);
+}
+
+int GetRecordingLastPlayedPosition(const PVR_RECORDING &recording)
+{
+  return g_client->GetRecordingLastPlayedPosition(recording);
+}
+
 
 /*******************************************/
 /** PVR Timer Functions                   **/
@@ -579,13 +589,4 @@ void DemuxReset(void) {}
 void DemuxFlush(void) {}
 
 long long SeekLiveStream(long long pos, int whence) { return -1; }
-
-PVR_ERROR SetRecordingLastPlayedPosition(const PVR_RECORDING &recording, int lastplayedposition)
-{
-  XBMC->Log(LOG_DEBUG, "Saving last watched position as %d seconds.", lastplayedposition);
-  return PVR_ERROR_NOT_IMPLEMENTED;
-}
-
-int GetRecordingLastPlayedPosition(const PVR_RECORDING &recording) { return -1; }
-
 } //end extern "C"

@@ -212,9 +212,24 @@ namespace ForTheRecord
 
   /**
    * \brief Mark this recording as watched
-   * \param recordingpath
+   * \param recordingfilename full UNC path of the recording file
    */
   int SetRecordingLastWatched(const std::string& recordingfilename);
+
+  /**
+   * \brief Get the last watched position for this recording
+   * \param recordingfilename full UNC path of the recording file
+   * \param response Reference to a std::string used to store the json response string
+   * \return last watched position in seconds, -1 on a failure
+   */
+  int GetRecordingLastWatchedPosition(const std::string& recordingfilename, Json::Value& response);
+
+  /**
+   * \brief Save the last watched position for this recording
+   * \param recordingfilename full UNC path of the recording file
+   * \param lastwatchedposition last watched position in seconds
+   */
+  int SetRecordingLastWatchedPosition(const std::string& recordingfilename, int lastwatchedposition);
 
   /**
    * \brief Delete the recording on the pvr backend
