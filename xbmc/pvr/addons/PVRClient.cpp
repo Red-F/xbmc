@@ -650,7 +650,8 @@ PVR_ERROR CPVRClient::SetRecordingLastPlayedPosition(const CPVRRecording &record
 
     retVal = m_pStruct->SetRecordingLastPlayedPosition(tag, lastplayedposition);
 
-    LogError(retVal, __FUNCTION__);
+    if (retVal != PVR_ERROR_NOT_IMPLEMENTED)
+      LogError(retVal, __FUNCTION__);
   }
   catch (exception &e)
   {

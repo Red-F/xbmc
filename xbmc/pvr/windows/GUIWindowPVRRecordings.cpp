@@ -66,15 +66,26 @@ CStdString CGUIWindowPVRRecordings::GetResumeString(CFileItem item)
   CStdString resumeString;
   if (item.IsPVRRecording())
   {
-    CVideoDatabase db;
-    if (db.Open())
+
+    // First try to find the resume position on the back-end, if that fails use video database
+    CPVRRecording recording = *item.GetPVRRecordingInfoTag();
+    int positionInSeconds = g_PVRManager.GetRecordingLastPlayedPosition(recording);
+    if (positionInSeconds < 0)
     {
-      CBookmark bookmark;
-      CStdString itemPath(item.GetPVRRecordingInfoTag()->m_strFileNameAndPath);
-      if (db.GetResumeBookMark(itemPath, bookmark) )
-        resumeString.Format(g_localizeStrings.Get(12022).c_str(), StringUtils::SecondsToTimeString(lrint(bookmark.timeInSeconds)).c_str());
-      db.Close();
+      CVideoDatabase db;
+      if (db.Open())
+      {
+        CBookmark bookmark;
+        CStdString itemPath(item.GetPVRRecordingInfoTag()->m_strFileNameAndPath);
+        if (db.GetResumeBookMark(itemPath, bookmark) )
+          positionInSeconds = lrint(bookmark.timeInSeconds);
+        db.Close();
+      }
     }
+
+    // Suppress resume from 0
+    if (positionInSeconds > 0)
+      resumeString.Format(g_localizeStrings.Get(12022).c_str(), StringUtils::SecondsToTimeString(positionInSeconds).c_str());
   }
   return resumeString;
 }
