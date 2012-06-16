@@ -48,15 +48,19 @@ static bool l_logCurl = false;
  */
 static size_t curl_write_data(void *buffer, size_t size, size_t nmemb, void *stream)
 {
-  //XBMC->Log(LOG_DEBUG, "\nwrite_data size=%i, nmemb=%i\n", size, nmemb, (char*) buffer);
+//  XBMC->Log(LOG_DEBUG, "write_data size=%i, nmemb=%i\n", size, nmemb, (char*) buffer);
 
   // Calculate the real size of the incoming buffer
   size_t realsize = size * nmemb;
+//  XBMC->Log(LOG_DEBUG, "write_data realsize = %d", realsize);
 
   std::string* response = (std::string*) stream;
+//  XBMC->Log(LOG_DEBUG, "stream is cast to response with size %d and maxsize %d", response->size(), response->max_size());
+
   // Dirty... needs some checking
   *response += (char*) buffer;
 
+//  XBMC->Log(LOG_DEBUG, "write_data appended");
   return realsize;
 }
 
@@ -79,6 +83,8 @@ static int my_curl_debug_callback(CURL* curl, curl_infotype infotype, char* data
   char *pch = new char[size +1];
     strncpy(pch, data, size);
     pch[size] = '\0';
+  // XBMC_Log will have a buffer overflow around 16K, stay away from there
+  if (size > (10 * 1024)) pch[10*1024] = '\0';
   switch(infotype)
   {
   case CURLINFO_TEXT:
@@ -857,6 +863,47 @@ namespace ForTheRecord
 
     return E_FAILED;
   }
+
+  int GetAllEPGData(const int backendversion, std::vector<std::string> guidechannel_ids, struct tm epg_start, struct tm epg_end, Json::Value& response)
+  {
+    XBMC->Log(LOG_DEBUG, "GetAllEPGData()");
+    std::string command = "ForTheRecord/Guide/FullChannelsPrograms/false";
+//    char arguments[256];
+    std::string starttime = TimeTToWCFDate(mktime(&epg_start));
+    std::string endtime = TimeTToWCFDate(mktime(&epg_end));
+    std::string channellist;
+    std::vector<std::string>::iterator it;
+
+    for (it = guidechannel_ids.begin(); it < guidechannel_ids.end(); it++ )
+    {
+      if (channellist.empty())
+      {
+        channellist += "[\"" + *it + "\"";
+      }
+      else
+      {
+        channellist += ", \"" + *it + "\"";
+      }
+    }
+    channellist += "]";
+    XBMC->Log(LOG_DEBUG, "Channellist: %s", channellist.c_str());
+
+
+//    snprintf(arguments, 256, "{ \"GuideChannelIds\":[\"%s\"], \"LowerTime\":\"%s\", \"UpperTime\":\"%s\"}",
+//             guidechannel_ids.at(0).c_str(), starttime.c_str(), endtime.c_str());
+    std::string arguments = "{ \"GuideChannelIds\":" + channellist + + ", \"LowerTime\":\"" + starttime + "\", \"UpperTime\":\"" + endtime + "\"}";
+
+    bool f = l_logCurl;
+    l_logCurl = true;
+    int retval = ForTheRecord::ForTheRecordJSONRPC(command, arguments, response);
+    if (retval < 0)
+    {
+      XBMC->Log(LOG_NOTICE, "GetAllEPGData remote call failed.");
+    }
+    l_logCurl = f;
+    return E_FAILED;
+  }
+
 
   int GetRecordingGroupByTitle(Json::Value& response)
   {

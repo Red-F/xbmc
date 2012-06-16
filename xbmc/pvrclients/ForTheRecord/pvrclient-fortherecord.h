@@ -107,6 +107,7 @@ public:
 private:
   cChannel* FetchChannel(int channel_uid, bool LogError = true);
   cChannel* FetchChannel(std::string channelid, bool LogError = true);
+  std::vector<std::string> FetchAllChannels(void);
   void Close();
   bool FetchRecordingDetails(std::string recordingid, cRecording& recording);
   bool FetchGuideProgramDetails(std::string Id, cGuideProgram& guideprogram);

@@ -333,6 +333,7 @@ PVR_ERROR cPVRClientForTheRecord::GetBackendTime(time_t *localTime, int *gmtOffs
 
 PVR_ERROR cPVRClientForTheRecord::GetEpg(PVR_HANDLE handle, const PVR_CHANNEL &channel, time_t iStart, time_t iEnd)
 {
+
   XBMC->Log(LOG_DEBUG, "->RequestEPGForChannel(%i)", channel.iUniqueId);
 
   cChannel* ftrchannel = FetchChannel(channel.iUniqueId);
@@ -341,6 +342,12 @@ PVR_ERROR cPVRClientForTheRecord::GetEpg(PVR_HANDLE handle, const PVR_CHANNEL &c
   struct tm tm_start = *convert;
   convert = localtime(&iEnd);
   struct tm tm_end = *convert;
+
+  XBMC->Log(LOG_DEBUG, "->testing all channel epg");
+
+  Json::Value zz;
+  int z = ForTheRecord::GetAllEPGData(m_iBackendVersion, FetchAllChannels(), tm_start, tm_end, zz);
+
 
   if(ftrchannel)
   {
@@ -1122,6 +1129,19 @@ cChannel* cPVRClientForTheRecord::FetchChannel(std::string channelid, bool LogEr
   
   if (LogError) XBMC->Log(LOG_ERROR, "ForTheRecord channel with GUID \"%s\" not found in the channel cache!.", channelid.c_str());
   return NULL;
+}
+
+std::vector<std::string> cPVRClientForTheRecord::FetchAllChannels(void)
+{
+  std::vector<std::string> rc;
+  // Search for this channel in our local channel list to find the original ChannelID back:
+  vector<cChannel>::iterator it;
+
+  for ( it=m_Channels.begin(); it < m_Channels.end(); it++ )
+  {
+    rc.push_back(it->GuideChannelID());
+  }
+  return rc;
 }
 
 bool cPVRClientForTheRecord::_OpenLiveStream(const PVR_CHANNEL &channelinfo)

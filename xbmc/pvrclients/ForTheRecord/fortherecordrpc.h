@@ -191,6 +191,14 @@ namespace ForTheRecord
   int GetEPGData(const int backendversion, const std::string& guidechannel_id, struct tm epg_start, struct tm epg_end, Json::Value& response);
 
   /**
+   * \brief Fetch the EPG data for all the given guidechannel ids
+   * \param guidechannel_ids Array of Strings containing the 4TR guidechannel_id (not the channel_id)
+   * \param epg_start        Start from this date
+   * \param epg_stop         Until this date
+   */
+  int GetAllEPGData(const int backendversion, std::vector<std::string> guidechannel_ids, struct tm epg_start, struct tm epg_end, Json::Value& response);
+
+  /**
    * \brief Fetch the recording groups sorted by title
    * \param response Reference to a std::string used to store the json response string
    */
