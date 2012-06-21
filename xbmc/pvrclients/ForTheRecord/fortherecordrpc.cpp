@@ -893,15 +893,12 @@ namespace ForTheRecord
 //             guidechannel_ids.at(0).c_str(), starttime.c_str(), endtime.c_str());
     std::string arguments = "{ \"GuideChannelIds\":" + channellist + + ", \"LowerTime\":\"" + starttime + "\", \"UpperTime\":\"" + endtime + "\"}";
 
-    bool f = l_logCurl;
-    l_logCurl = true;
     int retval = ForTheRecord::ForTheRecordJSONRPC(command, arguments, response);
     if (retval < 0)
     {
       XBMC->Log(LOG_NOTICE, "GetAllEPGData remote call failed.");
     }
-    l_logCurl = f;
-    return E_FAILED;
+    return retval;
   }
 
 

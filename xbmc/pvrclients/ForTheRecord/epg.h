@@ -31,6 +31,7 @@ class cEpg
 {
 private:
   std::string m_guideprogramid;
+  std::string m_guidechannelid;
   std::string m_title;
   std::string m_subtitle;
   std::string m_description;
@@ -45,6 +46,7 @@ public:
 
   bool Parse(const Json::Value& data);
   const std::string& UniqueId(void) const { return m_guideprogramid; }
+  const std::string& GuideChannelId(void) const { return m_guidechannelid; }
   time_t StartTime(void) const { return m_starttime; }
   time_t EndTime(void) const { return m_endtime; }
   const char *Title(void) const { return m_title.c_str(); }

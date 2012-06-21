@@ -343,12 +343,91 @@ PVR_ERROR cPVRClientForTheRecord::GetEpg(PVR_HANDLE handle, const PVR_CHANNEL &c
   convert = localtime(&iEnd);
   struct tm tm_end = *convert;
 
-  XBMC->Log(LOG_DEBUG, "->testing all channel epg");
 
-  Json::Value zz;
-  int z = ForTheRecord::GetAllEPGData(m_iBackendVersion, FetchAllChannels(), tm_start, tm_end, zz);
+  static bool runGetAllOnce = true;
+  static Json::Value zz;
+  static int rc = -1;
+  if (runGetAllOnce)
+  {
+    XBMC->Log(LOG_DEBUG, "***** runonce epg *****");
+//    rc = ForTheRecord::GetAllEPGData(m_iBackendVersion, FetchAllChannels(), tm_start, tm_end, zz);
+//    if (rc != E_FAILED && zz.type() == Json::arrayValue)
+//    {
+//      int size = zz.size();
+//      XBMC->Log(LOG_DEBUG, "GetAllEPGData returned %i entries.", size);
+//      for (int index = 0; index < size; index++)
+//      {
+//        cEpg epg;
+//        if (epg.Parse(zz[index]))
+//        {
+//          XBMC->Log(LOG_DEBUG, "  Channel %s - title \"%s\", sub-title \"%s\".", epg.GuideChannelId().c_str(), epg.Title(), epg.Subtitle());
+//        }
+//        else
+//        {
+//          XBMC->Log(LOG_DEBUG, "  could not parse all epg entry %d.", index);
+//        }
+//      }
+//    }
+//    else rc = E_FAILED;
 
+    runGetAllOnce = false;
+  }
 
+#if FALSE
+  XBMC->Log(LOG_DEBUG, "->testing all channel epg, returning %s.", ftrchannel->GuideChannelID().c_str());
+
+  if(ftrchannel)
+  {
+    if (rc != E_FAILED)
+    {
+      int size = zz.size();
+      EPG_TAG broadcast;
+      cEpg epg;
+
+      memset(&broadcast, 0, sizeof(EPG_TAG));
+
+      // parse channel list
+      for ( int index =0; index < size; ++index )
+      {
+        if (epg.Parse(zz[index]) && epg.GuideChannelId() == ftrchannel->GuideChannelID())
+        {
+          m_epg_id_offset++;
+          broadcast.iUniqueBroadcastId  = m_epg_id_offset;
+          broadcast.strTitle            = epg.Title();
+          broadcast.iChannelNumber      = channel.iChannelNumber;
+          broadcast.startTime           = epg.StartTime();
+          broadcast.endTime             = epg.EndTime();
+          broadcast.strPlotOutline      = epg.Subtitle();
+          broadcast.strPlot             = epg.Description();
+          broadcast.strIconPath         = "";
+          broadcast.iGenreType          = 0;
+          broadcast.iGenreSubType       = 0;
+          broadcast.strGenreDescription = "";
+          broadcast.firstAired          = 0;
+          broadcast.iParentalRating     = 0;
+          broadcast.iStarRating         = 0;
+          broadcast.bNotify             = false;
+          broadcast.iSeriesNumber       = 0;
+          broadcast.iEpisodeNumber      = 0;
+          broadcast.iEpisodePartNumber  = 0;
+          broadcast.strEpisodeName      = "";
+
+          PVR->TransferEpgEntry(handle, &broadcast);
+        }
+        epg.Reset();
+      }
+    }
+    else
+    {
+      XBMC->Log(LOG_ERROR, "GetEPGData failed for channel id:%i", channel.iUniqueId);
+    }
+  }
+  else
+  {
+    XBMC->Log(LOG_ERROR, "Channel (%i) did not return a channel class.", channel.iUniqueId);
+    XBMC->QueueNotification(QUEUE_ERROR, "GUID to XBMC Channel");
+  }
+#else
   if(ftrchannel)
   {
     Json::Value response;
@@ -409,7 +488,7 @@ PVR_ERROR cPVRClientForTheRecord::GetEpg(PVR_HANDLE handle, const PVR_CHANNEL &c
     XBMC->Log(LOG_ERROR, "Channel (%i) did not return a channel class.", channel.iUniqueId);
     XBMC->QueueNotification(QUEUE_ERROR, "GUID to XBMC Channel");
   }
-
+#endif
   return PVR_ERROR_NO_ERROR;
 }
 
