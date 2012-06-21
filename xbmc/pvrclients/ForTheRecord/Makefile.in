@@ -45,7 +45,7 @@ SRCS   = utils.cpp \
 include ../Makefile.include
 
 INCLUDES += -Ilib/jsoncpp/include/
-INCLUDES += -I@abs_top_srcdir@/xbmc/filesystem
+INCLUDES += -Ilib/filesystem/
 
 CXXFLAGS += -DTSREADER
 ifeq ($(findstring osx,@ARCH@),osx)

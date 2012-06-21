@@ -37,7 +37,7 @@
 #if defined(TARGET_WINDOWS)
 #else
 #include "PlatformInclude.h"
-using namespace XFILE;
+using namespace PLATFORM;
 #endif
 
 using namespace ADDON;
@@ -187,7 +187,9 @@ long FileReader::OpenFile()
 #if defined(TARGET_WINDOWS)
   XBMC->Log(LOG_DEBUG, "FileReader::OpenFile() %s handle %i %s", m_bReadOnly ? "read-only" : "read/write", m_hFile, m_pFileName );
 #elif defined(TARGET_LINUX) || defined(TARGET_OSX)
-  XBMC->Log(LOG_DEBUG, "FileReader::OpenFile() %s handle %p %s", m_bReadOnly ? "read-only" : "read/write", m_hFile.GetImplemenation(), m_pFileName );
+  // TODO: is there a possibility to retrieve the handle?
+//  XBMC->Log(LOG_DEBUG, "FileReader::OpenFile() %s handle %p %s", m_bReadOnly ? "read-only" : "read/write", m_hFile.GetImplemenation(), m_pFileName );
+  XBMC->Log(LOG_DEBUG, "FileReader::OpenFile() %s %s", m_bReadOnly ? "read-only" : "read/write", m_pFileName );
 #else
 #error FIXME: Add an debug log implementation for your OS
 #endif
@@ -234,7 +236,7 @@ bool FileReader::IsFileInvalid()
 #if defined(TARGET_WINDOWS)
   return (m_hFile == INVALID_HANDLE_VALUE);
 #elif defined(TARGET_LINUX) || defined(TARGET_OSX)
-  return (m_hFile.GetImplemenation() == NULL);
+  return (m_hFile.IsInvalid());
 #else
 #error FIXME: Add an IsFileInvalid implementation for your OS
 #endif
@@ -362,18 +364,7 @@ int64_t FileReader::GetFileSize()
     m_fileSize = li.QuadPart;
   }
 #elif defined(TARGET_LINUX) || defined(TARGET_OSX)
-  if (m_bReadOnly || !m_fileSize)
-  {
-    struct stat64 filestatus;
-
-    if(m_hFile.Stat(&filestatus) < 0)
-    {
-      XBMC->Log(LOG_ERROR, "%s: fstat64(File) failed. Error %d: %s", __FUNCTION__, errno, strerror(errno));
-      return E_FAIL;
-    }
-
-    m_fileSize = filestatus.st_size;
-  }
+  m_fileSize = m_hFile.GetLength();
 #else
 #error FIXME: Add a GetFileSize() implementation for your OS
 #endif
