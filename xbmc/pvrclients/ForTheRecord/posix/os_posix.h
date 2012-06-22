@@ -21,6 +21,8 @@
 #ifndef PVRCLIENT_FORTHERECORD_OS_POSIX_H
 #define PVRCLIENT_FORTHERECORD_OS_POSIX_H
 
+#include <sys/stat.h>
+
 #define _FILE_OFFSET_BITS 64
 
 // Success codes

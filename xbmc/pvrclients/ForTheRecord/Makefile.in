@@ -5,7 +5,7 @@
 # how to reach the author.
 #
 
-LIBS   = -ldl -lpthread -lcurl
+LIBS   = -ldl -lpthread -lcurl -lsmbclient
 LIBDIR = @abs_top_srcdir@/addons/pvr.fortherecord.argus
 ifeq ($(findstring osx,@ARCH@),osx)
 # until we get an additional extension point in addon.xml we can't create
@@ -37,6 +37,8 @@ SRCS   = utils.cpp \
         lib/tsreader/FileReader.cpp \
         lib/tsreader/MultiFileReader.cpp \
         lib/tsreader/TSReader.cpp \
+        lib/filesystem/FileSMB.cpp \
+        lib/filesystem/DirectorySMB.cpp \
         KeepAliveThread.cpp \
         fortherecordrpc.cpp \
         pvrclient-fortherecord.cpp \
