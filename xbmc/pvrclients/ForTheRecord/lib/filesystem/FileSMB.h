@@ -22,6 +22,7 @@
 #include "platform/threads/mutex.h"
 #include "os-dependent.h"
 #include "platform/util/StdString.h"
+#include "PlatformInclude.h"
 
 
 struct _SMBCCTX;
