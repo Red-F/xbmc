@@ -866,7 +866,7 @@ inline const Type& SSMAX(const Type& arg1, const Type& arg2)
       SSCodeCvt::result res  = SSCodeCvt::ok;
       const SSCodeCvt& conv  = SS_USE_FACET(loc, SSCodeCvt);
       SSCodeCvt::state_type st;
-      memset(&st, sizeof(st), 0);
+      memset(&st, 0, sizeof(st));
       res            = conv.in(st,
                     pSrcA, pSrcA + nSrc, pNextSrcA,
                     pDstW, pDstW + nDst, pNextDstW);
@@ -910,7 +910,7 @@ inline const Type& SSMAX(const Type& arg1, const Type& arg2)
       SSCodeCvt::result res  = SSCodeCvt::ok;
       const SSCodeCvt& conv  = SS_USE_FACET(loc, SSCodeCvt);
       SSCodeCvt::state_type st;
-      memset(&st, sizeof(st), 0);
+      memset(&st, 0, sizeof(st));
       res            = conv.out(st,
                     pSrcW, pSrcW + nSrc, pNextSrcW,
                     pDstA, pDstA + nDst, pNextDstA);
