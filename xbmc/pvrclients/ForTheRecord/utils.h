@@ -19,7 +19,7 @@
 
 #include <string>
 #include <json/json.h>
-#include "platform/util/StdString.h"
+#include "utils/StdString.h"
 
 namespace Json
 {

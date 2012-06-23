@@ -21,7 +21,7 @@
 #include <iostream>
 #include "platform/threads/mutex.h"
 #include "os-dependent.h"
-#include "platform/util/StdString.h"
+#include "utils/StdString.h"
 #include "PlatformInclude.h"
 
 
