@@ -34,6 +34,6 @@ public:
   int Open(const CStdString &url);
 
 private:
-  int OpenDir(const CStdString &url, CStdString& strAuth);
+  int OpenDir(const CStdString &url);
 };
 }

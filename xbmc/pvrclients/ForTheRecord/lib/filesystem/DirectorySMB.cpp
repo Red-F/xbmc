@@ -43,12 +43,6 @@
 #define XBMC_SMB_MOUNT_PATH "/media/xbmc/smb/"
 #endif
 
-struct CachedDirEntry
-{
-  unsigned int type;
-  CStdString name;
-};
-
 using namespace std;
 using namespace ADDON;
 
@@ -73,26 +67,19 @@ int CSMBDirectory::Open(const CStdString &url)
 {
   smb.Init();
   CStdString strAuth;
-  return OpenDir(url, strAuth);
+  return OpenDir(url);
 }
 
-/// \brief Checks authentication against SAMBA share and prompts for username and password if needed
-/// \param strAuth The SMB style path
+/// \brief Checks authentication against SAMBA share
+/// \param url The SMB style path
 /// \return SMB file descriptor
-int CSMBDirectory::OpenDir(const CStdString& url, CStdString& strAuth)
+int CSMBDirectory::OpenDir(const CStdString& url)
 {
   int fd = -1;
 
-  /* make a writeable copy */
-  CStdString urlIn(url);
-
-//  CPasswordManager::GetInstance().AuthenticateURL(urlIn);
-//  strAuth = smb.URLEncode(urlIn);
-  strAuth = url;
-
   // remove the / or \ at the end. the samba library does not strip them off
   // don't do this for smb:// !!
-  CStdString s = strAuth;
+  CStdString s = url;
   int len = s.length();
   if (len > 1 && s.at(len - 2) != '/' &&
       (s.at(len - 1) == '/' || s.at(len - 1) == '\\'))
@@ -107,13 +94,13 @@ int CSMBDirectory::OpenDir(const CStdString& url, CStdString& strAuth)
 
   if (fd < 0)
   {
-      XBMC->Log(LOG_ERROR, "%s: Directory open on %s failed (%d, \"%s\")\n", __FUNCTION__, strAuth.c_str(), errno, strerror(errno));
+      XBMC->Log(LOG_ERROR, "%s: Directory open on %s failed (%d, \"%s\")\n", __FUNCTION__, url.c_str(), errno, strerror(errno));
   }
 
   if (fd < 0)
   {
     // write error to logfile
-    XBMC->Log(LOG_ERROR, "SMBDirectory->GetDirectory: Unable to open directory : '%s'\nunix_err:'%x' error : '%s'", strAuth.c_str(), errno, strerror(errno));
+    XBMC->Log(LOG_ERROR, "SMBDirectory->GetDirectory: Unable to open directory : '%s'\nunix_err:'%x' error : '%s'", url.c_str(), errno, strerror(errno));
   }
 
   return fd;
