@@ -348,10 +348,10 @@ CUPnPServer::Announce(AnnouncementFlag flag, const char *sender, const char *mes
         return;
 
     if (data.isNull()) {
-        if (!strcmp(message, "OnScanStarted")) {
+        if (!strcmp(message, "OnScanStarted") || !strcmp(message, "OnCleanStarted")) {
             m_scanning = true;
         }
-        else if (!strcmp(message, "OnScanFinished")) {
+        else if (!strcmp(message, "OnScanFinished") || !strcmp(message, "OnCleanFinished")) {
             OnScanCompleted(flag);
         }
     }
@@ -536,7 +536,15 @@ CUPnPServer::OnBrowseDirectChildren(PLT_ActionReference&          action,
     CLog::Log(LOGINFO, "UPnP: Received Browse DirectChildren request for object '%s', with sort criteria %s", object_id, sort_criteria);
 
     items.SetPath(CStdString(parent_id));
-    if (!items.Load()) {
+
+    // guard against loading while saving to the same cache file
+    // as CArchive currently performs no locking itself
+    bool load;
+    { NPT_AutoLock lock(m_CacheMutex);
+      load = items.Load();
+    }
+
+    if (!load) {
         // cache anything that takes more than a second to retrieve
         unsigned int time = XbmcThreads::SystemClockMillis();
 
@@ -562,6 +570,7 @@ CUPnPServer::OnBrowseDirectChildren(PLT_ActionReference&          action,
         }
 
         if (items.CacheToDiscAlways() || (items.CacheToDiscIfSlow() && (XbmcThreads::SystemClockMillis() - time) > 1000 )) {
+            NPT_AutoLock lock(m_CacheMutex);
             items.Save();
         }
     }
@@ -604,7 +613,7 @@ CUPnPServer::BuildResponse(PLT_ActionReference&          action,
     // we will reuse this ThumbLoader for all items
     NPT_Reference<CThumbLoader> thumb_loader;
 
-    if (URIUtils::IsVideoDb(items.GetPath())) {
+    if (URIUtils::IsVideoDb(items.GetPath()) || items.GetPath().Left(15) == "library://video") {
         thumb_loader = NPT_Reference<CThumbLoader>(new CVideoThumbLoader());
     }
     else if (URIUtils::IsMusicDb(items.GetPath())) {

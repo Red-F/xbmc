@@ -177,6 +177,8 @@ namespace XBMCAddon
         else if (value == "top")
           item->SetSpecialSort(SortSpecialOnTop);
       }
+      else if (lowerKey.CompareNoCase("fanart_image") == 0)
+        item->SetArt("fanart", value);
       else
         item->SetProperty(lowerKey.ToLower(), value.c_str());
     }
@@ -195,6 +197,8 @@ namespace XBMCAddon
         value.Format("%f", item->GetVideoInfoTag()->m_resumePoint.totalTimeInSeconds);
       else if (lowerKey.CompareNoCase("resumetime") == 0)
         value.Format("%f", item->GetVideoInfoTag()->m_resumePoint.timeInSeconds);
+      else if (lowerKey.CompareNoCase("fanart_image") == 0)
+        value = item->GetArt("fanart");
       else
         value = item->GetProperty(lowerKey.ToLower()).asString();
 
@@ -433,6 +437,7 @@ namespace XBMCAddon
       }
       else if (strcmpi(type,"pictures") == 0)
       {
+        bool pictureTagLoaded = false;
         for (Dictionary::const_iterator it = infoLabels.begin(); it != infoLabels.end(); it++)
         {
           CStdString key = it->first;
@@ -458,12 +463,11 @@ namespace XBMCAddon
             if (!exifkey.Left(5).Equals("exif:") || exifkey.length() < 6) continue;
             int info = CPictureInfoTag::TranslateString(exifkey.Mid(5));
             item->GetPictureInfoTag()->SetInfo(info, value);
+            pictureTagLoaded = true;
           }
-
-          // This should probably be set outside of the loop but since the original
-          //  implementation set it inside of the loop, I'll leave it that way. - Jim C.
-          item->GetPictureInfoTag()->SetLoaded(true);
         }
+        if (pictureTagLoaded)
+          item->GetPictureInfoTag()->SetLoaded(true);
       }
     } // end ListItem::setInfo
 

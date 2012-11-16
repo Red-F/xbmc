@@ -2933,11 +2933,20 @@
     <ClCompile Include="..\..\xbmc\test\TestFileItem.cpp">
       <Filter>test</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\xbmc\test\TestTextureCache.cpp">
+      <Filter>test</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\xbmc\interfaces\json-rpc\PVROperations.cpp">
       <Filter>interfaces\json-rpc</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\filesystem\HTTPFile.cpp">
       <Filter>filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\utils\GroupUtils.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\cores\AudioEngine\Utils\AELimiter.cpp">
+      <Filter>cores\AudioEngine\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5745,6 +5754,12 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\filesystem\HTTPFile.h">
       <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\GroupUtils.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\cores\AudioEngine\Utils\AELimiter.h">
+      <Filter>cores\AudioEngine\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
