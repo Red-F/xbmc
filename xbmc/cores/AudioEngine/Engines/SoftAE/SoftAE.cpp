@@ -524,7 +524,7 @@ void CSoftAE::OnSettingsChange(const std::string& setting)
       setting == "audiooutput.passthroughaac"    ||
       setting == "audiooutput.truehdpassthrough" ||
       setting == "audiooutput.dtshdpassthrough"  ||
-      setting == "audiooutput.channellayout"     ||
+      setting == "audiooutput.channels"     ||
       setting == "audiooutput.useexclusivemode"  ||
       setting == "audiooutput.multichannellpcm"  ||
       setting == "audiooutput.stereoupmix")
@@ -553,7 +553,7 @@ void CSoftAE::LoadSettings()
 
   /* load the configuration */
   m_stdChLayout = AE_CH_LAYOUT_2_0;
-  switch (g_guiSettings.GetInt("audiooutput.channellayout"))
+  switch (g_guiSettings.GetInt("audiooutput.channels"))
   {
     default:
     case  0: m_stdChLayout = AE_CH_LAYOUT_2_0; break; /* dont alow 1_0 output */
@@ -1041,7 +1041,7 @@ void CSoftAE::Run()
         delete m_sink;
         m_sink = NULL;
       }
-      if (!m_playingStreams.empty() || !m_playing_sounds.empty() || m_sounds.empty())
+      if (!m_playingStreams.empty() || !m_playing_sounds.empty() || !m_sounds.empty())
         m_softSuspend = false;
       m_wake.WaitMSec(SOFTAE_IDLE_WAIT_MSEC);
     }
