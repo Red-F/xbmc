@@ -115,7 +115,17 @@ namespace VIDEO
          * occurs.
          */
         CStdString directory = *m_pathsToScan.begin();
-        if (!DoScan(directory))
+        if (!CDirectory::Exists(directory))
+        {
+          /*
+           * Note that this will skip clean (if m_bClean is enabled) if the directory really
+           * doesn't exist rather than a NAS being switched off.  A manual clean from settings
+           * will still pick up and remove it though.
+           */
+          CLog::Log(LOGWARNING, "%s directory '%s' does not exist - skipping scan%s.", __FUNCTION__, directory.c_str(), m_bClean ? " and clean" : "");
+          m_pathsToScan.erase(m_pathsToScan.begin());
+        }
+        else if (!DoScan(directory))
           bCancelled = true;
       }
 
@@ -249,8 +259,8 @@ namespace VIDEO
     {
       if (m_handle)
       {
-        int str = content == CONTENT_MOVIES ? 20374:20408;
-        m_handle->SetTitle(g_localizeStrings.Get(str));
+        int str = content == CONTENT_MOVIES ? 20317:20318;
+        m_handle->SetTitle(StringUtils::Format(g_localizeStrings.Get(str), info->Name().c_str()));
       }
 
       CStdString fastHash = GetFastHash(strDirectory);
@@ -294,7 +304,7 @@ namespace VIDEO
     else if (content == CONTENT_TVSHOWS)
     {
       if (m_handle)
-        m_handle->SetTitle(g_localizeStrings.Get(20409));
+        m_handle->SetTitle(StringUtils::Format(g_localizeStrings.Get(20319), info->Name().c_str()));
 
       if (foundDirectly && !settings.parent_name_root)
       {

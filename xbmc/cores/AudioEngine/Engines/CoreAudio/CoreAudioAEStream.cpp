@@ -406,8 +406,6 @@ unsigned int CCoreAudioAEStream::AddData(void *data, unsigned int size)
   // upmix the ouput to output channels
   if ( (!m_isRaw || m_rawDataFormat == AE_FMT_LPCM) && (m_chLayoutCountOutput > channelsInBuffer) )
   {
-    frames = addsize / m_StreamFormat.m_frameSize;
-
     CheckOutputBufferSize((void **)&m_upmixBuffer, &m_upmixBufferSize, frames * m_chLayoutCountOutput  * sizeof(float));
     Upmix(adddata, channelsInBuffer, m_upmixBuffer, m_chLayoutCountOutput, frames, m_OutputFormat.m_dataFormat);
     adddata = m_upmixBuffer;
@@ -535,7 +533,7 @@ unsigned int CCoreAudioAEStream::GetSpace()
   if (!m_valid || m_draining)
     return 0;
 
-  return m_Buffer->GetWriteSize();
+  return m_Buffer->GetWriteSize() / m_OutputBytesPerSample  * m_StreamBytesPerSample;
 }
 
 double CCoreAudioAEStream::GetDelay()

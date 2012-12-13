@@ -42,6 +42,7 @@
 
 #include "XBPyThread.h"
 #include "XBPython.h"
+#include "LanguageHook.h"
 
 #include "interfaces/legacy/Exception.h"
 #include "interfaces/legacy/CallbackHandler.h"
@@ -51,7 +52,7 @@
 #include "interfaces/python/pythreadstate.h"
 #include "interfaces/python/swig.h"
 #include "utils/CharsetConverter.h"
-
+#include "PyContext.h"
 
 #ifdef _WIN32
 extern "C" FILE *fopen_utf8(const char *_Filename, const char *_Mode);
@@ -102,7 +103,11 @@ XBPyThread::~XBPyThread()
 void XBPyThread::setSource(const CStdString &src)
 {
 #ifdef TARGET_WINDOWS
-  CStdString strsrc = src;
+  CStdString strsrc;
+  if (m_type == 'F')
+    strsrc = CSpecialProtocol::TranslatePath(src);
+  else
+    strsrc = src;
   g_charsetConverter.utf8ToSystem(strsrc);
   m_source  = new char[strsrc.GetLength()+1];
   strcpy(m_source, strsrc);
@@ -157,6 +162,9 @@ void XBPyThread::Process()
   }
   // swap in my thread state
   PyThreadState_Swap(state);
+
+  XBMCAddon::AddonClass::Ref<XBMCAddon::Python::LanguageHook> languageHook(new XBMCAddon::Python::LanguageHook(state->interp));
+  languageHook->RegisterMe();
 
   m_pExecuter->InitializeInterpreter(addon);
 
@@ -266,6 +274,7 @@ void XBPyThread::Process()
           CLog::Log(LOGDEBUG,"Instantiating addon using automatically obtained id of \"%s\" dependent on version %s of the xbmc.python api",addon->ID().c_str(),version.c_str());
         }
         Py_DECREF(f);
+        XBMCAddon::Python::PyContext pycontext; // this is a guard class that marks this callstack as being in a python context
         PyRun_FileExFlags(fp, CSpecialProtocol::TranslatePath(m_source).c_str(), m_Py_file_input, moduleDict, moduleDict,1,NULL);
       }
       else
@@ -368,8 +377,56 @@ void XBPyThread::Process()
   m_pExecuter->DeInitializeInterpreter();
 
   Py_EndInterpreter(state);
-  PyThreadState_Swap(NULL);
 
+  // This is a total hack. Python doesn't necessarily release
+  // all of the objects associated with the interpreter when
+  // you end the interpreter. As a result there are objects 
+  // managed by the windowing system that still receive events
+  // until python decides to clean them up. Python will eventually
+  // clean them up on the creation or ending of a subsequent
+  // interpreter. So we are going to keep creating and ending
+  // interpreters until we have no more python objects hanging
+  // around.
+  int countLimit;
+  for (countLimit = 0; languageHook->HasRegisteredAddonClasses() && countLimit < 10; countLimit++)
+  {
+    PyThreadState* tmpstate = Py_NewInterpreter();
+    Py_EndInterpreter(tmpstate);
+  }
+
+  // If necessary and successfull, debug log the results.
+  if (countLimit > 0 && !languageHook->HasRegisteredAddonClasses())
+    CLog::Log(LOGDEBUG,"It took %d Py_NewInterpreter/Py_EndInterpreter calls"
+              " to clean up the classes leftover from running \"%s.\"",
+              countLimit,m_source);
+
+  // If not successful, produce an error message detailing what's been left behind
+  if (languageHook->HasRegisteredAddonClasses())
+  {
+    CStdString message;
+    message.Format("The python script \"%s\" has left several "
+                   "classes in memory that should have been cleaned up. The classes include: ",
+                   m_source);
+
+    { XBMCAddon::AddonClass::Synchronize l(*(languageHook.get()));
+      std::set<XBMCAddon::AddonClass*>& acs = languageHook->GetRegisteredAddonClasses();
+      bool firstTime = true;
+      for (std::set<XBMCAddon::AddonClass*>::iterator iter = acs.begin();
+           iter != acs.end(); iter++)
+      {
+        if (!firstTime) message += ",";
+        else firstTime = false;
+        message += (*iter)->GetClassname().c_str();
+      }
+    }
+    
+    CLog::Log(LOGERROR, "%s", message.c_str());
+  }
+
+  // unregister the language hook
+  languageHook->UnregisterMe();
+
+  PyThreadState_Swap(NULL);
   PyEval_ReleaseLock();
 }
 

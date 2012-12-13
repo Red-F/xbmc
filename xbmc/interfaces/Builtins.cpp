@@ -374,7 +374,7 @@ int CBuiltins::Execute(const CStdString& execString)
         CBuiltins::Execute("Quit");
 #endif
       vector<CStdString> dummy;
-      g_windowManager.ActivateWindow(iWindow, dummy, !execute.Equals("activatewindow"));
+      g_windowManager.ActivateWindow(iWindow, dummy, false);
 
       unsigned int iPtr = 1;
       while (params.size() > iPtr + 1)
@@ -1243,8 +1243,10 @@ int CBuiltins::Execute(const CStdString& execString)
   }
   else if (execute.Equals("system.logoff"))
   {
-    if (g_windowManager.GetActiveWindow() == WINDOW_LOGIN_SCREEN ||
-        !g_settings.UsingLoginScreen())
+    // there was a commit from cptspiff here which was reverted
+    // for keeping the behaviour from Eden in Frodo - see
+    // git rev 9ee5f0047b
+    if (g_windowManager.GetActiveWindow() == WINDOW_LOGIN_SCREEN)
       return -1;
 
     g_application.StopPlaying();

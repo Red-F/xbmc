@@ -329,7 +329,6 @@ void CGUISettings::Initialize()
 
   CSettingsCategory* scr = AddCategory(SETTINGS_MUSIC, "scrobbler", 15221);
   AddBool(scr, "scrobbler.lastfmsubmit", 15201, false);
-  AddBool(scr, "scrobbler.lastfmsubmitradio", 15250, false);
   AddString(scr,"scrobbler.lastfmusername", 15202, "", EDIT_CONTROL_INPUT, false, 15202);
   AddString(scr,"scrobbler.lastfmpass", 15203, "", EDIT_CONTROL_MD5_INPUT, false, 15203);
   AddSeparator(scr, "scrobbler.sep1");
@@ -609,7 +608,9 @@ void CGUISettings::Initialize()
   else
   {
     shutdown.insert(make_pair(13009,POWERSTATE_QUIT));
+#if !defined(TARGET_DARWIN_IOS)
     shutdown.insert(make_pair(13014,POWERSTATE_MINIMIZE));
+#endif
     AddInt(pwm, "powermanagement.shutdownstate", 13008, POWERSTATE_QUIT, shutdown, SPIN_CONTROL_TEXT);
   }
 
@@ -923,10 +924,10 @@ void CGUISettings::Initialize()
   AddBool(fl, "filelists.showhidden", 21330, false);
 
   CSettingsCategory* ss = AddCategory(SETTINGS_APPEARANCE, "screensaver", 360);
-  AddInt(ss, "screensaver.time", 355, 3, 1, 1, 60, SPIN_CONTROL_INT_PLUS, MASK_MINS);
   AddDefaultAddon(ss, "screensaver.mode", 356, "screensaver.xbmc.builtin.dim", ADDON_SCREENSAVER);
   AddString(ss, "screensaver.settings", 21417, "", BUTTON_CONTROL_STANDARD);
   AddString(ss, "screensaver.preview", 1000, "", BUTTON_CONTROL_STANDARD);
+  AddInt(ss, "screensaver.time", 355, 3, 1, 1, 60, SPIN_CONTROL_INT_PLUS, MASK_MINS);
   AddSeparator(ss, "screensaver.sep1");
   AddBool(ss, "screensaver.usemusicvisinstead", 13392, true);
   AddBool(ss, "screensaver.usedimonpause", 22014, true);

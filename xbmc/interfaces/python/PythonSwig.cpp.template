@@ -180,7 +180,7 @@ void doMethod(method, MethodType methodType)
     }
     // now do the method call itself
     if (!destructor) {
-    if (constructor || !clazz) {  %>      XBMCAddon::SetLanguageHookGuard slhg(XBMCAddon::Python::LanguageHook::getInstance());<% println() }
+    if (constructor || !clazz) {  %>      XBMCAddon::SetLanguageHookGuard slhg(XBMCAddon::Python::LanguageHook::GetIfExists(PyThreadState_Get()->interp).get());<% println() }
 %>      <%
     if (returns != "void") { %>apiResult = (${SwigTypeParser.SwigType_lstr(returns)})<% }
     if (clazz && !constructor) {
@@ -490,6 +490,7 @@ Helper.getInsertNodes(module, 'begin').each { %>${Helper.unescape(it)}<% }
 #include <string>
 #include "interfaces/python/LanguageHook.h"
 #include "interfaces/python/swig.h"
+#include "interfaces/python/PyContext.h"
 
 <%
 Helper.getInsertNodes(module, 'header').each { %>${Helper.unescape(it)}<% }
@@ -563,6 +564,7 @@ namespace PythonBindings
         ${Helper.getOutConversion(param.@type,'result',it,['result' : 'py' + param.@name, 'api' : param.@name])}<%
         }
 %>
+        XBMCAddon::Python::PyContext pyContext;
         PyObject_CallMethod(self,(char*)"${Helper.callingName(it)}",(char*)"(${paramFormatStr})"<%
           params.each {
              %>, py${it.@name} <%
