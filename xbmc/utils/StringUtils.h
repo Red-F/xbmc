@@ -1,7 +1,7 @@
 #pragma once
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -61,6 +61,7 @@ public:
   static std::string& Trim(std::string &str);
   static std::string& TrimLeft(std::string &str);
   static std::string& TrimRight(std::string &str);
+  static std::string& RemoveDuplicatedSpacesAndTabs(std::string& str);
   static int Replace(std::string &str, char oldChar, char newChar);
   static int Replace(std::string &str, const std::string &oldStr, const std::string &newStr);
   static bool StartsWith(const std::string &str, const std::string &str2, bool useCase = false);
@@ -106,6 +107,7 @@ public:
   static bool IsInteger(const CStdString& str);
   static CStdString SizeToString(int64_t size);
   static const CStdString EmptyString;
+  static const std::string Empty;
   static size_t FindWords(const char *str, const char *wordLowerCase);
   static int FindEndBracket(const CStdString &str, char opener, char closer, int startPos = 0);
   static int DateStringToYYYYMMDD(const CStdString &dateString);
@@ -114,8 +116,17 @@ public:
   static bool ValidateUUID(const CStdString &uuid); // NB only validates syntax
   static double CompareFuzzy(const CStdString &left, const CStdString &right);
   static int FindBestMatch(const CStdString &str, const CStdStringArray &strings, double &matchscore);
+  static bool ContainsKeyword(const CStdString &str, const CStdStringArray &keywords);
 
-  static bool Test();
+  /*! \brief Escapes the given string to be able to be used as a parameter.
+
+   Escapes backslashes and double-quotes with an additional backslash and
+   adds double-quotes around the whole string.
+
+   \param param String to escape/paramify
+   \return Escaped/Paramified string
+   */
+  static std::string Paramify(const std::string &param);
 private:
   static CStdString m_lastUUID;
 };

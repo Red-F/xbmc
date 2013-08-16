@@ -1,7 +1,7 @@
 #pragma once
 /*
- *      Copyright (C) 2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2012-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,6 +38,8 @@ public:
   static bool SupportsWriteFileOperations(const CStdString& strPath);
   static bool IsLiveTV(const CStdString& strPath);
   static bool HasRecordings();
+
+  virtual bool Exists(const char* strPath);
 
 private:
 };

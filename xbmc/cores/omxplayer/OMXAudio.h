@@ -1,24 +1,24 @@
 /*
-* XBMC Media Center
-* Copyright (c) 2002 d7o3g4q and RUNTiME
-* Portions Copyright (c) by the authors of ffmpeg and xvid
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
-
-//////////////////////////////////////////////////////////////////////
+ *      Copyright (c) 2002 d7o3g4q and RUNTiME
+ *      Portions Copyright (c) by the authors of ffmpeg and xvid
+ *      Copyright (C) 2012-2013 Team XBMC
+ *      http://xbmc.org
+ *
+ *  This Program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2, or (at your option)
+ *  any later version.
+ *
+ *  This Program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with XBMC; see the file COPYING.  If not, see
+ *  <http://www.gnu.org/licenses/>.
+ *
+ */
 
 #ifndef __OPENMAXAUDIORENDER_H__
 #define __OPENMAXAUDIORENDER_H__
@@ -41,7 +41,7 @@
 
 #include "threads/CriticalSection.h"
 
-#define AUDIO_BUFFER_SECONDS 2
+#define AUDIO_BUFFER_SECONDS 3
 #define VIS_PACKET_SIZE 512
 
 #define OMX_IS_RAW(x)       \
@@ -61,22 +61,21 @@ public:
   float GetCacheTotal();
   COMXAudio();
   bool Initialize(AEAudioFormat format, std::string& device, OMXClock *clock, CDVDStreamInfo &hints, bool bUsePassthrough, bool bUseHWDecode);
+  bool PortSettingsChanged();
   ~COMXAudio();
 
   unsigned int AddPackets(const void* data, unsigned int len);
   unsigned int AddPackets(const void* data, unsigned int len, double dts, double pts);
   unsigned int GetSpace();
   bool Deinitialize();
-  bool Pause();
-  bool Stop();
-  bool Resume();
 
   long GetCurrentVolume() const;
   void Mute(bool bMute);
   bool SetCurrentVolume(float fVolume);
   void SetDynamicRangeCompression(long drc) { m_drc = drc; }
   int SetPlaySpeed(int iSpeed);
-  void WaitCompletion();
+  void SubmitEOS();
+  bool IsEOS();
   void SwitchChannels(int iAudioStream, bool bAudioOnAllSpeakers);
 
   void Flush();
@@ -84,9 +83,9 @@ public:
   void Process();
 
   void SetCodingType(AEDataFormat dataFormat);
-  static bool CanHWDecode(CodecID codec);
+  static bool CanHWDecode(AVCodecID codec);
 
-  void PrintChannels(OMX_AUDIO_CHANNELTYPE eChannelMapping[]);
+  static void PrintChannels(OMX_AUDIO_CHANNELTYPE eChannelMapping[]);
   void PrintPCM(OMX_AUDIO_PARAM_PCMMODETYPE *pcm, std::string direction);
   void PrintDDP(OMX_AUDIO_PARAM_DDPTYPE *ddparm);
   void PrintDTS(OMX_AUDIO_PARAM_DTSTYPE *dtsparam);
@@ -94,12 +93,12 @@ public:
   unsigned int SyncAC3(BYTE* pData, unsigned int iSize);
 
   bool BadState() { return !m_Initialized; };
+  unsigned int GetAudioRenderingLatency();
+  void VizPacket(const void* data, unsigned int len, double pts);
 
 private:
   IAudioCallback* m_pCallback;
   bool          m_Initialized;
-  bool          m_Pause;
-  bool          m_CanPause;
   float         m_CurrentVolume;
   long          m_drc;
   bool          m_Passthrough;
@@ -111,20 +110,28 @@ private:
   unsigned int  m_BitsPerSample;
   COMXCoreComponent *m_omx_clock;
   OMXClock       *m_av_clock;
-  bool          m_first_frame;
+  bool          m_settings_changed;
+  bool          m_setStartTime;
   bool          m_LostSync;
   int           m_SampleRate;
   OMX_AUDIO_CODINGTYPE m_eEncoding;
   uint8_t       *m_extradata;
   int           m_extrasize;
+  std::string   m_deviceuse;
   // stuff for visualisation
-  unsigned int  m_vizBufferSamples;
   double        m_last_pts;
   int           m_vizBufferSize;
   uint8_t       *m_vizBuffer;
   int           m_vizRemapBufferSize;
   uint8_t       *m_vizRemapBuffer;
   CAERemap      m_vizRemap;
+  bool          m_submitted_eos;
+  typedef struct {
+    int num_samples;
+    float samples[VIS_PACKET_SIZE];
+    double pts;
+  } vizblock_t;
+  std::queue<vizblock_t> m_vizqueue;
 
   OMX_AUDIO_PARAM_PCMMODETYPE m_pcm_output;
   OMX_AUDIO_PARAM_PCMMODETYPE m_pcm_input;
@@ -132,7 +139,7 @@ private:
   WAVEFORMATEXTENSIBLE        m_wave_header;
   AEAudioFormat m_format;
 protected:
-  COMXCoreComponent *m_omx_render;
+  COMXCoreComponent m_omx_render;
   COMXCoreComponent m_omx_mixer;
   COMXCoreComponent m_omx_decoder;
   COMXCoreTunel     m_omx_tunnel_clock;
@@ -145,10 +152,9 @@ protected:
 
   CAEChannelInfo    m_channelLayout;
 
-  CAEChannelInfo    GetChannelLayout(AEAudioFormat format);
+  static CAEChannelInfo    GetChannelLayout(AEAudioFormat format);
 
-  void CheckOutputBufferSize(void **buffer, int *oldSize, int newSize);
-  unsigned int GetAudioRenderingLatency();
+  static void CheckOutputBufferSize(void **buffer, int *oldSize, int newSize);
   CCriticalSection m_critSection;
 };
 #endif

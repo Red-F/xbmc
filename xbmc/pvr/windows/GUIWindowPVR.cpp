@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2012-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,6 +36,8 @@
 
 using namespace PVR;
 
+#define CHANNELS_REFRESH_INTERVAL 5000
+
 CGUIWindowPVR::CGUIWindowPVR(void) :
   CGUIMediaWindow(WINDOW_PVR, "MyPVR.xml"),
   m_guideGrid(NULL),
@@ -46,7 +48,8 @@ CGUIWindowPVR::CGUIWindowPVR(void) :
   m_windowGuide(NULL),
   m_windowRecordings(NULL),
   m_windowSearch(NULL),
-  m_windowTimers(NULL)
+  m_windowTimers(NULL),
+  m_bWasReset(false)
 {
   m_loadType = LOAD_EVERY_TIME;
 }
@@ -67,11 +70,17 @@ void CGUIWindowPVR::SetActiveView(CGUIWindowPVRCommon *window)
   CSingleLock lock(m_critSection);
 
   if ((!window && m_currentSubwindow) || (window && !m_currentSubwindow) ||
-      (window->GetWindowId() != m_currentSubwindow->GetWindowId()))
+      (window && m_currentSubwindow && window->GetWindowId() != m_currentSubwindow->GetWindowId()))
   {
     // switched views, save current history
     if (m_currentSubwindow)
+    {
       m_currentSubwindow->m_history = m_history;
+      m_currentSubwindow->m_iSelected = m_viewControl.GetSelectedItem();
+    }
+
+    if (window == m_windowChannelsRadio || window == m_windowChannelsTV)
+      m_refreshWatch.StartZero();
 
     // update m_history
     if (window)
@@ -146,10 +155,19 @@ void CGUIWindowPVR::OnInitWindow(void)
   CSingleLock lock(m_critSection);
   if (m_savedSubwindow)
     m_savedSubwindow->OnInitWindow();
+
+  bool bReset(m_bWasReset);
+  m_bWasReset = false;
   lock.Leave();
   graphicsLock.Leave();
 
   CGUIMediaWindow::OnInitWindow();
+
+  if (bReset)
+  {
+    CGUIMessage msg(GUI_MSG_FOCUSED, GetID(), CONTROL_BTNCHANNELS_TV, 0, 0);
+    OnMessageFocus(msg);
+  }
 }
 
 bool CGUIWindowPVR::OnMessage(CGUIMessage& message)
@@ -288,6 +306,8 @@ void CGUIWindowPVR::Reset(void)
   m_windowGuide->ResetObservers();
   m_windowRecordings->ResetObservers();
   m_windowTimers->ResetObservers();
+
+  m_bWasReset = true;
 }
 
 void CGUIWindowPVR::Cleanup(void)
@@ -319,4 +339,18 @@ void CGUIWindowPVR::Cleanup(void)
 
   ClearFileItems();
   FreeResources();
+}
+
+void CGUIWindowPVR::FrameMove()
+{
+  CGUIWindowPVRCommon* view = GetActiveView();
+  if (view == m_windowChannelsRadio || view == m_windowChannelsTV)
+  {
+    if (m_refreshWatch.GetElapsedMilliseconds() > CHANNELS_REFRESH_INTERVAL)
+    {
+      view->SetInvalid();
+      m_refreshWatch.Reset();
+    }
+  }
+  CGUIMediaWindow::FrameMove();
 }

@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,8 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, write to
- *  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
- *  http://www.gnu.org/copyleft/gpl.html
+ *  along with XBMC; see the file COPYING.  If not, see
+ *  <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -51,6 +50,7 @@ using namespace xbmc;
 
 %feature("python:method:play") Player
 {
+    TRACE;
     PyObject *pObject = NULL;
     PyObject *pObjectListItem = NULL;
     char bWindowed = false;
@@ -112,22 +112,6 @@ using namespace xbmc;
 %feature("python:nokwds") XBMCAddon::xbmc::PlayList::PlayList "true"
 
 %include "interfaces/legacy/Player.h"
-
- // TODO: This needs to be done with a class that holds the Image
- // data. A memory buffer type. Then a typemap needs to be defined
- // for that type.
-%feature("python:method:getImage") RenderCapture
-{
-  RenderCapture* rc = ((RenderCapture*)retrieveApiInstance((PyObject*)self,&PyXBMCAddon_xbmc_RenderCapture_Type,"getImage","XBMCAddon::xbmc::RenderCapture"));
-  if (rc->GetUserState() != CAPTURESTATE_DONE)
-  {
-    PyErr_SetString(PyExc_SystemError, "illegal user state");
-    return NULL;
-  }
-  
-  Py_ssize_t size = rc->getWidth() * rc->getHeight() * 4;
-  return PyByteArray_FromStringAndSize((const char *)rc->GetPixels(), size);
-}
 
 %include "interfaces/legacy/RenderCapture.h"
 

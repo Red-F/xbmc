@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,10 +20,10 @@
 
 #include "SlideShowPicture.h"
 #include "system.h"
+#include "guilib/GraphicContext.h"
 #include "guilib/Texture.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/Settings.h"
-#include "settings/GUISettings.h"
 #include "windowing/WindowingFactory.h"
 #include "utils/log.h"
 #include "threads/SingleLock.h"
@@ -52,6 +52,9 @@ CSlideShowPic::CSlideShowPic()
   m_bIsFinished = false;
   m_bDrawNextImage = false;
   m_bTransistionImmediately = false;
+
+  m_bCanMoveHorizontally = false;
+  m_bCanMoveVertically = false;
 }
 
 CSlideShowPic::~CSlideShowPic()
@@ -74,10 +77,34 @@ void CSlideShowPic::Close()
   m_bIsDirty = true;
 }
 
+void CSlideShowPic::Reset(DISPLAY_EFFECT dispEffect, TRANSISTION_EFFECT transEffect)
+{
+  CSingleLock lock(m_textureAccess);
+  if (m_pImage)
+    SetTexture_Internal(m_iSlideNumber, m_pImage, dispEffect, transEffect);
+  else
+    Close();
+}
+
+bool CSlideShowPic::DisplayEffectNeedChange(DISPLAY_EFFECT newDispEffect) const
+{
+  if (m_displayEffect == newDispEffect)
+    return false;
+  if (newDispEffect == EFFECT_RANDOM && m_displayEffect != EFFECT_NONE && m_displayEffect != EFFECT_NO_TIMEOUT)
+    return false;
+  return true;
+}
+
 void CSlideShowPic::SetTexture(int iSlideNumber, CBaseTexture* pTexture, DISPLAY_EFFECT dispEffect, TRANSISTION_EFFECT transEffect)
 {
   CSingleLock lock(m_textureAccess);
   Close();
+  SetTexture_Internal(iSlideNumber, pTexture, dispEffect, transEffect);
+}
+
+void CSlideShowPic::SetTexture_Internal(int iSlideNumber, CBaseTexture* pTexture, DISPLAY_EFFECT dispEffect, TRANSISTION_EFFECT transEffect)
+{
+  CSingleLock lock(m_textureAccess);
   m_bPause = false;
   m_bNoEffect = false;
   m_bTransistionImmediately = false;
@@ -93,7 +120,7 @@ void CSlideShowPic::SetTexture(int iSlideNumber, CBaseTexture* pTexture, DISPLAY
   m_transistionStart.type = transEffect;
   m_transistionStart.start = 0;
   // the +1's make sure it actually occurs
-  float fadeTime = std::min(0.2f*g_guiSettings.GetInt("slideshow.staytime"), 3.0f);
+  float fadeTime = std::min(0.2f*CSettings::Get().GetInt("slideshow.staytime"), 3.0f);
   m_transistionStart.length = (int)(g_graphicsContext.GetFPS() * fadeTime); // transition time in frames
   m_transistionEnd.type = transEffect;
   m_transistionEnd.length = m_transistionStart.length;
@@ -129,12 +156,12 @@ void CSlideShowPic::SetTexture(int iSlideNumber, CBaseTexture* pTexture, DISPLAY
   m_fPosX = m_fPosY = 0.0f;
   m_fPosZ = 1.0f;
   m_fVelocityX = m_fVelocityY = m_fVelocityZ = 0.0f;
-  int iFrames = max((int)(g_graphicsContext.GetFPS() * g_guiSettings.GetInt("slideshow.staytime")), 1);
+  int iFrames = max((int)(g_graphicsContext.GetFPS() * CSettings::Get().GetInt("slideshow.staytime")), 1);
   if (m_displayEffect == EFFECT_PANORAMA)
   {
-    RESOLUTION iRes = g_graphicsContext.GetVideoResolution();
-	  float fScreenWidth = (float)g_settings.m_ResInfo[iRes].Overscan.right - g_settings.m_ResInfo[iRes].Overscan.left;
-    float fScreenHeight = (float)g_settings.m_ResInfo[iRes].Overscan.bottom - g_settings.m_ResInfo[iRes].Overscan.top;
+    RESOLUTION_INFO res = g_graphicsContext.GetResInfo();
+    float fScreenWidth  = (float)res.Overscan.right  - res.Overscan.left;
+    float fScreenHeight = (float)res.Overscan.bottom - res.Overscan.top;
 
     if (m_fWidth > m_fHeight)
     {
@@ -339,9 +366,9 @@ void CSlideShowPic::Process(unsigned int currentTime, CDirtyRegionList &dirtyreg
     else if (m_displayEffect == EFFECT_ZOOM)
     {
       m_fPosZ += m_fVelocityZ;
-/*      if (m_fPosZ > 1.0f + 0.01f*g_guiSettings.GetInt("Slideshow.ZoomAmount"))
+/*      if (m_fPosZ > 1.0f + 0.01f*CSettings::Get().GetInt("Slideshow.ZoomAmount"))
       {
-        m_fPosZ = 1.0f + 0.01f * g_guiSettings.GetInt("Slideshow.ZoomAmount");
+        m_fPosZ = 1.0f + 0.01f * CSettings::Get().GetInt("Slideshow.ZoomAmount");
         m_fVelocityZ = -m_fVelocityZ;
       }
       if (m_fPosZ < 1.0f)
@@ -389,15 +416,15 @@ void CSlideShowPic::Process(unsigned int currentTime, CDirtyRegionList &dirtyreg
   if (m_iCounter > m_transistionEnd.start + m_transistionEnd.length)
     m_bIsFinished = true;
 
+  RESOLUTION_INFO info = g_graphicsContext.GetResInfo();
+
   // calculate where we should render (and how large it should be)
   // calculate aspect ratio correction factor
-  RESOLUTION iRes = g_graphicsContext.GetVideoResolution();
-  float fOffsetX = (float)g_settings.m_ResInfo[iRes].Overscan.left;
-  float fOffsetY = (float)g_settings.m_ResInfo[iRes].Overscan.top;
-  float fScreenWidth = (float)g_settings.m_ResInfo[iRes].Overscan.right - g_settings.m_ResInfo[iRes].Overscan.left;
-  float fScreenHeight = (float)g_settings.m_ResInfo[iRes].Overscan.bottom - g_settings.m_ResInfo[iRes].Overscan.top;
-
-  float fPixelRatio = g_settings.m_ResInfo[iRes].fPixelRatio;
+  float fOffsetX      = (float)info.Overscan.left;
+  float fOffsetY      = (float)info.Overscan.top;
+  float fScreenWidth  = (float)info.Overscan.right  - info.Overscan.left;
+  float fScreenHeight = (float)info.Overscan.bottom - info.Overscan.top;
+  float fPixelRatio   = info.fPixelRatio;
 
   // Rotate the image as needed
   float x[4];
@@ -481,6 +508,7 @@ void CSlideShowPic::Process(unsigned int currentTime, CDirtyRegionList &dirtyreg
     float w = maxx - minx;
     float h = maxy - miny;
     m_bCanMoveHorizontally = (w >= fScreenWidth);
+    m_bCanMoveVertically   = (h >= fScreenHeight);
     if (w >= fScreenWidth)
     { // must have no black bars
       if (minx + m_fZoomLeft*w > fOffsetX)
@@ -669,7 +697,7 @@ void CSlideShowPic::Rotate(float fRotateAngle, bool immediate /* = false */)
   m_transistionTemp.length = IMMEDIATE_TRANSISTION_TIME;
   m_fTransistionAngle = (float)fRotateAngle / (float)m_transistionTemp.length;
   // reset the timer
-  m_transistionEnd.start = m_iCounter + m_transistionStart.length + (int)(g_graphicsContext.GetFPS() * g_guiSettings.GetInt("slideshow.staytime"));
+  m_transistionEnd.start = m_iCounter + m_transistionStart.length + (int)(g_graphicsContext.GetFPS() * CSettings::Get().GetInt("slideshow.staytime"));
 }
 
 void CSlideShowPic::Zoom(float fZoom, bool immediate /* = false */)
@@ -686,7 +714,7 @@ void CSlideShowPic::Zoom(float fZoom, bool immediate /* = false */)
   m_transistionTemp.length = IMMEDIATE_TRANSISTION_TIME;
   m_fTransistionZoom = (fZoom - m_fZoomAmount) / (float)m_transistionTemp.length;
   // reset the timer
-  m_transistionEnd.start = m_iCounter + m_transistionStart.length + (int)(g_graphicsContext.GetFPS() * g_guiSettings.GetInt("slideshow.staytime"));
+  m_transistionEnd.start = m_iCounter + m_transistionStart.length + (int)(g_graphicsContext.GetFPS() * CSettings::Get().GetInt("slideshow.staytime"));
   // turn off the render effects until we're back down to normal zoom
   m_bNoEffect = true;
 }
@@ -696,7 +724,7 @@ void CSlideShowPic::Move(float fDeltaX, float fDeltaY)
   m_fZoomLeft += fDeltaX;
   m_fZoomTop += fDeltaY;
   // reset the timer
- // m_transistionEnd.start = m_iCounter + m_transistionStart.length + (int)(g_graphicsContext.GetFPS() * g_guiSettings.GetInt("slideshow.staytime"));
+ // m_transistionEnd.start = m_iCounter + m_transistionStart.length + (int)(g_graphicsContext.GetFPS() * CSettings::Get().GetInt("slideshow.staytime"));
 }
 
 void CSlideShowPic::Render()
@@ -718,17 +746,17 @@ void CSlideShowPic::Render(float *x, float *y, CBaseTexture* pTexture, color_t c
 #ifdef HAS_DX
   struct VERTEX
   {
-    D3DXVECTOR4 p;
+    D3DXVECTOR3 p;
     D3DCOLOR col;
     FLOAT tu, tv;
   };
-  static const DWORD FVF_VERTEX = D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1;
+  static const DWORD FVF_VERTEX = D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1;
 
   VERTEX vertex[5];
 
   for (int i = 0; i < 4; i++)
   {
-    vertex[i].p = D3DXVECTOR4( x[i], y[i], 0, 1.0f);
+    vertex[i].p = D3DXVECTOR3( x[i], y[i], 0);
     vertex[i].tu = 0;
     vertex[i].tv = 0;
     vertex[i].col = color;

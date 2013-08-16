@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2010 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,13 +13,12 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, write to
- *  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
- *  http://www.gnu.org/copyleft/gpl.html
+ *  along with XBMC; see the file COPYING.  If not, see
+ *  <http://www.gnu.org/licenses/>.
  *
  */
 
-#ifdef _WIN32
+#ifdef TARGET_WINDOWS
 #include <sys/types.h>
 #include <sys/stat.h>
 #define __STDC_FORMAT_MACROS
@@ -42,12 +41,12 @@
 #include "cmdlineargs.h"
 #include "libsquish/squish.h"
 
-#ifdef _WIN32
+#ifdef TARGET_WINDOWS
 #define strncasecmp strnicmp
 #endif
 
 #ifdef USE_LZO_PACKING
-#ifdef _WIN32
+#ifdef TARGET_WINDOWS
 #include "../../lib/win32/liblzo/LZO1X.H"
 #else
 #include <lzo/lzo1x.h>
@@ -196,7 +195,8 @@ CXBTFFrame appendContent(CXBTFWriter &writer, int width, int height, unsigned ch
   if ((flags & FLAGS_USE_LZO) == FLAGS_USE_LZO)
   {
     // grab a temporary buffer for unpacking into
-    unsigned char *packed  = new unsigned char[size + size / 16 + 64 + 3]; // see simple.c in lzo
+    packedSize = size + size / 16 + 64 + 3; // see simple.c in lzo
+    unsigned char *packed  = new unsigned char[packedSize];
     unsigned char *working = new unsigned char[LZO1X_999_MEM_COMPRESS];
     if (packed && working)
     {
@@ -209,8 +209,15 @@ CXBTFFrame appendContent(CXBTFWriter &writer, int width, int height, unsigned ch
       else
       { // success
         lzo_uint optimSize = size;
-        lzo1x_optimize(packed, packedSize, data, &optimSize, NULL);
-        writer.AppendContent(packed, packedSize);
+        if (lzo1x_optimize(packed, packedSize, data, &optimSize, NULL) != LZO_E_OK || optimSize != size)
+        { //optimisation failed
+          packedSize = size;
+          writer.AppendContent(data, size);
+        }
+        else
+        { // success
+          writer.AppendContent(packed, packedSize);
+        }
       }
       delete[] working;
       delete[] packed;
@@ -568,7 +575,7 @@ int main(int argc, char* argv[])
     {
       OutputFilename = args[++i];
       valid = true;
-#ifdef _LINUX
+#ifdef TARGET_POSIX
       char *c = NULL;
       while ((c = (char *)strchr(OutputFilename.c_str(), '\\')) != NULL) *c = '/';
 #endif

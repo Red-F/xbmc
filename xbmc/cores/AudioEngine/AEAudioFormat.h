@@ -1,6 +1,6 @@
 #pragma once
 /*
- *      Copyright (C) 2010-2012 Team XBMC
+ *      Copyright (C) 2010-2013 Team XBMC
  *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
@@ -31,26 +31,33 @@ enum AEDataFormat
   AE_FMT_INVALID = -1,
 
   AE_FMT_U8,
+  AE_FMT_U8P,
   AE_FMT_S8,
 
   AE_FMT_S16BE,
   AE_FMT_S16LE,
   AE_FMT_S16NE,
+  AE_FMT_S16NEP,
 
   AE_FMT_S32BE,
   AE_FMT_S32LE,
   AE_FMT_S32NE,
+  AE_FMT_S32NEP,
 
   AE_FMT_S24BE4,
   AE_FMT_S24LE4,
   AE_FMT_S24NE4, /* S24 in 4 bytes */
+  AE_FMT_S24NE4P,
 
   AE_FMT_S24BE3,
   AE_FMT_S24LE3,
   AE_FMT_S24NE3, /* S24 in 3 bytes */
+  AE_FMT_S24NE3P,
 
   AE_FMT_DOUBLE,
+  AE_FMT_DOUBLEP,
   AE_FMT_FLOAT,
+  AE_FMT_FLOATP,
 
   /* Bitstream formats */
   AE_FMT_AAC,
@@ -70,7 +77,7 @@ enum AEDataFormat
 /**
  * The audio format structure that fully defines a stream's audio information
  */
-typedef struct {
+typedef struct AEAudioFormat{
   /**
    * The stream's data format (eg, AE_FMT_S16LE)
    */
@@ -105,5 +112,16 @@ typedef struct {
    * The size of one frame in bytes
    */
   unsigned int m_frameSize;
+ 
+  AEAudioFormat()
+  {
+    m_dataFormat = AE_FMT_INVALID;
+    m_sampleRate = 0;
+    m_encodedRate = 0;
+    m_frames = 0;
+    m_frameSamples = 0;
+    m_frameSize = 0;
+  }
+ 
 } AEAudioFormat;
 

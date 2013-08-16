@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -438,7 +438,7 @@ bool CPlayList::LoadData(std::istream &stream)
 {
   // try to read as a string
   CStdString data;
-#if _MSC_VER > 1500
+#if TARGET_WINDOWS
   std::stringstream _stream(data);
   _stream << stream;
 #else
@@ -490,7 +490,9 @@ void CPlayList::UpdateItem(const CFileItem *item)
     CFileItemPtr playlistItem = *it;
     if (playlistItem->IsSamePath(item))
     {
+      CStdString temp = playlistItem->GetPath(); // save path, it may have been altered
       *playlistItem = *item;
+      playlistItem->SetPath(temp);
       break;
     }
   }

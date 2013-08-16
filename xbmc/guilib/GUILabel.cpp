@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
  */
 
 #include "GUILabel.h"
-#include "utils/CharsetConverter.h"
 #include <limits>
 
 CGUILabel::CGUILabel(float posX, float posY, float width, float height, const CLabelInfo& labelInfo, CGUILabel::OVER_FLOW overflow)
@@ -90,6 +89,11 @@ bool CGUILabel::Process(unsigned int currentTime)
   // TODO Add the correct processing
 
   bool overFlows = (m_renderRect.Width() + 0.5f < m_textLayout.GetTextWidth()); // 0.5f to deal with floating point rounding issues
+  bool renderSolid = (m_color == COLOR_DISABLED);
+
+  if (overFlows && m_scrolling && !renderSolid)
+    m_textLayout.UpdateScrollinfo(m_scrollInfo);
+
   return (overFlows && m_scrolling);
 }
 
@@ -152,6 +156,13 @@ bool CGUILabel::SetAlign(uint32_t align)
   UpdateRenderRect();
 
   return changed;
+}
+
+bool CGUILabel::SetStyledText(const vecText &text, const vecColors &colors)
+{
+  m_textLayout.UpdateStyled(text, colors, m_maxRect.Width());
+  m_invalid = false;
+  return true;
 }
 
 bool CGUILabel::SetText(const CStdString &label)

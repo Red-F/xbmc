@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@
 #include "utils/log.h"
 #include "UnrarXLib/rar.hpp"
 
-#ifndef _LINUX
+#ifndef TARGET_POSIX
 #include <process.h>
 #endif
 
@@ -42,7 +42,7 @@ using namespace std;
 #define SEEKTIMOUT 30000
 
 #ifdef HAS_FILESYSTEM_RAR
-CRarFileExtractThread::CRarFileExtractThread() : CThread("CFileRarExtractThread"), hRunning(true), hQuit(true)
+CRarFileExtractThread::CRarFileExtractThread() : CThread("RarFileExtract"), hRunning(true), hQuit(true)
 {
   m_pArc = NULL;
   m_pCmd = NULL;
@@ -287,7 +287,7 @@ unsigned int CRarFile::Read(void *lpBuf, int64_t uiBufSize)
   }
 
 
-  byte* pBuf = (byte*)lpBuf;
+  uint8_t* pBuf = (uint8_t*)lpBuf;
   int64_t uicBufSize = uiBufSize;
   if (m_iDataInBuffer > 0)
   {
@@ -718,7 +718,7 @@ bool CRarFile::OpenInArchive()
       m_pArc->SeekToNext();
     }
 
-    m_szBuffer = new byte[MAXWINMEMSIZE];
+    m_szBuffer = new uint8_t[MAXWINMEMSIZE];
     m_szStartOfBuffer = m_szBuffer;
     m_pExtract->GetDataIO().SetUnpackToMemory(m_szBuffer,0);
     m_iDataInBuffer = -1;

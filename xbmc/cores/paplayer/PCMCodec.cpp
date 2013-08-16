@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2011-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2011-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ PCMCodec::PCMCodec()
   m_Channels = 2;
   m_BitsPerSample = 16;
   m_Bitrate = m_SampleRate * m_Channels * m_BitsPerSample;
+  m_DataFormat = AE_FMT_S16LE;
 }
 
 PCMCodec::~PCMCodec()

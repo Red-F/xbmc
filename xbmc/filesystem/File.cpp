@@ -1,22 +1,24 @@
 /*
-* XBMC Media Center
-* Copyright (c) 2002 Frodo
-* Portions Copyright (c) by the authors of ffmpeg and xvid
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
+ *      Copyright (c) 2002 Frodo
+ *      Portions Copyright (c) by the authors of ffmpeg and xvid
+ *      Copyright (C) 2002-2013 Team XBMC
+ *      http://xbmc.org
+ *
+ *  This Program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2, or (at your option)
+ *  any later version.
+ *
+ *  This Program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with XBMC; see the file COPYING.  If not, see
+ *  <http://www.gnu.org/licenses/>.
+ *
+ */
 
 #include "File.h"
 #include "IFile.h"
@@ -100,7 +102,7 @@ bool CFile::Cache(const CStdString& strFileName, const CStdString& strDest, XFIL
       {
         CURL url(strDirectory);
         CStdString pathsep;
-#ifndef _LINUX
+#ifndef TARGET_POSIX
         pathsep = "\\";
 #else
         pathsep = "/";
@@ -215,7 +217,7 @@ bool CFile::Open(const CStdString& strFileName, unsigned int flags)
   try
   {
     bool bPathInCache;
-    CURL url2(strFileName);
+    CURL url2(URIUtils::SubstitutePath(strFileName));
     if (url2.GetProtocol() == "apk")
       url2.SetOptions("");
     if (url2.GetProtocol() == "zip")
@@ -227,12 +229,14 @@ bool CFile::Open(const CStdString& strFileName, unsigned int flags)
     }
 
     CURL url(URIUtils::SubstitutePath(strFileName));
-    if ( (flags & READ_NO_CACHE) == 0 && URIUtils::IsInternetStream(url, true) && !CUtil::IsPicture(strFileName) )
+    bool isInternetStream = URIUtils::IsInternetStream(url, true);
+    if ( (flags & READ_NO_CACHE) == 0 && isInternetStream && !CUtil::IsPicture(strFileName) )
       m_flags |= READ_CACHED;
 
     if (m_flags & READ_CACHED)
     {
-      m_pFile = new CFileCache();
+      // for internet stream, if it contains multiple stream, file cache need handle it specially.
+      m_pFile = new CFileCache((m_flags & READ_MULTI_STREAM)!=0 && isInternetStream);
       return m_pFile->Open(url);
     }
 
@@ -312,13 +316,14 @@ bool CFile::OpenForWrite(const CStdString& strFileName, bool bOverWrite)
 {
   try
   {
-    CURL url(URIUtils::SubstitutePath(strFileName));
+	CStdString storedFileName = URIUtils::SubstitutePath(strFileName);
+    CURL url(storedFileName);
 
     m_pFile = CFileFactory::CreateLoader(url);
     if (m_pFile && m_pFile->OpenForWrite(url, bOverWrite))
     {
       // add this file to our directory cache (if it's stored)
-      g_directoryCache.AddFile(strFileName);
+      g_directoryCache.AddFile(storedFileName);
       return true;
     }
     return false;
@@ -334,7 +339,7 @@ bool CFile::OpenForWrite(const CStdString& strFileName, bool bOverWrite)
 
 bool CFile::Exists(const CStdString& strFileName, bool bUseCache /* = true */)
 {
-  CURL url;
+  CURL url = URIUtils::SubstitutePath(strFileName);;
   
   try
   {
@@ -344,13 +349,12 @@ bool CFile::Exists(const CStdString& strFileName, bool bUseCache /* = true */)
     if (bUseCache)
     {
       bool bPathInCache;
-      if (g_directoryCache.FileExists(strFileName, bPathInCache) )
+      if (g_directoryCache.FileExists(url.Get(), bPathInCache) )
         return true;
       if (bPathInCache)
         return false;
     }
 
-    url = URIUtils::SubstitutePath(strFileName);
     auto_ptr<IFile> pFile(CFileFactory::CreateLoader(url));
     if (!pFile.get())
       return false;
@@ -517,6 +521,9 @@ void CFile::Close()
 {
   try
   {
+    if (m_pFile)
+      m_pFile->Close();
+
     SAFE_DELETE(m_pBuffer);
     SAFE_DELETE(m_pFile);
   }
@@ -715,7 +722,7 @@ bool CFile::Delete(const CStdString& strFileName)
 
     if(pFile->Delete(url))
     {
-      g_directoryCache.ClearFile(strFileName);
+      g_directoryCache.ClearFile(url.Get());
       return true;
     }
   }
@@ -742,8 +749,8 @@ bool CFile::Rename(const CStdString& strFileName, const CStdString& strNewFileNa
 
     if(pFile->Rename(url, urlnew))
     {
-      g_directoryCache.ClearFile(strFileName);
-      g_directoryCache.ClearFile(strNewFileName);
+      g_directoryCache.ClearFile(url.Get());
+      g_directoryCache.AddFile(urlnew.Get());
       return true;
     }
   }

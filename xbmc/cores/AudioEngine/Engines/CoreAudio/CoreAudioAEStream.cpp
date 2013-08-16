@@ -1,5 +1,5 @@
 /*
- *      Copyright (C) 2011-2012 Team XBMC
+ *      Copyright (C) 2011-2013 Team XBMC
  *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
@@ -26,7 +26,6 @@
 #include "xbmc/cores/AudioEngine/Interfaces/AE.h"
 #include "xbmc/cores/AudioEngine/AEFactory.h"
 #include "xbmc/cores/AudioEngine/Utils/AEUtil.h"
-#include "settings/GUISettings.h"
 #include "settings/Settings.h"
 #include "threads/SingleLock.h"
 #include "settings/AdvancedSettings.h"
@@ -148,6 +147,7 @@ CCoreAudioAEStream::~CCoreAudioAEStream()
   //_aligned_free(m_resampleBuffer); m_resampleBuffer = NULL;
   _aligned_free(m_remapBuffer); m_remapBuffer = NULL;
   _aligned_free(m_vizRemapBuffer); m_vizRemapBuffer = NULL;
+  _aligned_free(m_upmixBuffer); m_upmixBuffer = NULL;
 
   delete m_Buffer; m_Buffer = NULL;
 
@@ -596,10 +596,14 @@ void CCoreAudioAEStream::Pause()
 
 void CCoreAudioAEStream::Resume()
 {
+#if defined(TARGET_DARWIN_IOS) && !defined(TARGET_DARWIN_IOS_ATV)
+  if (CAEFactory::IsSuspended())
+    CAEFactory::Resume();
+#endif
   m_paused = false;
 }
 
-void CCoreAudioAEStream::Drain()
+void CCoreAudioAEStream::Drain(bool wait)
 {
   m_draining = true;
 }

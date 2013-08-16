@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,7 +37,6 @@
 #include "dialogs/GUIDialogOK.h"
 #include "interfaces/AnnouncementManager.h"
 #include "settings/AdvancedSettings.h"
-#include "settings/GUISettings.h"
 #include "settings/Settings.h"
 #include "utils/StringUtils.h"
 #include "guilib/LocalizeStrings.h"
@@ -58,7 +57,7 @@ using namespace ADDON;
 namespace VIDEO
 {
 
-  CVideoInfoScanner::CVideoInfoScanner() : CThread("CVideoInfoScanner")
+  CVideoInfoScanner::CVideoInfoScanner() : CThread("VideoInfoScanner")
   {
     m_bRunning = false;
     m_handle = NULL;
@@ -82,11 +81,12 @@ namespace VIDEO
 
       m_database.Open();
 
-      if (m_showDialog && !g_guiSettings.GetBool("videolibrary.backgroundupdate"))
+      if (m_showDialog && !CSettings::Get().GetBool("videolibrary.backgroundupdate"))
       {
         CGUIDialogExtendedProgressBar* dialog =
           (CGUIDialogExtendedProgressBar*)g_windowManager.GetWindow(WINDOW_DIALOG_EXT_PROGRESS);
-        m_handle = dialog->GetHandle(g_localizeStrings.Get(314));
+        if (dialog)
+           m_handle = dialog->GetHandle(g_localizeStrings.Get(314));
       }
 
       m_bCanInterrupt = true;
@@ -272,7 +272,7 @@ namespace VIDEO
       }
       if (!bSkip)
       { // need to fetch the folder
-        CDirectory::GetDirectory(strDirectory, items, g_settings.m_videoExtensions);
+        CDirectory::GetDirectory(strDirectory, items, g_advancedSettings.m_videoExtensions);
         items.Stack();
         // compute hash
         GetPathHash(items, hash);
@@ -308,7 +308,7 @@ namespace VIDEO
 
       if (foundDirectly && !settings.parent_name_root)
       {
-        CDirectory::GetDirectory(strDirectory, items, g_settings.m_videoExtensions);
+        CDirectory::GetDirectory(strDirectory, items, g_advancedSettings.m_videoExtensions);
         items.SetPath(strDirectory);
         GetPathHash(items, hash);
         bSkip = true;
@@ -548,7 +548,7 @@ namespace VIDEO
   INFO_RET CVideoInfoScanner::RetrieveInfoForMovie(CFileItem *pItem, bool bDirNames, ScraperPtr &info2, bool useLocal, CScraperUrl* pURL, CGUIDialogProgress* pDlgProgress)
   {
     if (pItem->m_bIsFolder || !pItem->IsVideo() || pItem->IsNFO() ||
-       (pItem->IsPlayList() && !URIUtils::GetExtension(pItem->GetPath()).Equals(".strm")))
+       (pItem->IsPlayList() && !URIUtils::HasExtension(pItem->GetPath(), ".strm")))
       return INFO_NOT_NEEDED;
 
     if (ProgressCancelled(pDlgProgress, 198, pItem->GetLabel()))
@@ -597,7 +597,7 @@ namespace VIDEO
   INFO_RET CVideoInfoScanner::RetrieveInfoForMusicVideo(CFileItem *pItem, bool bDirNames, ScraperPtr &info2, bool useLocal, CScraperUrl* pURL, CGUIDialogProgress* pDlgProgress)
   {
     if (pItem->m_bIsFolder || !pItem->IsVideo() || pItem->IsNFO() ||
-       (pItem->IsPlayList() && !URIUtils::GetExtension(pItem->GetPath()).Equals(".strm")))
+       (pItem->IsPlayList() && !URIUtils::HasExtension(pItem->GetPath(), ".strm")))
       return INFO_NOT_NEEDED;
 
     if (ProgressCancelled(pDlgProgress, 20394, pItem->GetLabel()))
@@ -665,7 +665,7 @@ namespace VIDEO
 
     if (item->m_bIsFolder)
     {
-      CUtil::GetRecursiveListing(item->GetPath(), items, g_settings.m_videoExtensions, true);
+      CUtil::GetRecursiveListing(item->GetPath(), items, g_advancedSettings.m_videoExtensions, true);
       CStdString hash, dbHash;
       int numFilesInFolder = GetPathHash(items, hash);
 
@@ -704,7 +704,7 @@ namespace VIDEO
     */
 
     // since we're doing this now anyway, should other items be stacked?
-    items.Sort(SORT_METHOD_FULLPATH, SortOrderAscending);
+    items.Sort(SortByPath, SortOrderAscending);
     int x = 0;
     while (x < items.Size())
     {
@@ -871,7 +871,7 @@ namespace VIDEO
 
     for (unsigned int i=0;i<expression.size();++i)
     {
-      CRegExp reg;
+      CRegExp reg(true);
       if (!reg.RegComp(expression[i].regexp))
         continue;
 
@@ -940,7 +940,7 @@ namespace VIDEO
       // add what we found by now
       episodeList.push_back(episode);
 
-      CRegExp reg2;
+      CRegExp reg2(true);
       // check the remainder of the string for any further episodes.
       if (!byDate && reg2.RegComp(g_advancedSettings.m_tvshowMultiPartEnumRegExp))
       {
@@ -1048,7 +1048,9 @@ namespace VIDEO
     if (!m_database.Open())
       return -1;
 
-    GetArtwork(pItem, content, videoFolder, useLocal, showInfo ? showInfo->m_strPath : "");
+    if (!libraryImport)
+      GetArtwork(pItem, content, videoFolder, useLocal, showInfo ? showInfo->m_strPath : "");
+
     // ensure the art map isn't completely empty by specifying an empty thumb
     map<string, string> art = pItem->GetArt();
     if (art.empty())
@@ -1100,12 +1102,14 @@ namespace VIDEO
     {
       if (pItem->m_bIsFolder)
       {
-        // get and cache season thumbs
         map<int, map<string, string> > seasonArt;
-        GetSeasonThumbs(movieDetails, seasonArt, CVideoThumbLoader::GetArtTypes("season"), useLocal);
-        for (map<int, map<string, string> >::iterator i = seasonArt.begin(); i != seasonArt.end(); ++i)
-          for (map<string, string>::iterator j = i->second.begin(); j != i->second.end(); ++j)
-            CTextureCache::Get().BackgroundCacheImage(j->second);
+        if (!libraryImport)
+        { // get and cache season thumbs
+          GetSeasonThumbs(movieDetails, seasonArt, CVideoThumbLoader::GetArtTypes("season"), useLocal);
+          for (map<int, map<string, string> >::iterator i = seasonArt.begin(); i != seasonArt.end(); ++i)
+            for (map<string, string>::iterator j = i->second.begin(); j != i->second.end(); ++j)
+              CTextureCache::Get().BackgroundCacheImage(j->second);
+        }
         lResult = m_database.SetDetailsForTvShow(pItem->GetPath(), movieDetails, art, seasonArt);
         movieDetails.m_iDbId = lResult;
         movieDetails.m_type = "tvshow";
@@ -1183,23 +1187,26 @@ namespace VIDEO
     movieDetails.m_fanart.Unpack();
     movieDetails.m_strPictureURL.Parse();
 
-    CGUIListItem::ArtMap art;
+    CGUIListItem::ArtMap art = pItem->GetArt();
 
     // get and cache thumb images
     vector<string> artTypes = CVideoThumbLoader::GetArtTypes(ContentToMediaType(content, pItem->m_bIsFolder));
     vector<string>::iterator i = find(artTypes.begin(), artTypes.end(), "fanart");
     if (i != artTypes.end())
       artTypes.erase(i); // fanart is handled below
-    bool lookForThumb = find(artTypes.begin(), artTypes.end(), "thumb") == artTypes.end();
-
+    bool lookForThumb = find(artTypes.begin(), artTypes.end(), "thumb") == artTypes.end() &&
+                        art.find("thumb") == art.end();
     // find local art
     if (useLocal)
     {
       for (vector<string>::const_iterator i = artTypes.begin(); i != artTypes.end(); ++i)
       {
-        std::string image = CVideoThumbLoader::GetLocalArt(*pItem, *i, bApplyToDir);
-        if (!image.empty())
-          art.insert(make_pair(*i, image));
+        if (art.find(*i) == art.end())
+        {
+          std::string image = CVideoThumbLoader::GetLocalArt(*pItem, *i, bApplyToDir);
+          if (!image.empty())
+            art.insert(make_pair(*i, image));
+        }
       }
       // find and classify the local thumb (backcompat) if available
       if (lookForThumb)
@@ -1239,7 +1246,7 @@ namespace VIDEO
 
     // get & save fanart image (treated separately due to it being stored in m_fanart)
     bool isEpisode = (content == CONTENT_TVSHOWS && !pItem->m_bIsFolder);
-    if (!isEpisode)
+    if (!isEpisode && art.find("fanart") == art.end())
     {
       string fanart = GetFanart(pItem, useLocal);
       if (!fanart.empty())
@@ -1253,7 +1260,7 @@ namespace VIDEO
 
     // parent folder to apply the thumb to and to search for local actor thumbs
     CStdString parentDir = GetParentDir(*pItem);
-    if (g_guiSettings.GetBool("videolibrary.actorthumbs"))
+    if (CSettings::Get().GetBool("videolibrary.actorthumbs"))
       FetchActorThumbs(movieDetails.m_cast, actorArtPath.empty() ? parentDir : actorArtPath);
     if (bApplyToDir)
       ApplyThumbToFolder(parentDir, art["thumb"]);
@@ -1344,6 +1351,12 @@ namespace VIDEO
       if (result == CNfoFile::FULL_NFO)
       {
         m_nfoReader.GetDetails(*item.GetVideoInfoTag());
+        // override with episode and season number from file if available
+        if (file->iEpisode > -1)
+        {
+          item.GetVideoInfoTag()->m_iEpisode = file->iEpisode;
+          item.GetVideoInfoTag()->m_iSeason = file->iSeason;
+        }
         if (AddVideo(&item, CONTENT_TVSHOWS, file->isFolder, true, &showInfo) < 0)
           return INFO_ERROR;
         continue;
@@ -1380,16 +1393,25 @@ namespace VIDEO
       }
 
       EPISODE key(file->iSeason, file->iEpisode, file->iSubepisode);
+      EPISODE backupkey(file->iSeason, file->iEpisode, 0);
       bool bFound = false;
       EPISODELIST::iterator guide = episodes.begin();;
       EPISODELIST matches;
 
       for (; guide != episodes.end(); ++guide )
       {
-        if ((file->iEpisode!=-1) && (file->iSeason!=-1) && (key==*guide))
+        if ((file->iEpisode!=-1) && (file->iSeason!=-1))
         {
-          bFound = true;
-          break;
+          if (key==*guide)
+          {
+            bFound = true;
+            break;
+          }
+          else if ((file->iSubepisode!=0) && (backupkey==*guide))
+          {
+            matches.push_back(*guide);
+            continue;
+          }
         }
         if (file->cDate.IsValid() && guide->cDate.IsValid() && file->cDate==guide->cDate)
         {
@@ -1480,10 +1502,6 @@ namespace VIDEO
     // Find a matching .nfo file
     if (!item->m_bIsFolder)
     {
-      // file
-      CStdString strExtension;
-      URIUtils::GetExtension(item->GetPath(), strExtension);
-
       if (URIUtils::IsInRAR(item->GetPath())) // we have a rarred item - we want to check outside the rars
       {
         CFileItem item2(*item);
@@ -1525,7 +1543,7 @@ namespace VIDEO
       else
       {
         // already an .nfo file?
-        if ( strcmpi(strExtension.c_str(), ".nfo") == 0 )
+        if (URIUtils::HasExtension(item->GetPath(), ".nfo"))
           nfoFile = item->GetPath();
         // no, create .nfo file
         else
@@ -1623,7 +1641,8 @@ namespace VIDEO
     if (!imdbThumb.IsEmpty())
     {
       CFileItem folderItem(folder, true);
-      CThumbLoader::SetCachedImage(folderItem, "thumb", imdbThumb);
+      CThumbLoader loader;
+      loader.SetCachedImage(folderItem, "thumb", imdbThumb);
     }
   }
 
@@ -1760,7 +1779,10 @@ namespace VIDEO
   void CVideoInfoScanner::FetchActorThumbs(vector<SActorInfo>& actors, const CStdString& strPath)
   {
     CFileItemList items;
-    CDirectory::GetDirectory(URIUtils::AddFileToFolder(strPath, ".actors"), items, ".png|.jpg|.tbn", DIR_FLAG_NO_FILE_DIRS | DIR_FLAG_NO_FILE_INFO);
+    CStdString actorsDir = URIUtils::AddFileToFolder(strPath, ".actors");
+    if (CDirectory::Exists(actorsDir))
+      CDirectory::GetDirectory(actorsDir, items, ".png|.jpg|.tbn", DIR_FLAG_NO_FILE_DIRS |
+                               DIR_FLAG_NO_FILE_INFO);
     for (vector<SActorInfo>::iterator i = actors.begin(); i != actors.end(); ++i)
     {
       if (i->thumb.IsEmpty())
@@ -1792,12 +1814,15 @@ namespace VIDEO
         || (info->Content() == CONTENT_TVSHOWS && !pItem->m_bIsFolder))
       strNfoFile = GetnfoFile(pItem, bGrabAny);
     if (info->Content() == CONTENT_TVSHOWS && pItem->m_bIsFolder)
-      URIUtils::AddFileToFolder(pItem->GetPath(), "tvshow.nfo", strNfoFile);
+      strNfoFile = URIUtils::AddFileToFolder(pItem->GetPath(), "tvshow.nfo");
 
     CNfoFile::NFOResult result=CNfoFile::NO_NFO;
     if (!strNfoFile.IsEmpty() && CFile::Exists(strNfoFile))
     {
-      result = m_nfoReader.Create(strNfoFile,info,pItem->GetVideoInfoTag()->m_iEpisode);
+      if (info->Content() == CONTENT_TVSHOWS && !pItem->m_bIsFolder)
+        result = m_nfoReader.Create(strNfoFile,info,pItem->GetVideoInfoTag()->m_iEpisode);
+      else
+        result = m_nfoReader.Create(strNfoFile,info);
 
       CStdString type;
       switch(result)

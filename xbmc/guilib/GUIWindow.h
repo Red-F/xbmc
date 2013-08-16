@@ -9,8 +9,8 @@
 #pragma once
 
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -98,7 +98,11 @@ public:
    \sa FrameMove
    */
   virtual void DoRender();
-  virtual void Render();
+
+  /*! \brief Do any post render activities.
+    Check if window closing animation is finished and finalize window closing.
+   */
+  void AfterRender();
   
   /*! \brief Main update function, called every frame prior to rendering
    Any window that requires updating on a frame by frame basis (such as to maintain

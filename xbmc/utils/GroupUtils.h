@@ -1,7 +1,7 @@
 #pragma once
 /*
- *      Copyright (C) 2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2012-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,6 +37,6 @@ typedef enum {
 class GroupUtils
 {
 public:
-  static bool Group(GroupBy groupBy, const CFileItemList &items, CFileItemList &groupedItems, GroupAttribute groupAttributes = GroupAttributeNone);
-  static bool GroupAndSort(GroupBy groupBy, const CFileItemList &items, const SortDescription &sortDescription, CFileItemList &groupedItems, GroupAttribute groupAttributes = GroupAttributeNone);
+  static bool Group(GroupBy groupBy, const std::string &baseDir, const CFileItemList &items, CFileItemList &groupedItems, GroupAttribute groupAttributes = GroupAttributeNone);
+  static bool GroupAndSort(GroupBy groupBy, const std::string &baseDir, const CFileItemList &items, const SortDescription &sortDescription, CFileItemList &groupedItems, GroupAttribute groupAttributes = GroupAttributeNone);
 };

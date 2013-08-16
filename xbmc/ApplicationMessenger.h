@@ -1,8 +1,8 @@
 #pragma once
 
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,14 +22,13 @@
 
 #include "threads/CriticalSection.h"
 #include "utils/StdString.h"
-#include "guilib/Key.h"
+#include "guilib/WindowIDs.h"
 #include "threads/Thread.h"
 #include "threads/Event.h"
 #include <boost/shared_ptr.hpp>
 
-#include "PlatformDefs.h"
-
 #include <queue>
+#include "utils/GlobalsHandling.h"
 
 class CFileItem;
 class CFileItemList;
@@ -37,6 +36,7 @@ class CGUIDialog;
 class CGUIWindow;
 class CGUIMessage;
 class CVideoInfoTag;
+class CAction;
 
 namespace MUSIC_INFO
 {
@@ -51,9 +51,11 @@ namespace MUSIC_INFO
 
 #define TMSG_MEDIA_PLAY           200
 #define TMSG_MEDIA_STOP           201
+// the PAUSE is indeed a PLAYPAUSE
 #define TMSG_MEDIA_PAUSE          202
 #define TMSG_MEDIA_RESTART        203
 #define TMSG_MEDIA_UNPAUSE        204
+#define TMSG_MEDIA_PAUSE_IF_PLAYING   205
 
 #define TMSG_PLAYLISTPLAYER_PLAY  210
 #define TMSG_PLAYLISTPLAYER_NEXT  211
@@ -87,6 +89,10 @@ namespace MUSIC_INFO
 #define TMSG_RENDERER_FLUSH       312
 #define TMSG_INHIBITIDLESHUTDOWN  313
 #define TMSG_LOADPROFILE          314
+#define TMSG_ACTIVATESCREENSAVER  315
+#define TMSG_CECTOGGLESTATE       316
+#define TMSG_CECACTIVATESOURCE    317
+#define TMSG_CECSTANDBY           318
 
 #define TMSG_NETWORKMESSAGE         500
 
@@ -100,6 +106,7 @@ namespace MUSIC_INFO
 #define TMSG_GUI_INFOBOOL             609
 #define TMSG_GUI_ADDON_DIALOG         610
 #define TMSG_GUI_MESSAGE              611
+#define TMSG_START_ANDROID_ACTIVITY   612
 
 #define TMSG_CALLBACK             800
 
@@ -111,13 +118,13 @@ namespace MUSIC_INFO
 
 typedef struct
 {
-  DWORD dwMessage;
-  DWORD dwParam1;
-  DWORD dwParam2;
+  unsigned int dwMessage;
+  unsigned int dwParam1;
+  unsigned int dwParam2;
   CStdString strParam;
   std::vector<CStdString> params;
   boost::shared_ptr<CEvent> waitEvent;
-  LPVOID lpVoid;
+  void* lpVoid;
 }
 ThreadMessage;
 
@@ -137,6 +144,12 @@ struct ThreadMessageCallback
   void (*callback)(void *userptr);
   void *userptr;
 };
+
+class CApplicationMessenger;
+namespace xbmcutil
+{
+   template<class T> class GlobalsSingleton;
+}
 
 class CApplicationMessenger
 {
@@ -158,8 +171,10 @@ public:
   void MediaPlay(const CFileItem &item);
   void MediaPlay(const CFileItemList &item, int song = 0);
   void MediaPlay(int playlistid, int song = -1);
-  void MediaStop(bool bWait = true);
+  void MediaStop(bool bWait = true, int playlistid = -1);
   void MediaPause();
+  void MediaUnPause();
+  void MediaPauseIfPlaying();
   void MediaRestart(bool bWait);
 
   void PlayListPlayerPlay();
@@ -191,6 +206,7 @@ public:
   void RestartApp();
   void Reset();
   void InhibitIdleShutdown(bool inhibit);
+  void ActivateScreensaver();
   void SwitchToFullscreen(); //
   void Minimize(bool wait = false);
   void ExecOS(const CStdString command, bool waitExit = false);
@@ -203,12 +219,15 @@ public:
   void SetCurrentItem(const CFileItem& item);
 
   void LoadProfile(unsigned int idx);
+  bool CECToggleState();
+  bool CECActivateSource();
+  bool CECStandby();
 
   CStdString GetResponse();
   int SetResponse(CStdString response);
   void ExecBuiltIn(const CStdString &command, bool wait = false);
 
-  void NetworkMessage(DWORD dwMessage, DWORD dwParam = 0);
+  void NetworkMessage(unsigned int dwMessage, unsigned int dwParam = 0);
 
   void DoModal(CGUIDialog *pDialog, int iWindowID, const CStdString &param = "");
   void Show(CGUIDialog *pDialog);
@@ -234,13 +253,15 @@ public:
   
   bool SetupDisplay();
   bool DestroyDisplay();
+  void StartAndroidActivity(const std::vector<CStdString> &params);
 
+  virtual ~CApplicationMessenger();
 private:
   // private construction, and no assignements; use the provided singleton methods
+   friend class xbmcutil::GlobalsSingleton<CApplicationMessenger>;
   CApplicationMessenger();
   CApplicationMessenger(const CApplicationMessenger&);
   CApplicationMessenger const& operator=(CApplicationMessenger const&);
-  virtual ~CApplicationMessenger();
   void ProcessMessage(ThreadMessage *pMsg);
 
   std::queue<ThreadMessage*> m_vecMessages;
@@ -249,3 +270,8 @@ private:
   CCriticalSection m_critBuffer;
   CStdString bufferResponse;
 };
+
+XBMC_GLOBAL_REF(CApplicationMessenger,s_messenger);
+#define s_messenger XBMC_GLOBAL_USE(CApplicationMessenger)
+
+

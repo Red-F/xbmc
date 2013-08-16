@@ -1,29 +1,30 @@
 /*
-* XBMC Media Center
-* Shader Classes
-* Copyright (c) 2007 d4rk
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
-
+ *      Copyright (c) 2007 d4rk
+ *      Copyright (C) 2007-2013 Team XBMC
+ *      http://xbmc.org
+ *
+ *  This Program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2, or (at your option)
+ *  any later version.
+ *
+ *  This Program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with XBMC; see the file COPYING.  If not, see
+ *  <http://www.gnu.org/licenses/>.
+ *
+ */
 
 #include "system.h"
 #include "../RenderFlags.h"
 #include "YUV2RGBShader.h"
 #include "settings/AdvancedSettings.h"
 #include "guilib/TransformMatrix.h"
+#include "windowing/WindowingFactory.h"
 #include "utils/log.h"
 #if defined(HAS_GL) || defined(HAS_GLES)
 #include "utils/GLUtils.h"
@@ -106,8 +107,20 @@ void CalculateYUVMatrix(TransformMatrix &matrix
       coef.m[row][col] = conv[col][row];
   coef.identity = false;
 
+
+  if(g_Windowing.UseLimitedColor())
+  {
+    matrix *= TransformMatrix::CreateTranslation(+ 16.0f / 255
+                                               , + 16.0f / 255
+                                               , + 16.0f / 255);
+    matrix *= TransformMatrix::CreateScaler((235 - 16) / 255.0f
+                                          , (235 - 16) / 255.0f
+                                          , (235 - 16) / 255.0f);
+  }
+
   matrix *= coef;
   matrix *= TransformMatrix::CreateTranslation(0.0, -0.5, -0.5);
+
   if (!(flags & CONF_FLAGS_YUV_FULLRANGE))
   {
     matrix *= TransformMatrix::CreateScaler(255.0f / (235 - 16)

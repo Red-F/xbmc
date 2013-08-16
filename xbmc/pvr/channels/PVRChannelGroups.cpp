@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2012-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #include "PVRChannelGroups.h"
 
 #include "FileItem.h"
-#include "settings/GUISettings.h"
+#include "settings/Settings.h"
 #include "guilib/GUIWindowManager.h"
 #include "utils/log.h"
 #include "URL.h"
@@ -52,7 +52,7 @@ void CPVRChannelGroups::Clear(void)
 
 bool CPVRChannelGroups::GetGroupsFromClients(void)
 {
-  if (! g_guiSettings.GetBool("pvrmanager.syncchannelgroups"))
+  if (! CSettings::Get().GetBool("pvrmanager.syncchannelgroups"))
     return true;
 
   return g_PVRClients->GetChannelGroups(this) == PVR_ERROR_NO_ERROR;
@@ -160,7 +160,7 @@ void CPVRChannelGroups::RemoveFromAllGroups(const CPVRChannel &channel)
 
 bool CPVRChannelGroups::Update(bool bChannelsOnly /* = false */)
 {
-  bool bUpdateAllGroups = !bChannelsOnly && g_guiSettings.GetBool("pvrmanager.syncchannelgroups");
+  bool bUpdateAllGroups = !bChannelsOnly && CSettings::Get().GetBool("pvrmanager.syncchannelgroups");
   bool bReturn(true);
 
   // sync groups
@@ -218,7 +218,7 @@ bool CPVRChannelGroups::LoadUserDefinedChannelGroups(void)
   if (!database)
     return false;
 
-  bool bSyncWithBackends = g_guiSettings.GetBool("pvrmanager.syncchannelgroups");
+  bool bSyncWithBackends = CSettings::Get().GetBool("pvrmanager.syncchannelgroups");
 
   CSingleLock lock(m_critSection);
 
@@ -245,7 +245,11 @@ bool CPVRChannelGroups::LoadUserDefinedChannelGroups(void)
     // load only user defined groups, as internal group is already loaded
     if (!(*it)->IsInternalGroup())
     {
-      (*it)->Load();
+      if (!(*it)->Load())
+      {
+        CLog::Log(LOGDEBUG, "PVR - %s - failed to load channel group '%s'", __FUNCTION__, (*it)->GroupName().c_str());
+        return false;
+      }
 
       // remove empty groups when sync with backend is enabled
       if (bSyncWithBackends && (*it)->Size() == 0)
@@ -275,14 +279,21 @@ bool CPVRChannelGroups::Load(void)
   // create and load the internal channel group
   CPVRChannelGroupPtr internalChannels = CPVRChannelGroupPtr(new CPVRChannelGroupInternal(m_bRadio));
   m_groups.push_back(internalChannels);
-  internalChannels->Load();
+  if (!internalChannels->Load())
+  {
+    CLog::Log(LOGERROR, "PVR - %s - failed to load channels", __FUNCTION__);
+    return false;
+  }
 
   // load the other groups from the database
-  LoadUserDefinedChannelGroups();
+  if (!LoadUserDefinedChannelGroups())
+  {
+    CLog::Log(LOGERROR, "PVR - %s - failed to load channel groups", __FUNCTION__);
+    return false;
+  }
 
   // set the internal group as selected at startup
   internalChannels->SetSelectedGroup(true);
-  internalChannels->Renumber();
   m_selectedGroup = internalChannels;
 
   CLog::Log(LOGDEBUG, "PVR - %s - %d %s channel groups loaded", __FUNCTION__, (int) m_groups.size(), m_bRadio ? "radio" : "TV");

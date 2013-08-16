@@ -1,13 +1,12 @@
 # XBMC Media Center language file
-# XBMC-core v12.0-BETA2
 msgid ""
 msgstr ""
-"Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
+"Project-Id-Version: XBMC Main\n"
 "Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: XBMC Translation Team\n"
-"Language-Team: Spanish (Argentina) (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/es_AR/)\n"
+"Language-Team: Spanish (Argentina) (http://www.transifex.com/projects/p/xbmc-main/language/es_AR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -48,7 +47,7 @@ msgstr "Archivos"
 
 msgctxt "#8"
 msgid "Weather"
-msgstr "Clima"
+msgstr "El Clima"
 
 msgctxt "#9"
 msgid "xbmc media center"
@@ -574,6 +573,10 @@ msgctxt "#167"
 msgid "Cancel file operations"
 msgstr "Cancelar operaciones de archivos"
 
+msgctxt "#168"
+msgid "%s- %s"
+msgstr "%s- %s"
+
 msgctxt "#169"
 msgid "Resolution"
 msgstr "Resolución"
@@ -668,7 +671,7 @@ msgstr "¡No se encontró información!"
 
 msgctxt "#196"
 msgid "Select movie:"
-msgstr "Seleccione película:"
+msgstr "Selecciona película:"
 
 msgctxt "#197"
 msgid "Querying %s info"
@@ -860,7 +863,7 @@ msgstr "Visualización"
 
 msgctxt "#251"
 msgid "Select destination directory"
-msgstr "Seleccione el directorio destino"
+msgstr "Selecciona el directorio destino"
 
 msgctxt "#252"
 msgid "Output stereo to all speakers"
@@ -869,10 +872,6 @@ msgstr "Salida estéreo a todos los parlantes"
 msgctxt "#253"
 msgid "Number of channels"
 msgstr "Número de canales"
-
-msgctxt "#254"
-msgid "- DTS capable receiver"
-msgstr "- Receptor compatible DTS"
 
 msgctxt "#255"
 msgid "CDDB"
@@ -1000,7 +999,7 @@ msgstr "Idioma de audio preferido"
 
 msgctxt "#286"
 msgid "Preferred subtitle language"
-msgstr "Idioma de subtitulos preferido"
+msgstr "Idioma de subtítulos preferido"
 
 msgctxt "#287"
 msgid "Subtitles"
@@ -1011,8 +1010,8 @@ msgid "Font"
 msgstr "Fuente"
 
 msgctxt "#289"
-msgid "- Size"
-msgstr "- Tamaño"
+msgid "Size"
+msgstr "Tamaño"
 
 msgctxt "#290"
 msgid "Dynamic range compression"
@@ -1045,22 +1044,6 @@ msgstr "Retardo de sonido"
 msgctxt "#298"
 msgid "Bookmarks"
 msgstr "Marcadores"
-
-msgctxt "#299"
-msgid "- AAC capable receiver"
-msgstr "- Receptor compatible AAC"
-
-msgctxt "#300"
-msgid "- MP1 capable receiver"
-msgstr "- Receptor compatible MP1"
-
-msgctxt "#301"
-msgid "- MP2 capable receiver"
-msgstr "- Receptor compatible MP2"
-
-msgctxt "#302"
-msgid "- MP3 capable receiver"
-msgstr "- Receptor compatible MP3"
 
 msgctxt "#303"
 msgid "Delay"
@@ -1226,18 +1209,6 @@ msgctxt "#346"
 msgid "Boost volume level on downmix"
 msgstr "Aumentar el volumen al hacer un downmix"
 
-msgctxt "#347"
-msgid "- DTS-HD capable receiver"
-msgstr "- Receptor compatible DTS-HD"
-
-msgctxt "#348"
-msgid "- Multichannel LPCM capable receiver"
-msgstr "- Receptor compatible LPCM multicanal"
-
-msgctxt "#349"
-msgid "- TrueHD capable receiver"
-msgstr "- Receptor compatible TrueHD"
-
 msgctxt "#350"
 msgid "Programs"
 msgstr "Programas"
@@ -1293,10 +1264,6 @@ msgstr "Nivel de atenuación del protector de pantalla"
 msgctxt "#363"
 msgid "Sort by: File"
 msgstr "Ordenar por: Archivo"
-
-msgctxt "#364"
-msgid "- Dolby Digital (AC3) capable receiver"
-msgstr "- Receptor compatible AC3"
 
 msgctxt "#365"
 msgid "Sort by: Name"
@@ -1424,7 +1391,7 @@ msgstr "Bruma"
 
 msgctxt "#396"
 msgid "Select location"
-msgstr "Seleccione un lugar"
+msgstr "Selecciona un lugar"
 
 msgctxt "#397"
 msgid "Refresh time"
@@ -1440,7 +1407,7 @@ msgstr "Velocidad en"
 
 msgctxt "#400"
 msgid "Weather"
-msgstr "Clima"
+msgstr "El Clima"
 
 msgctxt "#401"
 msgid "Temp"
@@ -1504,11 +1471,11 @@ msgstr "Ver: Iconos grandes"
 
 msgctxt "#418"
 msgid "Low"
-msgstr "Bajo"
+msgstr "Min"
 
 msgctxt "#419"
 msgid "High"
-msgstr "Alto"
+msgstr "Max"
 
 msgctxt "#420"
 msgid "HDMI"
@@ -1617,10 +1584,6 @@ msgstr "DVD"
 msgctxt "#447"
 msgid "Autorun media"
 msgstr "Reproducción automática"
-
-msgctxt "#448"
-msgid "LCD"
-msgstr "LCD"
 
 msgctxt "#449"
 msgid "Enabled"
@@ -1880,7 +1843,7 @@ msgstr "Cambiar medio"
 
 msgctxt "#524"
 msgid "Select playlist"
-msgstr "Seleccione lista de reproducción"
+msgstr "Selecciona lista de reproducción"
 
 msgctxt "#525"
 msgid "New playlist..."
@@ -1904,7 +1867,7 @@ msgstr "Error: Título duplicado"
 
 msgctxt "#530"
 msgid "Select genre"
-msgstr "Seleccione género"
+msgstr "Selecciona género"
 
 msgctxt "#531"
 msgid "New genre"
@@ -2402,10 +2365,6 @@ msgctxt "#705"
 msgid "Network"
 msgstr "Red"
 
-msgctxt "#706"
-msgid "- Server"
-msgstr "- Servidor"
-
 msgctxt "#708"
 msgid "Use an HTTP proxy server to access the internet"
 msgstr "Usar un proxy HTTP para acceder a internet"
@@ -2422,10 +2381,6 @@ msgctxt "#713"
 msgid "HTTP proxy"
 msgstr "Proxy HTTP"
 
-msgctxt "#715"
-msgid "- Assignment"
-msgstr "- Asignación"
-
 msgctxt "#716"
 msgid "Automatic (DHCP)"
 msgstr "Automática (DHCP)"
@@ -2435,20 +2390,8 @@ msgid "Manual (Static)"
 msgstr "Manual (Estática)"
 
 msgctxt "#719"
-msgid "- IP address"
-msgstr "- Dirección IP"
-
-msgctxt "#720"
-msgid "- Netmask"
-msgstr "- Máscara de Subred"
-
-msgctxt "#721"
-msgid "- Default gateway"
-msgstr "- Puerta de Enlace"
-
-msgctxt "#722"
-msgid "- DNS server"
-msgstr "- Servidor DNS"
+msgid "IP address"
+msgstr "IP"
 
 msgctxt "#723"
 msgid "Save & restart"
@@ -2475,32 +2418,24 @@ msgid "FTP server"
 msgstr "Servidor FTP"
 
 msgctxt "#730"
-msgid "- Port"
-msgstr "- Puerto"
+msgid "Port"
+msgstr "Puerto"
 
 msgctxt "#732"
 msgid "Save & apply"
 msgstr "Grabar y aplicar"
 
 msgctxt "#733"
-msgid "- Password"
-msgstr "- Contraseña"
+msgid "Password"
+msgstr "Contraseña"
 
 msgctxt "#734"
 msgid "No pass"
 msgstr "Sin contraseña"
 
 msgctxt "#735"
-msgid "- Character set"
-msgstr "- Juego de caracteres"
-
-msgctxt "#736"
-msgid "- Style"
-msgstr "- Estilo"
-
-msgctxt "#737"
-msgid "- Colour"
-msgstr "- Color"
+msgid "Character set"
+msgstr "Conjunto de caracteres"
 
 msgctxt "#738"
 msgid "Normal"
@@ -2552,7 +2487,7 @@ msgstr "Espejar imagen"
 
 msgctxt "#750"
 msgid "Are you sure?"
-msgstr "¿Está seguro?"
+msgstr "¿Estás seguro?"
 
 msgctxt "#751"
 msgid "Removing source"
@@ -2631,16 +2566,8 @@ msgid "Network interface"
 msgstr "Interfaz de red"
 
 msgctxt "#776"
-msgid "- Wireless network name (ESSID)"
-msgstr "- Nombre de la red inalámbrica (ESSID)"
-
-msgctxt "#777"
-msgid "- Wireless password"
-msgstr "- Contraseña de la red inalámbrica"
-
-msgctxt "#778"
-msgid "- Wireless security"
-msgstr "- Seguridad de la red inalámbrica"
+msgid "Wireless network name (ESSID)"
+msgstr "Nombre de la red inalámbrica (ESSID)"
 
 msgctxt "#779"
 msgid "Save and apply network interface settings"
@@ -2726,13 +2653,9 @@ msgctxt "#799"
 msgid "Library Update"
 msgstr "Actualización de Colección"
 
-msgctxt "#800"
-msgid "Music library needs to rescan art from tags"
-msgstr "La colección de música necesita re-escanear portadas desde las etiquetas"
-
 msgctxt "#801"
 msgid "Would you like to scan now?"
-msgstr "¿Desea que se escaneen ahora?"
+msgstr "¿Deseas que se escaneen ahora?"
 
 msgctxt "#850"
 msgid "Invalid port number entered"
@@ -2754,10 +2677,6 @@ msgctxt "#999"
 msgid "Add Videos..."
 msgstr "Añadir Videos..."
 
-msgctxt "#1000"
-msgid "- Preview"
-msgstr "- Vista previa"
-
 msgctxt "#1001"
 msgid "Unable to connect"
 msgstr "Imposible conectar"
@@ -2772,7 +2691,7 @@ msgstr "Podría ser debido a que la red no esté conectada."
 
 msgctxt "#1004"
 msgid "Would you like to add it anyway?"
-msgstr "¿Desea añadirla de todos modos?"
+msgstr "¿Deseas añadirla de todos modos?"
 
 msgctxt "#1006"
 msgid "IP address"
@@ -2943,8 +2862,8 @@ msgid "Other..."
 msgstr "Otro..."
 
 msgctxt "#1048"
-msgid "- Username"
-msgstr "- Nombre usuario"
+msgid "Username"
+msgstr "Usuario"
 
 msgctxt "#1049"
 msgid "Script settings"
@@ -3093,10 +3012,6 @@ msgstr "Permitir a XBMC recibir contenido de AirPlay"
 msgctxt "#1271"
 msgid "Device name"
 msgstr "Nombre del Dispositivo"
-
-msgctxt "#1272"
-msgid "- Use password protection"
-msgstr "- Utilizar protección con contraseña"
 
 msgctxt "#1273"
 msgid "AirPlay"
@@ -3354,10 +3269,6 @@ msgctxt "#2101"
 msgid "Newer version needed - See log"
 msgstr "Necesaria versión nueva. Consulta el log"
 
-msgctxt "#4501"
-msgid "Enable LCD/VFD"
-msgstr "Habilitar LCD/VFD"
-
 msgctxt "#10000"
 msgid "Home"
 msgstr "Inicio"
@@ -3416,7 +3327,7 @@ msgstr "Configuración - Programas"
 
 msgctxt "#10014"
 msgid "Settings - Weather"
-msgstr "Configuración - Clima"
+msgstr "Configuración - El Clima"
 
 msgctxt "#10015"
 msgid "Settings - Music"
@@ -3473,6 +3384,18 @@ msgstr "Cuadro de diálogo Sí/No"
 msgctxt "#10101"
 msgid "Progress dialog"
 msgstr "Diálogo de progreso"
+
+msgctxt "#10131"
+msgid "Lock settings"
+msgstr "Bloquear ajustes"
+
+msgctxt "#10134"
+msgid "Favourites"
+msgstr "Favoritos"
+
+msgctxt "#10140"
+msgid "Add-on settings"
+msgstr "Configuración del Add-on"
 
 msgctxt "#10210"
 msgid "Looking for subtitles..."
@@ -3768,7 +3691,7 @@ msgstr "Procesando %s"
 
 msgctxt "#12351"
 msgid "The art cache in your video library needs updating."
-msgstr "El caché de arte en su colección de video necesita actualizarse."
+msgstr "El caché de arte en tu colección de video necesita actualizarse."
 
 msgctxt "#12352"
 msgid "No downloading is needed."
@@ -3780,7 +3703,7 @@ msgstr "Reactivar bloqueo"
 
 msgctxt "#12354"
 msgid "Would you like to update it now?"
-msgstr "¿Desea actualizarlo ahora?"
+msgstr "¿Deseas actualizarlo ahora?"
 
 msgctxt "#12356"
 msgid "Change lock"
@@ -3872,7 +3795,7 @@ msgstr "Nivel de batería"
 
 msgctxt "#12600"
 msgid "Weather"
-msgstr "Clima"
+msgstr "El Clima"
 
 msgctxt "#12900"
 msgid "Screensaver"
@@ -4012,7 +3935,7 @@ msgstr "¿Grabar resolución?"
 
 msgctxt "#13111"
 msgid "Would you like to keep this resolution?"
-msgstr "¿Desea mantener esta resolución?"
+msgstr "¿Deseas mantener esta resolución?"
 
 msgctxt "#13112"
 msgid "High quality upscaling"
@@ -4080,7 +4003,7 @@ msgstr "Si continúa, puede que pierda el control de XBMC"
 
 msgctxt "#13142"
 msgid "any longer. Are you sure you want to stop the Event server?"
-msgstr "¿Está seguro de que desea detener el servidor de eventos?"
+msgstr "¿Estás seguro de que deseas detener el servidor de eventos?"
 
 msgctxt "#13144"
 msgid "Change Apple Remote mode?"
@@ -4088,15 +4011,15 @@ msgstr "¿Cambiar modo del mando Apple?"
 
 msgctxt "#13145"
 msgid "If you are currently using the Apple Remote to control"
-msgstr "Si está usando el mando Apple para controlar"
+msgstr "Si estás usando el mando Apple para controlar"
 
 msgctxt "#13146"
 msgid "XBMC, changing this setting might affect your ability"
-msgstr "XBMC, cambiar éste ajuste puede afectar su capacidad"
+msgstr "XBMC, cambiar éste ajuste puede afectar tu capacidad"
 
 msgctxt "#13147"
 msgid "to continue controlling it. Do you want to proceed?"
-msgstr "para continuar controlándolo.¿Desea continuar?"
+msgstr "para continuar controlándolo. ¿Deseas continuar?"
 
 msgctxt "#13159"
 msgid "Subnet mask"
@@ -4294,10 +4217,6 @@ msgctxt "#13302"
 msgid "Fan speed override"
 msgstr "Control manual del ventilador"
 
-msgctxt "#13303"
-msgid "- Fonts"
-msgstr "- Fuentes del skin"
-
 msgctxt "#13304"
 msgid "Enable flipping bi-directional strings"
 msgstr "Invertir cadenas bidireccionales"
@@ -4316,7 +4235,7 @@ msgstr "Plantilla de nombrado de pistas"
 
 msgctxt "#13308"
 msgid "Do you wish to reboot your system"
-msgstr "¿Desea reiniciar su equipo"
+msgstr "¿Deseas reiniciar tu equipo"
 
 msgctxt "#13309"
 msgid "instead of just XBMC?"
@@ -4974,33 +4893,21 @@ msgctxt "#14026"
 msgid "Video cache - DVD-ROM"
 msgstr "Caché de video - DVDRom"
 
-msgctxt "#14027"
-msgid "- Local Network"
-msgstr "- Red Local"
-
 msgctxt "#14028"
-msgid "- Internet"
-msgstr "- Internet"
+msgid "Internet"
+msgstr "Internet"
 
 msgctxt "#14030"
 msgid "Audio cache - DVD-ROM"
 msgstr "Caché de sonido - DVD-ROM"
 
-msgctxt "#14031"
-msgid "- Local Network"
-msgstr "- Red Local"
-
 msgctxt "#14032"
-msgid "- Internet"
-msgstr "- Internet"
+msgid "Internet"
+msgstr "Internet"
 
 msgctxt "#14034"
 msgid "DVD cache - DVD-ROM"
 msgstr "Caché de DVD - DVD-ROM"
-
-msgctxt "#14035"
-msgid "- Local Network"
-msgstr "- Red Local"
 
 msgctxt "#14036"
 msgid "Services"
@@ -5016,7 +4923,7 @@ msgstr "XBMC necesita reiniciar para poder cambiar su"
 
 msgctxt "#14040"
 msgid "network setup.  Would you like to restart now?"
-msgstr "configuración de red. ¿Desea reiniciar ahora?"
+msgstr "configuración de red. ¿Deseas reiniciar ahora?"
 
 msgctxt "#14041"
 msgid "Internet connection bandwidth limitation"
@@ -5124,7 +5031,7 @@ msgstr "Introduzca la dirección IP"
 
 msgctxt "#14069"
 msgid "Apply these settings now?"
-msgstr "¿Desea aplicar las opciones ahora?"
+msgstr "¿Deseas aplicar las opciones ahora?"
 
 msgctxt "#14070"
 msgid "Apply changes now"
@@ -5149,10 +5056,6 @@ msgstr "Añadir a favoritos"
 msgctxt "#14077"
 msgid "Remove from favourites"
 msgstr "Eliminar de favoritos"
-
-msgctxt "#14078"
-msgid "- Colours"
-msgstr "- Colores"
 
 msgctxt "#14079"
 msgid "Timezone country"
@@ -5290,10 +5193,6 @@ msgctxt "#15109"
 msgid "Skin default"
 msgstr "Por defecto"
 
-msgctxt "#15111"
-msgid "- Theme"
-msgstr "- Tema"
-
 msgctxt "#15112"
 msgid "Default theme"
 msgstr "Tema predeterminado"
@@ -5302,30 +5201,6 @@ msgctxt "#15200"
 msgid "Last.fm"
 msgstr "Last.fm"
 
-msgctxt "#15201"
-msgid "Submit songs to Last.fm"
-msgstr "Enviar canciones a Last.fm"
-
-msgctxt "#15202"
-msgid "Last.fm username"
-msgstr "Usuario de Last.fm"
-
-msgctxt "#15203"
-msgid "Last.fm password"
-msgstr "Contraseña de Last.fm"
-
-msgctxt "#15204"
-msgid "Unable to handshake: sleeping..."
-msgstr "Imposible conectar: durmiendo..."
-
-msgctxt "#15205"
-msgid "Please update XBMC"
-msgstr "Por favor, actualice XBMC"
-
-msgctxt "#15206"
-msgid "Bad authorization: Check username and password"
-msgstr "Autorización incorrecta: compruebe usuario y contraseña"
-
 msgctxt "#15207"
 msgid "Connected"
 msgstr "Conectado"
@@ -5333,22 +5208,6 @@ msgstr "Conectado"
 msgctxt "#15208"
 msgid "Not connected"
 msgstr "No conectado"
-
-msgctxt "#15209"
-msgid "Submit interval %i"
-msgstr "Intervalo de envío %i"
-
-msgctxt "#15210"
-msgid "Cached %i songs"
-msgstr "Almacenadas %i canciones"
-
-msgctxt "#15211"
-msgid "Submitting..."
-msgstr "Enviando..."
-
-msgctxt "#15212"
-msgid "Submitting in %i secs"
-msgstr "Enviando en %i segs"
 
 msgctxt "#15213"
 msgid "Play using..."
@@ -5365,218 +5224,6 @@ msgstr "Ocultar nombres de archivo en vista de miniaturas"
 msgctxt "#15216"
 msgid "Play in party mode"
 msgstr "Reproducir en modo fiesta"
-
-msgctxt "#15217"
-msgid "Submit songs to Libre.fm"
-msgstr "Enviar canciones a Libre.fm"
-
-msgctxt "#15218"
-msgid "Libre.fm username"
-msgstr "Usuario de Libre.fm"
-
-msgctxt "#15219"
-msgid "Libre.fm password"
-msgstr "Contraseña de Libre.fm"
-
-msgctxt "#15220"
-msgid "Libre.fm"
-msgstr "Libre.fm"
-
-msgctxt "#15221"
-msgid "Song submission"
-msgstr "Envío de canción"
-
-msgctxt "#15250"
-msgid "Submit Last.fm radio to Last.fm"
-msgstr "Enviar datos de radio Last.fm a Last.fm"
-
-msgctxt "#15251"
-msgid "Connecting to Last.fm..."
-msgstr "Conectando a Last.fm..."
-
-msgctxt "#15252"
-msgid "Selecting station..."
-msgstr "Seleccionando emisora..."
-
-msgctxt "#15253"
-msgid "Search similar artists..."
-msgstr "Buscar intérpretes similares..."
-
-msgctxt "#15254"
-msgid "Search similar tags..."
-msgstr "Buscar géneros similares..."
-
-msgctxt "#15255"
-msgid "Your profile (%name%)"
-msgstr "Tu perfil (%name%)"
-
-msgctxt "#15256"
-msgid "Overall top tags"
-msgstr "Top global de géneros"
-
-msgctxt "#15257"
-msgid "Top artists for tag %name%"
-msgstr "Top intérpretes del género %name%"
-
-msgctxt "#15258"
-msgid "Top albums for tag %name%"
-msgstr "Top álbumes del género %name%"
-
-msgctxt "#15259"
-msgid "Top tracks for tag %name%"
-msgstr "Top canciones del género %name%"
-
-msgctxt "#15260"
-msgid "Listen to tag %name% Last.fm radio"
-msgstr "Oír el género %name% desde la radio Last.fm"
-
-msgctxt "#15261"
-msgid "Similar artists as %name%"
-msgstr "Intérpretes similares a %name%"
-
-msgctxt "#15262"
-msgid "Top %name% albums"
-msgstr "Top álbumes de %name%"
-
-msgctxt "#15263"
-msgid "Top %name% tracks"
-msgstr "Top canciones de %name%"
-
-msgctxt "#15264"
-msgid "Top %name% tags"
-msgstr "Top géneros de %name%"
-
-msgctxt "#15265"
-msgid "Biggest fans of %name%"
-msgstr "Mayores fans de %name%"
-
-msgctxt "#15266"
-msgid "Listen to %name% fans Last.fm radio"
-msgstr "Oír a fans de %name% desde la radio Last.fm"
-
-msgctxt "#15267"
-msgid "Listen to %name% similar artists Last.fm radio"
-msgstr "Oír artistas similares a %name% desde la radio Last.fm"
-
-msgctxt "#15268"
-msgid "Top artists for user %name%"
-msgstr "Top intérpretes del usuario %name%"
-
-msgctxt "#15269"
-msgid "Top albums for user %name%"
-msgstr "Top álbumes del usuario %name%"
-
-msgctxt "#15270"
-msgid "Top tracks for user %name%"
-msgstr "Top canciones del usuario %name%"
-
-msgctxt "#15271"
-msgid "Friends of user %name%"
-msgstr "Amigos del usuario %name%"
-
-msgctxt "#15272"
-msgid "Neighbours of user %name%"
-msgstr "Vecinos del usuario %name%"
-
-msgctxt "#15273"
-msgid "Weekly artist chart for %name%"
-msgstr "Gráfica semanal de intérprete para %name%"
-
-msgctxt "#15274"
-msgid "Weekly album chart for %name%"
-msgstr "Gráfica semanal de álbum para %name%"
-
-msgctxt "#15275"
-msgid "Weekly track chart for %name%"
-msgstr "Gráfica semanal de canciones para %name%"
-
-msgctxt "#15276"
-msgid "Listen to %name%'s neighbours Last.fm radio"
-msgstr "Oír a los vecinos de %name% desde la radio Last.fm"
-
-msgctxt "#15277"
-msgid "Listen to %name%'s personal Last.fm radio"
-msgstr "Oír la radio Last.fm personal de %name%"
-
-msgctxt "#15278"
-msgid "Listen to %name%'s mix Last.fm radio"
-msgstr "Oír el mix de %name% desde la radio Last.fm"
-
-msgctxt "#15279"
-msgid "Retrieving list from Last.fm..."
-msgstr "Obteniendo la lista desde Last.fm..."
-
-msgctxt "#15280"
-msgid "Can't retrieve list from Last.fm..."
-msgstr "No se puede obtener la lista desde Last.fm..."
-
-msgctxt "#15281"
-msgid "Enter an artist name to find related ones"
-msgstr "Introduzca un nombre de intérprete para buscar relacionados"
-
-msgctxt "#15282"
-msgid "Enter a tag name to find similar ones"
-msgstr "Introduzca un género para encontrar similares"
-
-msgctxt "#15283"
-msgid "Tracks recently listened by %name%"
-msgstr "Canciones escuchadas recientemente por %name%"
-
-msgctxt "#15284"
-msgid "Listen to %name%'s recommendations Last.fm radio"
-msgstr "Escuche recomendaciones de %name% en la radio Last.fm"
-
-msgctxt "#15285"
-msgid "Top tags for user %name%"
-msgstr "Top de etiquetas para el usuario %name%"
-
-msgctxt "#15287"
-msgid "Do you want to add the current track to your loved tracks?"
-msgstr "¿Desea añadir la pista actual a su lista de canciones favoritas?"
-
-msgctxt "#15288"
-msgid "Do you want to ban the current track?"
-msgstr "¿Desea prohibir la reproducción de la pista actual?"
-
-msgctxt "#15289"
-msgid "Added to your loved tracks: '%s'."
-msgstr "Se ha añadido a sus canciones favoritas: '%s'."
-
-msgctxt "#15290"
-msgid "Could not add '%s' to your loved tracks."
-msgstr "No se pudo añadir '%s' a sus canciones favoritas."
-
-msgctxt "#15291"
-msgid "Banned: '%s'."
-msgstr "Prohibida: '%s'."
-
-msgctxt "#15292"
-msgid "Could not ban '%s'."
-msgstr "No se pudo prohibir '%s'."
-
-msgctxt "#15293"
-msgid "Tracks recently loved by %name%"
-msgstr "Canciones favoritas recientemente por %name%"
-
-msgctxt "#15294"
-msgid "Tracks recently banned by %name%"
-msgstr "Canciones prohibidas recientemente por %name%"
-
-msgctxt "#15295"
-msgid "Remove from loved tracks"
-msgstr "Quitar de las canciones favoritas"
-
-msgctxt "#15296"
-msgid "Un-ban"
-msgstr "Quitar prohibición"
-
-msgctxt "#15297"
-msgid "Do you want to remove this track from your loved tracks?"
-msgstr "¿Desea quitar esta pista de sus canciones favoritas?"
-
-msgctxt "#15298"
-msgid "Do you want to un-ban this track?"
-msgstr "¿Desea quitar la prohibición de esta pista?"
 
 msgctxt "#15300"
 msgid "Path not found or invalid"
@@ -6066,10 +5713,6 @@ msgctxt "#19034"
 msgid "Already started recording on this channel"
 msgstr "Ya se está grabando este canal"
 
-msgctxt "#19035"
-msgid "This channel cannot be played. Check the log for details."
-msgstr "Este canal no se puede reproducir. Consulte el log para más detalles."
-
 msgctxt "#19036"
 msgid "This recording cannot be played. Check the log for details."
 msgstr "Esta grabación no se puede reproducir. Consulte el log para más detalles."
@@ -6084,7 +5727,7 @@ msgstr "No soportado por el backend PVR."
 
 msgctxt "#19039"
 msgid "Are you sure you want to hide this channel?"
-msgstr "¿Está seguro de que desea ocultar este canal?"
+msgstr "¿Estás seguro de que deseas ocultar este canal?"
 
 msgctxt "#19040"
 msgid "Timer"
@@ -6092,11 +5735,11 @@ msgstr "Temporizadores"
 
 msgctxt "#19041"
 msgid "Are you sure you want to rename this recording?"
-msgstr "¿Está seguro de que desea renombrar esta grabación?"
+msgstr "¿Estás seguro de que deseas renombrar esta grabación?"
 
 msgctxt "#19042"
 msgid "Are you sure you want to rename this timer?"
-msgstr "¿Está seguro de que desea renombrar este temporizador?"
+msgstr "¿Estás seguro de que deseas renombrar este temporizador?"
 
 msgctxt "#19043"
 msgid "Recording"
@@ -6104,7 +5747,7 @@ msgstr "Grabación"
 
 msgctxt "#19044"
 msgid "Please check your configuration or check the log for details."
-msgstr "Por favor, revise su configuración o consulte el log para más detalles."
+msgstr "Por favor, revisa tu configuración o consulta el log para más detalles."
 
 msgctxt "#19045"
 msgid "No PVR clients have been started yet. Wait for the PVR clients to start up or check the log for details."
@@ -6364,7 +6007,7 @@ msgstr "No se pueden utilizar funciones PVR mientras durante la búsqueda."
 
 msgctxt "#19119"
 msgid "On which server you want to search?"
-msgstr "¿En qué servidor desea buscar?"
+msgstr "¿En qué servidor deseas buscar?"
 
 msgctxt "#19120"
 msgid "Client number"
@@ -6376,7 +6019,7 @@ msgstr "Evitar repeticiones"
 
 msgctxt "#19122"
 msgid "This timer is still recording. Are you sure you want to delete this timer?"
-msgstr "Este temporizador todavía está grabando. ¿Está seguro de que desea eliminarlo?"
+msgstr "Este temporizador todavía está grabando. ¿Estás seguro de que deseas eliminarlo?"
 
 msgctxt "#19123"
 msgid "Free to air channels only"
@@ -6764,7 +6407,7 @@ msgstr "EPG"
 
 msgctxt "#19223"
 msgid "No PVR add-on could be enabled. Check your settings or the log for more info."
-msgstr "No se pudo activar ningún add-on PVR. Revise su configuración o consulte el log para más detalles."
+msgstr "No se pudo activar ningún add-on PVR. Revisa tu configuración o consulta el log para más detalles."
 
 msgctxt "#19224"
 msgid "Recording aborted"
@@ -7400,7 +7043,7 @@ msgstr "Listas rep. video"
 
 msgctxt "#20013"
 msgid "Do you wish to launch the game?"
-msgstr "¿Desea ejecutar el juego?"
+msgstr "¿Deseas ejecutar el juego?"
 
 msgctxt "#20014"
 msgid "Sort by: Playlist"
@@ -7712,7 +7355,7 @@ msgstr "Encontrados ajustes antiguos."
 
 msgctxt "#20105"
 msgid "Do you want to use them?"
-msgstr "¿Desea usarlos?"
+msgstr "¿Deseas usarlos?"
 
 msgctxt "#20106"
 msgid "Old media sources found."
@@ -7727,8 +7370,8 @@ msgid "Root"
 msgstr "Raíz"
 
 msgctxt "#20109"
-msgid "- Zoom"
-msgstr "- Zoom"
+msgid "Zoom"
+msgstr "Zoom"
 
 msgctxt "#20110"
 msgid "UPnP settings"
@@ -7768,7 +7411,7 @@ msgstr "Esto requiere asignar el bloqueo maestro."
 
 msgctxt "#20119"
 msgid "Would you like to set it now?"
-msgstr "Desea hacerlo ahora?"
+msgstr "Deseas hacerlo ahora?"
 
 msgctxt "#20120"
 msgid "Loading program information"
@@ -7828,7 +7471,7 @@ msgstr "Eliminar dirección de red"
 
 msgctxt "#20135"
 msgid "Do you want to scan the folder?"
-msgstr "¿Desea realizar una exploración del directorio?"
+msgstr "¿Deseas realizar una exploración del directorio?"
 
 msgctxt "#20136"
 msgid "Memory unit"
@@ -8168,7 +7811,7 @@ msgstr "No se puede escribir en la carpeta:"
 
 msgctxt "#20303"
 msgid "Do you want to skip and proceed?"
-msgstr "¿Desea omitir y continuar?"
+msgstr "¿Deseas omitir y continuar?"
 
 msgctxt "#20304"
 msgid "RSS Feed"
@@ -8186,17 +7829,9 @@ msgctxt "#20309"
 msgid "Make new folder"
 msgstr "Crear nuevo directorio"
 
-msgctxt "#20310"
-msgid "Dim LCD on playback"
-msgstr "Atenuar LCD al reproducir"
-
 msgctxt "#20311"
 msgid "Unknown or onboard (protected)"
 msgstr "Desconocido o en placa (protegido)"
-
-msgctxt "#20312"
-msgid "Dim LCD on paused"
-msgstr "Atenuar LCD al pausar"
 
 msgctxt "#20314"
 msgid "Videos - Library"
@@ -8292,7 +7927,7 @@ msgstr "Director"
 
 msgctxt "#20340"
 msgid "Do you want to remove all items within"
-msgstr "¿Desea eliminar todos los elementos de"
+msgstr "¿Deseas eliminar todos los elementos de"
 
 msgctxt "#20341"
 msgid "this path from the XBMC library?"
@@ -8356,7 +7991,7 @@ msgstr "Cargando info de episodios en directorio"
 
 msgctxt "#20356"
 msgid "Select TV show:"
-msgstr "Seleccione serie de TV:"
+msgstr "Selecciona serie de TV:"
 
 msgctxt "#20357"
 msgid "Enter the TV show name"
@@ -8692,7 +8327,7 @@ msgstr "Cambiar el contenido"
 
 msgctxt "#20443"
 msgid "Do you want to refresh info for all"
-msgstr "¿Desea actualizar la información para todos"
+msgstr "¿Deseas actualizar la información para todos"
 
 msgctxt "#20444"
 msgid "items within this path?"
@@ -8708,7 +8343,7 @@ msgstr "Se ha encontrado información ya guardada."
 
 msgctxt "#20447"
 msgid "Ignore and refresh from internet?"
-msgstr "¿Desea ignorarla y actualizarla de Internet?"
+msgstr "¿Deseas ignorarla y actualizarla de Internet?"
 
 msgctxt "#20448"
 msgid "Could not download information"
@@ -8720,7 +8355,7 @@ msgstr "No se puede conectar al servidor remoto"
 
 msgctxt "#20450"
 msgid "Would you like to continue scanning?"
-msgstr "¿Desea continuar escaneando?"
+msgstr "¿Deseas continuar escaneando?"
 
 msgctxt "#20451"
 msgid "Countries"
@@ -8748,7 +8383,7 @@ msgstr "Colección de Películas"
 
 msgctxt "#20458"
 msgid "Group movies in sets"
-msgstr "Agrupar películas en colecciones"
+msgstr "Agrupar películas en sagas"
 
 msgctxt "#20459"
 msgid "Tags"
@@ -8796,7 +8431,7 @@ msgstr "Cambio al canal: %s fallido!"
 
 msgctxt "#21335"
 msgid "Are you sure to start the stream?"
-msgstr "¿Seguro que desea iniciar el medio?"
+msgstr "¿Seguro que deseas iniciar el medio?"
 
 msgctxt "#21336"
 msgid "Connecting to: %s"
@@ -9023,8 +8658,8 @@ msgid "Default music video scraper"
 msgstr "Scraper por defecto para videos musicales"
 
 msgctxt "#21417"
-msgid "- Settings"
-msgstr "- Configuración"
+msgid "Settings"
+msgstr "Ajustes"
 
 msgctxt "#21418"
 msgid "Multilingual"
@@ -9155,7 +8790,7 @@ msgid "Remote control sends keyboard presses"
 msgstr "El mando a distancia envía pulsaciones de teclado"
 
 msgctxt "#21450"
-msgid "- Edit"
+msgid "Edit"
 msgstr "- Editar"
 
 msgctxt "#21451"
@@ -9426,10 +9061,6 @@ msgctxt "#21877"
 msgid "Date created"
 msgstr "Fecha de creación"
 
-msgctxt "#21878"
-msgid "Copyright flag"
-msgstr "Marca copyright"
-
 msgctxt "#21879"
 msgid "Country code"
 msgstr "Código de país"
@@ -9526,10 +9157,6 @@ msgctxt "#22001"
 msgid "Hide progress of library updates"
 msgstr "Ocultar el progreso de actualización de la colección"
 
-msgctxt "#22002"
-msgid "- DNS suffix"
-msgstr "- Sufijo DNS"
-
 msgctxt "#22003"
 msgid "%2.3fs"
 msgstr "%2.3fs"
@@ -9623,16 +9250,8 @@ msgid "Font"
 msgstr "Fuente"
 
 msgctxt "#22031"
-msgid "- Size"
-msgstr "- Tamaño"
-
-msgctxt "#22032"
-msgid "- Colours"
-msgstr "- Colores"
-
-msgctxt "#22033"
-msgid "- Charset"
-msgstr "- Juego de caracteres"
+msgid "Size"
+msgstr "Tamaño"
 
 msgctxt "#22034"
 msgid "Export karaoke titles as HTML"
@@ -9824,7 +9443,7 @@ msgstr "El add-on está desactivado"
 
 msgctxt "#24027"
 msgid "Weather"
-msgstr "El Tiempo"
+msgstr "El Clima"
 
 msgctxt "#24028"
 msgid "Weather.com (standard)"
@@ -9932,11 +9551,11 @@ msgstr "Cambios"
 
 msgctxt "#24059"
 msgid "Would you like to enable this Add-on?"
-msgstr "¿Desea activar este Add-on?"
+msgstr "¿Deseas activar este Add-on?"
 
 msgctxt "#24060"
 msgid "Would you like to disable this Add-on?"
-msgstr "¿Desea desactivar este Add-on?"
+msgstr "¿Deseas desactivar este Add-on?"
 
 msgctxt "#24061"
 msgid "Add-on update available!"
@@ -10028,7 +9647,7 @@ msgstr "Add-on marcado como roto en el repositorio"
 
 msgctxt "#24097"
 msgid "Would you like to disable it on your system?"
-msgstr "¿Desea deshabilitarlo en el sistema?"
+msgstr "¿Deseas deshabilitarlo en el sistema?"
 
 msgctxt "#24098"
 msgid "Broken"
@@ -10036,7 +9655,7 @@ msgstr "Roto"
 
 msgctxt "#24099"
 msgid "Would you like to switch to this skin?"
-msgstr "¿Desea cambiar a esta skin?"
+msgstr "¿Deseas cambiar a este skin?"
 
 msgctxt "#24100"
 msgid "To use this feature you must download an Add-on:"
@@ -10044,7 +9663,7 @@ msgstr "Para utilizar esta característica debe descargar un Add-on:"
 
 msgctxt "#24101"
 msgid "Would you like to download this Add-on?"
-msgstr "¿Desea descargar este Add-on?"
+msgstr "¿Deseas descargar este Add-on?"
 
 msgctxt "#24102"
 msgid "Unable to load skin"
@@ -10080,7 +9699,7 @@ msgstr "Título: %d"
 
 msgctxt "#25006"
 msgid "Select playback item"
-msgstr "Seleccione elemento a reproducir"
+msgstr "Selecciona elemento a reproducir"
 
 msgctxt "#29800"
 msgid "Library Mode"
@@ -10352,7 +9971,7 @@ msgstr "revisión XBMC %s o mayor para funcionar."
 
 msgctxt "#33076"
 msgid "Please update XBMC."
-msgstr "Por favor, actualice su XBMC."
+msgstr "Por favor, actualiza tu XBMC."
 
 msgctxt "#33077"
 msgid "No data found!"
@@ -10372,7 +9991,7 @@ msgstr "No me gusta"
 
 msgctxt "#33081"
 msgid "This file is stacked, select the part you want to play from."
-msgstr "Este archivo está partido. Seleccione la parte que desea reproducir."
+msgstr "Este archivo está partido. Selecciona la parte que deseas reproducir."
 
 msgctxt "#33082"
 msgid "Path to script"
@@ -10494,10 +10113,6 @@ msgctxt "#34202"
 msgid "Can't find a previous item to play"
 msgstr "No se ha podido encontrar el anterior elemento a reproducir"
 
-msgctxt "#34300"
-msgid "Failed to start zeroconf"
-msgstr "Fallo al iniciar zeroconf"
-
 msgctxt "#34301"
 msgid "Is Apple's Bonjour Service installed? See log for more info."
 msgstr "¿Está instalado el servicio de Apple Bonjour? Consulte el log para más información."
@@ -10516,7 +10131,7 @@ msgstr "Fallo al inicializar el dispositivo de audio"
 
 msgctxt "#34403"
 msgid "Check your audiosettings"
-msgstr "Revise su configuración de audio"
+msgstr "Revisa tu configuración de audio"
 
 msgctxt "#34404"
 msgid "Use gestures for navigation:"
@@ -10581,10 +10196,6 @@ msgstr "No utilizar mapa de teclado personalizado para este dispositivo"
 msgctxt "#35100"
 msgid "Enable joystick and gamepad support"
 msgstr "Activar joystick y mando de juegos"
-
-msgctxt "#35101"
-msgid "Disable joystick when iMON is present"
-msgstr "Deshabilitar joystick cuando iMON está conectado"
 
 msgctxt "#35500"
 msgid "Location"
@@ -10692,7 +10303,7 @@ msgstr "Configuración actualizada"
 
 msgctxt "#36024"
 msgid "Failed to set the new configuration. Please check your settings."
-msgstr "Fallo al establecer la nueva configuración. Por favor, revise su configuración."
+msgstr "Fallo al establecer la nueva configuración. Por favor, revisa tu configuración."
 
 msgctxt "#36025"
 msgid "Send 'inactive source' command when stopping XBMC"
@@ -10753,3 +10364,7 @@ msgstr "TV y dispositivo AVR (explícito)"
 msgctxt "#36040"
 msgid "Unsupported libCEC interface version. %x is lower than the version XBMC supports (%x)"
 msgstr "Versión de interfaz libCEC no soportada. %x es menor que la versión soportada por XBMC (%x)"
+
+msgctxt "#36041"
+msgid "* Item folder"
+msgstr "* Carpeta de items"

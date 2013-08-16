@@ -1,5 +1,5 @@
 /*
- *      Copyright (C) 2010-2012 Team XBMC
+ *      Copyright (C) 2010-2013 Team XBMC
  *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
@@ -20,16 +20,23 @@
 #include "system.h"
 
 #include "AEFactory.h"
+#include "Utils/AEUtil.h"
 
 #if defined(TARGET_DARWIN)
   #include "Engines/CoreAudio/CoreAudioAE.h"
+  #include "settings/SettingsManager.h"
 #else
   #include "Engines/SoftAE/SoftAE.h"
+  #include "Engines/ActiveAE/ActiveAE.h"
 #endif
 
 #if defined(HAS_PULSEAUDIO)
   #include "Engines/PulseAE/PulseAE.h"
 #endif
+
+#include "guilib/LocalizeStrings.h"
+#include "settings/Setting.h"
+#include "utils/StringUtils.h"
 
 IAE* CAEFactory::AE = NULL;
 static float  g_fVolume = 1.0f;
@@ -48,9 +55,8 @@ bool CAEFactory::LoadEngine()
 
   bool loaded = false;
 
-  std::string engine;
-
 #if defined(TARGET_LINUX)
+  std::string engine;
   if (getenv("AE_ENGINE"))
   {
     engine = (std::string)getenv("AE_ENGINE");
@@ -62,6 +68,22 @@ bool CAEFactory::LoadEngine()
     #endif
     if (!loaded && engine == "SOFT" )
       loaded = CAEFactory::LoadEngine(AE_ENGINE_SOFT);
+    if (!loaded && engine == "ACTIVE")
+      loaded = CAEFactory::LoadEngine(AE_ENGINE_ACTIVE);
+  }
+#endif
+
+#if defined(TARGET_WINDOWS)
+  std::string engine;
+  if (getenv("AE_ENGINE"))
+  {
+    engine = (std::string)getenv("AE_ENGINE");
+    std::transform(engine.begin(), engine.end(), engine.begin(), ::toupper);
+
+    if (!loaded && engine == "SOFT" )
+      loaded = CAEFactory::LoadEngine(AE_ENGINE_SOFT);
+    if (!loaded && engine == "ACTIVE")
+      loaded = CAEFactory::LoadEngine(AE_ENGINE_ACTIVE);
   }
 #endif
 
@@ -94,6 +116,7 @@ bool CAEFactory::LoadEngine(enum AEEngine engine)
     case AE_ENGINE_COREAUDIO: AE = new CCoreAudioAE(); break;
 #else
     case AE_ENGINE_SOFT     : AE = new CSoftAE(); break;
+    case AE_ENGINE_ACTIVE   : AE = new ActiveAE::CActiveAE(); break;
 #endif
 #if defined(HAS_PULSEAUDIO)
     case AE_ENGINE_PULSE    : AE = new CPulseAE(); break;
@@ -203,9 +226,8 @@ void CAEFactory::VerifyOutputDevice(std::string &device, bool passthrough)
   EnumerateOutputDevices(devices, passthrough);
   std::string firstDevice;
 
-  for (AEDeviceList::const_iterator deviceIt = devices.begin(); deviceIt != devices.end(); deviceIt++)
+  for (AEDeviceList::const_iterator deviceIt = devices.begin(); deviceIt != devices.end(); ++deviceIt)
   {
-    std::string currentDevice = deviceIt->second;
     /* remember the first device so we can default to it if required */
     if (firstDevice.empty())
       firstDevice = deviceIt->second;
@@ -239,6 +261,28 @@ bool CAEFactory::SupportsRaw()
   return false;
 }
 
+bool CAEFactory::SupportsDrain()
+{
+  if(AE)
+    return AE->SupportsDrain();
+
+  return false;
+}
+
+/**
+  * Returns true if current AudioEngine supports at lest two basic quality levels
+  * @return true if quality setting is supported, otherwise false
+  */
+bool CAEFactory::SupportsQualitySetting(void) 
+{
+  if (!AE)
+    return false;
+
+  return ((AE->SupportsQualityLevel(AE_QUALITY_LOW)? 1 : 0) + 
+          (AE->SupportsQualityLevel(AE_QUALITY_MID)? 1 : 0) +
+          (AE->SupportsQualityLevel(AE_QUALITY_HIGH)? 1 : 0)) >= 2; 
+}
+  
 void CAEFactory::SetMute(const bool enabled)
 {
   if(AE)
@@ -298,4 +342,86 @@ void CAEFactory::GarbageCollect()
 {
   if(AE)
     AE->GarbageCollect();
+}
+
+void CAEFactory::SettingOptionsAudioDevicesFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current)
+{
+  SettingOptionsAudioDevicesFillerGeneral(setting, list, current, false);
+}
+
+void CAEFactory::SettingOptionsAudioDevicesPassthroughFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current)
+{
+  SettingOptionsAudioDevicesFillerGeneral(setting, list, current, true);
+}
+
+void CAEFactory::SettingOptionsAudioOutputModesFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current)
+{
+  list.push_back(std::make_pair(g_localizeStrings.Get(338), AUDIO_ANALOG));
+#if !defined(TARGET_RASPBERRY_PI)
+  list.push_back(std::make_pair(g_localizeStrings.Get(339), AUDIO_IEC958));
+#endif
+  list.push_back(std::make_pair(g_localizeStrings.Get(420), AUDIO_HDMI));
+}
+
+void CAEFactory::SettingOptionsAudioQualityLevelsFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current)
+{
+  if (!AE)
+    return;
+
+  if(AE->SupportsQualityLevel(AE_QUALITY_LOW))
+    list.push_back(std::make_pair(g_localizeStrings.Get(13506), AE_QUALITY_LOW));
+  if(AE->SupportsQualityLevel(AE_QUALITY_MID))
+    list.push_back(std::make_pair(g_localizeStrings.Get(13507), AE_QUALITY_MID));
+  if(AE->SupportsQualityLevel(AE_QUALITY_HIGH))
+    list.push_back(std::make_pair(g_localizeStrings.Get(13508), AE_QUALITY_HIGH));
+  if(AE->SupportsQualityLevel(AE_QUALITY_REALLYHIGH))
+    list.push_back(std::make_pair(g_localizeStrings.Get(13509), AE_QUALITY_REALLYHIGH));
+}
+
+void CAEFactory::SettingOptionsAudioDevicesFillerGeneral(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current, bool passthrough)
+{
+  current = ((const CSettingString*)setting)->GetValue();
+  std::string firstDevice;
+
+  bool foundValue = false;
+  AEDeviceList sinkList;
+  EnumerateOutputDevices(sinkList, passthrough);
+#if !defined(TARGET_DARWIN)
+  if (sinkList.size() == 0)
+    list.push_back(std::make_pair("Error - no devices found", "error"));
+  else
+  {
+#endif
+    for (AEDeviceList::const_iterator sink = sinkList.begin(); sink != sinkList.end(); ++sink)
+    {
+      if (sink == sinkList.begin())
+        firstDevice = sink->second;
+
+#if defined(TARGET_DARWIN)
+      list.push_back(std::make_pair(sink->first, sink->first));
+#else
+      list.push_back(std::make_pair(sink->first, sink->second));
+#endif
+
+      if (StringUtils::EqualsNoCase(current, sink->second))
+        foundValue = true;
+    }
+#if !defined(TARGET_DARWIN)
+  }
+#endif
+
+  if (!foundValue)
+    current = firstDevice;
+}
+
+void CAEFactory::RegisterAudioCallback(IAudioCallback* pCallback)
+{
+  if (AE)
+    AE->RegisterAudioCallback(pCallback);
+}
+
+void CAEFactory::UnregisterAudioCallback()
+{
+  if (AE)
+    AE->UnregisterAudioCallback();
 }

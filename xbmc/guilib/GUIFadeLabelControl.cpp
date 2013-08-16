@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
  */
 
 #include "GUIFadeLabelControl.h"
-#include "utils/CharsetConverter.h"
 
 using namespace std;
 
@@ -36,7 +35,7 @@ CGUIFadeLabelControl::CGUIFadeLabelControl(int parentID, int controlID, float po
   m_lastLabel = -1;
   m_scrollSpeed = labelInfo.scrollSpeed;  // save it for later
   m_resetOnLabelChange = resetOnLabelChange;
-  m_shortText = false;
+  m_shortText = true;
 }
 
 CGUIFadeLabelControl::CGUIFadeLabelControl(const CGUIFadeLabelControl &from)
@@ -147,6 +146,9 @@ void CGUIFadeLabelControl::Process(unsigned int currentTime, CDirtyRegionList &d
         m_fadeAnim.QueueAnimation(ANIM_PROCESS_REVERSE);
       }
     }
+
+    m_textLayout.UpdateScrollinfo(m_scrollInfo);
+
     g_graphicsContext.RemoveTransform();
   }
 

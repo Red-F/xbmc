@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
 #include "DVDDemuxers/DVDDemuxUtils.h"
 #include "utils/log.h"
 #include "threads/SingleLock.h"
-#ifdef _LINUX
+#ifdef TARGET_POSIX
 #include "config.h"
 #endif
 
@@ -63,6 +63,8 @@ void CDVDPlayerSubtitle::Flush()
 
 void CDVDPlayerSubtitle::SendMessage(CDVDMsg* pMsg)
 {
+  CSingleLock lock(m_section);
+
   if (pMsg->IsType(CDVDMsg::DEMUXER_PACKET))
   {
     CDVDMsgDemuxerPacket* pMsgDemuxerPacket = (CDVDMsgDemuxerPacket*)pMsg;
@@ -78,19 +80,17 @@ void CDVDPlayerSubtitle::SendMessage(CDVDMsg* pMsg)
 
         while((overlay = m_pOverlayCodec->GetOverlay()) != NULL)
         {
-          overlay->iGroupId = pPacket->iGroupId;
           m_pOverlayContainer->Add(overlay);
           overlay->Release();
         }
       }
     }
-    else if (m_streaminfo.codec == CODEC_ID_DVD_SUBTITLE)
+    else if (m_streaminfo.codec == AV_CODEC_ID_DVD_SUBTITLE)
     {
       CDVDOverlaySpu* pSPUInfo = m_dvdspus.AddData(pPacket->pData, pPacket->iSize, pPacket->pts);
       if (pSPUInfo)
       {
         CLog::Log(LOGDEBUG, "CDVDPlayer::ProcessSubData: Got complete SPU packet");
-        pSPUInfo->iGroupId = pPacket->iGroupId;
         m_pOverlayContainer->Add(pSPUInfo);
         pSPUInfo->Release();
       }
@@ -102,8 +102,8 @@ void CDVDPlayerSubtitle::SendMessage(CDVDMsg* pMsg)
     CDVDMsgSubtitleClutChange* pData = (CDVDMsgSubtitleClutChange*)pMsg;
     for (int i = 0; i < 16; i++)
     {
-      BYTE* color = m_dvdspus.m_clut[i];
-      BYTE* t = (BYTE*)pData->m_data[i];
+      uint8_t* color = m_dvdspus.m_clut[i];
+      uint8_t* t = (uint8_t*)pData->m_data[i];
 
 // pData->m_data[i] points to an uint32_t
 // Byte swapping is needed between big and little endian systems
@@ -129,6 +129,11 @@ void CDVDPlayerSubtitle::SendMessage(CDVDMsg* pMsg)
     if (m_pOverlayCodec)
       m_pOverlayCodec->Flush();
 
+    /* We must flush active overlays on flush or if we have a file
+     * parser since it will re-populate active items.  */
+    if(pMsg->IsType(CDVDMsg::GENERAL_FLUSH) || m_pSubtitleFileParser)
+      m_pOverlayContainer->Clear();
+
     m_lastPts = DVD_NOPTS_VALUE;
   }
 
@@ -137,6 +142,8 @@ void CDVDPlayerSubtitle::SendMessage(CDVDMsg* pMsg)
 
 bool CDVDPlayerSubtitle::OpenStream(CDVDStreamInfo &hints, string &filename)
 {
+  CSingleLock lock(m_section);
+
   CloseStream(false);
   m_streaminfo = hints;
 
@@ -162,7 +169,7 @@ bool CDVDPlayerSubtitle::OpenStream(CDVDStreamInfo &hints, string &filename)
   }
 
   // dvd's use special subtitle decoder
-  if(hints.codec == CODEC_ID_DVD_SUBTITLE && filename == "dvd")
+  if(hints.codec == AV_CODEC_ID_DVD_SUBTITLE && filename == "dvd")
     return true;
 
   m_pOverlayCodec = CDVDFactoryCodec::CreateOverlayCodec(hints);
@@ -175,6 +182,8 @@ bool CDVDPlayerSubtitle::OpenStream(CDVDStreamInfo &hints, string &filename)
 
 void CDVDPlayerSubtitle::CloseStream(bool flush)
 {
+  CSingleLock lock(m_section);
+
   if(m_pSubtitleStream)
     SAFE_DELETE(m_pSubtitleStream);
   if(m_pSubtitleFileParser)
@@ -190,6 +199,8 @@ void CDVDPlayerSubtitle::CloseStream(bool flush)
 
 void CDVDPlayerSubtitle::Process(double pts)
 {
+  CSingleLock lock(m_section);
+
   if (m_pSubtitleFileParser)
   {
     if(pts == DVD_NOPTS_VALUE)
@@ -209,6 +220,7 @@ void CDVDPlayerSubtitle::Process(double pts)
     while(pOverlay)
     {
       m_pOverlayContainer->Add(pOverlay);
+      pOverlay->Release();
       pOverlay = m_pSubtitleFileParser->Parse(pts);
     }
 
@@ -232,7 +244,7 @@ void CDVDPlayerSubtitle::GetCurrentSubtitle(CStdString& strSubtitle, double pts)
   VecOverlays* pOverlays = m_pOverlayContainer->GetOverlays();
   if (pOverlays)
   {
-    for(vector<CDVDOverlay*>::iterator it = pOverlays->begin();it != pOverlays->end();it++)
+    for(vector<CDVDOverlay*>::iterator it = pOverlays->begin();it != pOverlays->end();++it)
     {
       CDVDOverlay* pOverlay = *it;
 

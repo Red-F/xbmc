@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2010-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2010-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 #include <sstream>
 
 #include <sys/ioctl.h>
+#include <sys/fcntl.h>
 
 #if defined(OSS4) || defined(TARGET_FREEBSD)
   #include <sys/soundcard.h>
@@ -64,6 +65,7 @@ static int OSSSampleRateList[] =
 
 CAESinkOSS::CAESinkOSS()
 {
+  m_fd = 0;
 }
 
 CAESinkOSS::~CAESinkOSS()
@@ -71,7 +73,7 @@ CAESinkOSS::~CAESinkOSS()
   Deinitialize();
 }
 
-std::string CAESinkOSS::GetDeviceUse(const AEAudioFormat format, const std::string device)
+std::string CAESinkOSS::GetDeviceUse(const AEAudioFormat format, const std::string &device)
 {
 #ifdef OSS4
   if (AE_IS_RAW(format.m_dataFormat))
@@ -287,7 +289,6 @@ bool CAESinkOSS::Initialize(AEAudioFormat &format, std::string &device)
     if (ioctl(m_fd, SNDCTL_DSP_GET_CHNORDER, &order) == -1)
     {
       CLog::Log(LOGWARNING, "CAESinkOSS::Initialize - Failed to get the channel order, assuming CHNORDER_NORMAL");
-      order = CHNORDER_NORMAL;
     }
   }
 #endif
@@ -317,6 +318,13 @@ bool CAESinkOSS::Initialize(AEAudioFormat &format, std::string &device)
   {
     close(m_fd);
     CLog::Log(LOGERROR, "CAESinkOSS::Initialize - Failed to get the output buffer size");
+    return false;
+  }
+
+  if (fcntl(m_fd, F_SETFL,  fcntl(m_fd, F_GETFL, 0) | O_NONBLOCK) == -1)
+  {
+    close(m_fd);
+    CLog::Log(LOGERROR, "CAESinkOSS::Initialize - Failed to set non blocking writes");
     return false;
   }
 
@@ -367,7 +375,7 @@ inline CAEChannelInfo CAESinkOSS::GetChannelLayout(AEAudioFormat format)
   return info;
 }
 
-bool CAESinkOSS::IsCompatible(const AEAudioFormat format, const std::string device)
+bool CAESinkOSS::IsCompatible(const AEAudioFormat &format, const std::string &device)
 {
   AEAudioFormat tmp  = format;
   tmp.m_channelLayout = GetChannelLayout(format);
@@ -400,7 +408,7 @@ double CAESinkOSS::GetDelay()
   return (double)delay / (m_format.m_frameSize * m_format.m_sampleRate);
 }
 
-unsigned int CAESinkOSS::AddPackets(uint8_t *data, unsigned int frames, bool hasAudio)
+unsigned int CAESinkOSS::AddPackets(uint8_t *data, unsigned int frames, bool hasAudio, bool blocking)
 {
   int size = frames * m_format.m_frameSize;
   if (m_fd == -1)
@@ -412,6 +420,9 @@ unsigned int CAESinkOSS::AddPackets(uint8_t *data, unsigned int frames, bool has
   int wrote = write(m_fd, data, size);
   if (wrote < 0)
   {
+    if(!blocking && (errno == EAGAIN || errno == EWOULDBLOCK))
+      return 0;
+
     CLog::Log(LOGERROR, "CAESinkOSS::AddPackets - Failed to write");
     return INT_MAX;
   }
@@ -427,15 +438,15 @@ void CAESinkOSS::Drain()
   // ???
 }
 
-void CAESinkOSS::EnumerateDevicesEx(AEDeviceInfoList &list)
+void CAESinkOSS::EnumerateDevicesEx(AEDeviceInfoList &list, bool force)
 {
   int mixerfd;
   const char * mixerdev = "/dev/mixer";
 
   if ((mixerfd = open(mixerdev, O_RDWR, 0)) == -1)
   {
-    CLog::Log(LOGERROR,
-	  "CAESinkOSS::EnumerateDevicesEx - Failed to open mixer: %s", mixerdev);
+    CLog::Log(LOGNOTICE,
+	  "CAESinkOSS::EnumerateDevicesEx - No OSS mixer device present: %s", mixerdev);
     return;
   }	
 

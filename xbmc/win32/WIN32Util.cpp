@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
  */
 
 #include "WIN32Util.h"
-#include "settings/GUISettings.h"
 #include "Util.h"
 #include "utils/URIUtils.h"
 #include "storage/cdioSupport.h"
@@ -29,17 +28,19 @@
 #include <shlobj.h>
 #include "filesystem/SpecialProtocol.h"
 #include "my_ntddscsi.h"
-#if _MSC_VER > 1400
 #include "Setupapi.h"
-#endif
 #include "storage/MediaManager.h"
 #include "windowing/WindowingFactory.h"
 #include "guilib/LocalizeStrings.h"
+#include "utils/CharsetConverter.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "DllPaths_win32.h"
 #include "FileSystem/File.h"
 #include "utils/URIUtils.h"
+#include "powermanagement\PowerManager.h"
+#include "utils/SystemInfo.h"
+#include "utils/Environment.h"
 
 // default Broadcom registy bits (setup when installing a CrystalHD card)
 #define BC_REG_PATH       "Software\\Broadcom\\MediaPC"
@@ -242,8 +243,6 @@ char CWIN32Util::FirstDriveFromMask (ULONG unitmask)
 
 bool CWIN32Util::PowerManagement(PowerState State)
 {
-// SetSuspendState not available in vs2003
-#if _MSC_VER > 1400
   HANDLE hToken;
   TOKEN_PRIVILEGES tkp;
   // Get a token for this process.
@@ -264,6 +263,10 @@ bool CWIN32Util::PowerManagement(PowerState State)
     return false;
   }
 
+  // process OnSleep() events. This is called in main thread.
+  g_powerManager.ProcessEvents();
+
+  UINT uExitFlags = 0;
   switch (State)
   {
   case POWERSTATE_HIBERNATE:
@@ -276,7 +279,9 @@ bool CWIN32Util::PowerManagement(PowerState State)
     break;
   case POWERSTATE_SHUTDOWN:
     CLog::Log(LOGINFO, "Shutdown Windows...");
-    return ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE, SHTDN_REASON_MAJOR_OPERATINGSYSTEM | SHTDN_REASON_MINOR_UPGRADE | SHTDN_REASON_FLAG_PLANNED) == TRUE;
+    if (g_sysinfo.IsWindowsVersionAtLeast(CSysInfo::WindowsVersionWin8))
+      uExitFlags = 0x00400000; /* EWX_HYBRID_SHUTDOWN */
+    return ExitWindowsEx(uExitFlags | EWX_SHUTDOWN | EWX_FORCE, SHTDN_REASON_MAJOR_OPERATINGSYSTEM | SHTDN_REASON_MINOR_UPGRADE | SHTDN_REASON_FLAG_PLANNED) == TRUE;
     break;
   case POWERSTATE_REBOOT:
     CLog::Log(LOGINFO, "Rebooting Windows...");
@@ -287,9 +292,6 @@ bool CWIN32Util::PowerManagement(PowerState State)
     return false;
     break;
   }
-#else
-  return false;
-#endif
 }
 
 int CWIN32Util::BatteryLevel()
@@ -430,16 +432,19 @@ int CWIN32Util::GetDesktopColorDepth()
 CStdString CWIN32Util::GetSpecialFolder(int csidl)
 {
   CStdString strProfilePath;
-  WCHAR szPath[MAX_PATH];
+  static const int bufSize = MAX_PATH;
+  WCHAR* buf = new WCHAR[bufSize];
 
-  if(SUCCEEDED(SHGetFolderPathW(NULL,csidl,NULL,0,szPath)))
+  if(SUCCEEDED(SHGetFolderPathW(NULL, csidl, NULL, SHGFP_TYPE_CURRENT, buf)))
   {
-    g_charsetConverter.wToUTF8(szPath, strProfilePath);
+    buf[bufSize-1] = 0;
+    g_charsetConverter.wToUTF8(buf, strProfilePath);
     strProfilePath = UncToSmb(strProfilePath);
   }
   else
     strProfilePath = "";
-
+  
+  delete[] buf;
   return strProfilePath;
 }
 
@@ -492,23 +497,20 @@ CStdString CWIN32Util::SmbToUnc(const CStdString &strPath)
 
 void CWIN32Util::ExtendDllPath()
 {
-  CStdStringW strEnvW;
+  CStdString strEnv;
   CStdStringArray vecEnv;
-  WCHAR wctemp[32768];
-  if(GetEnvironmentVariableW(L"PATH",wctemp,32767) != 0)
-    strEnvW = wctemp;
+  strEnv = CEnvironment::getenv("PATH");
+  if (strEnv.IsEmpty())
+    CLog::Log(LOGWARNING, "Can get system env PATH or PATH is empty");
 
   StringUtils::SplitString(DLL_ENV_PATH, ";", vecEnv);
   for (int i=0; i<(int)vecEnv.size(); ++i)
-  {
-    CStdStringW strFileW;
-    g_charsetConverter.utf8ToW(CSpecialProtocol::TranslatePath(vecEnv[i]), strFileW, false);
-    strEnvW.append(L";" + strFileW);
-  }
-  if(SetEnvironmentVariableW(L"PATH",strEnvW.c_str())!=0)
-    CLog::Log(LOGDEBUG,"Setting system env PATH to %S",strEnvW.c_str());
+    strEnv.append(";" + CSpecialProtocol::TranslatePath(vecEnv[i]));
+
+  if (CEnvironment::setenv("PATH", strEnv) == 0)
+    CLog::Log(LOGDEBUG,"Setting system env PATH to %S",strEnv.c_str());
   else
-    CLog::Log(LOGDEBUG,"Can't set system env PATH to %S",strEnvW.c_str());
+    CLog::Log(LOGDEBUG,"Can't set system env PATH to %S",strEnv.c_str());
 
 }
 
@@ -596,7 +598,6 @@ HRESULT CWIN32Util::CloseTray(const char cDriveLetter)
 // http://www.codeproject.com/KB/system/RemoveDriveByLetter.aspx
 // http://www.techtalkz.com/microsoft-device-drivers/250734-remove-usb-device-c-3.html
 
-#if _MSC_VER > 1400
 DEVINST CWIN32Util::GetDrivesDevInstByDiskNumber(long DiskNumber)
 {
 
@@ -672,11 +673,9 @@ DEVINST CWIN32Util::GetDrivesDevInstByDiskNumber(long DiskNumber)
   SetupDiDestroyDeviceInfoList(hDevInfo);
   return 0;
 }
-#endif
 
 bool CWIN32Util::EjectDrive(const char cDriveLetter)
 {
-#if _MSC_VER > 1400
   if( !cDriveLetter )
     return false;
 
@@ -721,9 +720,6 @@ bool CWIN32Util::EjectDrive(const char cDriveLetter)
   }
 
   return bSuccess;
-#else
-  return false;
-#endif
 }
 
 #ifdef HAS_GL
@@ -984,7 +980,7 @@ extern "C" {
    * POSSIBILITY OF SUCH DAMAGE.
    */
 
-  #if !defined(_WIN32)
+  #if !defined(TARGET_WINDOWS)
   #include <sys/cdefs.h>
   #endif
 
@@ -992,7 +988,7 @@ extern "C" {
   __RCSID("$NetBSD: strptime.c,v 1.25 2005/11/29 03:12:00 christos Exp $");
   #endif
 
-  #if !defined(_WIN32)
+  #if !defined(TARGET_WINDOWS)
   #include "namespace.h"
   #include <sys/localedef.h>
   #else
@@ -1003,7 +999,7 @@ extern "C" {
   #include <locale.h>
   #include <string.h>
   #include <time.h>
-  #if !defined(_WIN32)
+  #if !defined(TARGET_WINDOWS)
   #include <tzfile.h>
   #endif
 
@@ -1011,7 +1007,7 @@ extern "C" {
   __weak_alias(strptime,_strptime)
   #endif
 
-  #if !defined(_WIN32)
+  #if !defined(TARGET_WINDOWS)
   #define  _ctloc(x)    (_CurrentTimeLocale->x)
   #else
   #define _ctloc(x)   (x)
@@ -1521,7 +1517,7 @@ void CWIN32Util::CropSource(CRect& src, CRect& dst, CRect target)
 
 void CWinIdleTimer::StartZero()
 {
-  SetThreadExecutionState(ES_SYSTEM_REQUIRED);
+  SetThreadExecutionState(ES_SYSTEM_REQUIRED|ES_DISPLAY_REQUIRED);
   CStopWatch::StartZero();
 }
 

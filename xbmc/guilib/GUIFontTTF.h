@@ -8,8 +8,8 @@
 #pragma once
 
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -131,7 +131,7 @@ protected:
    Accounts for spacing between lines to avoid characters overlapping.
    */
   unsigned int GetTextureLineHeight() const;
-  static unsigned int spacing_between_characters_in_texture;
+  static const unsigned int spacing_between_characters_in_texture;
 
   color_t m_color;
 

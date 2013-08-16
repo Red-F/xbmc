@@ -1,7 +1,7 @@
 #pragma once
 /*
- *      Copyright (C) 2011-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2011-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,6 +43,7 @@ public:
   CAMLSubTitleThread(DllLibAmplayer* dll);
   virtual ~CAMLSubTitleThread();
 
+  void         Flush();
   void         UpdateSubtitle(CStdString &subtitle, int64_t elapsed_ms);
 protected:
   virtual void Process(void);
@@ -80,12 +81,13 @@ public:
   virtual bool  SeekScene(bool bPlus = true);
   virtual void  SeekPercentage(float fPercent = 0.0f);
   virtual float GetPercentage();
+  virtual void  SetMute(bool bOnOff);
+  virtual bool  ControlsVolume() {return true;}
   virtual void  SetVolume(float volume);
   virtual void  SetDynamicRangeCompression(long drc)              {}
   virtual void  GetAudioInfo(CStdString &strAudioInfo);
   virtual void  GetVideoInfo(CStdString &strVideoInfo);
   virtual void  GetGeneralInfo(CStdString &strVideoInfo) {};
-  virtual void  Update(bool bPauseDrawing);
   virtual void  GetVideoRect(CRect& SrcRect, CRect& DestRect);
   virtual void  GetVideoAspectRatio(float &fAR);
   virtual bool  CanRecord()                                       {return false;};
@@ -99,18 +101,15 @@ public:
   virtual float GetSubTitleDelay();
   virtual int   GetSubtitleCount();
   virtual int   GetSubtitle();
-  virtual void  GetSubtitleName(int iStream, CStdString &strStreamName);
+  virtual void  GetSubtitleStreamInfo(int index, SPlayerSubtitleStreamInfo &info);
   virtual void  SetSubtitle(int iStream);
   virtual bool  GetSubtitleVisible();
   virtual void  SetSubtitleVisible(bool bVisible);
-  virtual bool  GetSubtitleExtension(CStdString &strSubtitleExtension) { return false; }
   virtual int   AddSubtitle(const CStdString& strSubPath);
 
   virtual int   GetAudioStreamCount();
   virtual int   GetAudioStream();
-  virtual void  GetAudioStreamName(int iStream, CStdString &strStreamName);
   virtual void  SetAudioStream(int iStream);
-  virtual void  GetAudioStreamLanguage(int iStream, CStdString &strLanguage) {};
 
   virtual TextCacheStruct_t* GetTeletextCache()                   {return NULL;};
   virtual void  LoadPage(int p, int sp, unsigned char* buffer)    {};
@@ -121,17 +120,14 @@ public:
   virtual int   SeekChapter(int iChapter);
 
   virtual float GetActualFPS();
-  virtual void  SeekTime(__int64 iTime = 0);
-  virtual __int64 GetTime();
-  virtual __int64 GetTotalTime();
-  virtual int   GetAudioBitrate();
-  virtual int   GetVideoBitrate();
+  virtual void  SeekTime(int64_t iTime = 0);
+  virtual int64_t GetTime();
+  virtual int64_t GetTotalTime();
+  virtual void  GetAudioStreamInfo(int index, SPlayerAudioStreamInfo &info);
+  virtual void  GetVideoStreamInfo(SPlayerVideoStreamInfo &info);
   virtual int   GetSourceBitrate();
-  virtual int   GetChannels();
   virtual int   GetBitsPerSample();
   virtual int   GetSampleRate();
-  virtual CStdString GetAudioCodecName();
-  virtual CStdString GetVideoCodecName();
   virtual int   GetPictureWidth();
   virtual int   GetPictureHeight();
   virtual bool  GetStreamDetails(CStreamDetails &details);
@@ -156,14 +152,6 @@ public:
   virtual bool  SetPlayerState(CStdString state)                  {return false;};
 
   virtual CStdString GetPlayingTitle()                            {return "";};
-/*
-  virtual void  GetRenderFeatures(Features* renderFeatures);
-  virtual void  GetDeinterlaceMethods(Features* deinterlaceMethods);
-  virtual void  GetDeinterlaceModes(Features* deinterlaceModes);
-  virtual void  GetScalingMethods(Features* scalingMethods);
-  virtual void  GetAudioCapabilities(Features* audioCaps);
-  virtual void  GetSubtitleCapabilities(Features* subCaps);
-*/
 
   virtual void  GetRenderFeatures(std::vector<int> &renderFeatures);
   virtual void  GetDeinterlaceMethods(std::vector<int> &deinterlaceMethods);
@@ -223,6 +211,8 @@ private:
   int                     m_audio_delay;
   bool                    m_audio_passthrough_ac3;
   bool                    m_audio_passthrough_dts;
+  bool                    m_audio_mute;
+  float                   m_audio_volume;
 
   int                     m_video_index;
   int                     m_video_count;
@@ -240,7 +230,6 @@ private:
   CDVDPlayerSubtitle     *m_dvdPlayerSubtitle;
   CDVDOverlayContainer   *m_dvdOverlayContainer;
 
-  int                     m_chapter_index;
   int                     m_chapter_count;
 
   int                     m_show_mainvideo;

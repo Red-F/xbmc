@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,8 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, write to
- *  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
- *  http://www.gnu.org/copyleft/gpl.html
+ *  along with XBMC; see the file COPYING.  If not, see
+ *  <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -24,11 +23,15 @@
 #include "cores/VideoRenderers/RenderManager.h"
 #include "cores/VideoRenderers/RenderCapture.h"
 #include "AddonClass.h"
+#include "Exception.h"
+#include "commons/Buffer.h"
 
 namespace XBMCAddon
 {
   namespace xbmc
   {
+    XBMCCOMMONS_STANDARD_EXCEPTION(RenderCaptureException);
+
     class RenderCapture : public AddonClass
     {
       CRenderCapture* m_capture;
@@ -71,25 +74,18 @@ namespace XBMCAddon
       }
 
       // RenderCapture_GetImage
-      // TODO: This needs to be done with a class that holds the Image
-      // data. A memory buffer type. Then a typemap needs to be defined
-      // for that type.
       /**
        * getImage() -- returns captured image as a bytearray.
        * 
        * The size of the image is getWidth() * getHeight() * 4
        */
-//      PyObject* RenderCapture_GetImage(RenderCapture *self, PyObject *args)
-//      {
-//        if (self->capture->GetUserState() != CAPTURESTATE_DONE)
-//        {
-//          PyErr_SetString(PyExc_SystemError, "illegal user state");
-//          return NULL;
-//        }
-//
-//        Py_ssize_t size = self->capture->GetWidth() * self->capture->GetHeight() * 4;
-//        return PyByteArray_FromStringAndSize((const char *)self->capture->GetPixels(), size);
-//      }
+      inline XbmcCommons::Buffer getImage() throw(RenderCaptureException)
+      {
+        if (GetUserState() != CAPTURESTATE_DONE)
+          throw RenderCaptureException("illegal user state");
+        size_t size = getWidth() * getHeight() * 4;
+        return XbmcCommons::Buffer(this->GetPixels(), size);
+      }
 
       /**
        * capture(width, height [, flags]) -- issue capture request.
@@ -116,6 +112,7 @@ namespace XBMCAddon
        */
       inline int waitForCaptureStateChangeEvent(unsigned int msecs = 0)
       {
+        DelayedCallGuard dg(languageHook);
         return msecs ? m_capture->GetEvent().WaitMSec(msecs) : m_capture->GetEvent().Wait();
       }
 

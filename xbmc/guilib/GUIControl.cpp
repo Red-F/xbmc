@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ using namespace std;
 
 CGUIControl::CGUIControl()
 {
-  m_hasRendered = false;
+  m_hasProcessed = false;
   m_bHasFocus = false;
   m_controlID = 0;
   m_parentID = 0;
@@ -77,7 +77,7 @@ CGUIControl::CGUIControl(int parentID, int controlID, float posX, float posY, fl
   ControlType = GUICONTROL_UNKNOWN;
   m_bInvalidated = true;
   m_bAllocated=false;
-  m_hasRendered = false;
+  m_hasProcessed = false;
   m_parentControl = NULL;
   m_hasCamera = false;
   m_pushedUpdates = false;
@@ -93,7 +93,7 @@ CGUIControl::~CGUIControl(void)
 
 void CGUIControl::AllocResources()
 {
-  m_hasRendered = false;
+  m_hasProcessed = false;
   m_bInvalidated = true;
   m_bAllocated=true;
 }
@@ -113,7 +113,7 @@ void CGUIControl::FreeResources(bool immediately)
     }
     m_bAllocated=false;
   }
-  m_hasRendered = false;
+  m_hasProcessed = false;
 }
 
 void CGUIControl::DynamicResourceAlloc(bool bOnOff)
@@ -162,6 +162,7 @@ void CGUIControl::Process(unsigned int currentTime, CDirtyRegionList &dirtyregio
 {
   // update our render region
   m_renderRegion = g_graphicsContext.generateAABB(CalcRenderRegion());
+  m_hasProcessed = true;
 }
 
 // the main render routine.
@@ -182,11 +183,6 @@ void CGUIControl::DoRender()
   if (m_hasCamera)
     g_graphicsContext.RestoreCameraPosition();
   g_graphicsContext.RemoveTransform();
-}
-
-void CGUIControl::Render()
-{
-  m_hasRendered = true;
 }
 
 bool CGUIControl::OnAction(const CAction &action)
@@ -649,6 +645,8 @@ void CGUIControl::SetInitialVisibility()
     m_visible = m_visibleFromSkinCondition ? VISIBLE : HIDDEN;
   //  CLog::Log(LOGDEBUG, "Set initial visibility for control %i: %s", m_controlID, m_visible == VISIBLE ? "visible" : "hidden");
   }
+  else if (m_visible == DELAYED)
+    m_visible = VISIBLE;
   // and handle animation conditions as well
   for (unsigned int i = 0; i < m_animations.size(); i++)
   {
@@ -707,8 +705,8 @@ void CGUIControl::ResetAnimations()
 bool CGUIControl::CheckAnimation(ANIMATION_TYPE animType)
 {
   // rule out the animations we shouldn't perform
-  if (!IsVisible() || !HasRendered())
-  { // hidden or never rendered - don't allow exit or entry animations for this control
+  if (!IsVisible() || !HasProcessed())
+  { // hidden or never processed - don't allow exit or entry animations for this control
     if (animType == ANIM_TYPE_WINDOW_CLOSE)
     { // could be animating a (delayed) window open anim, so reset it
       ResetAnimation(ANIM_TYPE_WINDOW_OPEN);
@@ -847,7 +845,7 @@ bool CGUIControl::Animate(unsigned int currentTime)
   for (unsigned int i = 0; i < m_animations.size(); i++)
   {
     CAnimation &anim = m_animations[i];
-    anim.Animate(currentTime, HasRendered() || visible == DELAYED);
+    anim.Animate(currentTime, HasProcessed() || visible == DELAYED);
     // Update the control states (such as visibility)
     UpdateStates(anim.GetType(), anim.GetProcess(), anim.GetState());
     // and render the animation effect

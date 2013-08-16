@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,19 +32,15 @@
 #include "dialogs/GUIDialogKaiToast.h"
 #include "TextureDatabase.h"
 #include "URL.h"
+#include "pvr/PVRManager.h"
+#include "filesystem/PluginDirectory.h"
 
 using namespace XFILE;
 using namespace ADDON;
 
-AddonPtr CRepository::Clone(const AddonPtr &self) const
+AddonPtr CRepository::Clone() const
 {
-  CRepository* result = new CRepository(*this, self);
-  result->m_info = m_info;
-  result->m_checksum = m_checksum;
-  result->m_datadir = m_datadir;
-  result->m_compressed = m_compressed;
-  result->m_zipped = m_zipped;
-  return AddonPtr(result);
+  return AddonPtr(new CRepository(*this));
 }
 
 CRepository::CRepository(const AddonProps& props) :
@@ -71,9 +67,15 @@ CRepository::CRepository(const cp_extension_t *ext)
   }
 }
 
-CRepository::CRepository(const CRepository &rhs, const AddonPtr &self)
-  : CAddon(rhs, self)
+CRepository::CRepository(const CRepository &rhs)
+  : CAddon(rhs)
 {
+  m_info       = rhs.m_info;
+  m_checksum   = rhs.m_checksum;
+  m_datadir    = rhs.m_datadir;
+  m_compressed = rhs.m_compressed;
+  m_zipped     = rhs.m_zipped;
+  m_hashes     = rhs.m_hashes;
 }
 
 CRepository::~CRepository()
@@ -206,6 +208,7 @@ bool CRepositoryUpdateJob::DoWork()
     // manager told us to feck off
     if (ShouldCancel(0,0))
       break;
+
     if (!CAddonInstaller::Get().CheckDependencies(addons[i]))
       addons[i]->Props().broken = g_localizeStrings.Get(24044);
 
@@ -220,15 +223,19 @@ bool CRepositoryUpdateJob::DoWork()
     if (addon && addons[i]->Version() > addon->Version() &&
         !database.IsAddonBlacklisted(addons[i]->ID(),addons[i]->Version().c_str()))
     {
-      if (g_settings.m_bAddonAutoUpdate || addon->Type() >= ADDON_VIZ_LIBRARY)
+      if (CSettings::Get().GetBool("general.addonautoupdate") || addon->Type() >= ADDON_VIZ_LIBRARY)
       {
         CStdString referer;
         if (URIUtils::IsInternetStream(addons[i]->Path()))
           referer.Format("Referer=%s-%s.zip",addon->ID().c_str(),addon->Version().c_str());
 
-        CAddonInstaller::Get().Install(addon->ID(), true, referer);
+        if (addons[i]->Type() == ADDON_PVRDLL &&
+            !PVR::CPVRManager::Get().InstallAddonAllowed(addons[i]->ID()))
+          PVR::CPVRManager::Get().MarkAsOutdated(addon->ID(), referer);
+        else
+          CAddonInstaller::Get().Install(addon->ID(), true, referer);
       }
-      else if (g_settings.m_bAddonNotifications)
+      else if (CSettings::Get().GetBool("general.addonnotifications"))
       {
         CGUIDialogKaiToast::QueueNotification(addon->Icon(),
                                               g_localizeStrings.Get(24061),
@@ -257,16 +264,30 @@ VECADDONS CRepositoryUpdateJob::GrabAddons(RepositoryPtr& repo)
   CAddonDatabase database;
   database.Open();
   CStdString checksum;
-  int idRepo = database.GetRepoChecksum(repo->ID(),checksum);
+  database.GetRepoChecksum(repo->ID(),checksum);
   CStdString reposum = repo->Checksum();
   VECADDONS addons;
-  if (idRepo == -1 || !checksum.Equals(reposum))
+  if (!checksum.Equals(reposum) || checksum.empty())
   {
     addons = repo->Parse();
-    if (!addons.empty())
-      database.AddRepository(repo->ID(),addons,reposum);
-    else
+    if (addons.empty())
+    {
       CLog::Log(LOGERROR,"Repository %s returned no add-ons, listing may have failed",repo->Name().c_str());
+      reposum = checksum; // don't update the checksum
+    }
+    else
+    {
+      bool add=true;
+      if (!repo->Props().libname.empty())
+      {
+        CFileItemList dummy;
+        CStdString s;
+        s.Format("plugin://%s/?action=update", repo->ID());
+        add = CDirectory::GetDirectory(s, dummy);
+      }
+      if (add)
+        database.AddRepository(repo->ID(),addons,reposum);
+    }
   }
   else
     database.GetRepository(repo->ID(),addons);

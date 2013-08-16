@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,8 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, write to
- *  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
- *  http://www.gnu.org/copyleft/gpl.html
+ *  along with XBMC; see the file COPYING.  If not, see
+ *  <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -536,13 +535,13 @@ namespace XBMCAddon
 
     float ControlSlider::getPercent() throw (UnimplementedException)
     {
-      return (pGUIControl) ? (float)((CGUISliderControl*)pGUIControl)->GetPercentage() : 0.0f;
+      return (pGUIControl) ? ((CGUISliderControl*)pGUIControl)->GetPercentage() : 0.0f;
     }
 
     void ControlSlider::setPercent(float pct) throw (UnimplementedException)
     {
       if (pGUIControl)
-        ((CGUISliderControl*)pGUIControl)->SetPercentage((int)pct);
+        ((CGUISliderControl*)pGUIControl)->SetPercentage(pct);
     }
 
     CGUIControl* ControlSlider::Create () throw (WindowException)
@@ -779,8 +778,8 @@ namespace XBMCAddon
         if (pTuple.GetNumValuesSet() != 2)
           throw WindowException("Error unpacking tuple found in list");
 
-        const String& cAttr = pTuple.first();
-        const String& cEvent = pTuple.second();
+        const String& cEvent = pTuple.first();
+        const String& cAttr = pTuple.second();
 
         TiXmlElement pNode("animation");
         CStdStringArray attrs;
@@ -1013,7 +1012,7 @@ namespace XBMCAddon
     {
       if (!pGUIControl) 
         return NULL;
-      return strText.c_str();
+      return strText;
     }
     // ============================================================
 
@@ -1079,7 +1078,7 @@ namespace XBMCAddon
     {
       if (!pGUIControl) 
         return NULL;
-      return strText.c_str();
+      return strText;
     }
 
     void ControlEdit::setText(const String& text) throw(UnimplementedException)
@@ -1183,12 +1182,17 @@ namespace XBMCAddon
 
     void ControlList::addItemStream(const String& fileOrUrl, bool sendMessage) throw(UnimplementedException,WindowException)
     {
-      addListItem(ListItem::fromString(fileOrUrl),sendMessage);
+      internAddListItem(ListItem::fromString(fileOrUrl),sendMessage);
     }
 
     void ControlList::addListItem(const XBMCAddon::xbmcgui::ListItem* pListItem, bool sendMessage) throw(UnimplementedException,WindowException)
     {
-      if (pListItem == NULL)
+      internAddListItem(pListItem,sendMessage);
+    }
+
+    void ControlList::internAddListItem(AddonClass::Ref<ListItem> pListItem, bool sendMessage) throw (WindowException)
+    {
+      if (pListItem.isNull())
         throw WindowException("NULL ListItem passed to ControlList::addListItem");
 
       // add item to objects vector
@@ -1218,6 +1222,16 @@ namespace XBMCAddon
 
       // send message
       g_windowManager.SendThreadMessage(msg, iParentId);
+    }
+
+    void ControlList::removeItem(int index) throw(UnimplementedException,WindowException)
+    {
+      if (index < 0 || index >= (int)vecItems.size())
+        throw WindowException("Index out of range");
+
+      vecItems.erase(vecItems.begin() + index);
+
+      sendLabelBind(vecItems.size());
     }
 
     void ControlList::reset() throw(UnimplementedException)
@@ -1268,7 +1282,8 @@ namespace XBMCAddon
       if ((vecItems.size() > 0) && pGUIControl)
       {
         pGUIControl->OnMessage(msg);
-        pListItem = vecItems[msg.GetParam1()];
+        if (msg.GetParam1() >= 0 && (size_t)msg.GetParam1() < vecItems.size())
+          pListItem = vecItems[msg.GetParam1()];
       }
 
       return pListItem.get();

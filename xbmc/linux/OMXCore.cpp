@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2010-2012 Team XBMCn
- *      http://www.xbmc.org
+ *      Copyright (C) 2010-2013 Team XBMCn
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,9 +18,9 @@
  *
  */
 
-#if (defined HAVE_CONFIG_H) && (!defined WIN32)
+#if (defined HAVE_CONFIG_H) && (!defined TARGET_WINDOWS)
   #include "config.h"
-#elif defined(_WIN32)
+#elif defined(TARGET_WINDOWS)
 #include "system.h"
 #endif
 
@@ -33,7 +33,7 @@
 
 #include "OMXClock.h"
 
-#ifdef _LINUX
+#ifdef TARGET_LINUX
 #include "XMemUtils.h"
 #endif
 
@@ -428,9 +428,6 @@ void COMXCoreComponent::TransitionToStateLoaded()
   if(!m_handle)
     return;
 
-  if(GetState() == OMX_StateExecuting)
-    SetStateForComponent(OMX_StatePause);
-
   if(GetState() != OMX_StateIdle)
     SetStateForComponent(OMX_StateIdle);
 
@@ -644,7 +641,7 @@ OMX_ERRORTYPE COMXCoreComponent::AllocInputBuffers(bool use_buffers /* = false *
   m_input_buffer_count  = portFormat.nBufferCountActual;
   m_input_buffer_size   = portFormat.nBufferSize;
 
-  CLog::Log(LOGDEBUG, "COMXCoreComponent::AllocInputBuffers component(%s) - port(%d), nBufferCountMin(%lu), nBufferCountActual(%lu), nBufferSize(%lu), nBufferAlignmen(%lu)\n",
+  CLog::Log(LOGDEBUG, "COMXCoreComponent::AllocInputBuffers component(%s) - port(%d), nBufferCountMin(%u), nBufferCountActual(%u), nBufferSize(%u), nBufferAlignmen(%u)\n",
             m_componentName.c_str(), GetInputPort(), portFormat.nBufferCountMin,
             portFormat.nBufferCountActual, portFormat.nBufferSize, portFormat.nBufferAlignment);
 
@@ -720,7 +717,7 @@ OMX_ERRORTYPE COMXCoreComponent::AllocOutputBuffers(bool use_buffers /* = false 
   m_output_buffer_count  = portFormat.nBufferCountActual;
   m_output_buffer_size   = portFormat.nBufferSize;
 
-  CLog::Log(LOGDEBUG, "COMXCoreComponent::AllocOutputBuffers component(%s) - port(%d), nBufferCountMin(%lu), nBufferCountActual(%lu), nBufferSize(%lu) nBufferAlignmen(%lu)\n",
+  CLog::Log(LOGDEBUG, "COMXCoreComponent::AllocOutputBuffers component(%s) - port(%d), nBufferCountMin(%u), nBufferCountActual(%u), nBufferSize(%u) nBufferAlignmen(%u)\n",
             m_componentName.c_str(), m_output_port, portFormat.nBufferCountMin,
             portFormat.nBufferCountActual, portFormat.nBufferSize, portFormat.nBufferAlignment);
 
@@ -1386,13 +1383,13 @@ bool COMXCoreComponent::Initialize( const std::string &component_name, OMX_INDEX
     omx_err = m_DllOMX->OMX_GetHandle(&m_handle, (char*)component_name.c_str(), this, &m_callbacks);
     if (!m_handle || omx_err != OMX_ErrorNone)
     {
-      CLog::Log(LOGERROR, "COMXCoreComponent::Initialize - could not get component handle for %s omx_err(0x%08x)\n", 
+      CLog::Log(LOGERROR, "COMXCoreComponent::Initialize - could not get component handle for %s omx_err(0x%08x)\n",
           component_name.c_str(), (int)omx_err);
       Deinitialize(true);
       return false;
     }
 
-    CLog::Log(LOGDEBUG, "COMXCoreComponent::Initialize : %s handle 0x%08x dllopen : %d\n", 
+    CLog::Log(LOGDEBUG, "COMXCoreComponent::Initialize : %s handle %p dllopen : %d\n", 
           m_componentName.c_str(), m_handle, m_DllOMXOpen);
   }
 
@@ -1467,12 +1464,12 @@ bool COMXCoreComponent::Deinitialize(bool free_component /* = false */)
 
     if(free_component)
     {
-      CLog::Log(LOGDEBUG, "COMXCoreComponent::Deinitialize : %s handle 0x%08x dllopen : %d\n", 
+      CLog::Log(LOGDEBUG, "COMXCoreComponent::Deinitialize : %s handle %p dllopen : %d\n", 
           m_componentName.c_str(), m_handle, m_DllOMXOpen);
       omx_err = m_DllOMX->OMX_FreeHandle(m_handle);
       if (omx_err != OMX_ErrorNone)
       {
-        CLog::Log(LOGERROR, "COMXCoreComponent::Deinitialize - failed to free handle for component %s omx_err(0x%08x)", 
+        CLog::Log(LOGERROR, "COMXCoreComponent::Deinitialize - failed to free handle for component %s omx_err(0x%08x)",
             m_componentName.c_str(), omx_err);
       }  
       m_handle = NULL;
@@ -1672,6 +1669,11 @@ OMX_ERRORTYPE COMXCoreComponent::DecoderEventHandler(
       CLog::Log(LOGDEBUG, "%s::%s %s - OMX_EventPortSettingsChanged(output)\n", CLASSNAME, __func__, ctx->GetName().c_str());
       #endif
     break;
+    case OMX_EventParamOrConfigChanged:
+      #if defined(OMX_DEBUG_EVENTHANDLER)
+      CLog::Log(LOGDEBUG, "%s::%s %s - OMX_EventParamOrConfigChanged(output)\n", CLASSNAME, __func__, ctx->GetName().c_str());
+      #endif
+    break;
     #if defined(OMX_DEBUG_EVENTHANDLER)
     case OMX_EventMark:
       CLog::Log(LOGDEBUG, "%s::%s %s - OMX_EventMark\n", CLASSNAME, __func__, ctx->GetName().c_str());
@@ -1705,12 +1707,12 @@ OMX_ERRORTYPE COMXCoreComponent::DecoderEventHandler(
           CLog::Log(LOGERROR, "%s::%s %s - OMX_ErrorUnsupportedSetting, unsupported setting\n", CLASSNAME, __func__, ctx->GetName().c_str());
         break;
         default:
-          CLog::Log(LOGERROR, "%s::%s %s - OMX_EventError detected, nData1(0x%lx), port %d\n",  CLASSNAME, __func__, ctx->GetName().c_str(), nData1, (int)nData2);
+          CLog::Log(LOGERROR, "%s::%s %s - OMX_EventError detected, nData1(0x%x), port %d\n",  CLASSNAME, __func__, ctx->GetName().c_str(), nData1, (int)nData2);
         break;
       }
     break;
     default:
-      CLog::Log(LOGWARNING, "%s::%s %s - Unknown eEvent(0x%x), nData1(0x%lx), port %d\n", CLASSNAME, __func__, ctx->GetName().c_str(), eEvent, nData1, (int)nData2);
+      CLog::Log(LOGWARNING, "%s::%s %s - Unknown eEvent(0x%x), nData1(0x%x), port %d\n", CLASSNAME, __func__, ctx->GetName().c_str(), eEvent, nData1, (int)nData2);
     break;
   }
 

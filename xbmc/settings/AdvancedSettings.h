@@ -1,6 +1,6 @@
 #pragma once
 /*
- *      Copyright (C) 2005-2012 Team XBMC
+ *      Copyright (C) 2005-2013 Team XBMC
  *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
@@ -20,10 +20,17 @@
  */
 
 #include <vector>
+
+#include "settings/ISettingCallback.h"
+#include "settings/ISettingsHandler.h"
 #include "utils/StdString.h"
 #include "utils/GlobalsHandling.h"
 
 class TiXmlElement;
+namespace ADDON
+{
+  class IAddon;
+}
 
 class DatabaseSettings
 {
@@ -78,14 +85,32 @@ struct RefreshVideoLatency
   float delay;
 };
 
+struct StagefrightConfig
+{
+  int useAVCcodec;
+  int useVC1codec;
+  int useVPXcodec;
+  int useMP4codec;
+  int useMPEG2codec;
+  bool useSwRenderer;
+  bool useInputDTS;
+};
+
 typedef std::vector<TVShowRegexp> SETTINGS_TVSHOWLIST;
 
-class CAdvancedSettings
+class CAdvancedSettings : public ISettingCallback, public ISettingsHandler
 {
   public:
     CAdvancedSettings();
 
     static CAdvancedSettings* getInstance();
+
+    virtual void OnSettingsLoaded();
+    virtual void OnSettingsUnloaded();
+
+    virtual void OnSettingChanged(const CSetting *setting);
+
+    virtual void OnSettingAction(const CSetting *setting);
 
     void Initialize();
     bool Initialized() { return m_initialized; };
@@ -164,6 +189,8 @@ class CAdvancedSettings
     bool m_DXVAForceProcessorRenderer;
     bool m_DXVANoDeintProcForProgressive;
     int  m_videoFpsDetect;
+    bool m_videoDisableHi10pMultithreading;
+    StagefrightConfig m_stagefrightConfig;
 
     CStdString m_videoDefaultPlayer;
     CStdString m_videoDefaultDVDPlayer;
@@ -173,14 +200,10 @@ class CAdvancedSettings
     float m_slideshowZoomAmount;
     float m_slideshowPanAmount;
 
-    bool m_lcdHeartbeat;
-    bool m_lcdDimOnScreenSave;
-    int m_lcdScrolldelay;
-    CStdString m_lcdHostName;
-
     int m_songInfoDuration;
     int m_logLevel;
     int m_logLevelHint;
+    int m_extraLogLevels;
     CStdString m_cddbAddress;
 
     //airtunes + airplay
@@ -236,6 +259,7 @@ class CAdvancedSettings
     int m_iMusicLibraryRecentlyAddedItems;
     bool m_bMusicLibraryAllItemsOnBottom;
     bool m_bMusicLibraryAlbumsSortByArtistThenYear;
+    bool m_bMusicLibraryCleanOnUpdate;
     CStdString m_strMusicLibraryAlbumFormat;
     CStdString m_strMusicLibraryAlbumFormatRight;
     bool m_prioritiseAPEv2tags;
@@ -289,7 +313,6 @@ class CAdvancedSettings
     int m_iEdlCommBreakAutowait;    // seconds
     int m_iEdlCommBreakAutowind;    // seconds
 
-    bool m_bFirstLoop;
     int m_curlconnecttimeout;
     int m_curllowspeedtime;
     int m_curlretries;
@@ -326,7 +349,6 @@ class CAdvancedSettings
 
     CStdString m_cpuTempCmd;
     CStdString m_gpuTempCmd;
-    int m_bgInfoLoaderMaxThreads;
 
     /* PVR/TV related advanced settings */
     int m_iPVRTimeCorrection;     /*!< @brief correct all times (epg tags, timer tags, recording tags) by this amount of minutes. defaults to 0. */
@@ -337,6 +359,7 @@ class CAdvancedSettings
     bool m_bPVRCacheInDvdPlayer; /*!< @brief true to use "CACHESTATE_PVR" in CDVDPlayer (default) */
     bool m_bPVRChannelIconsAutoScan; /*!< @brief automatically scan user defined folder for channel icons when loading internal channel groups */
     bool m_bPVRAutoScanIconsUserSet; /*!< @brief mark channel icons populated by auto scan as "user set" */
+    int m_iPVRNumericChannelSwitchTimeout; /*!< @brief time in ms before the numeric dialog auto closes when confirmchannelswitch is disabled */
 
     bool m_measureRefreshrate; //when true the videoreferenceclock will measure the refreshrate when direct3d is used
                                //otherwise it will use the windows refreshrate
@@ -352,6 +375,7 @@ class CAdvancedSettings
     unsigned int m_addonPackageFolderSize;
 
     unsigned int m_cacheMemBufferSize;
+    bool m_alwaysForceBuffer;
 
     bool m_jsonOutputCompact;
     unsigned int m_jsonTcpPort;
@@ -364,6 +388,20 @@ class CAdvancedSettings
     bool m_initialized;
 
     void SetDebugMode(bool debug);
+    void SetExtraLogsFromAddon(ADDON::IAddon* addon);
+
+    // runtime settings which cannot be set from advancedsettings.xml
+    CStdString m_pictureExtensions;
+    CStdString m_musicExtensions;
+    CStdString m_videoExtensions;
+    CStdString m_discStubExtensions;
+
+    CStdString m_stereoscopicflags_sbs;
+    CStdString m_stereoscopicflags_tab;
+
+    CStdString m_logFolder;
+
+    CStdString m_userAgent;
 };
 
 XBMC_GLOBAL(CAdvancedSettings,g_advancedSettings);

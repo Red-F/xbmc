@@ -1,5 +1,5 @@
 /*
- *      Copyright (C) 2010-2012 Team XBMC
+ *      Copyright (C) 2010-2013 Team XBMC
  *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
@@ -28,9 +28,8 @@
 #include "utils/MathUtils.h"
 #include "utils/EndianSwap.h"
 #include "threads/SingleLock.h"
-#include "settings/GUISettings.h"
-#include "settings/Settings.h"
 #include "settings/AdvancedSettings.h"
+#include "settings/Settings.h"
 
 #include "SoftAE.h"
 #include "SoftAESound.h"
@@ -59,10 +58,13 @@ CSoftAE::CSoftAE():
   m_audiophile         (true        ),
   m_running            (false       ),
   m_reOpen             (false       ),
+  m_sinkIsSuspended    (false       ),
   m_isSuspended        (false       ),
   m_softSuspend        (false       ),
   m_softSuspendTimer   (0           ),
+  m_volume             (1.0         ),
   m_sink               (NULL        ),
+  m_sinkBlockTime      (0           ),
   m_transcode          (false       ),
   m_rawPassthrough     (false       ),
   m_soundMode          (AE_SOUND_OFF),
@@ -74,21 +76,18 @@ CSoftAE::CSoftAE():
   m_outputStageFn      (NULL        ),
   m_streamStageFn      (NULL        )
 {
+  unsigned int c_retry = 5;
   CAESinkFactory::EnumerateEx(m_sinkInfoList);
-  for (AESinkInfoList::iterator itt = m_sinkInfoList.begin(); itt != m_sinkInfoList.end(); ++itt)
+  while(m_sinkInfoList.size() == 0 && c_retry > 0)
   {
-    CLog::Log(LOGNOTICE, "Enumerated %s devices:", itt->m_sinkName.c_str());
-    int count = 0;
-    for (AEDeviceInfoList::iterator itt2 = itt->m_deviceInfoList.begin(); itt2 != itt->m_deviceInfoList.end(); ++itt2)
-    {
-      CLog::Log(LOGNOTICE, "    Device %d", ++count);
-      CAEDeviceInfo& info = *itt2;
-      std::stringstream ss((std::string)info);
-      std::string line;
-      while(std::getline(ss, line, '\n'))
-        CLog::Log(LOGNOTICE, "        %s", line.c_str());
-    }
+    CLog::Log(LOGNOTICE, "No Devices found - retry: %d", c_retry);
+    Sleep(2000);
+    c_retry--;
+    // retry the enumeration
+    CAESinkFactory::EnumerateEx(m_sinkInfoList, true);
   }
+  CLog::Log(LOGNOTICE, "Found %lu Lists of Devices", m_sinkInfoList.size());
+  PrintSinks();
 }
 
 CSoftAE::~CSoftAE()
@@ -179,6 +178,18 @@ void CSoftAE::OpenSink()
   m_wake.Set();
 }
 
+void CSoftAE::InternalCloseSink()
+{
+  /* close the old sink if it was open */
+  if (m_sink)
+  {
+    CExclusiveLock sinkLock(m_sinkLock);
+    m_sink->Drain();
+    m_sink->Deinitialize();
+    delete m_sink;
+    m_sink = NULL;
+  }
+}
 /* this must NEVER be called from outside the main thread or Initialization */
 void CSoftAE::InternalOpenSink()
 {
@@ -305,15 +316,8 @@ void CSoftAE::InternalOpenSink()
     CExclusiveLock sinkLock(m_sinkLock);
 
     reInit = true;
-
-    /* we are going to open, so close the old sink if it was open */
-    if (m_sink)
-    {
-      m_sink->Drain();
-      m_sink->Deinitialize();
-      delete m_sink;
-      m_sink = NULL;
-    }
+    //close the sink cause it gets reinited
+    InternalCloseSink();
 
     /* get the display name of the device */
     GetDeviceFriendlyName(device);
@@ -347,6 +351,7 @@ void CSoftAE::InternalOpenSink()
     m_sinkFormatSampleRateMul = 1.0 / (double)newFormat.m_sampleRate;
     m_sinkFormatFrameSizeMul  = 1.0 / (double)newFormat.m_frameSize;
     m_sinkBlockSize           = newFormat.m_frames * newFormat.m_frameSize;
+    m_sinkBlockTime           = 1000 * newFormat.m_frames / newFormat.m_sampleRate;
     // check if sink controls volume, if so, init the volume.
     m_sinkHandlesVolume       = m_sink->HasVolume();
     if (m_sinkHandlesVolume)
@@ -509,7 +514,7 @@ bool CSoftAE::Initialize()
   CSingleLock lock(m_threadLock);
   InternalOpenSink();
   m_running = true;
-  m_thread  = new CThread(this, "CSoftAE");
+  m_thread  = new CThread(this, "SoftAE");
   m_thread->Create();
   m_thread->SetPriority(THREAD_PRIORITY_ABOVE_NORMAL);
   return true;
@@ -525,8 +530,7 @@ void CSoftAE::OnSettingsChange(const std::string& setting)
       setting == "audiooutput.passthroughaac"    ||
       setting == "audiooutput.truehdpassthrough" ||
       setting == "audiooutput.dtshdpassthrough"  ||
-      setting == "audiooutput.channels"     ||
-      setting == "audiooutput.useexclusivemode"  ||
+      setting == "audiooutput.channels"          ||
       setting == "audiooutput.multichannellpcm"  ||
       setting == "audiooutput.stereoupmix")
   {
@@ -548,13 +552,13 @@ void CSoftAE::LoadSettings()
   if (m_audiophile)
     CLog::Log(LOGINFO, "CSoftAE::LoadSettings - Audiophile switch enabled");
 
-  m_stereoUpmix = g_guiSettings.GetBool("audiooutput.stereoupmix");
+  m_stereoUpmix = CSettings::Get().GetBool("audiooutput.stereoupmix");
   if (m_stereoUpmix)
     CLog::Log(LOGINFO, "CSoftAE::LoadSettings - Stereo upmix is enabled");
 
   /* load the configuration */
   m_stdChLayout = AE_CH_LAYOUT_2_0;
-  switch (g_guiSettings.GetInt("audiooutput.channels"))
+  switch (CSettings::Get().GetInt("audiooutput.channels"))
   {
     default:
     case  0: m_stdChLayout = AE_CH_LAYOUT_2_0; break; /* dont alow 1_0 output */
@@ -571,21 +575,21 @@ void CSoftAE::LoadSettings()
   }
 
   // force optical/coax to 2.0 output channels
-  if (!m_rawPassthrough && g_guiSettings.GetInt("audiooutput.mode") == AUDIO_IEC958)
+  if (!m_rawPassthrough && CSettings::Get().GetInt("audiooutput.mode") == AUDIO_IEC958)
     m_stdChLayout = AE_CH_LAYOUT_2_0;
 
   /* get the output devices and ensure they exist */
-  m_device            = g_guiSettings.GetString("audiooutput.audiodevice");
-  m_passthroughDevice = g_guiSettings.GetString("audiooutput.passthroughdevice");
+  m_device            = CSettings::Get().GetString("audiooutput.audiodevice");
+  m_passthroughDevice = CSettings::Get().GetString("audiooutput.passthroughdevice");
   VerifySoundDevice(m_device           , false);
   VerifySoundDevice(m_passthroughDevice, true );
 
   m_transcode = (
-    g_guiSettings.GetBool("audiooutput.ac3passthrough") /*||
-    g_guiSettings.GetBool("audiooutput.dtspassthrough") */
+    CSettings::Get().GetBool("audiooutput.ac3passthrough") /*||
+    CSettings::Get().GetBool("audiooutput.dtspassthrough") */
   ) && (
-      (g_guiSettings.GetInt("audiooutput.mode") == AUDIO_IEC958) ||
-      (g_guiSettings.GetInt("audiooutput.mode") == AUDIO_HDMI && !g_guiSettings.GetBool("audiooutput.multichannellpcm"))
+      (CSettings::Get().GetInt("audiooutput.mode") == AUDIO_IEC958) ||
+      (CSettings::Get().GetInt("audiooutput.mode") == AUDIO_HDMI && !CSettings::Get().GetBool("audiooutput.multichannellpcm"))
   );
 }
 
@@ -646,7 +650,9 @@ void CSoftAE::Deinitialize()
     delete m_thread;
     m_thread = NULL;
   }
+  lock.Leave();
 
+  CExclusiveLock sinkLock(m_sinkLock);
   if (m_sink)
   {
     /* shutdown the sink */
@@ -663,6 +669,8 @@ void CSoftAE::Deinitialize()
   _aligned_free(m_converted);
   m_converted = NULL;
   m_convertedSize = 0;
+
+  m_sinkInfoList.clear();  
 }
 
 void CSoftAE::EnumerateOutputDevices(AEDeviceList &devices, bool passthrough)
@@ -722,9 +730,9 @@ void CSoftAE::PauseStream(CSoftAEStream *stream)
   CSingleLock streamLock(m_streamLock);
   RemoveStream(m_playingStreams, stream);
   stream->m_paused = true;
-  streamLock.Leave();
 
-  OpenSink();
+  m_reOpen = true;
+  m_wake.Set();
 }
 
 void CSoftAE::ResumeStream(CSoftAEStream *stream)
@@ -735,7 +743,8 @@ void CSoftAE::ResumeStream(CSoftAEStream *stream)
   streamLock.Leave();
 
   m_streamsPlaying = true;
-  OpenSink();
+  m_reOpen = true;
+  m_wake.Set();
 }
 
 void CSoftAE::Stop()
@@ -769,10 +778,10 @@ IAEStream *CSoftAE::MakeStream(enum AEDataFormat dataFormat, unsigned int sample
     ASSERT(encodedSampleRate);
 
   CSingleLock streamLock(m_streamLock);
-  CSoftAEStream *stream = new CSoftAEStream(dataFormat, sampleRate, encodedSampleRate, channelLayout, options);
+  CSoftAEStream *stream = new CSoftAEStream(dataFormat, sampleRate, encodedSampleRate, channelLayout, options, m_streamLock);
   m_newStreams.push_back(stream);
   streamLock.Leave();
-
+  // this is really needed here
   OpenSink();
   return stream;
 }
@@ -864,11 +873,12 @@ IAEStream *CSoftAE::FreeStream(IAEStream *stream)
   CSingleLock lock(m_streamLock);
   RemoveStream(m_playingStreams, (CSoftAEStream*)stream);
   RemoveStream(m_streams       , (CSoftAEStream*)stream);
-  lock.Leave();
-
-  /* if it was the master stream we need to reopen before deletion */
-  if (m_masterStream == stream)
-    OpenSink();
+  // Reopen is old behaviour. Not opening when masterstream stops means clipping on S/PDIF.
+  if(!m_isSuspended && (m_masterStream == stream))
+  {
+    m_reOpen = true;
+    m_masterStream = NULL;
+  }
 
   delete (CSoftAEStream*)stream;
   return NULL;
@@ -968,21 +978,74 @@ bool CSoftAE::Suspend()
   CLog::Log(LOGDEBUG, "CSoftAE::Suspend - Suspending AE processing");
   m_isSuspended = true;
 
+  StopAllSounds();
+
   CSingleLock streamLock(m_streamLock);
-  
   for (StreamList::iterator itt = m_playingStreams.begin(); itt != m_playingStreams.end(); ++itt)
   {
     CSoftAEStream *stream = *itt;
     stream->Flush();
   }
+  streamLock.Leave();
+  #if defined(TARGET_LINUX)
+  /*workaround sinks not playing sound after resume */
+    bool ret = true;
+    if(m_sink)
+    {
+      /* Deinitialize and delete current m_sink */
+      // we don't want that Run reopens our device, so we wait.
+      m_saveSuspend.Reset();
+      // wait until we are looping in ProcessSuspend()
+      // this is more save to not come up unclean
+      // we cannot wait forever
+      ret = m_saveSuspend.WaitMSec(500);
+      if(ret)
+      {
+        CLog::Log(LOGDEBUG, "CSoftAE::Suspend - After Event");
+        CExclusiveLock sinkLock(m_sinkLock);
+        // remove all the sinks
+        for (AESinkInfoList::iterator itt = m_sinkInfoList.begin(); itt != m_sinkInfoList.end(); ++itt)
+        {
+          itt->m_deviceInfoList.pop_back();
+        }
+        InternalCloseSink();
+      }
+      else
+      {
+        CLog::Log(LOGDEBUG, "CSoftAE::Suspend - Unload failed will continue");
+        m_saveSuspend.Reset();
+      }
+    }
+    // The device list is now empty and must be reenumerated afterwards.
+    if(ret)
+      m_sinkInfoList.clear();
+
+    // signal anybody, that we are gone now (beware of deadlocks)
+    // we don't unset the fields here, to care for reinit after resume
+    if(m_reOpen)
+      m_reOpenEvent.Set();
+  #endif
 
   return true;
 }
 
 bool CSoftAE::Resume()
 {
+#if defined(TARGET_LINUX)
+  // We must make sure, that we don't return empty.
+  if(m_sinkInfoList.empty())
+  {
+    CLog::Log(LOGDEBUG, "CSoftAE::Resume - Re Enumerating Sinks");
+    CExclusiveLock sinkLock(m_sinkLock);
+    // Forced enumeration - we are sure that we start completely fresh.
+    CAESinkFactory::EnumerateEx(m_sinkInfoList, true);
+    sinkLock.Leave(); // we leave here explicitly to not lock while printing new sinks
+    PrintSinks();
+  }
+#endif
   CLog::Log(LOGDEBUG, "CSoftAE::Resume - Resuming AE processing");
   m_isSuspended = false;
+  // we flag reopen
   m_reOpen = true;
 
   return true;
@@ -999,6 +1062,7 @@ void CSoftAE::Run()
   {
     bool restart = false;
 
+    /* with the new non blocking implementation - we just reOpen here, when it tells reOpen */
     if ((this->*m_outputStageFn)(hasAudio) > 0)
       hasAudio = false; /* taken some audio - reset our silence flag */
 
@@ -1019,18 +1083,34 @@ void CSoftAE::Run()
         restart = true;
     }
 
-#if !defined(TARGET_ANDROID)
     /* Handle idle or forced suspend */
     ProcessSuspend();
-#endif
 
     /* if we are told to restart */
     if (m_reOpen || restart || !m_sink)
     {
+      if(m_sinkIsSuspended && m_sink)
+      {
+        // hint for fritsch: remember lazy evaluation
+        m_reOpen = !m_sink->SoftResume() || m_reOpen;
+        m_sinkIsSuspended = false;
+        CLog::Log(LOGDEBUG, "CSoftAE::Run - Sink was forgotten");   
+      }
       CLog::Log(LOGDEBUG, "CSoftAE::Run - Sink restart flagged");
       InternalOpenSink();
-      m_isSuspended = false; // exit Suspend state
     }
+
+#if defined(TARGET_ANDROID)
+    else if (m_playingStreams.empty() 
+      &&     m_playing_sounds.empty()
+      && !g_advancedSettings.m_streamSilence)
+    {
+      // if we have nothing to do, take a dirt nap.
+      // we do not have to take a lock just to check empty.
+      // this keeps AE from sucking CPU if nothing is going on.
+      m_wake.WaitMSec(SOFTAE_IDLE_WAIT_MSEC);
+    }
+#endif
   }
 }
 
@@ -1136,6 +1216,43 @@ bool CSoftAE::FinalizeSamples(float *buffer, unsigned int samples, bool hasAudio
   return true;
 }
 
+unsigned int CSoftAE::WriteSink(CAEBuffer& src, unsigned int src_len, uint8_t *data, bool hasAudio)
+{
+  CExclusiveLock lock(m_sinkLock); /* lock to maintain delay consistency */
+
+  XbmcThreads::EndTime timeout(m_sinkBlockTime * 2);
+  while(m_sink && src.Used() >= src_len)
+  {
+    int frames = m_sink->AddPackets(data, m_sinkFormat.m_frames, hasAudio);
+
+    /* Return value of INT_MAX signals error in sink - restart */
+    if (frames == INT_MAX)
+    {
+      CLog::Log(LOGERROR, "CSoftAE::WriteSink - sink error - reinit flagged");
+      m_reOpen = true;
+      break;
+    }
+
+    if (frames)
+    {
+      src.Shift(NULL, src_len);
+      return frames;
+    }
+
+    if(timeout.IsTimePast())
+    {
+      CLog::Log(LOGERROR, "CSoftAE::WriteSink - sink blocked- reinit flagged");
+      m_reOpen = true;
+      break;
+    }
+
+    lock.Leave();
+    Sleep(m_sinkBlockTime / 4);
+    lock.Enter();
+  }
+  return 0;
+}
+
 int CSoftAE::RunOutputStage(bool hasAudio)
 {
   const unsigned int needSamples = m_sinkFormat.m_frames * m_sinkFormat.m_channelLayout.Count();
@@ -1146,7 +1263,6 @@ int CSoftAE::RunOutputStage(bool hasAudio)
   void *data = m_buffer.Raw(needBytes);
   hasAudio = FinalizeSamples((float*)data, needSamples, hasAudio);
 
-  int wroteFrames = 0;
   if (m_convertFn)
   {
     const unsigned int convertedBytes = m_sinkFormat.m_frames * m_sinkFormat.m_frameSize;
@@ -1156,22 +1272,7 @@ int CSoftAE::RunOutputStage(bool hasAudio)
     data = m_converted;
   }
 
-  /* Output frames to sink */
-  if (m_sink)
-    wroteFrames = m_sink->AddPackets((uint8_t*)data, m_sinkFormat.m_frames, hasAudio);
-
-  /* Return value of INT_MAX signals error in sink - restart */
-  if (wroteFrames == INT_MAX)
-  {
-    CLog::Log(LOGERROR, "CSoftAE::RunOutputStage - sink error - reinit flagged");
-    wroteFrames = 0;
-    m_reOpen = true;
-  }
-
-  if (wroteFrames)
-    m_buffer.Shift(NULL, wroteFrames * m_sinkFormat.m_channelLayout.Count() * sizeof(float));
-
-  return wroteFrames;
+  return WriteSink(m_buffer, needBytes, (uint8_t*)data, hasAudio);
 }
 
 int CSoftAE::RunRawOutputStage(bool hasAudio)
@@ -1199,24 +1300,13 @@ int CSoftAE::RunRawOutputStage(bool hasAudio)
     data = m_converted;
   }
 
-  int wroteFrames = 0;
-  if (m_sink)
-    wroteFrames = m_sink->AddPackets((uint8_t *)data, m_sinkFormat.m_frames, hasAudio);
-
-  /* Return value of INT_MAX signals error in sink - restart */
-  if (wroteFrames == INT_MAX)
-  {
-    CLog::Log(LOGERROR, "CSoftAE::RunRawOutputStage - sink error - reinit flagged");
-    wroteFrames = 0;
-    m_reOpen = true;
-  }
-
-  m_buffer.Shift(NULL, wroteFrames * m_sinkFormat.m_frameSize);
-  return wroteFrames;
+  return WriteSink(m_buffer, m_sinkBlockSize, (uint8_t*)data, hasAudio);
 }
 
 int CSoftAE::RunTranscodeStage(bool hasAudio)
 {
+  if (!m_encoder) return 0;
+  
   /* if we dont have enough samples to encode yet, return */
   unsigned int block     = m_encoderFormat.m_frames * m_encoderFormat.m_frameSize;
   unsigned int sinkBlock = m_sinkFormat.m_frames    * m_sinkFormat.m_frameSize;
@@ -1240,34 +1330,43 @@ int CSoftAE::RunTranscodeStage(bool hasAudio)
       buffer = m_buffer.Raw(block);
 
     encodedFrames = m_encoder->Encode((float*)buffer, m_encoderFormat.m_frames);
-    m_buffer.Shift(NULL, encodedFrames * m_encoderFormat.m_frameSize);
 
     uint8_t *packet;
     unsigned int size = m_encoder->GetData(&packet);
+
+    CExclusiveLock sinkLock(m_sinkLock); /* lock to maintain delay consistency */
 
     /* if there is not enough space for another encoded packet enlarge the buffer */
     if (m_encodedBuffer.Free() < size)
       m_encodedBuffer.ReAlloc(m_encodedBuffer.Used() + size);
 
+    m_buffer.Shift(NULL, encodedFrames * m_encoderFormat.m_frameSize);
     m_encodedBuffer.Push(packet, size);
   }
 
   /* if we have enough data to write */
   if (m_encodedBuffer.Used() >= sinkBlock)
-  {
-    int wroteFrames = m_sink->AddPackets((uint8_t*)m_encodedBuffer.Raw(sinkBlock), m_sinkFormat.m_frames, hasAudio);
-    
-    /* Return value of INT_MAX signals error in sink - restart */
-    if (wroteFrames == INT_MAX)
-    {
-      CLog::Log(LOGERROR, "CSoftAE::RunTranscodeStage - sink error - reinit flagged");
-      wroteFrames = 0;
-      m_reOpen = true;
-    }
+    WriteSink(m_encodedBuffer, sinkBlock, (uint8_t*)m_encodedBuffer.Raw(sinkBlock), hasAudio);
 
-    m_encodedBuffer.Shift(NULL, wroteFrames * m_sinkFormat.m_frameSize);
-  }
   return encodedFrames;
+}
+
+void CSoftAE::PrintSinks()
+{
+  for (AESinkInfoList::iterator itt = m_sinkInfoList.begin(); itt != m_sinkInfoList.end(); ++itt)
+  {
+    CLog::Log(LOGNOTICE, "Enumerated %s devices:", itt->m_sinkName.c_str());
+    int count = 0;
+    for (AEDeviceInfoList::iterator itt2 = itt->m_deviceInfoList.begin(); itt2 != itt->m_deviceInfoList.end(); ++itt2)
+    {
+      CLog::Log(LOGNOTICE, "    Device %d", ++count);
+      CAEDeviceInfo& info = *itt2;
+      std::stringstream ss((std::string)info);
+      std::string line;
+      while(std::getline(ss, line, '\n'))
+        CLog::Log(LOGNOTICE, "        %s", line.c_str());
+    }
+  }
 }
 
 unsigned int CSoftAE::RunRawStreamStage(unsigned int channelCount, void *out, bool &restart)
@@ -1275,7 +1374,6 @@ unsigned int CSoftAE::RunRawStreamStage(unsigned int channelCount, void *out, bo
   StreamList resumeStreams;
   static StreamList::iterator itt;
   CSingleLock streamLock(m_streamLock);
-
   /* handle playing streams */
   for (itt = m_playingStreams.begin(); itt != m_playingStreams.end(); ++itt)
   {
@@ -1385,47 +1483,68 @@ inline void CSoftAE::RemoveStream(StreamList &streams, CSoftAEStream *stream)
 
 inline void CSoftAE::ProcessSuspend()
 {
-  bool sinkIsSuspended = false;
-
-  if (m_playingStreams.empty() && m_playing_sounds.empty() && 
-     !m_softSuspend && !g_advancedSettings.m_streamSilence)
+  unsigned int curSystemClock = 0;
+#if defined(TARGET_WINDOWS) || defined(TARGET_LINUX)
+  if (!m_softSuspend && m_playingStreams.empty() && m_playing_sounds.empty() &&
+      !g_advancedSettings.m_streamSilence)
   {
     m_softSuspend = true;
     m_softSuspendTimer = XbmcThreads::SystemClockMillis() + 10000; //10.0 second delay for softSuspend
+    Sleep(10);
   }
 
-  unsigned int curSystemClock = XbmcThreads::SystemClockMillis();
-
+  if (m_softSuspend)
+    curSystemClock = XbmcThreads::SystemClockMillis();
+#endif
   /* idle while in Suspend() state until Resume() called */
   /* idle if nothing to play and user hasn't enabled     */
   /* continuous streaming (silent stream) in as.xml      */
-  while ((m_isSuspended || (m_softSuspend && (curSystemClock > m_softSuspendTimer))) &&
-          m_running     && !m_reOpen)
+  /* In case of Suspend stay in there until Resume is called from outer thread */
+  while (m_isSuspended || ((m_softSuspend && (curSystemClock > m_softSuspendTimer)) &&
+          m_running     && !m_reOpen))
   {
-    if (m_sink && !sinkIsSuspended)
+    if (!m_isSuspended && m_sink && !m_sinkIsSuspended)
     {
       /* put the sink in Suspend mode */
       CExclusiveLock sinkLock(m_sinkLock);
-      if (!m_sink->SoftSuspend())
+      if (m_sink && !m_sink->SoftSuspend())
       {
-        sinkIsSuspended = false; //sink cannot be suspended
+        m_sinkIsSuspended = false; //sink cannot be suspended
         m_softSuspend   = false; //break suspend loop
         break;
       }
       else
-        sinkIsSuspended = true; //sink has suspended processing
+      {
+        CLog::Log(LOGDEBUG, "Suspended the Sink");
+        m_sinkIsSuspended = true; //sink has suspended processing
+      }
       sinkLock.Leave();
     }
+    // Signal that the Suspend can go on now.
+    // Idea: Outer thread calls Suspend() - but
+    // because of AddPackets does not care about locks, we must make
+    // sure, that our school bus (AE::Run) is currently driving through
+    // some gas station, before we move away the sink.
+    if(m_isSuspended)
+      m_saveSuspend.Set();
 
     /* idle for platform-defined time */
     m_wake.WaitMSec(SOFTAE_IDLE_WAIT_MSEC);
 
-    /* check if we need to resume for stream or sound */
+    /* check if we need to resume for stream or sound or somebody wants to open us
+     * the suspend checks are only there to:
+     * a) not run out of softSuspend directly when we are sleeping
+     * b) nail(!) the thread during real Suspend into this method
+     * Note: It is not enough to check the streams buffer, cause it might not be filled yet
+     * We have to check after ProcessSuspending() if the sink is still in softsleep and resume it
+     */
     if (!m_isSuspended && (!m_playingStreams.empty() || !m_playing_sounds.empty()))
     {
-      m_reOpen = !m_sink->SoftResume(); // sink returns false if it requires reinit
-      sinkIsSuspended = false; //sink processing data
-      m_softSuspend   = false; //break suspend loop
+      // the sink might still be not initialized after Resume of real suspend
+      m_reOpen = m_sink && (!m_sink->SoftResume() || m_reOpen); // sink returns false if it requires reinit (worthless with current implementation)
+      m_sinkIsSuspended = false; //sink processing data
+      m_softSuspend   = false; //break suspend loop (under some conditions)
+      CLog::Log(LOGDEBUG, "Resumed the Sink");
       break;
     }
   }

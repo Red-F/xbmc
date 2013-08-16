@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  *
  */
 
+#include "network/Network.h"
 #include "threads/SystemClock.h"
 #include "RssReader.h"
 #include "utils/HTMLUtil.h"
@@ -29,12 +30,16 @@
 #if defined(TARGET_DARWIN)
 #include "osx/CocoaInterface.h"
 #endif
-#include "settings/Settings.h"
+#include "settings/AdvancedSettings.h"
 #include "guilib/LocalizeStrings.h"
 #include "guilib/GUIRSSControl.h"
 #include "utils/TimeUtils.h"
 #include "threads/SingleLock.h"
 #include "log.h"
+
+#define RSS_COLOR_BODY      0
+#define RSS_COLOR_HEADLINE  1
+#define RSS_COLOR_CHANNEL   2
 
 using namespace std;
 using namespace XFILE;
@@ -43,7 +48,7 @@ using namespace XFILE;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CRssReader::CRssReader() : CThread("CRssReader")
+CRssReader::CRssReader() : CThread("RSSReader")
 {
   m_pObserver = NULL;
   m_spacesBetweenFeeds = 0;
@@ -64,7 +69,7 @@ CRssReader::~CRssReader()
 
 void CRssReader::Create(IRssObserver* aObserver, const vector<string>& aUrls, const vector<int> &times, int spacesBetweenFeeds, bool rtl)
 {
-  CSingleLock lock(*this);
+  CSingleLock lock(m_critical);
 
   m_pObserver = aObserver;
   m_spacesBetweenFeeds = spacesBetweenFeeds;
@@ -77,7 +82,7 @@ void CRssReader::Create(IRssObserver* aObserver, const vector<string>& aUrls, co
   m_requestRefresh = false;
 
   // update each feed on creation
-  for (unsigned int i=0;i<m_vecUpdateTimes.size();++i )
+  for (unsigned int i = 0; i < m_vecUpdateTimes.size(); ++i)
   {
     AddToQueue(i);
     SYSTEMTIME* time = new SYSTEMTIME;
@@ -93,7 +98,7 @@ void CRssReader::requestRefresh()
 
 void CRssReader::AddToQueue(int iAdd)
 {
-  CSingleLock lock(*this);
+  CSingleLock lock(m_critical);
   if (iAdd < (int)m_vecUrls.size())
     m_vecQueue.push_back(iAdd);
   if (!m_bIsRunning)
@@ -111,7 +116,7 @@ void CRssReader::OnExit()
 
 int CRssReader::GetQueueSize()
 {
-  CSingleLock lock(*this);
+  CSingleLock lock(m_critical);
   return m_vecQueue.size();
 }
 
@@ -119,7 +124,7 @@ void CRssReader::Process()
 {
   while (GetQueueSize())
   {
-    CSingleLock lock(*this);
+    CSingleLock lock(m_critical);
 
     int iFeed = m_vecQueue.front();
     m_vecQueue.erase(m_vecQueue.begin());
@@ -128,7 +133,7 @@ void CRssReader::Process()
     m_strColors[iFeed] = "";
 
     CCurlFile http;
-    http.SetUserAgent(g_settings.m_userAgent);
+    http.SetUserAgent(g_advancedSettings.m_userAgent);
     http.SetTimeout(2);
     CStdString strXML;
     CStdString strUrl = m_vecUrls[iFeed];
@@ -138,17 +143,18 @@ void CRssReader::Process()
     CURL url(strUrl);
 
     // we wait for the network to come up
-    if ((url.GetProtocol() == "http" || url.GetProtocol() == "https") && !g_application.getNetwork().IsAvailable(true))
+    if ((url.GetProtocol() == "http" || url.GetProtocol() == "https") &&
+        !g_application.getNetwork().IsAvailable(true))
       strXML = "<rss><item><title>"+g_localizeStrings.Get(15301)+"</title></item></rss>";
     else
     {
       unsigned int starttime = XbmcThreads::SystemClockMillis();
-      while ( (!m_bStop) && (nRetries > 0) )
+      while (!m_bStop && nRetries > 0)
       {
         unsigned int currenttimer = XbmcThreads::SystemClockMillis() - starttime;
         if (currenttimer > 15000)
         {
-          CLog::Log(LOGERROR,"Timeout whilst retrieving %s", strUrl.c_str());
+          CLog::Log(LOGERROR, "Timeout whilst retrieving %s", strUrl.c_str());
           http.Cancel();
           break;
         }
@@ -159,8 +165,8 @@ void CRssReader::Process()
           CFile file;
           if (file.Open(strUrl))
           {
-            char *yo = new char[(int)file.GetLength()+1];
-            file.Read(yo,file.GetLength());
+            char *yo = new char[(int)file.GetLength() + 1];
+            file.Read(yo, file.GetLength());
             yo[file.GetLength()] = '\0';
             strXML = yo;
             delete[] yo;
@@ -176,7 +182,7 @@ void CRssReader::Process()
       }
       http.Cancel();
     }
-    if ((!strXML.IsEmpty()) && m_pObserver)
+    if (!strXML.IsEmpty() && m_pObserver)
     {
       // erase any <content:encoded> tags (also unsupported by tinyxml)
       int iStart = strXML.Find("<content:encoded>");
@@ -192,10 +198,8 @@ void CRssReader::Process()
         iStart = strXML.Find("<content:encoded>");
       }
 
-      if (Parse((LPSTR)strXML.c_str(),iFeed))
-      {
+      if (Parse((LPSTR)strXML.c_str(), iFeed))
         CLog::Log(LOGDEBUG, "Parsed rss feed: %s", strUrl.c_str());
-      }
     }
   }
   UpdateObserver();
@@ -235,9 +239,7 @@ void CRssReader::AddString(CStdStringW aString, int aColour, int iFeed)
   int nStringLength = aString.GetLength();
 
   for (int i = 0;i < nStringLength;i++)
-  {
     aString[i] = (CHAR) (48 + aColour);
-  }
 
   if (m_rtlText)
     m_strColors[iFeed] = aString + m_strColors[iFeed];
@@ -280,11 +282,9 @@ void CRssReader::GetNewsItems(TiXmlElement* channelXmlNode, int iFeed)
           //  <div dir="RTL">��� ����: ���� �� �����</div>
           // </title>
           if (htmlText.Equals("div") || htmlText.Equals("span"))
-          {
             htmlText = childNode->FirstChild()->FirstChild()->Value();
-          }
 
-          CStdStringW unicodeText,unicodeText2;
+          CStdStringW unicodeText, unicodeText2;
 
           fromRSSToUTF16(htmlText, unicodeText2);
           html.ConvertHTMLToW(unicodeText2, unicodeText);
@@ -296,7 +296,7 @@ void CRssReader::GetNewsItems(TiXmlElement* channelXmlNode, int iFeed)
     }
 
     int rsscolour = RSS_COLOR_HEADLINE;
-    for (i = m_tagSet.begin();i != m_tagSet.end();i++)
+    for (i = m_tagSet.begin(); i != m_tagSet.end(); i++)
     {
       map <CStdString, CStdStringW>::iterator j = mTagElements.find(*i);
 
@@ -315,8 +315,7 @@ void CRssReader::GetNewsItems(TiXmlElement* channelXmlNode, int iFeed)
 
 void CRssReader::fromRSSToUTF16(const CStdStringA& strSource, CStdStringW& strDest)
 {
-  CStdString flippedStrSource;
-  CStdString strSourceUtf8;
+  CStdString flippedStrSource, strSourceUtf8;
 
   g_charsetConverter.stringCharsetToUtf8(m_encoding, strSource, strSourceUtf8);
   if (m_rtlText)
@@ -336,9 +335,7 @@ bool CRssReader::Parse(LPSTR szBuffer, int iFeed)
   {
     TiXmlDeclaration *tiXmlDeclaration = m_xml.RootElement()->Parent()->FirstChild()->ToDeclaration();
     if (tiXmlDeclaration != NULL && strlen(tiXmlDeclaration->Encoding()) > 0)
-    {
       m_encoding = tiXmlDeclaration->Encoding();
-    }
   }
 
   CLog::Log(LOGDEBUG, "RSS feed encoding: %s", m_encoding.c_str());
@@ -356,10 +353,8 @@ bool CRssReader::Parse(int iFeed)
   TiXmlElement* rssXmlNode = NULL;
 
   CStdString strValue = rootXmlNode->Value();
-  if (( strValue.Find("rss") >= 0 ) || ( strValue.Find("rdf") >= 0 ))
-  {
+  if (strValue.Find("rss") >= 0 || strValue.Find("rdf") >= 0)
     rssXmlNode = rootXmlNode;
-  }
   else
   {
     // Unable to find root <rss> or <rdf> node
@@ -387,7 +382,7 @@ bool CRssReader::Parse(int iFeed)
   GetNewsItems(rssXmlNode,iFeed);
 
   // avoid trailing ' - '
-  if (m_strFeed[iFeed].size() > 3 && m_strFeed[iFeed].Mid(m_strFeed[iFeed].size()-3) == L" - ")
+  if (m_strFeed[iFeed].size() > 3 && m_strFeed[iFeed].Mid(m_strFeed[iFeed].size() - 3) == L" - ")
   {
     if (m_rtlText)
     {
@@ -396,8 +391,8 @@ bool CRssReader::Parse(int iFeed)
     }
     else
     {
-      m_strFeed[iFeed].erase(m_strFeed[iFeed].length()-3);
-      m_strColors[iFeed].erase(m_strColors[iFeed].length()-3);
+      m_strFeed[iFeed].erase(m_strFeed[iFeed].length() - 3);
+      m_strColors[iFeed].erase(m_strColors[iFeed].length() - 3);
     }
   }
   return true;
@@ -410,7 +405,9 @@ void CRssReader::SetObserver(IRssObserver *observer)
 
 void CRssReader::UpdateObserver()
 {
-  if (!m_pObserver) return;
+  if (!m_pObserver)
+    return;
+
   vecText feed;
   getFeed(feed);
   if (feed.size() > 0)
@@ -428,7 +425,8 @@ void CRssReader::CheckForUpdates()
 
   for (unsigned int i = 0;i < m_vecUpdateTimes.size(); ++i )
   {
-    if (m_requestRefresh || ((time.wDay * 24 * 60) + (time.wHour * 60) + time.wMinute) - ((m_vecTimeStamps[i]->wDay * 24 * 60) + (m_vecTimeStamps[i]->wHour * 60) + m_vecTimeStamps[i]->wMinute) > m_vecUpdateTimes[i] )
+    if (m_requestRefresh ||
+       ((time.wDay * 24 * 60) + (time.wHour * 60) + time.wMinute) - ((m_vecTimeStamps[i]->wDay * 24 * 60) + (m_vecTimeStamps[i]->wHour * 60) + m_vecTimeStamps[i]->wMinute) > m_vecUpdateTimes[i])
     {
       CLog::Log(LOGDEBUG, "Updating RSS");
       GetLocalTime(m_vecTimeStamps[i]);
@@ -438,57 +436,3 @@ void CRssReader::CheckForUpdates()
 
   m_requestRefresh = false;
 }
-
-CRssManager g_rssManager;
-
-CRssManager::CRssManager()
-{
-  m_bActive = false;
-}
-
-CRssManager::~CRssManager()
-{
-  Stop();
-}
-
-void CRssManager::Start()
- {
-   m_bActive = true;
-}
-
-void CRssManager::Stop()
-{
-  m_bActive = false;
-  for (unsigned int i = 0; i < m_readers.size(); i++)
-  {
-    if (m_readers[i].reader)
-    {
-      delete m_readers[i].reader;
-    }
-  }
-  m_readers.clear();
-}
-
-// returns true if the reader doesn't need creating, false otherwise
-bool CRssManager::GetReader(int controlID, int windowID, IRssObserver* observer, CRssReader *&reader)
-{
-  // check to see if we've already created this reader
-  for (unsigned int i = 0; i < m_readers.size(); i++)
-  {
-    if (m_readers[i].controlID == controlID && m_readers[i].windowID == windowID)
-    {
-      reader = m_readers[i].reader;
-      reader->SetObserver(observer);
-      reader->UpdateObserver();
-      return true;
-    }
-  }
-  // need to create a new one
-  READERCONTROL readerControl;
-  readerControl.controlID = controlID;
-  readerControl.windowID = windowID;
-  reader = readerControl.reader = new CRssReader;
-  m_readers.push_back(readerControl);
-  return false;
-}
-

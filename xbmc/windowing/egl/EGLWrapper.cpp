@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,53 +41,55 @@ CEGLWrapper::~CEGLWrapper()
   Destroy();
 }
 
+namespace
+{
+  bool
+  CorrectGuess(CEGLNativeType *guess,
+               const std::string &implementation)
+  {
+    assert(guess != NULL);
+
+    if(guess->CheckCompatibility())
+    {
+      if (implementation == guess->GetNativeName() ||
+          implementation == "auto")
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  template <class NativeType>
+  CEGLNativeType * CreateEGLNativeType(const std::string &implementation)
+  {
+    CEGLNativeType *guess = new NativeType;
+    if(CorrectGuess(guess, implementation))
+      return guess;
+
+    delete guess;
+    return NULL;
+  }
+}
+
 bool CEGLWrapper::Initialize(const std::string &implementation)
 {
-  bool ret = false;
   CEGLNativeType *nativeGuess = NULL;
 
-  nativeGuess = new CEGLNativeTypeAndroid;
-  if (nativeGuess->CheckCompatibility())
+  // Try to create each backend in sequence and go with the first one
+  // that we know will work
+  if ((nativeGuess = CreateEGLNativeType<CEGLNativeTypeAndroid>(implementation)) ||
+      (nativeGuess = CreateEGLNativeType<CEGLNativeTypeAmlogic>(implementation)) ||
+      (nativeGuess = CreateEGLNativeType<CEGLNativeTypeRaspberryPI>(implementation)))
   {
-    if(implementation == nativeGuess->GetNativeName() || implementation == "auto")
-    {
-      m_nativeTypes = nativeGuess;
-      ret = true;
-    }
-  }
+    m_nativeTypes = nativeGuess;
 
-  if (!ret)
-  {
-    delete nativeGuess;
-    nativeGuess = new CEGLNativeTypeAmlogic;
-    if (nativeGuess->CheckCompatibility())
-    {
-      if(implementation == nativeGuess->GetNativeName() || implementation == "auto")
-      {
-        m_nativeTypes = nativeGuess;
-        ret = true;
-      }
-    }
-  }
-
-  if (!ret)
-  {
-    delete nativeGuess;
-    nativeGuess = new CEGLNativeTypeRaspberryPI;
-    if (nativeGuess->CheckCompatibility())
-    {
-      if(implementation == nativeGuess->GetNativeName() || implementation == "auto")
-      {
-        m_nativeTypes = nativeGuess;
-        ret = true;
-      }
-    }
-  }
-
-  if (ret && m_nativeTypes)
     m_nativeTypes->Initialize();
+    return true;
+  }
 
-  return ret;
+  return false;
 }
 
 bool CEGLWrapper::Destroy()
@@ -171,7 +173,7 @@ bool CEGLWrapper::ShowWindow(bool show)
 {
   if (!m_nativeTypes)
     return false;
-  
+
   return m_nativeTypes->ShowWindow(show);
 }
 
@@ -196,7 +198,7 @@ bool CEGLWrapper::InitDisplay(EGLDisplay *display)
 
   *display = eglGetDisplay(*nativeDisplay);
   CheckError();
-  if (*display == EGL_NO_DISPLAY) 
+  if (*display == EGL_NO_DISPLAY)
   {
     CLog::Log(LOGERROR, "EGL failed to obtain display");
     return false;
@@ -213,7 +215,7 @@ bool CEGLWrapper::ChooseConfig(EGLDisplay display, EGLint *configAttrs, EGLConfi
   EGLint     configCount = 0;
   EGLConfig* configList = NULL;
 
-  // Find out how many configurations suit our needs  
+  // Find out how many configurations suit our needs
   eglStatus = eglChooseConfig(display, configAttrs, NULL, 0, &configCount);
   CheckError();
 
@@ -375,6 +377,25 @@ bool CEGLWrapper::GetConfigAttrib(EGLDisplay display, EGLConfig config, EGLint a
   if (display == EGL_NO_DISPLAY || !config || !attribute)
     return eglGetConfigAttrib(display, config, attribute, value);
   return false;
+}
+
+void* CEGLWrapper::GetProcAddress(const char* function)
+{
+  void* ext = (void*) eglGetProcAddress(function);
+  if (!ext)
+  {
+    CLog::Log(LOGERROR, "EGL error in %s - cannot get proc addr of %s", __FUNCTION__, function);
+    return NULL;
+  }
+
+  return ext;
+}
+
+bool CEGLWrapper::SurfaceAttrib(EGLDisplay display, EGLSurface surface, EGLint attribute, EGLint value)
+{
+  if ((display == EGL_NO_DISPLAY) || (surface == EGL_NO_SURFACE))
+    return false;
+  return eglSurfaceAttrib(display, surface, attribute, value);
 }
 #endif
 

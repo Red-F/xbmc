@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@
 #include "guilib/GUIRadioButtonControl.h"
 #include "guilib/GUISpinControlEx.h"
 #include "guilib/GUIImage.h"
+#include "guilib/Key.h"
 #include "filesystem/Directory.h"
 #include "video/VideoInfoScanner.h"
 #include "addons/Scraper.h"
@@ -41,7 +42,8 @@
 #include "ApplicationMessenger.h"
 #include "guilib/GUIKeyboardFactory.h"
 #include "FileItem.h"
-#include "settings/Settings.h"
+#include "settings/AdvancedSettings.h"
+#include "settings/MediaSourceSettings.h"
 #include "GUIInfoManager.h"
 #include "GUIUserMessages.h"
 #include "dialogs/GUIDialogSelect.h"
@@ -330,7 +332,7 @@ bool CGUIDialogAddonSettings::ShowVirtualKeyboard(int iControl)
           // setup the shares
           VECSOURCES *shares = NULL;
           if (source && strcmpi(source, "") != 0)
-            shares = g_settings.GetSourcesFromType(source);
+            shares = CMediaSourceSettings::Get().GetSources(source);
 
           VECSOURCES localShares;
           if (!shares)
@@ -369,9 +371,9 @@ bool CGUIDialogAddonSettings::ShowVirtualKeyboard(int iControl)
             {
               strMask = setting->Attribute("mask");
               // convert mask qualifiers
-              strMask.Replace("$AUDIO", g_settings.m_musicExtensions);
-              strMask.Replace("$VIDEO", g_settings.m_videoExtensions);
-              strMask.Replace("$IMAGE", g_settings.m_pictureExtensions);
+              strMask.Replace("$AUDIO", g_advancedSettings.m_musicExtensions);
+              strMask.Replace("$VIDEO", g_advancedSettings.m_videoExtensions);
+              strMask.Replace("$IMAGE", g_advancedSettings.m_pictureExtensions);
 #if defined(_WIN32_WINNT)
               strMask.Replace("$EXECUTABLE", ".exe|.bat|.cmd|.py");
 #else
@@ -381,9 +383,9 @@ bool CGUIDialogAddonSettings::ShowVirtualKeyboard(int iControl)
             else
             {
               if (strcmpi(type, "video") == 0)
-                strMask = g_settings.m_videoExtensions;
+                strMask = g_advancedSettings.m_videoExtensions;
               else if (strcmpi(type, "audio") == 0)
-                strMask = g_settings.m_musicExtensions;
+                strMask = g_advancedSettings.m_musicExtensions;
               else if (strcmpi(type, "executable") == 0)
 #if defined(_WIN32_WINNT)
                 strMask = ".exe|.bat|.cmd|.py";
@@ -523,7 +525,13 @@ void CGUIDialogAddonSettings::UpdateFromControls()
             value.Format("%i", ((CGUISpinControlEx*) control)->GetValue());
           break;
         case CGUIControl::GUICONTROL_SETTINGS_SLIDER:
-          value.Format("%f", ((CGUISettingsSliderControl *)control)->GetFloatValue());
+          {
+            CStdString option = setting->Attribute("option");
+            if (option.size() == 0 || option.CompareNoCase("float") == 0)
+              value.Format("%f", ((CGUISettingsSliderControl *)control)->GetFloatValue());
+            else
+              value.Format("%i", ((CGUISettingsSliderControl *)control)->GetIntValue());
+          }
           break;
         default:
           break;

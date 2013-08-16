@@ -1,8 +1,8 @@
 #pragma once
 
 /*
- *      Copyright (C) 2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2012-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -65,14 +65,6 @@ namespace EPG
     virtual ~CEpg(void);
 
     CEpg &operator =(const CEpg &right);
-
-    /*!
-     * @brief Update this table's info with the given info. Doesn't change the EpgID.
-     * @param epg The new info.
-     * @param bUpdateDb If true, persist the changes.
-     * @return True if the update was successful, false otherwise.
-     */
-    bool UpdateMetadata(const CEpg &epg, bool bUpdateDb = false);
 
     /*!
      * @brief Load all entries for this table from the database.

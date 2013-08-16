@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,8 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, write to
- *  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
- *  http://www.gnu.org/copyleft/gpl.html
+ *  along with XBMC; see the file COPYING.  If not, see
+ *  <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -97,18 +96,20 @@ namespace XBMCAddon
     void setResolvedUrl(int handle, bool succeeded, const XBMCAddon::xbmcgui::ListItem* listitem);
 
     /**
-     * addSortMethod(handle, sortMethod, label2) -- Adds a sorting method for the media list.
+     * addSortMethod(handle, sortMethod, label2Mask) -- Adds a sorting method for the media list.
      * 
      * handle      : integer - handle the plugin was started with.
-     * sortMethod  : integer - number for sortmethod see FileItem.h.
+     * sortMethod  : integer - number for sortmethod see SortFileItem.h.
      * label2Mask  : [opt] string - the label mask to use for the second label.  Defaults to '%D'
      *               applies to: SORT_METHOD_NONE, SORT_METHOD_UNSORTED, SORT_METHOD_VIDEO_TITLE,
-     *                           SORT_METHOD_TRACKNUM, SORT_METHOD_FILE, SORT_METHOD_TITLE
-     *                           SORT_METHOD_TITLE_IGNORE_THE, SORT_METHOD_LABEL
-     *                           SORT_METHOD_LABEL_IGNORE_THE
+     *                           SORT_METHOD_TRACKNUM, SORT_METHOD_FILE, SORT_METHOD_TITLE,
+     *                           SORT_METHOD_TITLE_IGNORE_THE, SORT_METHOD_LABEL,
+     *                           SORT_METHOD_LABEL_IGNORE_THE, SORT_METHOD_VIDEO_SORT_TITLE,
+     *                           SORT_METHOD_VIDEO_SORT_TITLE_IGNORE_THE, SORT_METHOD_FULLPATH,
+     *                           SORT_METHOD_LABEL_IGNORE_FOLDERS, SORT_METHOD_CHANNEL
      * 
      * example:
-     *   - xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_TITLE)
+     *   - xbmcplugin.addSortMethod(int(sys.argv[1]), 1)
      */
     void addSortMethod(int handle, int sortMethod, const String& label2Mask = emptyString);
 
@@ -214,6 +215,8 @@ namespace XBMCAddon
     SWIG_CONSTANT(int,SORT_METHOD_PLAYLIST_ORDER);
     SWIG_CONSTANT(int,SORT_METHOD_EPISODE);
     SWIG_CONSTANT(int,SORT_METHOD_VIDEO_TITLE);
+    SWIG_CONSTANT(int,SORT_METHOD_VIDEO_SORT_TITLE);
+    SWIG_CONSTANT(int,SORT_METHOD_VIDEO_SORT_TITLE_IGNORE_THE);
     SWIG_CONSTANT(int,SORT_METHOD_PRODUCTIONCODE);
     SWIG_CONSTANT(int,SORT_METHOD_SONG_RATING);
     SWIG_CONSTANT(int,SORT_METHOD_MPAA_RATING);
@@ -223,5 +226,13 @@ namespace XBMCAddon
     SWIG_CONSTANT(int,SORT_METHOD_UNSORTED);
     SWIG_CONSTANT(int,SORT_METHOD_BITRATE);
     SWIG_CONSTANT(int,SORT_METHOD_LISTENERS);
+    SWIG_CONSTANT(int,SORT_METHOD_COUNTRY);
+    SWIG_CONSTANT(int,SORT_METHOD_DATEADDED);
+    SWIG_CONSTANT(int,SORT_METHOD_FULLPATH);
+    SWIG_CONSTANT(int,SORT_METHOD_LABEL_IGNORE_FOLDERS);
+    SWIG_CONSTANT(int,SORT_METHOD_LASTPLAYED);
+    SWIG_CONSTANT(int,SORT_METHOD_PLAYCOUNT);
+    SWIG_CONSTANT(int,SORT_METHOD_CHANNEL);
+    SWIG_CONSTANT(int,SORT_METHOD_DATE_TAKEN);
   }
 }

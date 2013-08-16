@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,8 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, write to
- *  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
- *  http://www.gnu.org/copyleft/gpl.html
+ *  along with XBMC; see the file COPYING.  If not, see
+ *  <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -44,6 +43,7 @@ namespace XBMCAddon
       inline void    OnScreensaverActivated() { TRACE; invokeCallback(new CallbackFunction<Monitor>(this,&Monitor::onScreensaverActivated)); }
       inline void    OnScreensaverDeactivated() { TRACE; invokeCallback(new CallbackFunction<Monitor>(this,&Monitor::onScreensaverDeactivated)); }
       inline void    OnDatabaseUpdated(const String &database) { TRACE; invokeCallback(new CallbackFunction<Monitor,const String>(this,&Monitor::onDatabaseUpdated,database)); }
+      inline void    OnDatabaseScanStarted(const String &database) { TRACE; invokeCallback(new CallbackFunction<Monitor,const String>(this,&Monitor::onDatabaseScanStarted,database)); }
       inline void    OnAbortRequested() { TRACE; invokeCallback(new CallbackFunction<Monitor>(this,&Monitor::onAbortRequested)); }
 #endif
 
@@ -71,12 +71,21 @@ namespace XBMCAddon
       /**
        * onDatabaseUpdated(database) -- onDatabaseUpdated method.
        * 
-       * database - video/music as stri
+       * database - video/music as string
        * 
        * Will be called when database gets updated and return video or music to indicate which DB has been changed
        */
       virtual void    onDatabaseUpdated(const String database) { TRACE; }
 
+      /**
+       * onDatabaseScanStarted(database) -- onDatabaseScanStarted method.
+       *
+       * database - video/music as string
+       *
+       * Will be called when database update starts and return video or music to indicate which DB is being updated
+       */
+      virtual void    onDatabaseScanStarted(const String database) { TRACE; }
+      
       /**
        * onAbortRequested() -- onAbortRequested method.
        * 

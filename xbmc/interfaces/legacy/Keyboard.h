@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,8 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, write to
- *  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
- *  http://www.gnu.org/copyleft/gpl.html
+ *  along with XBMC; see the file COPYING.  If not, see
+ *  <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -55,10 +54,13 @@ namespace XBMCAddon
     class Keyboard : public AddonClass
     {
     public:
+#ifndef SWIG
       String strDefault;
       String strHeading;
       bool bHidden;
-      CGUIDialogKeyboardGeneric* dlg;
+      String strText;
+      bool bConfirmed;
+#endif
 
       Keyboard(const String& line = emptyString, const String& heading = emptyString, bool hidden = false);
       virtual ~Keyboard();
@@ -71,7 +73,7 @@ namespace XBMCAddon
        * example:
        *   - kb.doModal(30000)
        */
-      void doModal(int autoclose = 0) throw (KeyboardException);
+      void doModal(int autoclose = 0);
 
       // setDefault() Method
       /**
@@ -82,7 +84,7 @@ namespace XBMCAddon
        * example:
        *   - kb.setDefault('password')
        */
-      void setDefault(const String& line = emptyString) throw (KeyboardException);
+      void setDefault(const String& line = emptyString);
 
       /**
        * setHiddenInput(hidden) -- Allows hidden text entry.
@@ -91,7 +93,7 @@ namespace XBMCAddon
        * example:
        *   - kb.setHiddenInput(True)
        */
-      void setHiddenInput(bool hidden = false) throw (KeyboardException);
+      void setHiddenInput(bool hidden = false);
 
       // setHeading() Method
       /**
@@ -102,7 +104,7 @@ namespace XBMCAddon
        * example:
        *   - kb.setHeading('Enter password')
        */
-      void setHeading(const String& heading) throw (KeyboardException);
+      void setHeading(const String& heading);
 
       // getText() Method
       /**
@@ -114,7 +116,7 @@ namespace XBMCAddon
        * example:
        *   - text = kb.getText()
        */
-      String getText() throw (KeyboardException);
+      String getText();
 
       // isConfirmed() Method
       /**
@@ -123,7 +125,7 @@ namespace XBMCAddon
        * example:
        *   - if (kb.isConfirmed()):
        */
-      bool isConfirmed() throw (KeyboardException);
+      bool isConfirmed();
 
     };
   }

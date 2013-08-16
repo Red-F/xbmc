@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2012-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,12 +23,12 @@
 #include "Application.h"
 #include "dialogs/GUIDialogOK.h"
 #include "guilib/GUIWindowManager.h"
+#include "guilib/Key.h"
 #include "pvr/PVRManager.h"
 #include "pvr/channels/PVRChannelGroupsContainer.h"
 #include "epg/EpgContainer.h"
 #include "pvr/windows/GUIWindowPVR.h"
 #include "settings/AdvancedSettings.h"
-#include "settings/GUISettings.h"
 #include "settings/Settings.h"
 #include "threads/SingleLock.h"
 #include "utils/log.h"
@@ -41,7 +41,7 @@ using namespace EPG;
 CGUIWindowPVRGuide::CGUIWindowPVRGuide(CGUIWindowPVR *parent) :
   CGUIWindowPVRCommon(parent, PVR_WINDOW_EPG, CONTROL_BTNGUIDE, CONTROL_LIST_GUIDE_NOW_NEXT),
   Observer(),
-  m_iGuideView(g_guiSettings.GetInt("epg.defaultguideview"))
+  m_iGuideView(CSettings::Get().GetInt("epg.defaultguideview"))
 {
   m_cachedTimeline = new CFileItemList;
   m_cachedChannelGroup = CPVRChannelGroupPtr(new CPVRChannelGroup);
@@ -64,7 +64,7 @@ void CGUIWindowPVRGuide::ResetObservers(void)
 
 void CGUIWindowPVRGuide::Notify(const Observable &obs, const ObservableMessage msg)
 {
-  if (msg == ObservableMessageEpg)
+  if (msg == ObservableMessageEpg || msg == ObservableMessageEpgContainer)
   {
     m_bUpdateRequired = true;
 
@@ -427,9 +427,14 @@ bool CGUIWindowPVRGuide::PlayEpgItem(CFileItem *item)
     return false;
 
   CLog::Log(LOGDEBUG, "play channel '%s'", channel->ChannelName().c_str());
-  bool bReturn = g_application.PlayFile(CFileItem(*channel));
+  CFileItem channelItem = CFileItem(*channel);
+  bool bReturn = PlayFile(&channelItem);
   if (!bReturn)
-    CGUIDialogOK::ShowAndGetInput(19033,0,19035,0);
+  {
+    CStdString msg;
+    msg.Format(g_localizeStrings.Get(19035).c_str(), channel->ChannelName().c_str()); // CHANNELNAME could not be played. Check the log for details.
+    CGUIDialogOK::ShowAndGetInput(19033, 0, msg, 0);
+  }
 
   return bReturn;
 }
@@ -482,4 +487,12 @@ void CGUIWindowPVRGuide::UpdateButtons(void)
     m_parent->SetLabel(m_iControlButton, g_localizeStrings.Get(19222) + ": " + g_localizeStrings.Get(19031));
   else if (m_iGuideView == GUIDE_VIEW_TIMELINE)
     m_parent->SetLabel(m_iControlButton, g_localizeStrings.Get(19222) + ": " + g_localizeStrings.Get(19032));
+}
+
+void CGUIWindowPVRGuide::SettingOptionsEpgGuideViewFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current)
+{
+  list.push_back(make_pair(g_localizeStrings.Get(19029), PVR::GUIDE_VIEW_CHANNEL));
+  list.push_back(make_pair(g_localizeStrings.Get(19030), PVR::GUIDE_VIEW_NOW));
+  list.push_back(make_pair(g_localizeStrings.Get(19031), PVR::GUIDE_VIEW_NEXT));
+  list.push_back(make_pair(g_localizeStrings.Get(19032), PVR::GUIDE_VIEW_TIMELINE));
 }

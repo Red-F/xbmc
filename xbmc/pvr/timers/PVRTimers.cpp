@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2012-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,9 +18,8 @@
  *
  */
 
-#include "Application.h"
 #include "FileItem.h"
-#include "settings/GUISettings.h"
+#include "settings/Settings.h"
 #include "dialogs/GUIDialogKaiToast.h"
 #include "dialogs/GUIDialogOK.h"
 #include "threads/SingleLock.h"
@@ -253,7 +252,7 @@ bool CPVRTimers::UpdateEntries(const CPVRTimers &timers)
 
     NotifyObservers(bAddedOrDeleted ? ObservableMessageTimersReset : ObservableMessageTimers);
 
-    if (g_guiSettings.GetBool("pvrrecord.timernotifications"))
+    if (CSettings::Get().GetBool("pvrrecord.timernotifications"))
     {
       /* queue notifications */
       for (unsigned int iNotificationPtr = 0; iNotificationPtr < timerNotifications.size(); iNotificationPtr++)
@@ -434,30 +433,33 @@ bool CPVRTimers::GetDirectory(const CStdString& strPath, CFileItemList &items) c
 bool CPVRTimers::DeleteTimersOnChannel(const CPVRChannel &channel, bool bDeleteRepeating /* = true */, bool bCurrentlyActiveOnly /* = false */)
 {
   bool bReturn = false;
-  CSingleLock lock(m_critSection);
-
-  for (map<CDateTime, vector<CPVRTimerInfoTagPtr>* >::reverse_iterator it = m_tags.rbegin(); it != m_tags.rend(); it++)
   {
-    for (vector<CPVRTimerInfoTagPtr>::iterator timerIt = it->second->begin(); timerIt != it->second->end(); )
-    {
-      bool bDeleteActiveItem = !bCurrentlyActiveOnly ||
-          (CDateTime::GetCurrentDateTime() > (*timerIt)->StartAsLocalTime() &&
-           CDateTime::GetCurrentDateTime() < (*timerIt)->EndAsLocalTime());
-      bool bDeleteRepeatingItem = bDeleteRepeating || !(*timerIt)->m_bIsRepeating;
-      bool bChannelsMatch = (*timerIt)->ChannelNumber() == channel.ChannelNumber() &&
-          (*timerIt)->m_bIsRadio == channel.IsRadio();
+    CSingleLock lock(m_critSection);
 
-      if (bDeleteActiveItem && bDeleteRepeatingItem && bChannelsMatch)
+    for (map<CDateTime, vector<CPVRTimerInfoTagPtr>* >::reverse_iterator it = m_tags.rbegin(); it != m_tags.rend(); it++)
+    {
+      for (vector<CPVRTimerInfoTagPtr>::iterator timerIt = it->second->begin(); timerIt != it->second->end(); )
       {
-        bReturn = (*timerIt)->DeleteFromClient(true) || bReturn;
-        timerIt = it->second->erase(timerIt);
-      }
-      else
-      {
-        ++timerIt;
+        bool bDeleteActiveItem = !bCurrentlyActiveOnly || (*timerIt)->IsRecording();
+        bool bDeleteRepeatingItem = bDeleteRepeating || !(*timerIt)->m_bIsRepeating;
+        bool bChannelsMatch = *(*timerIt)->ChannelTag() == channel;
+
+        if (bDeleteActiveItem && bDeleteRepeatingItem && bChannelsMatch)
+        {
+          CLog::Log(LOGDEBUG,"PVRTimers - %s - deleted timer %d on client %d", __FUNCTION__, (*timerIt)->m_iClientIndex, (*timerIt)->m_iClientId);
+          bReturn = (*timerIt)->DeleteFromClient(true) || bReturn;
+          timerIt = it->second->erase(timerIt);
+          SetChanged();
+        }
+        else
+        {
+          ++timerIt;
+        }
       }
     }
   }
+
+  NotifyObservers(ObservableMessageTimersReset);
 
   return bReturn;
 }
@@ -495,7 +497,7 @@ bool CPVRTimers::InstantTimer(const CPVRChannel &channel)
   newTimer->SetStartFromUTC(startTime);
   newTimer->m_iMarginStart = 0; /* set the start margin to 0 for instant timers */
 
-  int iDuration = g_guiSettings.GetInt("pvrrecord.instantrecordtime");
+  int iDuration = CSettings::Get().GetInt("pvrrecord.instantrecordtime");
   CDateTime endTime = CDateTime::GetUTCDateTime() + CDateTimeSpan(0, 0, iDuration ? iDuration : 120, 0);
   newTimer->SetEndFromUTC(endTime);
 
@@ -655,10 +657,10 @@ void CPVRTimers::Notify(const Observable &obs, const ObservableMessage msg)
 
 CDateTime CPVRTimers::GetNextEventTime(void) const
 {
-  const bool dailywakup = g_guiSettings.GetBool("pvrpowermanagement.dailywakeup");
+  const bool dailywakup = CSettings::Get().GetBool("pvrpowermanagement.dailywakeup");
   const CDateTime now = CDateTime::GetUTCDateTime();
-  const CDateTimeSpan prewakeup(0, 0, g_guiSettings.GetInt("pvrpowermanagement.prewakeup"), 0);
-  const CDateTimeSpan idle(0, 0, g_guiSettings.GetInt("pvrpowermanagement.backendidletime"), 0);
+  const CDateTimeSpan prewakeup(0, 0, CSettings::Get().GetInt("pvrpowermanagement.prewakeup"), 0);
+  const CDateTimeSpan idle(0, 0, CSettings::Get().GetInt("pvrpowermanagement.backendidletime"), 0);
 
   CDateTime wakeuptime;
 
@@ -676,7 +678,7 @@ CDateTime CPVRTimers::GetNextEventTime(void) const
   if (dailywakup)
   {
     CDateTime dailywakeuptime;
-    dailywakeuptime.SetFromDBTime(g_guiSettings.GetString("pvrpowermanagement.dailywakeuptime", false));
+    dailywakeuptime.SetFromDBTime(CSettings::Get().GetString("pvrpowermanagement.dailywakeuptime"));
     dailywakeuptime = dailywakeuptime.GetAsUTCDateTime();
 
     dailywakeuptime.SetDateTime(

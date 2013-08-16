@@ -1,8 +1,8 @@
 /*
- *      Copyright (C) 2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2012-2013 Team XBMC
+ *      http://xbmc.org
  *
- * This Program is free software; you can redistribute it and/or modify
+ *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2, or (at your option)
  *  any later version.
@@ -44,6 +44,15 @@ CPVRDirectory::~CPVRDirectory()
 {
 }
 
+bool CPVRDirectory::Exists(const char* strPath)
+{
+  CStdString directory(strPath);
+  if (directory.substr(0,17) == "pvr://recordings/")
+    return true;
+  else
+    return false;
+}
+
 bool CPVRDirectory::GetDirectory(const CStdString& strPath, CFileItemList &items)
 {
   CStdString base(strPath);
@@ -83,7 +92,7 @@ bool CPVRDirectory::GetDirectory(const CStdString& strPath, CFileItemList &items
     items.Add(item);
 
     // Sort by name only. Labels are preformated.
-    items.AddSortMethod(SORT_METHOD_LABEL, 551 /* Name */, LABEL_MASKS("%L", "", "%L", ""));
+    items.AddSortMethod(SortByLabel, 551 /* Name */, LABEL_MASKS("%L", "", "%L", ""));
 
     return true;
   }

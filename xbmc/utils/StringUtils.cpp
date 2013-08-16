@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -46,6 +46,7 @@ const char* ADDON_GUID_RE = "^(\\{){0,1}[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-
 
 /* empty string for use in returns by ref */
 const CStdString StringUtils::EmptyString = "";
+const std::string StringUtils::Empty = "";
 CStdString StringUtils::m_lastUUID = "";
 
 string StringUtils::Format(const char *fmt, ...)
@@ -161,6 +162,33 @@ std::string& StringUtils::TrimLeft(std::string &str)
 std::string& StringUtils::TrimRight(std::string &str)
 {
   str.erase(::find_if(str.rbegin(), str.rend(), ::not1(::ptr_fun<int, int>(::isspace))).base(), str.end());
+  return str;
+}
+
+std::string& StringUtils::RemoveDuplicatedSpacesAndTabs(std::string& str)
+{
+  std::string::iterator it = str.begin();
+  bool onSpace = false;
+  while(it != str.end())
+  {
+    if (*it == '\t')
+      *it = ' ';
+
+    if (*it == ' ')
+    {
+      if (onSpace)
+      {
+        it = str.erase(it);
+        continue;
+      }
+      else
+        onSpace = true;
+    }
+    else
+      onSpace = false;
+
+    ++it;
+  }
   return str;
 }
 
@@ -492,39 +520,6 @@ bool StringUtils::IsInteger(const CStdString& str)
   return i == str.size() && n > 0;
 }
 
-bool StringUtils::Test()
-{
-  bool ret = true;
-
-  ret |= IsNaturalNumber("10");
-  ret |= IsNaturalNumber(" 10");
-  ret |= IsNaturalNumber("0");
-  ret |= !IsNaturalNumber(" 1 0");
-  ret |= !IsNaturalNumber("1.0");
-  ret |= !IsNaturalNumber("1.1");
-  ret |= !IsNaturalNumber("0x1");
-  ret |= !IsNaturalNumber("blah");
-  ret |= !IsNaturalNumber("120 h");
-  ret |= !IsNaturalNumber(" ");
-  ret |= !IsNaturalNumber("");
-  ret |= !IsNaturalNumber("ייטט");
-
-  ret |= IsInteger("10");
-  ret |= IsInteger(" -10");
-  ret |= IsInteger("0");
-  ret |= !IsInteger(" 1 0");
-  ret |= !IsInteger("1.0");
-  ret |= !IsInteger("1.1");
-  ret |= !IsInteger("0x1");
-  ret |= !IsInteger("blah");
-  ret |= !IsInteger("120 h");
-  ret |= !IsInteger(" ");
-  ret |= !IsInteger("");
-  ret |= !IsInteger("ייטט");
-
-  return ret;
-}
-
 void StringUtils::RemoveCRLF(CStdString& strLine)
 {
   while ( strLine.size() && (strLine.Right(1) == "\n" || strLine.Right(1) == "\r") )
@@ -555,6 +550,36 @@ CStdString StringUtils::SizeToString(int64_t size)
   return strLabel;
 }
 
+// return -1 if not, else return the utf8 char length.
+int IsUTF8Letter(const unsigned char *str)
+{
+  // reference:
+  // unicode -> utf8 table: http://www.utf8-chartable.de/
+  // latin characters in unicode: http://en.wikipedia.org/wiki/Latin_characters_in_Unicode
+  unsigned char ch = str[0];
+  if (!ch)
+    return -1;
+  if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))
+    return 1;
+  if (!(ch & 0x80))
+    return -1;
+  unsigned char ch2 = str[1];
+  if (!ch2)
+    return -1;
+  // check latin 1 letter table: http://en.wikipedia.org/wiki/C1_Controls_and_Latin-1_Supplement
+  if (ch == 0xC3 && ch2 >= 0x80 && ch2 <= 0xBF && ch2 != 0x97 && ch2 != 0xB7)
+    return 2;
+  // check latin extended A table: http://en.wikipedia.org/wiki/Latin_Extended-A
+  if (ch >= 0xC4 && ch <= 0xC7 && ch2 >= 0x80 && ch2 <= 0xBF)
+    return 2;
+  // check latin extended B table: http://en.wikipedia.org/wiki/Latin_Extended-B
+  // and International Phonetic Alphabet: http://en.wikipedia.org/wiki/IPA_Extensions_(Unicode_block)
+  if (((ch == 0xC8 || ch == 0xC9) && ch2 >= 0x80 && ch2 <= 0xBF)
+      || (ch == 0xCA && ch2 >= 0x80 && ch2 <= 0xAF))
+    return 2;
+  return -1;
+}
+
 size_t StringUtils::FindWords(const char *str, const char *wordLowerCase)
 {
   // NOTE: This assumes word is lowercase!
@@ -577,8 +602,20 @@ size_t StringUtils::FindWords(const char *str, const char *wordLowerCase)
     if (same && *w == 0)  // only the same if word has been exhausted
       return (const char *)s - str;
 
-    // otherwise, find a space and skip to the end of the whitespace
-    while (*s && *s != ' ') s++;
+    // otherwise, skip current word (composed by latin letters) or number
+    int l;
+    if (*s >= '0' && *s <= '9')
+    {
+      ++s;
+      while (*s >= '0' && *s <= '9') ++s;
+    }
+    else if ((l = IsUTF8Letter(s)) > 0)
+    {
+      s += l;
+      while ((l = IsUTF8Letter(s)) > 0) s += l;
+    }
+    else
+      ++s;
     while (*s && *s == ' ') s++;
 
     // and repeat until we're done
@@ -702,6 +739,16 @@ int StringUtils::FindBestMatch(const CStdString &str, const CStdStringArray &str
   return best;
 }
 
+bool StringUtils::ContainsKeyword(const CStdString &str, const CStdStringArray &keywords)
+{
+  for (CStdStringArray::const_iterator it = keywords.begin(); it != keywords.end(); it++)
+  {
+    if (str.find(*it) != str.npos)
+      return true;
+  }
+  return false;
+}
+
 size_t StringUtils::utf8_strlen(const char *s)
 {
   size_t length = 0;
@@ -711,4 +758,16 @@ size_t StringUtils::utf8_strlen(const char *s)
       length++;
   }
   return length;
+}
+
+std::string StringUtils::Paramify(const std::string &param)
+{
+  std::string result = param;
+  // escape backspaces
+  StringUtils::Replace(result, "\\", "\\\\");
+  // escape double quotes
+  StringUtils::Replace(result, "\"", "\\\"");
+
+  // add double quotes around the whole string
+  return "\"" + result + "\"";
 }

@@ -9,13 +9,18 @@ SET DEPS_DIR=..\BuildDependencies
 SET TMP_DIR=%DEPS_DIR%\tmp
 
 SET LIBNAME=xbmc-pvr-addons
-SET VERSION=1409bbaa9248646372cf5c838def8c49c90e6e11
-SET SOURCE=%LIBNAME%-%VERSION%
+SET VERSION=a8e177dd268b5d69b74d9134d51adae47988ec2f
+SET SOURCE=%LIBNAME%
 SET GIT_URL=git://github.com/opdenkamp/%LIBNAME%.git
 SET SOURCE_DIR=%TMP_DIR%\%SOURCE%
 SET BUILT_ADDONS_DIR=%SOURCE_DIR%\addons
 
-set OPTS_EXE=%SOURCE_DIR%\project\VS2010Express\xbmc-pvr-addons.sln /build Release
+REM check if MSBuild.exe is used because it requires different command line switches
+IF "%msbuildemitsolution%" == "1" (
+  set OPTS_EXE=%SOURCE_DIR%\project\VS2010Express\xbmc-pvr-addons.sln /t:Build /p:Configuration="Release"
+) ELSE (
+  set OPTS_EXE=%SOURCE_DIR%\project\VS2010Express\xbmc-pvr-addons.sln /build Release
+)
 
 REM Try wrapped msysgit - must be in the path
 SET GITEXE=git.cmd
@@ -44,11 +49,14 @@ GOTO work
 IF NOT EXIST "%TMP_DIR%" MD "%TMP_DIR%"
 
 REM clone the git repository into SOURCE_DIR
-CALL %GITEXE% clone %GIT_URL% "%SOURCE_DIR%" > NUL
+CALL %GITEXE% clone %GIT_URL% "%SOURCE_DIR%" > NUL 2>&1
+CD "%SOURCE_DIR%"
+REM get the proper revision
+CALL %GITEXE% checkout %VERSION% > NUL 2>&1
 
 :build
 REM run DownloadBuildDeps.bat of xbmc-pvr-addons
-CD "%SOURCE_DIR%\project\BuildDependencies"
+CD "project\BuildDependencies"
 CALL DownloadBuildDeps.bat > NUL 2>&1
 CD "%CUR_DIR%"
 

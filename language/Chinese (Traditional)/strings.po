@@ -1,13 +1,12 @@
 # XBMC Media Center language file
-# XBMC-core v12.0-BETA2
 msgid ""
 msgstr ""
-"Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
+"Project-Id-Version: XBMC Main\n"
 "Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: XBMC Translation Team\n"
-"Language-Team: Chinese (Traditional) (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/zh_TW/)\n"
+"Language-Team: Chinese (Traditional) (http://www.transifex.com/projects/p/xbmc-main/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -44,7 +43,7 @@ msgstr "XBMC SVN"
 
 msgctxt "#7"
 msgid "File manager"
-msgstr "檔案管理員"
+msgstr "檔案總管"
 
 msgctxt "#8"
 msgid "Weather"
@@ -132,31 +131,31 @@ msgstr "十二月"
 
 msgctxt "#41"
 msgid "Mon"
-msgstr "周一"
+msgstr "週一"
 
 msgctxt "#42"
 msgid "Tue"
-msgstr "周二"
+msgstr "週二"
 
 msgctxt "#43"
 msgid "Wed"
-msgstr "周三"
+msgstr "週三"
 
 msgctxt "#44"
 msgid "Thu"
-msgstr "周四"
+msgstr "週四"
 
 msgctxt "#45"
 msgid "Fri"
-msgstr "周五"
+msgstr "週五"
 
 msgctxt "#46"
 msgid "Sat"
-msgstr "周六"
+msgstr "週六"
 
 msgctxt "#47"
 msgid "Sun"
-msgstr "周日"
+msgstr "週日"
 
 msgctxt "#51"
 msgid "Jan"
@@ -396,15 +395,15 @@ msgstr "確認刪除檔案？"
 
 msgctxt "#123"
 msgid "Copy these files?"
-msgstr "複製這些檔案？"
+msgstr "要複製這些檔案嗎？"
 
 msgctxt "#124"
 msgid "Move these files?"
-msgstr "移動這些檔案？"
+msgstr "要移動些檔案嗎？"
 
 msgctxt "#125"
 msgid "Delete these files? - Deleting files cannot be undone!"
-msgstr "刪除這些檔案？ - 刪除後將無法復原！"
+msgstr "要刪除這些檔案嗎？ - 刪除後將無法復原！"
 
 msgctxt "#126"
 msgid "Status"
@@ -496,7 +495,7 @@ msgstr "靜態（手動指定）"
 
 msgctxt "#148"
 msgid "DHCP"
-msgstr "動態（自動分配）"
+msgstr "DHCP（自動分配）"
 
 msgctxt "#149"
 msgid "MAC address"
@@ -574,6 +573,10 @@ msgctxt "#167"
 msgid "Cancel file operations"
 msgstr "取消檔案操作"
 
+msgctxt "#168"
+msgid "%s- %s"
+msgstr "%s- %s"
+
 msgctxt "#169"
 msgid "Resolution"
 msgstr "解析度"
@@ -588,7 +591,7 @@ msgstr "發行日期"
 
 msgctxt "#173"
 msgid "Display 4:3 videos as"
-msgstr "播放4:3視訊的方式"
+msgstr "播放 4:3 視訊的方式"
 
 msgctxt "#175"
 msgid "Moods"
@@ -628,7 +631,7 @@ msgstr "正在搜尋專輯"
 
 msgctxt "#186"
 msgid "OK"
-msgstr "OK"
+msgstr "確定"
 
 msgctxt "#187"
 msgid "No albums found!"
@@ -676,7 +679,7 @@ msgstr "正在查詢 %s 的資訊"
 
 msgctxt "#198"
 msgid "Loading movie details"
-msgstr "載入影片詳細資料"
+msgstr "載入電影詳細資料"
 
 msgctxt "#199"
 msgid "Web interface"
@@ -684,7 +687,7 @@ msgstr "Web 介面"
 
 msgctxt "#202"
 msgid "Tagline"
-msgstr "標題"
+msgstr "標語"
 
 msgctxt "#203"
 msgid "Plot outline"
@@ -696,7 +699,7 @@ msgstr "得票："
 
 msgctxt "#206"
 msgid "Cast"
-msgstr "演員表"
+msgstr "演員"
 
 msgctxt "#207"
 msgid "Plot"
@@ -708,11 +711,11 @@ msgstr "播放"
 
 msgctxt "#209"
 msgid "Next"
-msgstr "向後"
+msgstr "下一項目"
 
 msgctxt "#210"
 msgid "Previous"
-msgstr "向前"
+msgstr "上一項目"
 
 msgctxt "#213"
 msgid "Calibrate user interface..."
@@ -871,8 +874,8 @@ msgid "Number of channels"
 msgstr "通道數"
 
 msgctxt "#254"
-msgid "- DTS capable receiver"
-msgstr "- DTS 相容的接收器"
+msgid "DTS capable receiver"
+msgstr "DTS相容接收機"
 
 msgctxt "#255"
 msgid "CDDB"
@@ -888,7 +891,7 @@ msgstr "錯誤"
 
 msgctxt "#258"
 msgid "Enable tag reading"
-msgstr "啟用 檔案資訊讀取"
+msgstr "啟用檔案標籤讀取"
 
 msgctxt "#259"
 msgid "Opening"
@@ -1011,8 +1014,8 @@ msgid "Font"
 msgstr "字型"
 
 msgctxt "#289"
-msgid "- Size"
-msgstr "- 大小"
+msgid "Size"
+msgstr "大小"
 
 msgctxt "#290"
 msgid "Dynamic range compression"
@@ -1047,20 +1050,20 @@ msgid "Bookmarks"
 msgstr "書籤"
 
 msgctxt "#299"
-msgid "- AAC capable receiver"
-msgstr "- AAC 相容的接收器"
+msgid "AAC capable receiver"
+msgstr "AAC相容接收機"
 
 msgctxt "#300"
-msgid "- MP1 capable receiver"
-msgstr "- MP1  相容的接收器"
+msgid "MP1 capable receiver"
+msgstr "MP1相容接收機"
 
 msgctxt "#301"
-msgid "- MP2 capable receiver"
-msgstr "- MP2 相容的接收器"
+msgid "MP2 capable receiver"
+msgstr "MP2相容接收機"
 
 msgctxt "#302"
-msgid "- MP3 capable receiver"
-msgstr "- MP3 相容的接收器"
+msgid "MP3 capable receiver"
+msgstr "MP3相容接收機"
 
 msgctxt "#303"
 msgid "Delay"
@@ -1104,7 +1107,7 @@ msgstr "資料庫錯誤！"
 
 msgctxt "#316"
 msgid "Searching songs..."
-msgstr "搜尋歌曲…"
+msgstr "正在搜尋歌曲…"
 
 msgctxt "#317"
 msgid "Cleaned database successfully"
@@ -1112,7 +1115,7 @@ msgstr "成功清除資料庫！"
 
 msgctxt "#318"
 msgid "Cleaning songs..."
-msgstr "清除歌曲…"
+msgstr "正在清除歌曲…"
 
 msgctxt "#319"
 msgid "Error cleaning songs"
@@ -1164,7 +1167,7 @@ msgstr "這需要一些時間…"
 
 msgctxt "#331"
 msgid "Compressing database..."
-msgstr "壓縮資料庫…"
+msgstr "正在壓縮資料庫…"
 
 msgctxt "#332"
 msgid "Error compressing database"
@@ -1172,7 +1175,7 @@ msgstr "壓縮資料庫錯誤！"
 
 msgctxt "#333"
 msgid "Do you want to clean the library?"
-msgstr "要清除資料庫嗎？"
+msgstr "你確定要清除資料庫嗎？"
 
 msgctxt "#334"
 msgid "Clean library..."
@@ -1208,7 +1211,7 @@ msgstr "播放光碟"
 
 msgctxt "#342"
 msgid "Movies"
-msgstr "影片"
+msgstr "電影"
 
 msgctxt "#343"
 msgid "Adjust framerate"
@@ -1227,16 +1230,16 @@ msgid "Boost volume level on downmix"
 msgstr "增加聲道縮減混音音量"
 
 msgctxt "#347"
-msgid "- DTS-HD capable receiver"
-msgstr "- DTS-HD 相容的接收器"
+msgid "DTS-HD capable receiver"
+msgstr "DTS-HD 相容接收機"
 
 msgctxt "#348"
-msgid "- Multichannel LPCM capable receiver"
-msgstr "- 多聲道 LPCM 相容的接收器"
+msgid "Multichannel LPCM capable receiver"
+msgstr "多聲道LPCM相容接收機"
 
 msgctxt "#349"
-msgid "- TrueHD capable receiver"
-msgstr "- TrueHD 相容的接收器"
+msgid "TrueHD capable receiver"
+msgstr "TrueHD相容接收機"
 
 msgctxt "#350"
 msgid "Programs"
@@ -1276,7 +1279,7 @@ msgstr "全部專輯"
 
 msgctxt "#359"
 msgid "Recently added albums"
-msgstr "新的專輯"
+msgstr "最近加入的專輯"
 
 msgctxt "#360"
 msgid "Screensaver"
@@ -1295,8 +1298,8 @@ msgid "Sort by: File"
 msgstr "排序：檔案"
 
 msgctxt "#364"
-msgid "- Dolby Digital (AC3) capable receiver"
-msgstr "- 杜比數位 (AC3) 相容的接收器"
+msgid "Dolby Digital (AC3) capable receiver"
+msgstr "Dolby Digital (AC3) 相容接收機"
 
 msgctxt "#365"
 msgid "Sort by: Name"
@@ -1492,7 +1495,7 @@ msgstr "此專輯無評論"
 
 msgctxt "#415"
 msgid "Downloading thumbnail..."
-msgstr "下載縮略圖…"
+msgstr "正在下載縮略圖…"
 
 msgctxt "#416"
 msgid "Not available"
@@ -1560,7 +1563,7 @@ msgstr "從資料庫中移除影片"
 
 msgctxt "#433"
 msgid "Really remove '%s'?"
-msgstr "確定移除 '%s' 嗎？"
+msgstr "確定要移除 '%s' 嗎？"
 
 msgctxt "#434"
 msgid "From %s at %i %s"
@@ -1617,10 +1620,6 @@ msgstr "DVD"
 msgctxt "#447"
 msgid "Autorun media"
 msgstr "自動播放媒體"
-
-msgctxt "#448"
-msgid "LCD"
-msgstr "LCD"
 
 msgctxt "#449"
 msgid "Enabled"
@@ -1704,7 +1703,7 @@ msgstr "播放工具列位置"
 
 msgctxt "#470"
 msgid "Credits"
-msgstr "改機者"
+msgstr "工作人員"
 
 msgctxt "#471"
 msgid "Modchip"
@@ -1764,7 +1763,7 @@ msgstr "重複資料夾"
 
 msgctxt "#489"
 msgid "Play the next song automatically"
-msgstr "自動播放下個項目"
+msgstr "自動播放下一首歌項目"
 
 msgctxt "#491"
 msgid "- Use big icons"
@@ -1824,7 +1823,7 @@ msgstr "空的"
 
 msgctxt "#505"
 msgid "Loading media info from files..."
-msgstr "從檔案載入媒體資訊…"
+msgstr "正在從檔案載入媒體資訊…"
 
 msgctxt "#507"
 msgid "Sort by: Usage"
@@ -1848,7 +1847,7 @@ msgstr "主界面"
 
 msgctxt "#514"
 msgid "Manual settings"
-msgstr "設定界面"
+msgstr "手動設定"
 
 msgctxt "#515"
 msgid "Genre"
@@ -1884,7 +1883,7 @@ msgstr "選擇播放列表"
 
 msgctxt "#525"
 msgid "New playlist..."
-msgstr "新播放列表…"
+msgstr "新增播放列表…"
 
 msgctxt "#526"
 msgid "Add to playlist"
@@ -1964,7 +1963,7 @@ msgstr "媒體資訊"
 
 msgctxt "#545"
 msgid "Audio output device"
-msgstr "音效輸出設備"
+msgstr "音效輸出裝置"
 
 msgctxt "#546"
 msgid "Passthrough output device"
@@ -2192,7 +2191,7 @@ msgstr "無法擷取 CD 或音軌"
 
 msgctxt "#609"
 msgid "CDDARipPath is not set."
-msgstr "CD 擷取路徑未設定。"
+msgstr "CDDA 擷取路徑未設定。"
 
 msgctxt "#610"
 msgid "Rip audio track"
@@ -2202,13 +2201,21 @@ msgctxt "#611"
 msgid "Enter number"
 msgstr "輸入數字"
 
+msgctxt "#612"
+msgid "Bits/sample"
+msgstr "位元/樣本"
+
+msgctxt "#613"
+msgid "Sample rate"
+msgstr "取樣率"
+
 msgctxt "#620"
 msgid "Audio CDs"
 msgstr "音樂 CD 擷取"
 
 msgctxt "#621"
 msgid "Encoder"
-msgstr "編碼"
+msgstr "編碼器"
 
 msgctxt "#622"
 msgid "Quality"
@@ -2225,6 +2232,10 @@ msgstr "包括音軌編號"
 msgctxt "#625"
 msgid "All songs of"
 msgstr "所有歌曲"
+
+msgctxt "#626"
+msgid "In progress TV shows"
+msgstr "當季的電視劇"
 
 msgctxt "#629"
 msgid "View mode"
@@ -2308,11 +2319,11 @@ msgstr "匯入視訊資料庫"
 
 msgctxt "#649"
 msgid "Importing"
-msgstr "匯入中"
+msgstr "正在匯入"
 
 msgctxt "#650"
 msgid "Exporting"
-msgstr "匯出中"
+msgstr "正在匯出"
 
 msgctxt "#651"
 msgid "Browse for library"
@@ -2374,6 +2385,10 @@ msgctxt "#665"
 msgid "Compression level"
 msgstr "壓縮等級"
 
+msgctxt "#666"
+msgid "Verbose logging..."
+msgstr "詳細記錄..."
+
 msgctxt "#700"
 msgid "Cleaning up library"
 msgstr "清除音樂資料庫"
@@ -2391,8 +2406,8 @@ msgid "Network"
 msgstr "網路設定"
 
 msgctxt "#706"
-msgid "- Server"
-msgstr "- 伺服器"
+msgid "Server"
+msgstr "伺服器"
 
 msgctxt "#708"
 msgid "Use an HTTP proxy server to access the internet"
@@ -2410,10 +2425,6 @@ msgctxt "#713"
 msgid "HTTP proxy"
 msgstr "HTTP 代理伺服器"
 
-msgctxt "#715"
-msgid "- Assignment"
-msgstr "- 分配"
-
 msgctxt "#716"
 msgid "Automatic (DHCP)"
 msgstr "自動(動態分配)"
@@ -2423,20 +2434,20 @@ msgid "Manual (Static)"
 msgstr "手動(靜態分配)"
 
 msgctxt "#719"
-msgid "- IP address"
-msgstr "- IP 位址"
+msgid "IP address"
+msgstr "IP 位址"
 
 msgctxt "#720"
-msgid "- Netmask"
-msgstr "- 子網路遮罩"
+msgid "Netmask"
+msgstr "子網路遮罩"
 
 msgctxt "#721"
-msgid "- Default gateway"
-msgstr "- 預設閘道"
+msgid "Default gateway"
+msgstr "預設閘道器"
 
 msgctxt "#722"
-msgid "- DNS server"
-msgstr "- DNS 伺服器"
+msgid "DNS server"
+msgstr "DNS 伺服器"
 
 msgctxt "#723"
 msgid "Save & restart"
@@ -2463,32 +2474,32 @@ msgid "FTP server"
 msgstr "FTP 伺服器"
 
 msgctxt "#730"
-msgid "- Port"
-msgstr "- 連接埠"
+msgid "Port"
+msgstr "連接埠"
 
 msgctxt "#732"
 msgid "Save & apply"
 msgstr "儲存 & 套用"
 
 msgctxt "#733"
-msgid "- Password"
-msgstr "- 密碼"
+msgid "Password"
+msgstr "密碼"
 
 msgctxt "#734"
 msgid "No pass"
 msgstr "無密碼"
 
 msgctxt "#735"
-msgid "- Character set"
-msgstr "- 編碼"
+msgid "Character set"
+msgstr "字元集"
 
 msgctxt "#736"
-msgid "- Style"
-msgstr "- 效果"
+msgid "Style"
+msgstr "風格"
 
 msgctxt "#737"
-msgid "- Colour"
-msgstr "- 顏色"
+msgid "Colour"
+msgstr "色彩"
 
 msgctxt "#738"
 msgid "Normal"
@@ -2619,16 +2630,16 @@ msgid "Network interface"
 msgstr "網路界面"
 
 msgctxt "#776"
-msgid "- Wireless network name (ESSID)"
-msgstr "- 無線網路帳號(ESSID)"
+msgid "Wireless network name (ESSID)"
+msgstr "無線網路帳號(ESSID)"
 
 msgctxt "#777"
-msgid "- Wireless password"
-msgstr "- 無線網路密碼"
+msgid "Wireless password"
+msgstr "無線密碼"
 
 msgctxt "#778"
-msgid "- Wireless security"
-msgstr "- 無線網路安全"
+msgid "Wireless security"
+msgstr "無線安全"
 
 msgctxt "#779"
 msgid "Save and apply network interface settings"
@@ -2730,6 +2741,10 @@ msgctxt "#852"
 msgid "Valid port range is 1024-65535"
 msgstr "合法的連接埠範圍是 1024-65535"
 
+msgctxt "#997"
+msgid "Add Pictures..."
+msgstr "新增圖片..."
+
 msgctxt "#998"
 msgid "Add Music..."
 msgstr "新增音樂..."
@@ -2739,8 +2754,8 @@ msgid "Add Videos..."
 msgstr "新增影片..."
 
 msgctxt "#1000"
-msgid "- Preview"
-msgstr "- 預覽"
+msgid "Preview"
+msgstr "預覽"
 
 msgctxt "#1001"
 msgid "Unable to connect"
@@ -2927,8 +2942,8 @@ msgid "Other..."
 msgstr "其他…"
 
 msgctxt "#1048"
-msgid "- Username"
-msgstr "- 使用者名稱"
+msgid "Username"
+msgstr "帳號"
 
 msgctxt "#1049"
 msgid "Script settings"
@@ -2942,9 +2957,33 @@ msgctxt "#1051"
 msgid "Enter web address"
 msgstr "輸入網路位址"
 
+msgctxt "#1180"
+msgid "Proxy type"
+msgstr "代理伺服器類型"
+
+msgctxt "#1181"
+msgid "HTTP"
+msgstr "HTTP"
+
+msgctxt "#1182"
+msgid "SOCKS4"
+msgstr "SOCKS4"
+
+msgctxt "#1183"
+msgid "SOCKS4A"
+msgstr "SOCKS4A"
+
+msgctxt "#1184"
+msgid "SOCKS5"
+msgstr "SOCKS5"
+
+msgctxt "#1185"
+msgid "SOCKS5 with remote dns resolving"
+msgstr "SOCKS5 與遠端 DNS 解析"
+
 msgctxt "#1200"
 msgid "SMB client"
-msgstr "SMB 共享設定"
+msgstr "SMB 客戶端"
 
 msgctxt "#1202"
 msgid "Workgroup"
@@ -3079,12 +3118,16 @@ msgid "Device name"
 msgstr "裝置名稱"
 
 msgctxt "#1272"
-msgid "- Use password protection"
-msgstr "- 使用密碼保護"
+msgid "Use password protection"
+msgstr "使用密碼保護"
 
 msgctxt "#1273"
 msgid "AirPlay"
 msgstr "AirPlay"
+
+msgctxt "#1274"
+msgid "AirTunes"
+msgstr "AirTunes"
 
 msgctxt "#1275"
 msgid "Filter %s"
@@ -3092,7 +3135,7 @@ msgstr "過濾%s"
 
 msgctxt "#1300"
 msgid "Custom audio device"
-msgstr "自訂音效設備"
+msgstr "自訂音效裝置"
 
 msgctxt "#1301"
 msgid "Custom passthrough device"
@@ -3234,6 +3277,10 @@ msgctxt "#1429"
 msgid "Ash"
 msgstr "灰"
 
+msgctxt "#1430"
+msgid "Widespread"
+msgstr "廣佈"
+
 msgctxt "#1431"
 msgid "Dust"
 msgstr "塵"
@@ -3270,9 +3317,21 @@ msgctxt "#1439"
 msgid "and"
 msgstr "且"
 
+msgctxt "#1440"
+msgid "Sleet"
+msgstr "	\n霰雨"
+
 msgctxt "#1441"
 msgid "with"
 msgstr "有"
+
+msgctxt "#1442"
+msgid "Chance"
+msgstr "機會"
+
+msgctxt "#1443"
+msgid "of"
+msgstr "中"
 
 msgctxt "#1444"
 msgid "Funnel"
@@ -3285,6 +3344,10 @@ msgstr "雲"
 msgctxt "#1446"
 msgid "Unknown"
 msgstr "未知"
+
+msgctxt "#1447"
+msgid "Squals"
+msgstr "獨特"
 
 msgctxt "#1448"
 msgid "Precipitation"
@@ -3317,10 +3380,6 @@ msgstr "腳本錯誤！：%s"
 msgctxt "#2101"
 msgid "Newer version needed - See log"
 msgstr "需要更新的版本 - 看記錄"
-
-msgctxt "#4501"
-msgid "Enable LCD/VFD"
-msgstr "啟用 LCD/VFD"
 
 msgctxt "#10000"
 msgid "Home"
@@ -3426,9 +3485,25 @@ msgctxt "#10034"
 msgid "Settings - Profiles"
 msgstr "設定 - 使用者設定檔"
 
+msgctxt "#10035"
+msgid "Reset"
+msgstr "重置"
+
 msgctxt "#10040"
 msgid "Addon browser"
 msgstr "附加元件瀏覽器"
+
+msgctxt "#10041"
+msgid "Reset settings"
+msgstr "重置設定"
+
+msgctxt "#10043"
+msgid "Help"
+msgstr "說明"
+
+msgctxt "#10044"
+msgid "No help available"
+msgstr "無說明內容"
 
 msgctxt "#10100"
 msgid "Yes/No dialog"
@@ -3437,6 +3512,58 @@ msgstr "確認對話框"
 msgctxt "#10101"
 msgid "Progress dialog"
 msgstr "進度對話框"
+
+msgctxt "#10126"
+msgid "File browser"
+msgstr "檔案瀏覽器"
+
+msgctxt "#10128"
+msgid "Network setup"
+msgstr "網路設定"
+
+msgctxt "#10129"
+msgid "Media source"
+msgstr "媒體來源"
+
+msgctxt "#10130"
+msgid "Profile settings"
+msgstr "設定檔選項"
+
+msgctxt "#10131"
+msgid "Lock settings"
+msgstr "鎖定系統設定"
+
+msgctxt "#10132"
+msgid "Content settings"
+msgstr "內容設定"
+
+msgctxt "#10134"
+msgid "Favourites"
+msgstr "我的最愛"
+
+msgctxt "#10135"
+msgid "Songs/Info"
+msgstr "歌曲/資訊"
+
+msgctxt "#10136"
+msgid "Smart playlist editor"
+msgstr "智慧型播放清單編輯器"
+
+msgctxt "#10137"
+msgid "Smart playlist rule editor"
+msgstr "智慧型播放清單規則編輯器"
+
+msgctxt "#10139"
+msgid "Pictures/Info"
+msgstr "圖片/資訊"
+
+msgctxt "#10140"
+msgid "Add-on settings"
+msgstr "附加元件設定"
+
+msgctxt "#10146"
+msgid "Add-ons/Info"
+msgstr "附加元件/資訊"
 
 msgctxt "#10210"
 msgid "Looking for subtitles..."
@@ -3624,7 +3751,7 @@ msgstr "←"
 
 msgctxt "#12321"
 msgid "Ok"
-msgstr "Ok"
+msgstr "確定"
 
 msgctxt "#12322"
 msgid "*"
@@ -3656,7 +3783,7 @@ msgstr "輸入手把按鍵組合並且"
 
 msgctxt "#12331"
 msgid "press OK, or Back to cancel"
-msgstr "按 Start 確認，或按 Back 取消"
+msgstr "按「確定」確認，或按 Back 取消"
 
 msgctxt "#12332"
 msgid "Set lock"
@@ -4134,6 +4261,10 @@ msgctxt "#13211"
 msgid "Alarm!"
 msgstr "響鈴！"
 
+msgctxt "#13212"
+msgid "Cancelled with %im%is left"
+msgstr "鬧鈴取消，剩下 %i 分 %i 秒"
+
 msgctxt "#13213"
 msgid "%2.0fm"
 msgstr "%2.0f分"
@@ -4255,8 +4386,8 @@ msgid "Fan speed override"
 msgstr "指定風扇轉速"
 
 msgctxt "#13303"
-msgid "- Fonts"
-msgstr "- 字型"
+msgid "Fonts"
+msgstr "字型"
 
 msgctxt "#13304"
 msgid "Enable flipping bi-directional strings"
@@ -4714,6 +4845,10 @@ msgctxt "#13433"
 msgid "Play the next video automatically"
 msgstr "自動播放下一個影片"
 
+msgctxt "#13434"
+msgid "Play only this"
+msgstr "只播放這個"
+
 msgctxt "#13500"
 msgid "A/V sync method"
 msgstr "影音同步方式"
@@ -4931,32 +5066,32 @@ msgid "Video cache - DVD-ROM"
 msgstr "視訊緩衝區 - 光碟機"
 
 msgctxt "#14027"
-msgid "- Local Network"
-msgstr "視訊緩衝區 - 區域網路"
+msgid "Local Network"
+msgstr "區域網路"
 
 msgctxt "#14028"
-msgid "- Internet"
-msgstr "視訊緩衝區 - 網際網路"
+msgid "Internet"
+msgstr "網際網路"
 
 msgctxt "#14030"
 msgid "Audio cache - DVD-ROM"
 msgstr "音效緩衝區 - 光碟機"
 
 msgctxt "#14031"
-msgid "- Local Network"
-msgstr "音效緩衝區 - 區域網路"
+msgid "Local Network"
+msgstr "區域網路"
 
 msgctxt "#14032"
-msgid "- Internet"
-msgstr "音效緩衝區 - 網際網路"
+msgid "Internet"
+msgstr "網際網路"
 
 msgctxt "#14034"
 msgid "DVD cache - DVD-ROM"
 msgstr "光碟緩衝區 - 光碟機"
 
 msgctxt "#14035"
-msgid "- Local Network"
-msgstr "光碟緩衝區 - 區域網路"
+msgid "Local Network"
+msgstr "區域網路"
 
 msgctxt "#14036"
 msgid "Services"
@@ -5107,8 +5242,8 @@ msgid "Remove from favourites"
 msgstr "從我的最愛中移除"
 
 msgctxt "#14078"
-msgid "- Colours"
-msgstr "- 桌面顏色"
+msgid "Colours"
+msgstr "色彩"
 
 msgctxt "#14079"
 msgid "Timezone country"
@@ -5247,8 +5382,8 @@ msgid "Skin default"
 msgstr "佈景主題預設"
 
 msgctxt "#15111"
-msgid "- Theme"
-msgstr "- 主題"
+msgid "Theme"
+msgstr "主題"
 
 msgctxt "#15112"
 msgid "Default theme"
@@ -5258,30 +5393,6 @@ msgctxt "#15200"
 msgid "Last.fm"
 msgstr "Last.fm"
 
-msgctxt "#15201"
-msgid "Submit songs to Last.fm"
-msgstr "提交歌曲資訊到 Last.fm"
-
-msgctxt "#15202"
-msgid "Last.fm username"
-msgstr "Last.fm 帳號"
-
-msgctxt "#15203"
-msgid "Last.fm password"
-msgstr "Last.fm 密碼"
-
-msgctxt "#15204"
-msgid "Unable to handshake: sleeping..."
-msgstr "無法連線：休息中…"
-
-msgctxt "#15205"
-msgid "Please update XBMC"
-msgstr "請更新 XBMC"
-
-msgctxt "#15206"
-msgid "Bad authorization: Check username and password"
-msgstr "無法通過認證： 檢查帳號和密碼"
-
 msgctxt "#15207"
 msgid "Connected"
 msgstr "已連線"
@@ -5289,22 +5400,6 @@ msgstr "已連線"
 msgctxt "#15208"
 msgid "Not connected"
 msgstr "無法連線"
-
-msgctxt "#15209"
-msgid "Submit interval %i"
-msgstr "提交進度 %i"
-
-msgctxt "#15210"
-msgid "Cached %i songs"
-msgstr "已快取 %i 首歌曲"
-
-msgctxt "#15211"
-msgid "Submitting..."
-msgstr "提交中…"
-
-msgctxt "#15212"
-msgid "Submitting in %i secs"
-msgstr "提交剩餘 % i秒"
 
 msgctxt "#15213"
 msgid "Play using..."
@@ -5321,218 +5416,6 @@ msgstr "顯示縮圖時隱藏檔案名稱"
 msgctxt "#15216"
 msgid "Play in party mode"
 msgstr "派對模式播放"
-
-msgctxt "#15217"
-msgid "Submit songs to Libre.fm"
-msgstr "將歌曲提交到 Libre.fm"
-
-msgctxt "#15218"
-msgid "Libre.fm username"
-msgstr "Libre.fm 帳號"
-
-msgctxt "#15219"
-msgid "Libre.fm password"
-msgstr "Libre.fm 密碼"
-
-msgctxt "#15220"
-msgid "Libre.fm"
-msgstr "Libre.fm"
-
-msgctxt "#15221"
-msgid "Song submission"
-msgstr "提交歌曲"
-
-msgctxt "#15250"
-msgid "Submit Last.fm radio to Last.fm"
-msgstr "上傳電台到 Last.fm"
-
-msgctxt "#15251"
-msgid "Connecting to Last.fm..."
-msgstr "連線到 Last.fm…"
-
-msgctxt "#15252"
-msgid "Selecting station..."
-msgstr "選擇電台…"
-
-msgctxt "#15253"
-msgid "Search similar artists..."
-msgstr "尋找同類型藝人…"
-
-msgctxt "#15254"
-msgid "Search similar tags..."
-msgstr "尋找同類型標籤…"
-
-msgctxt "#15255"
-msgid "Your profile (%name%)"
-msgstr "你的設定檔 (%name%)"
-
-msgctxt "#15256"
-msgid "Overall top tags"
-msgstr "所有排行"
-
-msgctxt "#15257"
-msgid "Top artists for tag %name%"
-msgstr "標籤為 %name% 的演出者排行"
-
-msgctxt "#15258"
-msgid "Top albums for tag %name%"
-msgstr "%name% 專輯排行"
-
-msgctxt "#15259"
-msgid "Top tracks for tag %name%"
-msgstr "%name% 歌曲排行"
-
-msgctxt "#15260"
-msgid "Listen to tag %name% Last.fm radio"
-msgstr "收聽 %name% 在 Last.fm 廣播"
-
-msgctxt "#15261"
-msgid "Similar artists as %name%"
-msgstr "和 %name% 同類型的演出者"
-
-msgctxt "#15262"
-msgid "Top %name% albums"
-msgstr "%name% 專輯排行"
-
-msgctxt "#15263"
-msgid "Top %name% tracks"
-msgstr "%name% 歌曲排行"
-
-msgctxt "#15264"
-msgid "Top %name% tags"
-msgstr "%name% 標籤排行"
-
-msgctxt "#15265"
-msgid "Biggest fans of %name%"
-msgstr "%name% 頭號歌迷"
-
-msgctxt "#15266"
-msgid "Listen to %name% fans Last.fm radio"
-msgstr "收聽 %name% 的歌迷在 Last.fm 廣播"
-
-msgctxt "#15267"
-msgid "Listen to %name% similar artists Last.fm radio"
-msgstr "收聽 %name% 的同類型藝人在 Last.fm 廣播"
-
-msgctxt "#15268"
-msgid "Top artists for user %name%"
-msgstr "%name% 演出者排行"
-
-msgctxt "#15269"
-msgid "Top albums for user %name%"
-msgstr "%name% 專輯排行"
-
-msgctxt "#15270"
-msgid "Top tracks for user %name%"
-msgstr "%name% 歌曲排行"
-
-msgctxt "#15271"
-msgid "Friends of user %name%"
-msgstr "%name% 好友"
-
-msgctxt "#15272"
-msgid "Neighbours of user %name%"
-msgstr "%name% 同好"
-
-msgctxt "#15273"
-msgid "Weekly artist chart for %name%"
-msgstr "%name% 演出者週排行"
-
-msgctxt "#15274"
-msgid "Weekly album chart for %name%"
-msgstr "%name% 專輯週排行"
-
-msgctxt "#15275"
-msgid "Weekly track chart for %name%"
-msgstr "%name% 歌曲週排行"
-
-msgctxt "#15276"
-msgid "Listen to %name%'s neighbours Last.fm radio"
-msgstr "收聽 %name% 的同好在 Last.fm 廣播"
-
-msgctxt "#15277"
-msgid "Listen to %name%'s personal Last.fm radio"
-msgstr "收聽 %name% 的個人在 Last.fm 廣播"
-
-msgctxt "#15278"
-msgid "Listen to %name%'s mix Last.fm radio"
-msgstr "收聽 %name% 的最愛在 Last.fm 廣播"
-
-msgctxt "#15279"
-msgid "Retrieving list from Last.fm..."
-msgstr "從 Last.fm 獲取目錄…"
-
-msgctxt "#15280"
-msgid "Can't retrieve list from Last.fm..."
-msgstr "無法從 Last.fm 獲取目錄…"
-
-msgctxt "#15281"
-msgid "Enter an artist name to find related ones"
-msgstr "輸入演出者名稱尋找相關資訊"
-
-msgctxt "#15282"
-msgid "Enter a tag name to find similar ones"
-msgstr "輸入標籤名稱尋找相關資訊"
-
-msgctxt "#15283"
-msgid "Tracks recently listened by %name%"
-msgstr "%name% 最近聽過的歌曲"
-
-msgctxt "#15284"
-msgid "Listen to %name%'s recommendations Last.fm radio"
-msgstr "收聽 %name% 的推薦在 Last.fm 廣播"
-
-msgctxt "#15285"
-msgid "Top tags for user %name%"
-msgstr "%name% 的排行"
-
-msgctxt "#15287"
-msgid "Do you want to add the current track to your loved tracks?"
-msgstr "你想把目前歌曲加入你的最愛嗎？"
-
-msgctxt "#15288"
-msgid "Do you want to ban the current track?"
-msgstr "你想封鎖目前的歌曲嗎？"
-
-msgctxt "#15289"
-msgid "Added to your loved tracks: '%s'."
-msgstr "已加入你的最愛歌曲： '%s'"
-
-msgctxt "#15290"
-msgid "Could not add '%s' to your loved tracks."
-msgstr "不能加入 '%s' 到你的最愛"
-
-msgctxt "#15291"
-msgid "Banned: '%s'."
-msgstr "被封鎖： '%s'."
-
-msgctxt "#15292"
-msgid "Could not ban '%s'."
-msgstr "不能封鎖 '%s'."
-
-msgctxt "#15293"
-msgid "Tracks recently loved by %name%"
-msgstr "%name% 最近喜好的歌曲"
-
-msgctxt "#15294"
-msgid "Tracks recently banned by %name%"
-msgstr "%name% 最近封鎖的歌曲"
-
-msgctxt "#15295"
-msgid "Remove from loved tracks"
-msgstr "從最愛中移除"
-
-msgctxt "#15296"
-msgid "Un-ban"
-msgstr "解除封鎖"
-
-msgctxt "#15297"
-msgid "Do you want to remove this track from your loved tracks?"
-msgstr "你想從你的最愛移除這首歌曲嗎？"
-
-msgctxt "#15298"
-msgid "Do you want to un-ban this track?"
-msgstr "你想解除封鎖這首歌曲嗎？"
 
 msgctxt "#15300"
 msgid "Path not found or invalid"
@@ -5580,7 +5463,7 @@ msgstr "輸入新標題"
 
 msgctxt "#16009"
 msgid "Enter the movie name"
-msgstr "輸入影片名稱"
+msgstr "輸入電影名稱"
 
 msgctxt "#16010"
 msgid "Enter the profile name"
@@ -5982,6 +5865,10 @@ msgctxt "#19024"
 msgid "Radio channels"
 msgstr "無線電廣播頻道"
 
+msgctxt "#19025"
+msgid "Upcoming recordings"
+msgstr "預備錄影"
+
 msgctxt "#19026"
 msgid "Add timer..."
 msgstr "新增定時器..."
@@ -6018,10 +5905,6 @@ msgctxt "#19034"
 msgid "Already started recording on this channel"
 msgstr "已經開始對這個頻道錄影"
 
-msgctxt "#19035"
-msgid "This channel cannot be played. Check the log for details."
-msgstr "無法播放這個頻道。詳情請查看日誌。"
-
 msgctxt "#19036"
 msgid "This recording cannot be played. Check the log for details."
 msgstr "這個錄影無法被播放。詳情請查閱日誌。"
@@ -6052,11 +5935,15 @@ msgstr "你確定要重新命名這個計時器嗎？"
 
 msgctxt "#19043"
 msgid "Recording"
-msgstr "錄影中"
+msgstr "錄影"
 
 msgctxt "#19044"
 msgid "Please check your configuration or check the log for details."
 msgstr "請檢查你的設定或從日誌查看詳情。"
+
+msgctxt "#19045"
+msgid "No PVR clients have been started yet. Wait for the PVR clients to start up or check the log for details."
+msgstr "尚未有啟動的 PVR 客戶端。請等候 PVR 客戶端啟動，或檢查記錄中是否有相關問題細節。"
 
 msgctxt "#19046"
 msgid "New channel"
@@ -6162,6 +6049,10 @@ msgctxt "#19073"
 msgid "Delay channel switch"
 msgstr "延遲頻道切換"
 
+msgctxt "#19074"
+msgid "Active:"
+msgstr "	\n現行"
+
 msgctxt "#19075"
 msgid "Name:"
 msgstr "名稱："
@@ -6197,6 +6088,10 @@ msgstr "優先權："
 msgctxt "#19083"
 msgid "Lifetime (days):"
 msgstr "生命周期(天)"
+
+msgctxt "#19084"
+msgid "First day:"
+msgstr "首日"
 
 msgctxt "#19085"
 msgid "Unknown channel %u"
@@ -6261,6 +6156,10 @@ msgstr "請切換到另一個頻道"
 msgctxt "#19104"
 msgid "Enter the name of the folder for the recording"
 msgstr "輸入存放這個錄影的資料夾名稱"
+
+msgctxt "#19106"
+msgid "Next timer on"
+msgstr "下一個定時器"
 
 msgctxt "#19107"
 msgid "at"
@@ -6341,6 +6240,14 @@ msgstr "開始日期"
 msgctxt "#19129"
 msgid "End date"
 msgstr "結束日期"
+
+msgctxt "#19130"
+msgid "Minimum duration"
+msgstr "最小時間長度"
+
+msgctxt "#19131"
+msgid "Maximum duration"
+msgstr "最大時間長度"
 
 msgctxt "#19132"
 msgid "Include unknown genres"
@@ -6454,6 +6361,10 @@ msgctxt "#19160"
 msgid "to"
 msgstr "到"
 
+msgctxt "#19162"
+msgid "Recording active"
+msgstr "錄影開始於：%s"
+
 msgctxt "#19163"
 msgid "Recordings"
 msgstr "錄影"
@@ -6477,6 +6388,10 @@ msgstr "尋找遺失的圖示"
 msgctxt "#19169"
 msgid "Hide video information box"
 msgstr "隱藏視訊資訊盒"
+
+msgctxt "#19170"
+msgid "Timeout when starting playback"
+msgstr "開始播放時超時"
 
 msgctxt "#19171"
 msgid "Start playback minimized"
@@ -6638,6 +6553,10 @@ msgctxt "#19211"
 msgid "Delete channel"
 msgstr "刪除頻道"
 
+msgctxt "#19212"
+msgid "This list contains changes"
+msgstr "此清單含變動項目"
+
 msgctxt "#19213"
 msgid "Select backend"
 msgstr "選擇後端"
@@ -6657,6 +6576,10 @@ msgstr "所有的廣播頻道"
 msgctxt "#19217"
 msgid "All TV channels"
 msgstr "所有的電視頻道"
+
+msgctxt "#19218"
+msgid "Visible"
+msgstr "可見的"
 
 msgctxt "#19219"
 msgid "Ungrouped channels"
@@ -6762,6 +6685,10 @@ msgctxt "#19244"
 msgid "Backend idle time"
 msgstr "後端閒置時間"
 
+msgctxt "#19245"
+msgid "Set wakeup command (cmd [timestamp])"
+msgstr "設定喚醒命令 (cmd [timestamp])"
+
 msgctxt "#19246"
 msgid "Wakeup before recording"
 msgstr "錄影前喚醒"
@@ -6818,6 +6745,10 @@ msgctxt "#19259"
 msgid "Parental control"
 msgstr "家長控制"
 
+msgctxt "#19260"
+msgid "Unlock duration"
+msgstr "解鎖時間"
+
 msgctxt "#19261"
 msgid "Change PIN"
 msgstr "修改 PIN"
@@ -6862,6 +6793,14 @@ msgctxt "#19271"
 msgid "No PVR add-ons could be found"
 msgstr "找不到任何 PVR 附加元件"
 
+msgctxt "#19272"
+msgid "You need a tuner, backend software, and an"
+msgstr "你需要一個接收器 (tuner)、後端軟體和為該後端軟體"
+
+msgctxt "#19273"
+msgid "add-on for the backend to be able to use PVR."
+msgstr "設計的附加元件才能使用 PVR 功能。"
+
 msgctxt "#19274"
 msgid "Please visit xbmc.org/pvr to learn more."
 msgstr "請拜訪 xbmc.org/pvr 以取得更多資訊。"
@@ -6881,6 +6820,18 @@ msgstr "錄影衝突"
 msgctxt "#19278"
 msgid "Recording error"
 msgstr "錄影錯誤"
+
+msgctxt "#19279"
+msgid "Client specific"
+msgstr "客戶端專用"
+
+msgctxt "#19280"
+msgid "Client specific settings"
+msgstr "客戶端專用設定"
+
+msgctxt "#19281"
+msgid "Confirm channel switches by pressing OK"
+msgstr "轉台時需要按「確定」確認"
 
 msgctxt "#19499"
 msgid "Other/Unknown"
@@ -7611,8 +7562,8 @@ msgid "Root"
 msgstr "根目錄"
 
 msgctxt "#20109"
-msgid "- Zoom"
-msgstr "- 桌面縮放"
+msgid "Zoom"
+msgstr "填滿螢幕(無黑邊)"
 
 msgctxt "#20110"
 msgid "UPnP settings"
@@ -8070,17 +8021,9 @@ msgctxt "#20309"
 msgid "Make new folder"
 msgstr "新建資料夾"
 
-msgctxt "#20310"
-msgid "Dim LCD on playback"
-msgstr "播放時關閉液晶螢幕背光"
-
 msgctxt "#20311"
 msgid "Unknown or onboard (protected)"
 msgstr "未知或內建(寫入保護)"
-
-msgctxt "#20312"
-msgid "Dim LCD on paused"
-msgstr "暫停時關閉液晶螢幕背光"
 
 msgctxt "#20314"
 msgid "Videos - Library"
@@ -8089,6 +8032,26 @@ msgstr "視訊 - 資料庫"
 msgctxt "#20316"
 msgid "Sort by: ID"
 msgstr "排序：標籤"
+
+msgctxt "#20317"
+msgid "Scanning movies using %s"
+msgstr "正在使用 %s 掃描電影"
+
+msgctxt "#20318"
+msgid "Scanning music videos using %s"
+msgstr "正在使用 %s 掃描音樂影片"
+
+msgctxt "#20319"
+msgid "Scanning tvshows using %s"
+msgstr "正在使用 %s 掃描電視節目"
+
+msgctxt "#20320"
+msgid "Scanning artists using %s"
+msgstr "正在使用 %s 掃描演出者"
+
+msgctxt "#20321"
+msgid "Scanning albums using %s"
+msgstr "正在使用 %s 掃描專輯"
 
 msgctxt "#20324"
 msgid "Play part..."
@@ -8148,7 +8111,7 @@ msgstr "演員"
 
 msgctxt "#20338"
 msgid "Movie"
-msgstr "影片"
+msgstr "電影"
 
 msgctxt "#20339"
 msgid "Director"
@@ -8164,7 +8127,7 @@ msgstr "移除此路徑內所有項目？"
 
 msgctxt "#20342"
 msgid "Movies"
-msgstr "影片"
+msgstr "電影"
 
 msgctxt "#20343"
 msgid "TV shows"
@@ -8340,7 +8303,7 @@ msgstr "移除電視劇連結"
 
 msgctxt "#20386"
 msgid "Recently added movies"
-msgstr "最近加入的電影"
+msgstr "最近新增的電影"
 
 msgctxt "#20387"
 msgid "Recently added episodes"
@@ -8409,6 +8372,10 @@ msgstr "自動擷取演員的縮圖"
 msgctxt "#20403"
 msgid "Set actor thumb"
 msgstr "設定演員縮圖"
+
+msgctxt "#20404"
+msgid "Remove bookmark"
+msgstr "移除書籤"
 
 msgctxt "#20405"
 msgid "Remove episode bookmark"
@@ -8637,6 +8604,18 @@ msgstr "名稱為 '%s' 的標籤已經存在。"
 msgctxt "#20464"
 msgid "Select %s"
 msgstr "選擇 %s"
+
+msgctxt "#20465"
+msgid "Manage movie set"
+msgstr "管理電影集"
+
+msgctxt "#20466"
+msgid "Select movie set"
+msgstr "選擇電影集"
+
+msgctxt "#20468"
+msgid "Add movie to a new set"
+msgstr "新增電影至新電影集"
 
 msgctxt "#21330"
 msgid "Show hidden files and directories"
@@ -8887,8 +8866,8 @@ msgid "Default music video scraper"
 msgstr "預設音樂影片站台"
 
 msgctxt "#21417"
-msgid "- Settings"
-msgstr "- 設定"
+msgid "Settings"
+msgstr "系統設定"
 
 msgctxt "#21418"
 msgid "Multilingual"
@@ -9019,8 +8998,8 @@ msgid "Remote control sends keyboard presses"
 msgstr "遙控器發送鍵盤按鍵"
 
 msgctxt "#21450"
-msgid "- Edit"
-msgstr "- 編輯"
+msgid "Edit"
+msgstr "編輯"
 
 msgctxt "#21451"
 msgid "Internet connection required."
@@ -9045,6 +9024,14 @@ msgstr "只快取到足夠連續播放的資料量"
 msgctxt "#21456"
 msgid "External storage"
 msgstr "外部儲存"
+
+msgctxt "#21457"
+msgid "Watched episode count"
+msgstr "已觀看的集數"
+
+msgctxt "#21458"
+msgid "Group by"
+msgstr "群組分類依據"
 
 msgctxt "#21460"
 msgid "Subtitle location"
@@ -9214,6 +9201,10 @@ msgctxt "#21843"
 msgid "Orientation"
 msgstr "方位"
 
+msgctxt "#21858"
+msgid "Image type"
+msgstr "影像類型"
+
 msgctxt "#21860"
 msgid "Supplemental categories"
 msgstr "補充類別"
@@ -9285,10 +9276,6 @@ msgstr "原始的 Tx 引用"
 msgctxt "#21877"
 msgid "Date created"
 msgstr "建立日期"
-
-msgctxt "#21878"
-msgid "Copyright flag"
-msgstr "版權標誌"
 
 msgctxt "#21879"
 msgid "Country code"
@@ -9387,8 +9374,8 @@ msgid "Hide progress of library updates"
 msgstr "總是在幕後更新資料庫"
 
 msgctxt "#22002"
-msgid "- DNS suffix"
-msgstr "- DNS 的尾碼"
+msgid "DNS suffix"
+msgstr "DNS 尾碼"
 
 msgctxt "#22003"
 msgid "%2.3fs"
@@ -9412,7 +9399,7 @@ msgstr "OpenGL 廠商："
 
 msgctxt "#22008"
 msgid "OpenGL renderer:"
-msgstr "OpenGL 渲染："
+msgstr "OpenGL 算繪器："
 
 msgctxt "#22009"
 msgid "OpenGL version:"
@@ -9483,16 +9470,16 @@ msgid "Font"
 msgstr "字型"
 
 msgctxt "#22031"
-msgid "- Size"
-msgstr "- 大小"
+msgid "Size"
+msgstr "大小"
 
 msgctxt "#22032"
-msgid "- Colours"
-msgstr "- 顏色"
+msgid "Colours"
+msgstr "色彩"
 
 msgctxt "#22033"
-msgid "- Charset"
-msgstr "- 編碼"
+msgid "Charset"
+msgstr "字元編碼"
 
 msgctxt "#22034"
 msgid "Export karaoke titles as HTML"
@@ -9588,11 +9575,11 @@ msgstr "外部播放機啟動"
 
 msgctxt "#23101"
 msgid "Click OK to terminate the player"
-msgstr "點選 OK 關閉播放機"
+msgstr "點選「確定」關閉播放機"
 
 msgctxt "#23104"
 msgid "Click OK when playback has ended"
-msgstr "播放完畢時點選 OK"
+msgstr "播放完畢時點選「確定」"
 
 msgctxt "#24000"
 msgid "Add-on"
@@ -9648,7 +9635,7 @@ msgstr "電視資訊"
 
 msgctxt "#24015"
 msgid "Music video information"
-msgstr "音樂錄影帶資訊"
+msgstr "音樂影片資訊"
 
 msgctxt "#24016"
 msgid "Album information"
@@ -9752,7 +9739,7 @@ msgstr "可取得的更新"
 
 msgctxt "#24044"
 msgid "Dependencies not met"
-msgstr "Dependencies 不相符"
+msgstr "無法滿足相依關係"
 
 msgctxt "#24045"
 msgid "Add-on does not have the correct structure"
@@ -9884,7 +9871,7 @@ msgstr "〈黑名單〉"
 
 msgctxt "#24096"
 msgid "Add-on has been marked as broken in repository."
-msgstr "附加元件已經被標記為\"已損壞\"。"
+msgstr "附加元件已經被標記為「已損壞」。"
 
 msgctxt "#24097"
 msgid "Would you like to disable it on your system?"
@@ -10208,11 +10195,11 @@ msgstr "運行此版本的 %s 需要"
 
 msgctxt "#33075"
 msgid "XBMC revision of %s or greater to run."
-msgstr "XBMC為 %s 或更高版本。"
+msgstr "XBMC 為 %s 或更高版本。"
 
 msgctxt "#33076"
 msgid "Please update XBMC."
-msgstr "請升級XBMC。"
+msgstr "請更新 XBMC。"
 
 msgctxt "#33077"
 msgid "No data found!"
@@ -10241,6 +10228,10 @@ msgstr "腳本路徑"
 msgctxt "#33083"
 msgid "Enable custom script button"
 msgstr "啟用自訂腳本按鈕"
+
+msgctxt "#33084"
+msgid "Auto login"
+msgstr "自動登入"
 
 msgctxt "#33100"
 msgid "Failed to start"
@@ -10355,12 +10346,16 @@ msgid "Can't find a previous item to play"
 msgstr "找不到前一個播放項目"
 
 msgctxt "#34300"
-msgid "Failed to start zeroconf"
-msgstr "Zeroconf啟動失敗"
+msgid "Failed to start Zeroconf"
+msgstr "無法啟動 Zeroconf"
 
 msgctxt "#34301"
 msgid "Is Apple's Bonjour Service installed? See log for more info."
 msgstr "已經安裝蘋果的 Bonjour 服務了嗎？請查閱記錄以取得更多資訊。"
+
+msgctxt "#34303"
+msgid "Unable to stop Zeroconf"
+msgstr "無法停止 Zeroconf"
 
 msgctxt "#34400"
 msgid "Video Rendering"
@@ -10441,10 +10436,6 @@ msgstr "此裝置不使用自定的快速鍵"
 msgctxt "#35100"
 msgid "Enable joystick and gamepad support"
 msgstr "啟用搖桿和手把支援"
-
-msgctxt "#35101"
-msgid "Disable joystick when iMON is present"
-msgstr "使用 iMON 時停用遊戲遙桿"
 
 msgctxt "#35500"
 msgid "Location"
@@ -10558,6 +10549,14 @@ msgctxt "#36025"
 msgid "Send 'inactive source' command when stopping XBMC"
 msgstr "關閉 XBMC 時送出 \"非作用中來源\" 的命令"
 
+msgctxt "#36026"
+msgid "Put devices in standby mode when putting the PC in standby"
+msgstr "當電腦進入待機時讓裝置也待機"
+
+msgctxt "#36027"
+msgid "This device needs servicing"
+msgstr "此裝置需要服務"
+
 msgctxt "#36028"
 msgid "Ignore"
 msgstr "忽略"
@@ -10598,6 +10597,550 @@ msgctxt "#36038"
 msgid "Amplifier / AVR device"
 msgstr "放大器/AVR 裝置"
 
+msgctxt "#36039"
+msgid "TV and AVR device (explicit)"
+msgstr "電視和 AVR 裝置 (外接式)"
+
 msgctxt "#36040"
 msgid "Unsupported libCEC interface version. %x is lower than the version XBMC supports (%x)"
 msgstr "未支援的 libECE 介面版本。版本 %x 小於 XBMC 所支援的版本(%x)"
+
+msgctxt "#36041"
+msgid "* Item folder"
+msgstr "* 項目資料夾"
+
+msgctxt "#36102"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36112"
+msgid "Edit the RSS feeds."
+msgstr "編輯 RSS 來源。"
+
+msgctxt "#36113"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36117"
+msgid "Select country location."
+msgstr "選擇國家位置。"
+
+msgctxt "#36118"
+msgid "Select your current timezone."
+msgstr "選擇目前所在時區。"
+
+msgctxt "#36121"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36127"
+msgid "Show hidden files and directories."
+msgstr "顯示隱藏的檔案和目錄。"
+
+msgctxt "#36128"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36132"
+msgid "Preview the selected screensaver."
+msgstr "預覽選擇的螢幕保護程式。"
+
+msgctxt "#36135"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36136"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36137"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36138"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36139"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36140"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36142"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36151"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36154"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36156"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36157"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36158"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36159"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36160"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36161"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36162"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36163"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36168"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36169"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36173"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36176"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36178"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36181"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36182"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36183"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36184"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36185"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36186"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36187"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36188"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36189"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36190"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36193"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36197"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36201"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36202"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36210"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36211"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36212"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36213"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36214"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36215"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36216"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36217"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36218"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36226"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36230"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36232"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36233"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36240"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36247"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36251"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36252"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36253"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36254"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36264"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36277"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36278"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36279"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36280"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36282"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36292"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36294"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36299"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36300"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36301"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36302"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36303"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36304"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36305"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36310"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36311"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36315"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36316"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36319"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36320"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36322"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36325"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36327"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36333"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36335"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36336"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36337"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36339"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36340"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36341"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36342"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36343"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36344"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36345"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36346"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36347"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36348"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36349"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36351"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36352"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36353"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36359"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36360"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36374"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36375"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36379"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36388"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36392"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36399"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36400"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36401"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36402"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36403"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36404"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36405"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36406"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36407"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36408"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36409"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36410"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36411"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36412"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36413"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36414"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36415"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36417"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36418"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#36420"
+msgid "No info available yet."
+msgstr "無可用資訊。"
+
+msgctxt "#37014"
+msgid "Last used profile"
+msgstr "上次使用的設定"

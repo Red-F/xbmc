@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -55,19 +55,33 @@ void CGUIFontTTFDX::Begin()
 {
   LPDIRECT3DDEVICE9 pD3DDevice = g_Windowing.Get3DDevice();
 
-  if (m_nestedBeginCount == 0)
+  if (pD3DDevice == NULL)
+    CLog::Log(LOGERROR, __FUNCTION__" - failed to get Direct3D device");
+
+  if (m_nestedBeginCount == 0 && pD3DDevice != NULL && m_texture != NULL)
   {
+    int unit = 0;
     // just have to blit from our texture.
-    m_texture->BindToUnit(0);
-    pD3DDevice->SetTextureStageState( 0, D3DTSS_COLOROP, D3DTOP_SELECTARG1 ); // only use diffuse
-    pD3DDevice->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_DIFFUSE);
-    pD3DDevice->SetTextureStageState( 0, D3DTSS_ALPHAOP, D3DTOP_MODULATE );
-    pD3DDevice->SetTextureStageState( 0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
-    pD3DDevice->SetTextureStageState( 0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
+    m_texture->BindToUnit(unit);
+    pD3DDevice->SetTextureStageState( unit, D3DTSS_COLOROP, D3DTOP_SELECTARG1 ); // only use diffuse
+    pD3DDevice->SetTextureStageState( unit, D3DTSS_COLORARG1, D3DTA_DIFFUSE);
+    pD3DDevice->SetTextureStageState( unit, D3DTSS_ALPHAOP, D3DTOP_MODULATE );
+    pD3DDevice->SetTextureStageState( unit, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+    pD3DDevice->SetTextureStageState( unit, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
+    unit++;
+
+    if(g_Windowing.UseLimitedColor())
+    {
+      pD3DDevice->SetTextureStageState( unit, D3DTSS_COLOROP  , D3DTOP_ADD );
+      pD3DDevice->SetTextureStageState( unit, D3DTSS_COLORARG1, D3DTA_CURRENT) ;
+      pD3DDevice->SetRenderState( D3DRS_TEXTUREFACTOR, D3DCOLOR_RGBA(16,16,16,0) );
+      pD3DDevice->SetTextureStageState( unit, D3DTSS_COLORARG2, D3DTA_TFACTOR );
+      unit++;
+    }
 
     // no other texture stages needed
-    pD3DDevice->SetTextureStageState( 1, D3DTSS_COLOROP, D3DTOP_DISABLE);
-    pD3DDevice->SetTextureStageState( 1, D3DTSS_ALPHAOP, D3DTOP_DISABLE);
+    pD3DDevice->SetTextureStageState( unit, D3DTSS_COLOROP, D3DTOP_DISABLE);
+    pD3DDevice->SetTextureStageState( unit, D3DTSS_ALPHAOP, D3DTOP_DISABLE);
 
     pD3DDevice->SetRenderState( D3DRS_ZENABLE, FALSE );
     pD3DDevice->SetRenderState( D3DRS_FOGENABLE, FALSE );
@@ -149,6 +163,16 @@ void CGUIFontTTFDX::End()
 
 CBaseTexture* CGUIFontTTFDX::ReallocTexture(unsigned int& newHeight)
 {
+  assert(newHeight != 0);
+  assert(m_textureWidth != 0);
+  if(m_textureHeight == 0)
+  {
+    delete m_texture;
+    m_texture = NULL;
+    delete m_speedupTexture;
+    m_speedupTexture = NULL;
+  }
+
   CDXTexture* pNewTexture = new CDXTexture(m_textureWidth, newHeight, XB_FMT_A8);
   pNewTexture->CreateTextureObject();
   LPDIRECT3DTEXTURE9 newTexture = pNewTexture->GetTextureObject();
@@ -254,6 +278,7 @@ CBaseTexture* CGUIFontTTFDX::ReallocTexture(unsigned int& newHeight)
   SAFE_DELETE(m_texture);
   SAFE_DELETE(m_speedupTexture);
   m_textureHeight = newHeight;
+  m_textureScaleY = 1.0f / m_textureHeight;
   m_speedupTexture = newSpeedupTexture;
 
   return pNewTexture;

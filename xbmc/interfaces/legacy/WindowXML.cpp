@@ -1,6 +1,6 @@
  /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,8 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, write to
- *  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
- *  http://www.gnu.org/copyleft/gpl.html
+ *  along with XBMC; see the file COPYING.  If not, see
+ *  <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -23,7 +22,8 @@
 
 #include "WindowInterceptor.h"
 #include "guilib/GUIWindowManager.h"
-#include "settings/GUISettings.h"
+#include "guilib/TextureManager.h"
+#include "settings/Settings.h"
 #include "addons/Skin.h"
 #include "filesystem/File.h"
 #include "utils/URIUtils.h"
@@ -381,6 +381,12 @@ namespace XBMCAddon
                 PulseActionEvent();
                 return true;
               }
+              else if (controlClicked->IsContainer() && message.GetParam1() == ACTION_MOUSE_DOUBLE_CLICK)
+              {
+                invokeCallback(new CallbackFunction<WindowXML,int>(this,&WindowXML::onDoubleClick,iControl));
+                PulseActionEvent();
+                return true;
+              }
               else if (controlClicked->IsContainer() && message.GetParam1() == ACTION_MOUSE_RIGHT_CLICK)
               {
                 AddonClass::Ref<Action> inf(new Action(CAction(ACTION_CONTEXT_MENU)));
@@ -435,6 +441,12 @@ namespace XBMCAddon
       TRACE;
       // Hook Over calling  CGUIMediaWindow::OnClick(iItem) results in it trying to PLAY the file item
       // which if its not media is BAD and 99 out of 100 times undesireable.
+      return false;
+    }
+
+    bool WindowXML::OnDoubleClick(int iItem)
+    {
+      TRACE;
       return false;
     }
 
@@ -500,13 +512,12 @@ namespace XBMCAddon
     {
       TRACE;
       // Path where the language strings reside
-      CStdString pathToLanguageFile = m_scriptPath;
-      URIUtils::AddFileToFolder(pathToLanguageFile, "resources", pathToLanguageFile);
-      URIUtils::AddFileToFolder(pathToLanguageFile, "language", pathToLanguageFile);
+      CStdString pathToLanguageFile = URIUtils::AddFileToFolder(m_scriptPath, "resources");
+      pathToLanguageFile = URIUtils::AddFileToFolder(pathToLanguageFile, "language");
       URIUtils::AddSlashAtEnd(pathToLanguageFile);
 
       // allocate a bunch of strings
-      return g_localizeStrings.LoadBlock(m_scriptPath, pathToLanguageFile, g_guiSettings.GetString("locale.language"));
+      return g_localizeStrings.LoadBlock(m_scriptPath, pathToLanguageFile, CSettings::Get().GetString("locale.language"));
     }
 
     void WindowXML::ClearScriptStrings()

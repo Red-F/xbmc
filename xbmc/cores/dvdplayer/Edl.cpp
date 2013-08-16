@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@
 #include "utils/XBMCTinyXML.h"
 #include "PlatformDefs.h"
 #include "URL.h"
+#include "pvr/recordings/PVRRecordings.h"
+#include "pvr/PVRManager.h"
 
 extern "C"
 {
@@ -112,7 +114,10 @@ bool CEdl::ReadEditDecisionLists(const CStdString& strMovie, const float fFrameR
    * Only check for edit decision lists if the movie is on the local hard drive, or accessed over a
    * network share.
    */
-  if ((URIUtils::IsHD(strMovie) ||  URIUtils::IsSmb(strMovie)) &&
+  if ((URIUtils::IsHD(strMovie)  || 
+       URIUtils::IsSmb(strMovie) || 
+       URIUtils::IsNfs(strMovie) || 
+       URIUtils::IsAfp(strMovie))         &&
       !URIUtils::IsPVRRecording(strMovie) &&
       !URIUtils::IsInternetStream(strMovie))
   {
@@ -147,6 +152,17 @@ bool CEdl::ReadEditDecisionLists(const CStdString& strMovie, const float fFrameR
     CLog::Log(LOGDEBUG, "%s - Checking for cut list within MythTV for: %s", __FUNCTION__,
               strMovie.c_str());
     bFound |= ReadMythCutList(strMovie, fFramesPerSecond);
+  }
+
+  /*
+   * PVR Recordings
+   */
+  else if (URIUtils::IsPVRRecording(strMovie))
+  {
+    CLog::Log(LOGDEBUG, "%s - Checking for edit decision list (EDL) for PVR recording: %s",
+      __FUNCTION__, strMovie.c_str());
+
+    bFound = ReadPvr(strMovie);
   }
 
   if (bFound)
@@ -582,6 +598,71 @@ bool CEdl::ReadBeyondTV(const CStdString& strMovie)
   }
 }
 
+bool CEdl::ReadPvr(const CStdString &strMovie)
+{
+  if (!PVR::g_PVRManager.IsStarted())
+  {
+    CLog::Log(LOGERROR, "%s - PVR Manager not started, cannot read Edl for %s", __FUNCTION__, strMovie.c_str());
+    return false;
+  }
+
+  CFileItemPtr tag =  PVR::g_PVRRecordings->GetByPath(strMovie);
+  if (tag && tag->HasPVRRecordingInfoTag())
+  {
+    CLog::Log(LOGDEBUG, "%s - Reading Edl for recording: %s", __FUNCTION__, tag->GetPVRRecordingInfoTag()->m_strTitle.c_str());
+  }
+  else
+  {
+    CLog::Log(LOGERROR, "%s - Unable to find PVR recording: %s", __FUNCTION__, strMovie.c_str());
+    return false;
+  }
+
+  std::vector<PVR_EDL_ENTRY> edl = tag->GetPVRRecordingInfoTag()->GetEdl();
+  std::vector<PVR_EDL_ENTRY>::const_iterator it;
+  for (it = edl.begin(); it != edl.end(); ++it)
+  {
+    Cut cut;
+    cut.start = it->start;
+    cut.end = it->end;
+
+    switch (it->type)
+    {
+    case PVR_EDL_TYPE_CUT:
+      cut.action = CUT;
+      break;
+    case PVR_EDL_TYPE_MUTE:
+      cut.action = MUTE;
+      break;
+    case PVR_EDL_TYPE_SCENE:
+      //cut.action = SCENE;
+      //break;
+      CLog::Log(LOGINFO, "%s - Ignoring entry of type SCENE", __FUNCTION__);
+      continue;
+    case PVR_EDL_TYPE_COMBREAK:
+      cut.action = COMM_BREAK;
+      break;
+    default:
+      CLog::Log(LOGINFO, "%s - Ignoring entry of unknown type: %d", __FUNCTION__, it->type);
+      continue;
+    }
+
+    if (AddCut(cut))
+    {
+      CLog::Log(LOGDEBUG, "%s - Added break [%s - %s] found in PVRRecording for: %s.",
+        __FUNCTION__, MillisecondsToTimeString(cut.start).c_str(),
+        MillisecondsToTimeString(cut.end).c_str(), strMovie.c_str());
+    }
+    else
+    {
+      CLog::Log(LOGERROR, "%s - Invalid break [%s - %s] found in PVRRecording for: %s. Continuing anyway.",
+        __FUNCTION__, MillisecondsToTimeString(cut.start).c_str(),
+        MillisecondsToTimeString(cut.end).c_str(), strMovie.c_str());
+    }
+  }
+
+ return !edl.empty();
+}
+
 bool CEdl::AddCut(Cut& cut)
 {
   if (cut.action != CUT && cut.action != MUTE && cut.action != COMM_BREAK)
@@ -656,7 +737,7 @@ bool CEdl::AddCut(Cut& cut)
   else
   {
     vector<Cut>::iterator pCurrentCut;
-    for (pCurrentCut = m_vecCuts.begin(); pCurrentCut != m_vecCuts.end(); pCurrentCut++)
+    for (pCurrentCut = m_vecCuts.begin(); pCurrentCut != m_vecCuts.end(); ++pCurrentCut)
     {
       if (cut.start < pCurrentCut->start)
       {

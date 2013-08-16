@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,13 +23,14 @@
 #include <dlfcn.h>
 #include "windowing/WindowingFactory.h"
 #include "VDPAU.h"
+#include "guilib/GraphicContext.h"
 #include "guilib/TextureManager.h"
 #include "cores/VideoRenderers/RenderManager.h"
 #include "DVDVideoCodecFFmpeg.h"
 #include "DVDClock.h"
 #include "settings/Settings.h"
-#include "settings/GUISettings.h"
 #include "settings/AdvancedSettings.h"
+#include "settings/MediaSettings.h"
 #include "Application.h"
 #include "utils/MathUtils.h"
 #include "DVDCodecs/DVDCodecUtils.h"
@@ -147,6 +148,32 @@ CVDPAU::CVDPAU()
   dl_vdp_device_create_x11 = NULL;
   dl_vdp_get_proc_address = NULL;
   dl_vdp_preemption_callback_register = NULL;
+  past[0] = NULL;
+  past[1] = NULL;
+  current = NULL;
+  future = NULL;
+  tmpNoiseReduction = 0.0f;
+  tmpSharpness = 0.0f;
+  vdp_get_proc_address = NULL;
+  vdp_device_destroy = NULL;
+  vdp_video_surface_create = NULL;
+  vdp_video_surface_destroy = NULL;
+  vdp_video_surface_put_bits_y_cb_cr = NULL;
+  vdp_video_surface_get_bits_y_cb_cr = NULL;
+  vdp_output_surface_put_bits_y_cb_cr = NULL;
+  vdp_output_surface_put_bits_native = NULL;
+  vdp_output_surface_create = NULL;
+  vdp_output_surface_destroy = NULL;
+  vdp_output_surface_get_bits_native = NULL;
+  vdp_output_surface_render_output_surface = NULL;
+  vdp_output_surface_put_bits_indexed = NULL;
+  vdp_video_mixer_create = NULL;
+  vdp_video_mixer_set_feature_enables = NULL;
+  vdp_video_mixer_query_parameter_support = NULL;
+  vdp_video_mixer_query_feature_support = NULL;
+  vdp_video_mixer_destroy = NULL;
+  vdp_video_mixer_render = NULL;
+  m_hwContext.bitstream_buffers_allocated = 0;
 }
 
 bool CVDPAU::Open(AVCodecContext* avctx, const enum PixelFormat, unsigned int surfaces)
@@ -157,6 +184,9 @@ bool CVDPAU::Open(AVCodecContext* avctx, const enum PixelFormat, unsigned int su
     CLog::Log(LOGWARNING,"(VDPAU) no width/height available, can't init");
     return false;
   }
+
+  if ((avctx->codec_id == AV_CODEC_ID_MPEG4) && !g_advancedSettings.m_videoAllowMpeg4VDPAU)
+    return false;
 
   if (!dl_handle)
   {
@@ -184,10 +214,10 @@ bool CVDPAU::Open(AVCodecContext* avctx, const enum PixelFormat, unsigned int su
     SpewHardwareAvailable();
 
     VdpDecoderProfile profile = 0;
-    if(avctx->codec_id == CODEC_ID_H264)
+    if(avctx->codec_id == AV_CODEC_ID_H264)
       profile = VDP_DECODER_PROFILE_H264_HIGH;
 #ifdef VDP_DECODER_PROFILE_MPEG4_PART2_ASP
-    else if(avctx->codec_id == CODEC_ID_MPEG4)
+    else if(avctx->codec_id == AV_CODEC_ID_MPEG4)
       profile = VDP_DECODER_PROFILE_MPEG4_PART2_ASP;
 #endif
     if(profile)
@@ -213,10 +243,15 @@ bool CVDPAU::Open(AVCodecContext* avctx, const enum PixelFormat, unsigned int su
     InitCSCMatrix(avctx->coded_height);
 
     /* finally setup ffmpeg */
+    memset(&m_hwContext, 0, sizeof(AVVDPAUContext));
+    m_hwContext.render = CVDPAU::Render;
+    m_hwContext.bitstream_buffers_allocated = 0;
     avctx->get_buffer      = CVDPAU::FFGetBuffer;
     avctx->release_buffer  = CVDPAU::FFReleaseBuffer;
     avctx->draw_horiz_band = CVDPAU::FFDrawSlice;
     avctx->slice_flags=SLICE_FLAG_CODED_ORDER|SLICE_FLAG_ALLOW_FIELD;
+    avctx->hwaccel_context = &m_hwContext;
+    avctx->thread_count    = 1;
 
     g_Windowing.Register(this);
     return true;
@@ -244,6 +279,11 @@ void CVDPAU::Close()
       m_dllAvUtil.av_freep(&render->bitstream_buffers);
     render->bitstream_buffers_allocated = 0;
     free(render);
+  }
+
+  if (m_hwContext.bitstream_buffers_allocated)
+  {
+    m_dllAvUtil.av_freep(&m_hwContext.bitstream_buffers);
   }
 
   g_Windowing.Unregister(this);
@@ -471,11 +511,10 @@ int CVDPAU::Check(AVCodecContext* avctx)
 
 bool CVDPAU::IsVDPAUFormat(PixelFormat format)
 {
-  if ((format >= PIX_FMT_VDPAU_H264) && (format <= PIX_FMT_VDPAU_VC1)) return true;
-#if (defined PIX_FMT_VDPAU_MPEG4_IN_AVUTIL)
-  if (format == PIX_FMT_VDPAU_MPEG4) return true;
-#endif
-  else return false;
+  if (format == AV_PIX_FMT_VDPAU)
+    return true;
+  else
+    return false;
 }
 
 void CVDPAU::CheckFeatures()
@@ -501,8 +540,7 @@ void CVDPAU::CheckFeatures()
     tmpNoiseReduction = 0;
     tmpSharpness = 0;
 
-    VdpStatus vdp_st = VDP_STATUS_ERROR;
-    vdp_st = vdp_video_mixer_create(vdp_device,
+    VdpStatus vdp_st = vdp_video_mixer_create(vdp_device,
                                     m_feature_count,
                                     m_features,
                                     ARSIZE(parameters),
@@ -514,29 +552,29 @@ void CVDPAU::CheckFeatures()
     SetHWUpscaling();
   }
 
-  if (tmpBrightness != g_settings.m_currentVideoSettings.m_Brightness ||
-      tmpContrast   != g_settings.m_currentVideoSettings.m_Contrast)
+  if (tmpBrightness != CMediaSettings::Get().GetCurrentVideoSettings().m_Brightness ||
+      tmpContrast   != CMediaSettings::Get().GetCurrentVideoSettings().m_Contrast)
   {
     SetColor();
-    tmpBrightness = g_settings.m_currentVideoSettings.m_Brightness;
-    tmpContrast = g_settings.m_currentVideoSettings.m_Contrast;
+    tmpBrightness = CMediaSettings::Get().GetCurrentVideoSettings().m_Brightness;
+    tmpContrast = CMediaSettings::Get().GetCurrentVideoSettings().m_Contrast;
   }
-  if (tmpNoiseReduction != g_settings.m_currentVideoSettings.m_NoiseReduction)
+  if (tmpNoiseReduction != CMediaSettings::Get().GetCurrentVideoSettings().m_NoiseReduction)
   {
-    tmpNoiseReduction = g_settings.m_currentVideoSettings.m_NoiseReduction;
+    tmpNoiseReduction = CMediaSettings::Get().GetCurrentVideoSettings().m_NoiseReduction;
     SetNoiseReduction();
   }
-  if (tmpSharpness != g_settings.m_currentVideoSettings.m_Sharpness)
+  if (tmpSharpness != CMediaSettings::Get().GetCurrentVideoSettings().m_Sharpness)
   {
-    tmpSharpness = g_settings.m_currentVideoSettings.m_Sharpness;
+    tmpSharpness = CMediaSettings::Get().GetCurrentVideoSettings().m_Sharpness;
     SetSharpness();
   }
-  if (  tmpDeintMode != g_settings.m_currentVideoSettings.m_DeinterlaceMode ||
-        tmpDeintGUI  != g_settings.m_currentVideoSettings.m_InterlaceMethod ||
+  if (  tmpDeintMode != CMediaSettings::Get().GetCurrentVideoSettings().m_DeinterlaceMode ||
+        tmpDeintGUI  != CMediaSettings::Get().GetCurrentVideoSettings().m_InterlaceMethod ||
        (tmpDeintGUI == VS_INTERLACEMETHOD_AUTO && tmpDeint != AutoInterlaceMethod()))
   {
-    tmpDeintMode = g_settings.m_currentVideoSettings.m_DeinterlaceMode;
-    tmpDeintGUI  = g_settings.m_currentVideoSettings.m_InterlaceMethod;
+    tmpDeintMode = CMediaSettings::Get().GetCurrentVideoSettings().m_DeinterlaceMode;
+    tmpDeintGUI  = CMediaSettings::Get().GetCurrentVideoSettings().m_InterlaceMethod;
     if (tmpDeintGUI == VS_INTERLACEMETHOD_AUTO)
       tmpDeint = AutoInterlaceMethod();
     else
@@ -580,10 +618,10 @@ void CVDPAU::SetColor()
 {
   VdpStatus vdp_st;
 
-  if (tmpBrightness != g_settings.m_currentVideoSettings.m_Brightness)
-    m_Procamp.brightness = (float)((g_settings.m_currentVideoSettings.m_Brightness)-50) / 100;
-  if (tmpContrast != g_settings.m_currentVideoSettings.m_Contrast)
-    m_Procamp.contrast = (float)((g_settings.m_currentVideoSettings.m_Contrast)+50) / 100;
+  if (tmpBrightness != CMediaSettings::Get().GetCurrentVideoSettings().m_Brightness)
+    m_Procamp.brightness = (float)((CMediaSettings::Get().GetCurrentVideoSettings().m_Brightness)-50) / 100;
+  if (tmpContrast != CMediaSettings::Get().GetCurrentVideoSettings().m_Contrast)
+    m_Procamp.contrast = (float)((CMediaSettings::Get().GetCurrentVideoSettings().m_Contrast)+50) / 100;
 
   if(vid_height >= 600 || vid_width > 1024)
     vdp_st = vdp_generate_csc_matrix(&m_Procamp, VDP_COLOR_STANDARD_ITUR_BT_709, &m_CSCMatrix);
@@ -591,7 +629,7 @@ void CVDPAU::SetColor()
     vdp_st = vdp_generate_csc_matrix(&m_Procamp, VDP_COLOR_STANDARD_ITUR_BT_601, &m_CSCMatrix);
 
   VdpVideoMixerAttribute attributes[] = { VDP_VIDEO_MIXER_ATTRIBUTE_CSC_MATRIX };
-  if (g_guiSettings.GetBool("videoplayer.vdpaustudiolevel"))
+  if (CSettings::Get().GetBool("videoscreen.limitedrange"))
   {
     void const * pm_CSCMatix[] = { &studioCSC };
     vdp_st = vdp_video_mixer_set_attribute_values(videoMixer, ARSIZE(attributes), attributes, pm_CSCMatix);
@@ -613,7 +651,7 @@ void CVDPAU::SetNoiseReduction()
   VdpVideoMixerAttribute attributes[] = { VDP_VIDEO_MIXER_ATTRIBUTE_NOISE_REDUCTION_LEVEL };
   VdpStatus vdp_st;
 
-  if (!g_settings.m_currentVideoSettings.m_NoiseReduction)
+  if (!CMediaSettings::Get().GetCurrentVideoSettings().m_NoiseReduction)
   {
     VdpBool enabled[]= {0};
     vdp_st = vdp_video_mixer_set_feature_enables(videoMixer, ARSIZE(feature), feature, enabled);
@@ -623,8 +661,8 @@ void CVDPAU::SetNoiseReduction()
   VdpBool enabled[]={1};
   vdp_st = vdp_video_mixer_set_feature_enables(videoMixer, ARSIZE(feature), feature, enabled);
   CheckStatus(vdp_st, __LINE__);
-  void* nr[] = { &g_settings.m_currentVideoSettings.m_NoiseReduction };
-  CLog::Log(LOGNOTICE,"Setting Noise Reduction to %f",g_settings.m_currentVideoSettings.m_NoiseReduction);
+  void* nr[] = { &CMediaSettings::Get().GetCurrentVideoSettings().m_NoiseReduction };
+  CLog::Log(LOGNOTICE,"Setting Noise Reduction to %f",CMediaSettings::Get().GetCurrentVideoSettings().m_NoiseReduction);
   vdp_st = vdp_video_mixer_set_attribute_values(videoMixer, ARSIZE(attributes), attributes, nr);
   CheckStatus(vdp_st, __LINE__);
 }
@@ -638,7 +676,7 @@ void CVDPAU::SetSharpness()
   VdpVideoMixerAttribute attributes[] = { VDP_VIDEO_MIXER_ATTRIBUTE_SHARPNESS_LEVEL };
   VdpStatus vdp_st;
 
-  if (!g_settings.m_currentVideoSettings.m_Sharpness)
+  if (!CMediaSettings::Get().GetCurrentVideoSettings().m_Sharpness)
   {
     VdpBool enabled[]={0};
     vdp_st = vdp_video_mixer_set_feature_enables(videoMixer, ARSIZE(feature), feature, enabled);
@@ -648,8 +686,8 @@ void CVDPAU::SetSharpness()
   VdpBool enabled[]={1};
   vdp_st = vdp_video_mixer_set_feature_enables(videoMixer, ARSIZE(feature), feature, enabled);
   CheckStatus(vdp_st, __LINE__);
-  void* sh[] = { &g_settings.m_currentVideoSettings.m_Sharpness };
-  CLog::Log(LOGNOTICE,"Setting Sharpness to %f",g_settings.m_currentVideoSettings.m_Sharpness);
+  void* sh[] = { &CMediaSettings::Get().GetCurrentVideoSettings().m_Sharpness };
+  CLog::Log(LOGNOTICE,"Setting Sharpness to %f",CMediaSettings::Get().GetCurrentVideoSettings().m_Sharpness);
   vdp_st = vdp_video_mixer_set_attribute_values(videoMixer, ARSIZE(attributes), attributes, sh);
   CheckStatus(vdp_st, __LINE__);
 }
@@ -671,8 +709,8 @@ void CVDPAU::SetHWUpscaling()
 void CVDPAU::SetDeinterlacing()
 {
   VdpStatus vdp_st;
-  EDEINTERLACEMODE   mode = g_settings.m_currentVideoSettings.m_DeinterlaceMode;
-  EINTERLACEMETHOD method = g_settings.m_currentVideoSettings.m_InterlaceMethod;
+  EDEINTERLACEMODE   mode = CMediaSettings::Get().GetCurrentVideoSettings().m_DeinterlaceMode;
+  EINTERLACEMETHOD method = CMediaSettings::Get().GetCurrentVideoSettings().m_InterlaceMethod;
   if (method == VS_INTERLACEMETHOD_AUTO)
     method = AutoInterlaceMethod();
 
@@ -889,35 +927,34 @@ void CVDPAU::FiniVDPAUOutput()
 }
 
 
-void CVDPAU::ReadFormatOf( PixelFormat fmt
+void CVDPAU::ReadFormatOf( AVCodecID codec
                          , VdpDecoderProfile &vdp_decoder_profile
                          , VdpChromaType     &vdp_chroma_type)
 {
-  switch (fmt)
+  switch (codec)
   {
-    case PIX_FMT_VDPAU_MPEG1:
+    case AV_CODEC_ID_MPEG1VIDEO:
       vdp_decoder_profile = VDP_DECODER_PROFILE_MPEG1;
       vdp_chroma_type     = VDP_CHROMA_TYPE_420;
       break;
-    case PIX_FMT_VDPAU_MPEG2:
+    case AV_CODEC_ID_MPEG2VIDEO:
       vdp_decoder_profile = VDP_DECODER_PROFILE_MPEG2_MAIN;
       vdp_chroma_type     = VDP_CHROMA_TYPE_420;
       break;
-    case PIX_FMT_VDPAU_H264:
+    case  AV_CODEC_ID_H264:
       vdp_decoder_profile = VDP_DECODER_PROFILE_H264_HIGH;
       vdp_chroma_type     = VDP_CHROMA_TYPE_420;
       break;
-    case PIX_FMT_VDPAU_WMV3:
+    case AV_CODEC_ID_WMV3:
       vdp_decoder_profile = VDP_DECODER_PROFILE_VC1_MAIN;
       vdp_chroma_type     = VDP_CHROMA_TYPE_420;
       break;
-    case PIX_FMT_VDPAU_VC1:
+    case AV_CODEC_ID_VC1:
       vdp_decoder_profile = VDP_DECODER_PROFILE_VC1_ADVANCED;
       vdp_chroma_type     = VDP_CHROMA_TYPE_420;
       break;
-#if (defined PIX_FMT_VDPAU_MPEG4_IN_AVUTIL) && \
-    (defined VDP_DECODER_PROFILE_MPEG4_PART2_ASP)
-    case PIX_FMT_VDPAU_MPEG4:
+#if (defined VDP_DECODER_PROFILE_MPEG4_PART2_ASP)
+    case AV_CODEC_ID_MPEG4:
       vdp_decoder_profile = VDP_DECODER_PROFILE_MPEG4_PART2_ASP;
       vdp_chroma_type     = VDP_CHROMA_TYPE_420;
       break;
@@ -944,9 +981,9 @@ bool CVDPAU::ConfigVDPAU(AVCodecContext* avctx, int ref_frames)
   past[1] = past[0] = current = future = NULL;
   CLog::Log(LOGNOTICE, " (VDPAU) screenWidth:%i vidWidth:%i surfaceWidth:%i",OutWidth,vid_width,surface_width);
   CLog::Log(LOGNOTICE, " (VDPAU) screenHeight:%i vidHeight:%i surfaceHeight:%i",OutHeight,vid_height,surface_height);
-  ReadFormatOf(avctx->pix_fmt, vdp_decoder_profile, vdp_chroma_type);
+  ReadFormatOf(avctx->codec_id, vdp_decoder_profile, vdp_chroma_type);
 
-  if(avctx->pix_fmt == PIX_FMT_VDPAU_H264)
+  if(avctx->codec_id == AV_CODEC_ID_H264)
   {
      max_references = ref_frames;
      if (max_references > 16) max_references = 16;
@@ -1204,7 +1241,7 @@ int CVDPAU::FFGetBuffer(AVCodecContext *avctx, AVFrame *pic)
   {
     // create a new surface
     VdpDecoderProfile profile;
-    ReadFormatOf(avctx->pix_fmt, profile, vdp->vdp_chroma_type);
+    ReadFormatOf(avctx->codec_id, profile, vdp->vdp_chroma_type);
     render = (vdpau_render_state*)calloc(sizeof(vdpau_render_state), 1);
     if (render == NULL)
     {
@@ -1231,11 +1268,9 @@ int CVDPAU::FFGetBuffer(AVCodecContext *avctx, AVFrame *pic)
     }
   }
 
-  if (render == NULL)
-    return -1;
-
-  pic->data[1] =  pic->data[2] = NULL;
-  pic->data[0]= (uint8_t*)render;
+  pic->data[1] = pic->data[2] = NULL;
+  pic->data[0] = (uint8_t*)render;
+  pic->data[3] = (uint8_t*)(uintptr_t)render->surface;
 
   pic->linesize[0] = pic->linesize[1] =  pic->linesize[2] = 0;
 
@@ -1288,6 +1323,13 @@ void CVDPAU::FFReleaseBuffer(AVCodecContext *avctx, AVFrame *pic)
   render->state &= ~FF_VDPAU_STATE_USED_FOR_REFERENCE;
 }
 
+VdpStatus CVDPAU::Render(VdpDecoder decoder, VdpVideoSurface target,
+                         VdpPictureInfo const *picture_info,
+                         uint32_t bitstream_buffer_count,
+                         VdpBitstreamBuffer const * bitstream_buffers)
+{
+  return VDP_STATUS_OK;
+}
 
 void CVDPAU::FFDrawSlice(struct AVCodecContext *s,
                                            const AVFrame *src, int offset[4],
@@ -1330,8 +1372,8 @@ void CVDPAU::FFDrawSlice(struct AVCodecContext *s,
   }
 
   uint32_t max_refs = 0;
-  if(s->pix_fmt == PIX_FMT_VDPAU_H264)
-    max_refs = render->info.h264.num_ref_frames;
+  if(s->codec_id == AV_CODEC_ID_H264)
+    max_refs = vdp->m_hwContext.info.h264.num_ref_frames;
 
   if(vdp->decoder == VDP_INVALID_HANDLE
   || vdp->vdpauConfigured == false
@@ -1343,9 +1385,9 @@ void CVDPAU::FFDrawSlice(struct AVCodecContext *s,
 
   vdp_st = vdp->vdp_decoder_render(vdp->decoder,
                                    render->surface,
-                                   (VdpPictureInfo const *)&(render->info),
-                                   render->bitstream_buffers_used,
-                                   render->bitstream_buffers);
+                                   (VdpPictureInfo const *)&(vdp->m_hwContext.info),
+                                   vdp->m_hwContext.bitstream_buffers_used,
+                                   vdp->m_hwContext.bitstream_buffers);
   vdp->CheckStatus(vdp_st, __LINE__);
 }
 
@@ -1381,8 +1423,8 @@ int CVDPAU::Decode(AVCodecContext *avctx, AVFrame *pFrame)
     outRectVid.y1 = OutHeight;
   }
 
-  EDEINTERLACEMODE   mode = g_settings.m_currentVideoSettings.m_DeinterlaceMode;
-  EINTERLACEMETHOD method = g_settings.m_currentVideoSettings.m_InterlaceMethod;
+  EDEINTERLACEMODE   mode = CMediaSettings::Get().GetCurrentVideoSettings().m_DeinterlaceMode;
+  EINTERLACEMETHOD method = CMediaSettings::Get().GetCurrentVideoSettings().m_InterlaceMethod;
   if (method == VS_INTERLACEMETHOD_AUTO)
     method = AutoInterlaceMethod();
 
@@ -1516,7 +1558,7 @@ int CVDPAU::Decode(AVCodecContext *avctx, AVFrame *pFrame)
     }
   }
 
-  vdp_st = vdp_presentation_queue_block_until_surface_idle(vdp_flip_queue,outputSurface,&time);
+  vdp_presentation_queue_block_until_surface_idle(vdp_flip_queue,outputSurface,&time);
 
   VdpRect sourceRect = {0,0,vid_width, vid_height};
 

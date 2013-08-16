@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,8 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, write to
- *  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
- *  http://www.gnu.org/copyleft/gpl.html
+ *  along with XBMC; see the file COPYING.  If not, see
+ *  <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -25,6 +24,9 @@
 #include "AddonString.h"
 #include "AddonClass.h"
 #include "LanguageHook.h"
+#include "commons/Buffer.h"
+
+#include <algorithm>
 
 namespace XBMCAddon
 {
@@ -54,31 +56,51 @@ namespace XBMCAddon
 
       inline ~File() { delete file; }
 
-#ifndef SWIG
       /**
        * read(bytes)
        * 
-       * bytes : how many bytes to read [opt]- if not set it will read the whole fi
+       * bytes : how many bytes to read [opt]- if not set it will read the whole file
+       *
+       * returns: string
        * 
        * example:
        *  f = xbmcvfs.File(file)
        *  b = f.read()
        *  f.close()
        */
-      unsigned long read(void* buffer, unsigned long numBytes = 0);
-#endif
+      inline String read(unsigned long numBytes = 0) 
+      { 
+        XbmcCommons::Buffer b = readBytes(numBytes);
+        return b.getString(numBytes == 0 ? b.remaining() : std::min((unsigned long)b.remaining(),numBytes));
+      }
+
+      /**
+       * readBytes(numbytes)
+       * 
+       * numbytes : how many bytes to read [opt]- if not set it will read the whole file
+       *
+       * returns: bytearray
+       * 
+       * example:
+       *  f = xbmcvfs.File(file)
+       *  b = f.read()
+       *  f.close()
+       */
+      XbmcCommons::Buffer readBytes(unsigned long numBytes = 0);
 
       /**
        * write(buffer)
        * 
-       * buffer : buffer to write to fi
+       * buffer : buffer to write to file
+       *
+       * returns: true on success.
        * 
        * example:
        *  f = xbmcvfs.File(file, 'w', True)
        *  result = f.write(buffer)
        *  f.close()
        */
-      bool write(const char* file);
+      bool write(XbmcCommons::Buffer& buffer);
 
       /**
        * size()

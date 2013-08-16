@@ -1,6 +1,6 @@
 #pragma once
 /*
- *      Copyright (C) 2011-2012 Team XBMC
+ *      Copyright (C) 2011-2013 Team XBMC
  *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
@@ -73,7 +73,7 @@ public:
 
   virtual void Pause();
   virtual void Resume();
-  virtual void Drain();
+  virtual void Drain(bool wait);
   virtual void Flush();
 
   virtual float GetVolume();

@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2012-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,8 +23,9 @@
  * - use Observable here, so we can use event driven operations later
  */
 
-#include "settings/GUISettings.h"
 #include "settings/AdvancedSettings.h"
+#include "settings/Setting.h"
+#include "settings/Settings.h"
 #include "guilib/GUIWindowManager.h"
 #include "dialogs/GUIDialogYesNo.h"
 #include "dialogs/GUIDialogOK.h"
@@ -49,7 +50,8 @@ CPVRChannelGroup::CPVRChannelGroup(void) :
     m_iGroupId(-1),
     m_bLoaded(false),
     m_bChanged(false),
-    m_bUsingBackendChannelOrder(false)
+    m_bUsingBackendChannelOrder(false),
+    m_bPreventSortAndRenumber(false)
 {
 }
 
@@ -60,7 +62,8 @@ CPVRChannelGroup::CPVRChannelGroup(bool bRadio, unsigned int iGroupId, const CSt
     m_strGroupName(strGroupName),
     m_bLoaded(false),
     m_bChanged(false),
-    m_bUsingBackendChannelOrder(false)
+    m_bUsingBackendChannelOrder(false),
+    m_bPreventSortAndRenumber(false)
 {
 }
 
@@ -71,7 +74,8 @@ CPVRChannelGroup::CPVRChannelGroup(const PVR_CHANNEL_GROUP &group) :
     m_strGroupName(group.strGroupName),
     m_bLoaded(false),
     m_bChanged(false),
-    m_bUsingBackendChannelOrder(false)
+    m_bUsingBackendChannelOrder(false),
+    m_bPreventSortAndRenumber(false)
 {
 }
 
@@ -108,19 +112,24 @@ CPVRChannelGroup::CPVRChannelGroup(const CPVRChannelGroup &group)
     m_members.push_back(group.m_members.at(iPtr));
 }
 
-int CPVRChannelGroup::Load(void)
+bool CPVRChannelGroup::Load(void)
 {
   /* make sure this container is empty before loading */
   Unload();
 
-  m_bUsingBackendChannelOrder   = g_guiSettings.GetBool("pvrmanager.backendchannelorder");
-  m_bUsingBackendChannelNumbers = g_guiSettings.GetBool("pvrmanager.usebackendchannelnumbers");
+  m_bUsingBackendChannelOrder   = CSettings::Get().GetBool("pvrmanager.backendchannelorder");
+  m_bUsingBackendChannelNumbers = CSettings::Get().GetBool("pvrmanager.usebackendchannelnumbers");
 
   int iChannelCount = m_iGroupId > 0 ? LoadFromDb() : 0;
   CLog::Log(LOGDEBUG, "PVRChannelGroup - %s - %d channels loaded from the database for group '%s'",
         __FUNCTION__, iChannelCount, m_strGroupName.c_str());
 
-  Update();
+  if (!Update())
+  {
+    CLog::Log(LOGERROR, "PVRChannelGroup - %s - failed to update channels", __FUNCTION__);
+    return false;
+  }
+
   if (Size() - iChannelCount > 0)
   {
     CLog::Log(LOGDEBUG, "PVRChannelGroup - %s - %d channels added from clients to group '%s'",
@@ -129,26 +138,25 @@ int CPVRChannelGroup::Load(void)
 
   SortAndRenumber();
 
-  g_guiSettings.RegisterObserver(this);
   m_bLoaded = true;
 
-  return Size();
+  return true;
 }
 
 void CPVRChannelGroup::Unload(void)
 {
   CSingleLock lock(m_critSection);
-  g_guiSettings.UnregisterObserver(this);
   m_members.clear();
 }
 
 bool CPVRChannelGroup::Update(void)
 {
   if (GroupType() == PVR_GROUP_TYPE_USER_DEFINED ||
-      !g_guiSettings.GetBool("pvrmanager.syncchannelgroups"))
-    return false;
+      !CSettings::Get().GetBool("pvrmanager.syncchannelgroups"))
+    return true;
 
   CPVRChannelGroup PVRChannels_tmp(m_bRadio, m_iGroupId, m_strGroupName);
+  PVRChannels_tmp.SetPreventSortAndRenumber();
   PVRChannels_tmp.LoadFromClients();
 
   return UpdateGroupEntries(PVRChannels_tmp);
@@ -231,7 +239,7 @@ bool CPVRChannelGroup::SetChannelIconPath(CPVRChannelPtr channel, const std::str
 
 void CPVRChannelGroup::SearchAndSetChannelIcons(bool bUpdateDb /* = false */)
 {
-  if (g_guiSettings.GetString("pvrmenu.iconpath").IsEmpty())
+  if (CSettings::Get().GetString("pvrmenu.iconpath").empty())
     return;
 
   CPVRDatabase *database = GetPVRDatabase();
@@ -248,7 +256,7 @@ void CPVRChannelGroup::SearchAndSetChannelIcons(bool bUpdateDb /* = false */)
     if (!groupMember.channel->IconPath().IsEmpty())
       continue;
 
-    CStdString strBasePath = g_guiSettings.GetString("pvrmenu.iconpath");
+    CStdString strBasePath = CSettings::Get().GetString("pvrmenu.iconpath");
     CStdString strSanitizedChannelName = CUtil::MakeLegalFileName(groupMember.channel->ClientChannelName());
 
     CStdString strIconPath = strBasePath + strSanitizedChannelName;
@@ -296,6 +304,9 @@ struct sortByChannelNumber
 
 bool CPVRChannelGroup::SortAndRenumber(void)
 {
+  if (PreventSortAndRenumber())
+    return true;
+
   CSingleLock lock(m_critSection);
   if (m_bUsingBackendChannelOrder)
     SortByClientChannelNumber();
@@ -310,13 +321,15 @@ bool CPVRChannelGroup::SortAndRenumber(void)
 void CPVRChannelGroup::SortByClientChannelNumber(void)
 {
   CSingleLock lock(m_critSection);
-  sort(m_members.begin(), m_members.end(), sortByClientChannelNumber());
+  if (!PreventSortAndRenumber())
+    sort(m_members.begin(), m_members.end(), sortByClientChannelNumber());
 }
 
 void CPVRChannelGroup::SortByChannelNumber(void)
 {
   CSingleLock lock(m_critSection);
-  sort(m_members.begin(), m_members.end(), sortByChannelNumber());
+  if (!PreventSortAndRenumber())
+    sort(m_members.begin(), m_members.end(), sortByChannelNumber());
 }
 
 /********** getters **********/
@@ -571,20 +584,19 @@ int CPVRChannelGroup::LoadFromDb(bool bCompress /* = false */)
   return Size() - iChannelCount;
 }
 
-int CPVRChannelGroup::LoadFromClients(void)
+bool CPVRChannelGroup::LoadFromClients(void)
 {
-  int iCurSize = Size();
-
   /* get the channels from the backends */
-  g_PVRClients->GetChannelGroupMembers(this);
-
-  return Size() - iCurSize;
+  return g_PVRClients->GetChannelGroupMembers(this) == PVR_ERROR_NO_ERROR;
 }
 
 bool CPVRChannelGroup::AddAndUpdateChannels(const CPVRChannelGroup &channels, bool bUseBackendChannelNumbers)
 {
   bool bReturn(false);
+  bool bPreventSortAndRenumber(PreventSortAndRenumber());
   CSingleLock lock(m_critSection);
+
+  SetPreventSortAndRenumber();
 
   /* go through the channel list and check for new channels.
      channels will only by updated in CPVRChannelGroupInternal to prevent dupe updates */
@@ -603,13 +615,16 @@ bool CPVRChannelGroup::AddAndUpdateChannels(const CPVRChannelGroup &channels, bo
     if (!IsGroupMember(*existingChannel))
     {
       int iChannelNumber = bUseBackendChannelNumbers ? member.channel->ClientChannelNumber() : 0;
-      AddToGroup(*existingChannel, iChannelNumber, false);
+      AddToGroup(*existingChannel, iChannelNumber);
 
       bReturn = true;
       CLog::Log(LOGINFO,"PVRChannelGroup - %s - added %s channel '%s' at position %d in group '%s'",
           __FUNCTION__, m_bRadio ? "radio" : "TV", existingChannel->ChannelName().c_str(), iChannelNumber, GroupName().c_str());
     }
   }
+
+  SetPreventSortAndRenumber(bPreventSortAndRenumber);
+  SortAndRenumber();
 
   return bReturn;
 }
@@ -752,7 +767,7 @@ bool CPVRChannelGroup::RemoveFromGroup(const CPVRChannel &channel)
   return bReturn;
 }
 
-bool CPVRChannelGroup::AddToGroup(CPVRChannel &channel, int iChannelNumber /* = 0 */, bool bSortAndRenumber /* = true */)
+bool CPVRChannelGroup::AddToGroup(CPVRChannel &channel, int iChannelNumber /* = 0 */)
 {
   CSingleLock lock(m_critSection);
 
@@ -773,8 +788,7 @@ bool CPVRChannelGroup::AddToGroup(CPVRChannel &channel, int iChannelNumber /* = 
       m_members.push_back(newMember);
       m_bChanged = true;
 
-      if (bSortAndRenumber)
-        SortAndRenumber();
+      SortAndRenumber();
 
       // TODO notify observers
       bReturn = true;
@@ -869,7 +883,11 @@ bool CPVRChannelGroup::Renumber(void)
 {
   bool bReturn(false);
   unsigned int iChannelNumber(0);
-  bool bUseBackendChannelNumbers(g_guiSettings.GetBool("pvrmanager.usebackendchannelnumbers") && g_PVRClients->EnabledClientAmount() == 1);
+  bool bUseBackendChannelNumbers(CSettings::Get().GetBool("pvrmanager.usebackendchannelnumbers") && g_PVRClients->EnabledClientAmount() == 1);
+
+  if (PreventSortAndRenumber())
+    return true;
+
   CSingleLock lock(m_critSection);
 
   for (unsigned int iChannelPtr = 0; iChannelPtr < m_members.size();  iChannelPtr++)
@@ -959,18 +977,30 @@ void CPVRChannelGroup::ResetChannelNumbers(void)
     m_members.at(iChannelPtr).channel->SetCachedChannelNumber(0);
 }
 
-void CPVRChannelGroup::Notify(const Observable &obs, const ObservableMessage msg)
+void CPVRChannelGroup::OnSettingChanged(const CSetting *setting)
 {
-  if (msg == ObservableMessageGuiSettings)
+  if (setting == NULL)
+    return;
+
+  /* TODO: while pvr manager is starting up do accept setting changes. */
+  if(!g_PVRManager.IsStarted())
+  {
+    CLog::Log(LOGWARNING, "CPVRChannelGroup setting change ignored while PVRManager is starting\n");
+    return;
+  }
+
+  const std::string &settingId = setting->GetId();
+  if (settingId == "pvrmanager.backendchannelorder" || settingId == "pvrmanager.usebackendchannelnumbers")
   {
     CSingleLock lock(m_critSection);
-    bool bUsingBackendChannelOrder   = g_guiSettings.GetBool("pvrmanager.backendchannelorder");
-    bool bUsingBackendChannelNumbers = g_guiSettings.GetBool("pvrmanager.usebackendchannelnumbers");
+    bool bUsingBackendChannelOrder   = CSettings::Get().GetBool("pvrmanager.backendchannelorder");
+    bool bUsingBackendChannelNumbers = CSettings::Get().GetBool("pvrmanager.usebackendchannelnumbers");
     bool bChannelNumbersChanged      = m_bUsingBackendChannelNumbers != bUsingBackendChannelNumbers;
     bool bChannelOrderChanged        = m_bUsingBackendChannelOrder != bUsingBackendChannelOrder;
 
     m_bUsingBackendChannelOrder   = bUsingBackendChannelOrder;
     m_bUsingBackendChannelNumbers = bUsingBackendChannelNumbers;
+    lock.Leave();
 
     /* check whether this channel group has to be renumbered */
     if (bChannelOrderChanged || bChannelNumbersChanged)
@@ -1069,10 +1099,16 @@ int CPVRChannelGroup::GetEPGAll(CFileItemList &results)
 
   for (unsigned int iChannelPtr = 0; iChannelPtr < m_members.size(); iChannelPtr++)
   {
-    if (!m_members.at(iChannelPtr).channel || m_members.at(iChannelPtr).channel->IsHidden())
-      continue;
-
-    m_members.at(iChannelPtr).channel->GetEPG(results);
+    if (m_members.at(iChannelPtr).channel && !m_members.at(iChannelPtr).channel->IsHidden())
+    {
+      CEpg* epg = m_members.at(iChannelPtr).channel->GetEPG();
+      if (epg)
+      {
+        // XXX channel pointers aren't set in some occasions. this works around the issue, but is not very nice
+        epg->SetChannel(m_members.at(iChannelPtr).channel);
+        epg->Get(results);
+      }
+    }
   }
 
   return results.Size() - iInitialSize;
@@ -1109,6 +1145,18 @@ CStdString CPVRChannelGroup::GroupName(void) const
   CSingleLock lock(m_critSection);
   CStdString strReturn(m_strGroupName);
   return strReturn;
+}
+
+bool CPVRChannelGroup::PreventSortAndRenumber(void) const
+{
+  CSingleLock lock(m_critSection);
+  return m_bPreventSortAndRenumber;
+}
+
+void CPVRChannelGroup::SetPreventSortAndRenumber(bool bPreventSortAndRenumber /* = true */)
+{
+  CSingleLock lock(m_critSection);
+  m_bPreventSortAndRenumber = bPreventSortAndRenumber;
 }
 
 bool CPVRChannelGroup::UpdateChannel(const CFileItem &item, bool bHidden, bool bVirtual, bool bEPGEnabled, bool bParentalLocked, int iEPGSource, int iChannelNumber, const CStdString &strChannelName, const CStdString &strIconPath, const CStdString &strStreamURL)

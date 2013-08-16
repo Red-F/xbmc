@@ -9,8 +9,8 @@
 #pragma once
 
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,6 +32,8 @@
 #include "IWindowManagerCallback.h"
 #include "IMsgTargetCallback.h"
 #include "DirtyRegionTracker.h"
+#include "utils/GlobalsHandling.h"
+#include <list>
 
 class CGUIDialog;
 
@@ -90,6 +92,10 @@ public:
    */
   bool Render();
 
+  /*! \brief Do any post render activities.
+   */
+  void AfterRender();
+
   /*! \brief Per-frame updating of the current window and any dialogs
    FrameMove is called every frame to update the current window and any dialogs
    on screen. It should only be called from the application thread.
@@ -113,9 +119,11 @@ public:
   void RemoveDialog(int id);
   int GetTopMostModalDialogID(bool ignoreClosing = false) const;
 
-  void SendThreadMessage(CGUIMessage& message);
-  void SendThreadMessage(CGUIMessage& message, int window);
+  void SendThreadMessage(CGUIMessage& message, int window = 0);
   void DispatchThreadMessages();
+  // method to removed queued messages with message id in the requested message id list.
+  // pMessageIDList: point to first integer of a 0 ends integer array.
+  int RemoveThreadMessageByMessageIds(int *pMessageIDList);
   void AddMsgTarget( IMsgTargetCallback* pMsgTarget );
   int GetActiveWindow() const;
   int GetFocusedWindow() const;
@@ -160,7 +168,7 @@ private:
   std::stack<int> m_windowHistory;
 
   IWindowManagerCallback* m_pCallback;
-  std::vector < std::pair<CGUIMessage*,int> > m_vecThreadMessages;
+  std::list < std::pair<CGUIMessage*,int> > m_vecThreadMessages;
   CCriticalSection m_critSection;
   std::vector <IMsgTargetCallback*> m_vecMsgTargets;
 
@@ -175,6 +183,7 @@ private:
  \ingroup winman
  \brief
  */
-extern CGUIWindowManager g_windowManager;
+XBMC_GLOBAL_REF(CGUIWindowManager,g_windowManager);
+#define g_windowManager XBMC_GLOBAL_USE(CGUIWindowManager)
 #endif
 

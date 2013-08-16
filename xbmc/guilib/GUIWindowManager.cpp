@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,13 +27,13 @@
 #include "GUIInfoManager.h"
 #include "threads/SingleLock.h"
 #include "utils/URIUtils.h"
-#include "settings/GUISettings.h"
-#include "settings/Settings.h"
 #include "settings/AdvancedSettings.h"
+#include "settings/Settings.h"
 #include "addons/Skin.h"
 #include "GUITexture.h"
 #include "windowing/WindowingFactory.h"
 #include "utils/Variant.h"
+#include "Key.h"
 
 using namespace std;
 
@@ -156,6 +156,9 @@ bool CGUIWindowManager::SendMessage(CGUIMessage& message)
 
 bool CGUIWindowManager::SendMessage(CGUIMessage& message, int window)
 {
+  if (window == 0)
+    // send to no specified windows.
+    return SendMessage(message);
   CGUIWindow* pWindow = GetWindow(window);
   if(pWindow)
     return pWindow->OnMessage(message);
@@ -357,7 +360,7 @@ void CGUIWindowManager::ActivateWindow_Internal(int iWindowID, const vector<CStd
   // virtual music window which returns the last open music window (aka the music start window)
   if (iWindowID == WINDOW_MUSIC)
   {
-    iWindowID = g_settings.m_iMyMusicStartWindow;
+    iWindowID = CSettings::Get().GetInt("mymusic.startwindow");
     // ensure the music virtual window only returns music files and music library windows
     if (iWindowID != WINDOW_MUSIC_NAV)
       iWindowID = WINDOW_MUSIC_FILES;
@@ -508,11 +511,8 @@ void CGUIWindowManager::Process(unsigned int currentTime)
       pWindow->DoProcess(currentTime, dirtyregions);
   }
 
-  if (g_application.m_AppActive)
-  {
-    for (CDirtyRegionList::iterator itr = dirtyregions.begin(); itr != dirtyregions.end(); itr++)
-      m_tracker.MarkDirtyRegion(*itr);
-  }
+  for (CDirtyRegionList::iterator itr = dirtyregions.begin(); itr != dirtyregions.end(); itr++)
+    m_tracker.MarkDirtyRegion(*itr);
 }
 
 void CGUIWindowManager::MarkDirty()
@@ -591,9 +591,24 @@ bool CGUIWindowManager::Render()
       CGUITexture::DrawQuad(*i, 0x4c00ff00);
   }
 
+  return hasRendered;
+}
+
+void CGUIWindowManager::AfterRender()
+{
   m_tracker.CleanMarkedRegions();
 
-  return hasRendered;
+  CGUIWindow* pWindow = GetWindow(GetActiveWindow());
+  if (pWindow)
+    pWindow->AfterRender();
+
+  // make copy of vector as we may remove items from it as we go
+  vector<CGUIWindow *> activeDialogs = m_activeDialogs;
+  for (iDialog it = activeDialogs.begin(); it != activeDialogs.end(); ++it)
+  {
+    if ((*it)->IsDialogRunning())
+      (*it)->AfterRender();
+  }
 }
 
 void CGUIWindowManager::FrameMove()
@@ -621,6 +636,8 @@ void CGUIWindowManager::FrameMove()
   vector<CGUIWindow *> dialogs = m_activeDialogs;
   for (iDialog it = dialogs.begin(); it != dialogs.end(); ++it)
     (*it)->FrameMove();
+
+  g_infoManager.m_AVInfoValid = false;
 }
 
 CGUIWindow* CGUIWindowManager::GetWindow(int id) const
@@ -751,15 +768,7 @@ int CGUIWindowManager::GetTopMostModalDialogID(bool ignoreClosing /*= false*/) c
   return WINDOW_INVALID;
 }
 
-void CGUIWindowManager::SendThreadMessage(CGUIMessage& message)
-{
-  CSingleLock lock(m_critSection);
-
-  CGUIMessage* msg = new CGUIMessage(message);
-  m_vecThreadMessages.push_back( pair<CGUIMessage*,int>(msg,0) );
-}
-
-void CGUIWindowManager::SendThreadMessage(CGUIMessage& message, int window)
+void CGUIWindowManager::SendThreadMessage(CGUIMessage& message, int window /*= 0*/)
 {
   CSingleLock lock(m_critSection);
 
@@ -769,26 +778,72 @@ void CGUIWindowManager::SendThreadMessage(CGUIMessage& message, int window)
 
 void CGUIWindowManager::DispatchThreadMessages()
 {
+  // This method only be called in the xbmc main thread.
+
+  // XXX: for more info of this method
+  //      check the pr here: https://github.com/xbmc/xbmc/pull/2253
+
+  // As a thread message queue service, it should follow these rules:
+  // 1. [Must] Thread safe, message can be pushed into queue in arbitrary thread context.
+  // 2. Messages [must] be processed in dispatch message thread context with the same
+  //    order as they be pushed into the queue.
+  // 3. Dispatch function [must] support call itself during message process procedure,
+  //    and do not break other rules listed here. to make it clear: in the
+  //    SendMessage(), it could start another xbmc main thread loop, calling
+  //    DispatchThreadMessages() in it's internal loop, this must be supported.
+  // 4. During DispatchThreadMessages() processing, any new pushed message [should] not
+  //    be processed by the current loop in DispatchThreadMessages(), prevent dead loop.
+  // 5. If possible, queued messages can be removed by certain filter condition
+  //    and not break above.
+
   CSingleLock lock(m_critSection);
-  vector< pair<CGUIMessage*,int> > messages(m_vecThreadMessages);
-  m_vecThreadMessages.erase(m_vecThreadMessages.begin(), m_vecThreadMessages.end());
-  lock.Leave();
 
-  while ( messages.size() > 0 )
+  for(int msgCount = m_vecThreadMessages.size(); m_vecThreadMessages.size() > 0 && msgCount > 0; --msgCount)
   {
-    vector< pair<CGUIMessage*,int> >::iterator it = messages.begin();
-    CGUIMessage* pMsg = it->first;
-    int window = it->second;
-    // first remove the message from the queue,
-    // else the message could be processed more then once
-    it = messages.erase(it);
+    // pop up one message per time to make messages be processed by order.
+    // this will ensure rule No.2 & No.3
+    CGUIMessage *pMsg = m_vecThreadMessages.front().first;
+    int window = m_vecThreadMessages.front().second;
+    m_vecThreadMessages.pop_front();
 
+    lock.Leave();
+
+    // XXX: during SendMessage(), there could be a deeper 'xbmc main loop' inited by e.g. doModal
+    //      which may loop there and callback to DispatchThreadMessages() multiple times.
     if (window)
       SendMessage( *pMsg, window );
     else
       SendMessage( *pMsg );
     delete pMsg;
+
+    lock.Enter();
   }
+}
+
+int CGUIWindowManager::RemoveThreadMessageByMessageIds(int *pMessageIDList)
+{
+  CSingleLock lock(m_critSection);
+  int removedMsgCount = 0;
+  for (std::list < std::pair<CGUIMessage*,int> >::iterator it = m_vecThreadMessages.begin();
+       it != m_vecThreadMessages.end();)
+  {
+    CGUIMessage *pMsg = it->first;
+    int *pMsgID;
+    for(pMsgID = pMessageIDList; *pMsgID != 0; ++pMsgID)
+      if (pMsg->GetMessage() == *pMsgID)
+        break;
+    if (*pMsgID)
+    {
+      it = m_vecThreadMessages.erase(it);
+      delete pMsg;
+      ++removedMsgCount;
+    }
+    else
+    {
+      ++it;
+    }
+  }
+  return removedMsgCount;
 }
 
 void CGUIWindowManager::AddMsgTarget( IMsgTargetCallback* pMsgTarget )

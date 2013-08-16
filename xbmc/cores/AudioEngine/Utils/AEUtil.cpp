@@ -1,5 +1,5 @@
 /*
- *      Copyright (C) 2010-2012 Team XBMC
+ *      Copyright (C) 2010-2013 Team XBMC
  *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
@@ -30,7 +30,7 @@ using namespace std;
 
 /* declare the rng seed and initialize it */
 unsigned int CAEUtil::m_seed = (unsigned int)(CurrentHostCounter() / 1000.0f);
-#ifdef __SSE__
+#ifdef __SSE2__
   /* declare the SSE seed and initialize it */
   MEMALIGN(16, __m128i CAEUtil::m_sseSeed) = _mm_set_epi32(CAEUtil::m_seed, CAEUtil::m_seed+1, CAEUtil::m_seed, CAEUtil::m_seed+1);
 #endif
@@ -82,26 +82,33 @@ const unsigned int CAEUtil::DataFormatToBits(const enum AEDataFormat dataFormat)
   static const unsigned int formats[AE_FMT_MAX] =
   {
     8,                   /* U8     */
+    8,                   /* U8P    */
     8,                   /* S8     */
 
     16,                  /* S16BE  */
     16,                  /* S16LE  */
     16,                  /* S16NE  */
+    16,                  /* S16NEP */
 
     32,                  /* S32BE  */
     32,                  /* S32LE  */
     32,                  /* S32NE  */
+    32,                  /* S32NEP */
 
     32,                  /* S24BE  */
     32,                  /* S24LE  */
     32,                  /* S24NE  */
+    32,                  /* S24NEP */
 
     24,                  /* S24BE3 */
     24,                  /* S24LE3 */
     24,                  /* S24NE3 */
+    24,                  /* S24NE3P*/
 
     sizeof(double) << 3, /* DOUBLE */
+    sizeof(double) << 3, /* DOUBLEP */
     sizeof(float ) << 3, /* FLOAT  */
+    sizeof(float ) << 3, /* FLOATP  */
 
     16,                  /* AAC    */
     16,                  /* AC3    */
@@ -123,26 +130,33 @@ const char* CAEUtil::DataFormatToStr(const enum AEDataFormat dataFormat)
   static const char *formats[AE_FMT_MAX] =
   {
     "AE_FMT_U8",
+    "AE_FMT_U8P",
     "AE_FMT_S8",
 
     "AE_FMT_S16BE",
     "AE_FMT_S16LE",
     "AE_FMT_S16NE",
+    "AE_FMT_S16NEP",
 
     "AE_FMT_S32BE",
     "AE_FMT_S32LE",
     "AE_FMT_S32NE",
+    "AE_FMT_S32NEP",
 
     "AE_FMT_S24BE4",
     "AE_FMT_S24LE4",
     "AE_FMT_S24NE4",  /* S24 in 4 bytes */
+    "AE_FMT_S24NE4P",
 
     "AE_FMT_S24BE3",
     "AE_FMT_S24LE3",
     "AE_FMT_S24NE3", /* S24 in 3 bytes */
+    "AE_FMT_S24NE3P",
 
     "AE_FMT_DOUBLE",
+    "AE_FMT_DOUBLEP",
     "AE_FMT_FLOAT",
+    "AE_FMT_FLOATP",
 
     /* for passthrough streams and the like */
     "AE_FMT_AAC",
@@ -386,7 +400,7 @@ float CAEUtil::FloatRand1(const float min, const float max)
 
 void CAEUtil::FloatRand4(const float min, const float max, float result[4], __m128 *sseresult/* = NULL */)
 {
-  #ifdef __SSE__
+  #ifdef __SSE2__
     /*
       this method may be called from other SSE code, we need
       to calculate the delta & factor using SSE as the FPU

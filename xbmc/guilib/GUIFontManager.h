@@ -9,8 +9,8 @@
 #pragma once
 
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,12 +30,14 @@
 
 #include "GraphicContext.h"
 #include "IMsgTargetCallback.h"
+#include "utils/GlobalsHandling.h"
 
 // Forward
 class CGUIFont;
 class CGUIFontTTFBase;
 class CXBMCTinyXML;
 class TiXmlNode;
+class CSetting;
 
 struct OrigFontInfo
 {
@@ -81,6 +83,8 @@ public:
   void ReloadTTFFonts();
   void UnloadTTFFonts();
 
+  static void SettingOptionsFontsFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current);
+
 protected:
   void RescaleFontSizeAndAspect(float *size, float *aspect, const RESOLUTION_INFO &sourceRes, bool preserveAspect) const;
   void LoadFonts(const TiXmlNode* fontNode);
@@ -99,5 +103,6 @@ protected:
  \ingroup textures
  \brief
  */
-extern GUIFontManager g_fontManager;
+XBMC_GLOBAL_REF(GUIFontManager, g_fontManager);
+#define g_fontManager XBMC_GLOBAL_USE(GUIFontManager)
 #endif

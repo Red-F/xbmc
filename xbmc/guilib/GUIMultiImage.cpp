@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,9 +24,10 @@
 #include "utils/URIUtils.h"
 #include "utils/JobManager.h"
 #include "FileItem.h"
-#include "settings/Settings.h"
+#include "settings/AdvancedSettings.h"
 #include "Key.h"
 #include "TextureCache.h"
+#include "WindowIDs.h"
 
 using namespace std;
 using namespace XFILE;
@@ -297,6 +298,7 @@ bool CGUIMultiImage::CMultiImageJob::DoWork()
 {
   // check to see if we have a single image or a folder of images
   CFileItem item(m_path, false);
+  item.FillInMimeType();
   if (item.IsPicture() || item.GetMimeType().Left(6).Equals("image/"))
   {
     m_files.push_back(m_path);
@@ -311,7 +313,7 @@ bool CGUIMultiImage::CMultiImageJob::DoWork()
 
     URIUtils::AddSlashAtEnd(realPath);
     CFileItemList items;
-    CDirectory::GetDirectory(realPath, items, g_settings.m_pictureExtensions + "|.tbn|.dds", DIR_FLAG_NO_FILE_DIRS | DIR_FLAG_NO_FILE_INFO);
+    CDirectory::GetDirectory(realPath, items, g_advancedSettings.m_pictureExtensions + "|.tbn|.dds", DIR_FLAG_NO_FILE_DIRS | DIR_FLAG_NO_FILE_INFO);
     for (int i=0; i < items.Size(); i++)
     {
       CFileItem* pItem = items[i].get();

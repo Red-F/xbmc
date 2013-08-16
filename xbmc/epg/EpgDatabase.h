@@ -1,7 +1,7 @@
 #pragma once
 /*
- *      Copyright (C) 2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2012-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -137,6 +137,11 @@ namespace EPG
      * @return The database ID of this entry or 0 if bSingleUpdate is false and the query was queued.
      */
     virtual int Persist(const CEpgInfoTag &tag, bool bSingleUpdate = true);
+
+    /*!
+     * @return Last EPG id in the database
+     */
+    int GetLastEPGId(void);
 
     //@}
 

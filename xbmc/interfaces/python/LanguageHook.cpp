@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,8 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with XBMC; see the file COPYING.  If not, write to
- *  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
- *  http://www.gnu.org/copyleft/gpl.html
+ *  along with XBMC; see the file COPYING.  If not, see
+ *  <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -35,7 +34,7 @@ namespace XBMCAddon
     static AddonClass::Ref<LanguageHook> instance;
 
     static CCriticalSection hooksMutex;
-    std::map<PyInterpreterState*,AddonClass::Ref<LanguageHook> > LanguageHook::hooks;
+    static std::map<PyInterpreterState*,AddonClass::Ref<LanguageHook> > hooks;
 
     // vtab instantiation
     LanguageHook::~LanguageHook()
@@ -76,18 +75,32 @@ namespace XBMCAddon
       hooks.erase(m_interp);
     }
 
+    static AddonClass::Ref<XBMCAddon::Python::LanguageHook> g_languageHook;
+
+    // Ok ... we're going to get it even if it doesn't exist. If it doesn't exist then
+    // we're going to assume we're not in control of the interpreter. This (apparently)
+    // can be the case. E.g. Libspotify manages to call into a script using a ctypes
+    // extention but under the control of an Interpreter we know nothing about. In
+    // cases like this we're going to use a global interpreter 
     AddonClass::Ref<LanguageHook> LanguageHook::GetIfExists(PyInterpreterState* interp)
     {
       TRACE;
       CSingleLock lock(hooksMutex);
       std::map<PyInterpreterState*,AddonClass::Ref<LanguageHook> >::iterator iter = hooks.find(interp);
-      return iter == hooks.end() ? AddonClass::Ref<LanguageHook>(NULL) : AddonClass::Ref<LanguageHook>(iter->second);
+      if (iter != hooks.end())
+        return AddonClass::Ref<LanguageHook>(iter->second);
+
+      // if we got here then we need to use the global one.
+      if (g_languageHook.isNull())
+        g_languageHook = new XBMCAddon::Python::LanguageHook();
+
+      return g_languageHook;
     }
 
     bool LanguageHook::IsAddonClassInstanceRegistered(AddonClass* obj)
     {
       for (std::map<PyInterpreterState*,AddonClass::Ref<LanguageHook> >::iterator iter = hooks.begin();
-           iter != hooks.end(); iter++)
+           iter != hooks.end(); ++iter)
       {
         if ((iter->second)->HasRegisteredAddonClassInstance(obj))
           return true;
@@ -158,6 +171,7 @@ namespace XBMCAddon
     {
       TRACE;
       Synchronize l(*this);
+      obj->Acquire();
       currentObjects.insert(obj);
     }
 
@@ -165,7 +179,8 @@ namespace XBMCAddon
     {
       TRACE;
       Synchronize l(*this);
-      currentObjects.erase(obj);
+      if (currentObjects.erase(obj) > 0)
+        obj->Release();
     }
 
     bool LanguageHook::HasRegisteredAddonClassInstance(AddonClass* obj)

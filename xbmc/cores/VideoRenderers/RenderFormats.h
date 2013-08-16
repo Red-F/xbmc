@@ -1,8 +1,8 @@
 #ifndef _RENDER_FORMATS_H_
 #define _RENDER_FORMATS_H_
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@ enum ERenderFormat {
   RENDER_FMT_OMXEGL,
   RENDER_FMT_CVBREF,
   RENDER_FMT_BYPASS,
+  RENDER_FMT_EGLIMG,
 };
 
 #endif

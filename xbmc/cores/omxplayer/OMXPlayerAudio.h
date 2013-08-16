@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -57,45 +57,26 @@ protected:
   AEAudioFormat             m_format;
   CAEChannelInfo            m_channelLayout;
   COMXAudioCodecOMX         *m_pAudioCodec;
-  unsigned int              m_speed;
+  int                       m_speed;
   bool                      m_silence;
   double                    m_audioClock;
-  double m_error;    //last average error
-
-  int64_t m_errortime; //timestamp of last time we measured
-  int64_t m_freq;
-
-  void   HandleSyncError(double duration);
-  double m_errorbuff; //place to store average errors
-  int    m_errorcount;//number of errors stored
-  bool   m_syncclock;
-
-  double m_integral; //integral correction for resampler
-  int    m_skipdupcount; //counter for skip/duplicate synctype
-  bool   m_prevskipped;
 
   bool                      m_stalled;
   bool                      m_started;
 
   BitstreamStats            m_audioStats;
 
-  struct timespec           m_starttime, m_endtime;
   bool                      m_buffer_empty;
   bool                      m_flush;
-  //SYNC_DISCON, SYNC_SKIPDUP, SYNC_RESAMPLE
-  int                       m_synctype;
   int                       m_nChannels;
   bool                      m_DecoderOpen;
 
   DllBcmHost                m_DllBcmHost;
-  bool                      m_send_eos;
   bool                      m_bad_state;
 
   virtual void OnStartup();
   virtual void OnExit();
   virtual void Process();
-
-  void HandlePlayspeed(bool bDropPacket);
 private:
 public:
   OMXPlayerAudio(OMXClock *av_clock, CDVDMessageQueue& parent);
@@ -108,7 +89,7 @@ public:
   bool IsInited() const                             { return m_messageQueue.IsInited(); }
   int  GetLevel() const                             { return m_messageQueue.GetLevel(); }
   bool IsStalled()                                  { return m_stalled;  }
-  bool IsEOS()                                      { return m_send_eos; };
+  bool IsEOS();
   void WaitForBuffers();
   bool CloseStream(bool bWaitForBuffers);
   bool CodecChange();
@@ -121,11 +102,13 @@ public:
   void CloseDecoder();
   double GetDelay();
   double GetCacheTime();
-  double GetCurrentPTS() { return m_audioClock; };
+  double GetCacheTotal();
+  double GetCurrentPts() { return m_audioClock; };
   void WaitCompletion();
+  void SubmitEOS();
   void  RegisterAudioCallback(IAudioCallback* pCallback);
   void  UnRegisterAudioCallback();
-  void SetCurrentVolume(float fVolume);
+  bool SetCurrentVolume(float fVolume);
   void SetSpeed(int iSpeed);
   int  GetAudioBitrate();
   std::string GetPlayerInfo();

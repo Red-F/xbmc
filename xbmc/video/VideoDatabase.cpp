@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,8 +39,10 @@
 #include "dialogs/GUIDialogProgress.h"
 #include "dialogs/GUIDialogYesNo.h"
 #include "FileItem.h"
+#include "profiles/ProfilesManager.h"
 #include "settings/AdvancedSettings.h"
-#include "settings/GUISettings.h"
+#include "settings/MediaSettings.h"
+#include "settings/MediaSourceSettings.h"
 #include "settings/Settings.h"
 #include "utils/StringUtils.h"
 #include "guilib/LocalizeStrings.h"
@@ -106,7 +108,7 @@ bool CVideoDatabase::CreateTables()
                 "SubtitleDelay float, SubtitlesOn bool, Brightness float, Contrast float, Gamma float,"
                 "VolumeAmplification float, AudioDelay float, OutputToAllSpeakers bool, ResumeTime integer, Crop bool, CropLeft integer,"
                 "CropRight integer, CropTop integer, CropBottom integer, Sharpness float, NoiseReduction float, NonLinStretch bool, PostProcess bool,"
-                "ScalingMethod integer, DeinterlaceMode integer)\n");
+                "ScalingMethod integer, DeinterlaceMode integer, StereoMode integer, StereoInvert bool)\n");
     m_pDS->exec("CREATE UNIQUE INDEX ix_settings ON settings ( idFile )\n");
 
     CLog::Log(LOGINFO, "create stacktimes table");
@@ -1688,7 +1690,7 @@ void CVideoDatabase::GetMoviesByActor(const CStdString& strActor, CFileItemList&
                  "LEFT JOIN actors d ON d.idActor=directorlinkmovie.idDirector";
   filter.where = PrepareSQL("a.strActor='%s' OR d.strActor='%s'", strActor.c_str(), strActor.c_str());
   filter.group = "movieview.idMovie";
-  GetMoviesByWhere("videodb://1/2/", filter, items);
+  GetMoviesByWhere("videodb://movies/titles/", filter, items);
 }
 
 void CVideoDatabase::GetTvShowsByActor(const CStdString& strActor, CFileItemList& items)
@@ -1700,7 +1702,7 @@ void CVideoDatabase::GetTvShowsByActor(const CStdString& strActor, CFileItemList
                  "LEFT JOIN actors d ON d.idActor=directorlinktvshow.idDirector";
   filter.where = PrepareSQL("a.strActor='%s' OR d.strActor='%s'", strActor.c_str(), strActor.c_str());
   filter.group = "tvshowview.idShow";
-  GetTvShowsByWhere("videodb://2/2/", filter, items);
+  GetTvShowsByWhere("videodb://tvshows/titles/", filter, items);
 }
 
 void CVideoDatabase::GetEpisodesByActor(const CStdString& strActor, CFileItemList& items)
@@ -1712,7 +1714,7 @@ void CVideoDatabase::GetEpisodesByActor(const CStdString& strActor, CFileItemLis
                  "LEFT JOIN actors d ON d.idActor=directorlinkepisode.idDirector";
   filter.where = PrepareSQL("a.strActor='%s' OR d.strActor='%s'", strActor.c_str(), strActor.c_str());
   filter.group = "episodeview.idEpisode";
-  GetEpisodesByWhere("videodb://2/2/", filter, items);
+  GetEpisodesByWhere("videodb://tvshows/titles/", filter, items);
 }
 
 void CVideoDatabase::GetMusicVideosByArtist(const CStdString& strArtist, CFileItemList& items)
@@ -1825,7 +1827,7 @@ bool CVideoDatabase::GetMusicVideoInfo(const CStdString& strFilenameAndPath, CVi
     CStdString sql = PrepareSQL("select * from musicvideoview where idMVideo=%i", idMVideo);
     if (!m_pDS->query(sql.c_str()))
       return false;
-    details = GetDetailsForMusicVideo(m_pDS);
+    details = GetDetailsForMusicVideo(m_pDS, true);
     return !details.IsEmpty();
   }
   catch (...)
@@ -1845,7 +1847,7 @@ bool CVideoDatabase::GetSetInfo(int idSet, CVideoInfoTag& details)
     Filter filter;
     filter.where = PrepareSQL("sets.idSet=%d", idSet);
     CFileItemList items;
-    if (!GetSetsByWhere("videodb://1/7/", filter, items) ||
+    if (!GetSetsByWhere("videodb://movies/sets/", filter, items) ||
         items.Size() != 1 ||
         !items[0]->HasVideoInfoTag())
       return false;
@@ -2036,6 +2038,26 @@ int CVideoDatabase::SetDetailsForMovie(const CStdString& strFilenameAndPath, con
 
     SetArtForItem(idMovie, "movie", artwork);
 
+    // query DB for any movies matching imdbid and year
+    CStdString strSQL = PrepareSQL("select files.playCount, files.lastPlayed from movie,files where files.idFile=movie.idFile and movie.c%02d='%s' and movie.c%02d=%i and movie.idMovie!=%i and files.playCount > 0", VIDEODB_ID_IDENT, details.m_strIMDBNumber.c_str(), VIDEODB_ID_YEAR, details.m_iYear, idMovie);
+    m_pDS->query(strSQL.c_str());
+	
+    if (!m_pDS->eof())
+    {
+      int playCount = m_pDS->fv("files.playCount").get_asInt();
+
+      CDateTime lastPlayed;
+      lastPlayed.SetFromDBDateTime(m_pDS->fv("files.lastPlayed").get_asString());
+
+      int idFile = GetFileId(strFilenameAndPath);
+
+      // update with playCount and lastPlayed
+      strSQL = PrepareSQL("update files set playCount=%i,lastPlayed='%s' where idFile=%i", playCount, lastPlayed.GetAsDBDateTime().c_str(), idFile);
+      m_pDS->exec(strSQL.c_str());
+    }
+
+    m_pDS->close();
+
     // update our movie table (we know it was added already above)
     // and insert the new row
     CStdString sql = "update movie set " + GetValueString(details, VIDEODB_ID_MIN, VIDEODB_ID_MAX, DbMovieOffsets);
@@ -2198,6 +2220,26 @@ int CVideoDatabase::SetDetailsForEpisode(const CStdString& strFilenameAndPath, c
     AddSeason(idShow, details.m_iSeason);
 
     SetArtForItem(idEpisode, "episode", artwork);
+
+    // query DB for any episodes matching idShow, Season and Episode
+    CStdString strSQL = PrepareSQL("select files.playCount, files.lastPlayed from episode, files where files.idFile=episode.idFile and episode.c%02d=%i and episode.c%02d=%i AND episode.idShow=%i and episode.idEpisode!=%i and files.playCount > 0",VIDEODB_ID_EPISODE_SEASON, details.m_iSeason, VIDEODB_ID_EPISODE_EPISODE, details.m_iEpisode, idShow, idEpisode);
+    m_pDS->query(strSQL.c_str());
+
+    if (!m_pDS->eof())
+    {
+      int playCount = m_pDS->fv("files.playCount").get_asInt();
+
+      CDateTime lastPlayed;
+      lastPlayed.SetFromDBDateTime(m_pDS->fv("files.lastPlayed").get_asString());
+
+      int idFile = GetFileId(strFilenameAndPath);
+
+      // update with playCount and lastPlayed
+      strSQL = PrepareSQL("update files set playCount=%i,lastPlayed='%s' where idFile=%i", playCount, lastPlayed.GetAsDBDateTime().c_str(), idFile);
+      m_pDS->exec(strSQL.c_str());
+    }
+
+    m_pDS->close();
 
     // and insert the new row
     CStdString sql = "update episode set " + GetValueString(details, VIDEODB_ID_EPISODE_MIN, VIDEODB_ID_EPISODE_MAX, DbEpisodeOffsets);
@@ -3005,6 +3047,19 @@ void CVideoDatabase::DeleteSet(int idSet)
   }
 }
 
+void CVideoDatabase::ClearMovieSet(int idMovie)
+{
+  SetMovieSet(idMovie, -1);
+}
+
+void CVideoDatabase::SetMovieSet(int idMovie, int idSet)
+{
+  if (idSet >= 0)
+    ExecuteQuery(PrepareSQL("update movie set idSet = %i where idMovie = %i", idSet, idMovie));
+  else
+    ExecuteQuery(PrepareSQL("update movie set idSet = null where idMovie = %i", idMovie));
+}
+
 void CVideoDatabase::DeleteTag(int idTag, VIDEODB_CONTENT_TYPE mediaType)
 {
   try
@@ -3090,11 +3145,31 @@ CVideoInfoTag CVideoDatabase::GetDetailsByTypeAndId(VIDEODB_CONTENT_TYPE type, i
       break;
     case VIDEODB_CONTENT_MUSICVIDEOS:
       GetMusicVideoInfo("", details, id);
+      break;
     default:
       break;
   }
 
   return details;
+}
+
+bool CVideoDatabase::GetStreamDetails(CFileItem& item)
+{
+  // Note that this function (possibly) creates VideoInfoTags for items that don't have one yet!
+  int fileId = -1;
+
+  if (item.HasVideoInfoTag())
+    fileId = item.GetVideoInfoTag()->m_iFileId;
+
+  if (fileId < 0)
+    fileId = GetFileId(item);
+
+  if (fileId < 0)
+    return false;
+
+  // Have a file id, get stream details if available (creates tag either way)
+  item.GetVideoInfoTag()->m_iFileId = fileId;
+  return GetStreamDetails(*item.GetVideoInfoTag());
 }
 
 bool CVideoDatabase::GetStreamDetails(CVideoInfoTag& tag) const
@@ -3220,12 +3295,12 @@ bool CVideoDatabase::GetResumePoint(CVideoInfoTag& tag)
   return match;
 }
 
-CVideoInfoTag CVideoDatabase::GetDetailsForMovie(auto_ptr<Dataset> &pDS, bool needsCast /* = false */)
+CVideoInfoTag CVideoDatabase::GetDetailsForMovie(auto_ptr<Dataset> &pDS, bool getDetails /* = false */)
 {
-  return GetDetailsForMovie(pDS->get_sql_record(), needsCast);
+  return GetDetailsForMovie(pDS->get_sql_record(), getDetails);
 }
 
-CVideoInfoTag CVideoDatabase::GetDetailsForMovie(const dbiplus::sql_record* const record, bool needsCast /* = false */)
+CVideoInfoTag CVideoDatabase::GetDetailsForMovie(const dbiplus::sql_record* const record, bool getDetails /* = false */)
 {
   CVideoInfoTag details;
 
@@ -3255,7 +3330,7 @@ CVideoInfoTag CVideoDatabase::GetDetailsForMovie(const dbiplus::sql_record* cons
 
   movieTime += XbmcThreads::SystemClockMillis() - time; time = XbmcThreads::SystemClockMillis();
 
-  if (needsCast)
+  if (getDetails)
   {
     GetCast("movie", "idMovie", details.m_iDbId, details.m_cast);
 
@@ -3283,16 +3358,19 @@ CVideoInfoTag CVideoDatabase::GetDetailsForMovie(const dbiplus::sql_record* cons
         details.m_showLink.push_back(m_pDS2->fv(0).get_asString());
     }
     m_pDS2->close();
+
+    // get streamdetails
+    GetStreamDetails(details);
   }
   return details;
 }
 
-CVideoInfoTag CVideoDatabase::GetDetailsForTvShow(auto_ptr<Dataset> &pDS, bool needsCast /* = false */)
+CVideoInfoTag CVideoDatabase::GetDetailsForTvShow(auto_ptr<Dataset> &pDS, bool getDetails /* = false */)
 {
-  return GetDetailsForTvShow(pDS->get_sql_record(), needsCast);
+  return GetDetailsForTvShow(pDS->get_sql_record(), getDetails);
 }
 
-CVideoInfoTag CVideoDatabase::GetDetailsForTvShow(const dbiplus::sql_record* const record, bool needsCast /* = false */)
+CVideoInfoTag CVideoDatabase::GetDetailsForTvShow(const dbiplus::sql_record* const record, bool getDetails /* = false */)
 {
   CVideoInfoTag details;
 
@@ -3315,7 +3393,7 @@ CVideoInfoTag CVideoDatabase::GetDetailsForTvShow(const dbiplus::sql_record* con
 
   movieTime += XbmcThreads::SystemClockMillis() - time; time = XbmcThreads::SystemClockMillis();
 
-  if (needsCast)
+  if (getDetails)
   {
     GetCast("tvshow", "idShow", details.m_iDbId, details.m_cast);
 
@@ -3334,12 +3412,12 @@ CVideoInfoTag CVideoDatabase::GetDetailsForTvShow(const dbiplus::sql_record* con
   return details;
 }
 
-CVideoInfoTag CVideoDatabase::GetDetailsForEpisode(auto_ptr<Dataset> &pDS, bool needsCast /* = false */)
+CVideoInfoTag CVideoDatabase::GetDetailsForEpisode(auto_ptr<Dataset> &pDS, bool getDetails /* = false */)
 {
-  return GetDetailsForEpisode(pDS->get_sql_record(), needsCast);
+  return GetDetailsForEpisode(pDS->get_sql_record(), getDetails);
 }
 
-CVideoInfoTag CVideoDatabase::GetDetailsForEpisode(const dbiplus::sql_record* const record, bool needsCast /* = false */)
+CVideoInfoTag CVideoDatabase::GetDetailsForEpisode(const dbiplus::sql_record* const record, bool getDetails /* = false */)
 {
   CVideoInfoTag details;
 
@@ -3373,7 +3451,7 @@ CVideoInfoTag CVideoDatabase::GetDetailsForEpisode(const dbiplus::sql_record* co
 
   movieTime += XbmcThreads::SystemClockMillis() - time; time = XbmcThreads::SystemClockMillis();
 
-  if (needsCast)
+  if (getDetails)
   {
     GetCast("episode", "idEpisode", details.m_iDbId, details.m_cast);
     GetCast("tvshow", "idShow", details.m_iIdShow, details.m_cast);
@@ -3385,16 +3463,19 @@ CVideoInfoTag CVideoDatabase::GetDetailsForEpisode(const dbiplus::sql_record* co
     if (!m_pDS2->eof())
       details.m_fEpBookmark = m_pDS2->fv("bookmark.timeInSeconds").get_asFloat();
     m_pDS2->close();
+
+    // get streamdetails
+    GetStreamDetails(details);
   }
   return details;
 }
 
-CVideoInfoTag CVideoDatabase::GetDetailsForMusicVideo(auto_ptr<Dataset> &pDS)
+CVideoInfoTag CVideoDatabase::GetDetailsForMusicVideo(auto_ptr<Dataset> &pDS, bool getDetails /* = false */)
 {
-  return GetDetailsForMusicVideo(pDS->get_sql_record());
+  return GetDetailsForMusicVideo(pDS->get_sql_record(), getDetails);
 }
 
-CVideoInfoTag CVideoDatabase::GetDetailsForMusicVideo(const dbiplus::sql_record* const record)
+CVideoInfoTag CVideoDatabase::GetDetailsForMusicVideo(const dbiplus::sql_record* const record, bool getDetails /* = false */)
 {
   CVideoInfoTag details;
 
@@ -3418,16 +3499,23 @@ CVideoInfoTag CVideoDatabase::GetDetailsForMusicVideo(const dbiplus::sql_record*
 
   movieTime += XbmcThreads::SystemClockMillis() - time; time = XbmcThreads::SystemClockMillis();
 
-  // get tags
-  CStdString strSQL = PrepareSQL("SELECT tag.strTag FROM tag, taglinks WHERE taglinks.idMedia = %i AND taglinks.media_type = 'musicvideo' AND taglinks.idTag = tag.idTag ORDER BY tag.idTag", idMVideo);
-  m_pDS2->query(strSQL.c_str());
-  while (!m_pDS2->eof())
+  if (getDetails)
   {
-    details.m_tags.push_back(m_pDS2->fv("tag.strTag").get_asString());
-    m_pDS2->next();
-  }
+    // get tags
+    CStdString strSQL = PrepareSQL("SELECT tag.strTag FROM tag, taglinks WHERE taglinks.idMedia = %i AND taglinks.media_type = 'musicvideo' AND taglinks.idTag = tag.idTag ORDER BY tag.idTag", idMVideo);
+    m_pDS2->query(strSQL.c_str());
+    while (!m_pDS2->eof())
+    {
+      details.m_tags.push_back(m_pDS2->fv("tag.strTag").get_asString());
+      m_pDS2->next();
+    }
+    m_pDS2->close();
 
-  details.m_strPictureURL.Parse();
+    details.m_strPictureURL.Parse();
+
+    // get streamdetails
+    GetStreamDetails(details);
+  }
   return details;
 }
 
@@ -3531,6 +3619,8 @@ bool CVideoDatabase::GetVideoSettings(const CStdString &strFilenameAndPath, CVid
       settings.m_VolumeAmplification = m_pDS->fv("VolumeAmplification").get_asFloat();
       settings.m_OutputToAllSpeakers = m_pDS->fv("OutputToAllSpeakers").get_asBool();
       settings.m_ScalingMethod = (ESCALINGMETHOD)m_pDS->fv("ScalingMethod").get_asInt();
+      settings.m_StereoMode = m_pDS->fv("StereoMode").get_asInt();
+      settings.m_StereoInvert = m_pDS->fv("StereoInvert").get_asBool();
       settings.m_SubtitleCached = false;
       m_pDS->close();
       return true;
@@ -3571,7 +3661,7 @@ void CVideoDatabase::SetVideoSettings(const CStdString& strFilenameAndPath, cons
                        setting.m_OutputToAllSpeakers,setting.m_Sharpness,setting.m_NoiseReduction,setting.m_CustomNonLinStretch,setting.m_PostProcess,setting.m_ScalingMethod,
                        setting.m_DeinterlaceMode);
       CStdString strSQL2;
-      strSQL2=PrepareSQL("ResumeTime=%i,Crop=%i,CropLeft=%i,CropRight=%i,CropTop=%i,CropBottom=%i where idFile=%i\n", setting.m_ResumeTime, setting.m_Crop, setting.m_CropLeft, setting.m_CropRight, setting.m_CropTop, setting.m_CropBottom, idFile);
+      strSQL2=PrepareSQL("ResumeTime=%i,Crop=%i,CropLeft=%i,CropRight=%i,CropTop=%i,CropBottom=%i,StereoMode=%i,StereoInvert=%i where idFile=%i\n", setting.m_ResumeTime, setting.m_Crop, setting.m_CropLeft, setting.m_CropRight, setting.m_CropTop, setting.m_CropBottom, setting.m_StereoMode, setting.m_StereoInvert, idFile);
       strSQL += strSQL2;
       m_pDS->exec(strSQL.c_str());
       return ;
@@ -3583,15 +3673,15 @@ void CVideoDatabase::SetVideoSettings(const CStdString& strFilenameAndPath, cons
                 "AudioStream,SubtitleStream,SubtitleDelay,SubtitlesOn,Brightness,"
                 "Contrast,Gamma,VolumeAmplification,AudioDelay,OutputToAllSpeakers,"
                 "ResumeTime,Crop,CropLeft,CropRight,CropTop,CropBottom,"
-                "Sharpness,NoiseReduction,NonLinStretch,PostProcess,ScalingMethod,DeinterlaceMode) "
+                "Sharpness,NoiseReduction,NonLinStretch,PostProcess,ScalingMethod,DeinterlaceMode,StereoMode,StereoInvert) "
               "VALUES ";
-      strSQL += PrepareSQL("(%i,%i,%i,%f,%f,%f,%i,%i,%f,%i,%f,%f,%f,%f,%f,%i,%i,%i,%i,%i,%i,%i,%f,%f,%i,%i,%i,%i)",
+      strSQL += PrepareSQL("(%i,%i,%i,%f,%f,%f,%i,%i,%f,%i,%f,%f,%f,%f,%f,%i,%i,%i,%i,%i,%i,%i,%f,%f,%i,%i,%i,%i,%i,%i)",
                            idFile, setting.m_InterlaceMethod, setting.m_ViewMode, setting.m_CustomZoomAmount, setting.m_CustomPixelRatio, setting.m_CustomVerticalShift,
                            setting.m_AudioStream, setting.m_SubtitleStream, setting.m_SubtitleDelay, setting.m_SubtitleOn, setting.m_Brightness,
                            setting.m_Contrast, setting.m_Gamma, setting.m_VolumeAmplification, setting.m_AudioDelay, setting.m_OutputToAllSpeakers,
                            setting.m_ResumeTime, setting.m_Crop, setting.m_CropLeft, setting.m_CropRight, setting.m_CropTop, setting.m_CropBottom,
                            setting.m_Sharpness, setting.m_NoiseReduction, setting.m_CustomNonLinStretch, setting.m_PostProcess, setting.m_ScalingMethod,
-                           setting.m_DeinterlaceMode);
+                           setting.m_DeinterlaceMode, setting.m_StereoMode, setting.m_StereoInvert);
       m_pDS->exec(strSQL.c_str());
     }
   }
@@ -3700,6 +3790,33 @@ bool CVideoDatabase::GetTvShowSeasonArt(int showId, map<int, map<string, string>
   catch (...)
   {
     CLog::Log(LOGERROR, "%s(%d) failed", __FUNCTION__, showId);
+  }
+  return false;
+}
+
+bool CVideoDatabase::GetArtTypes(const std::string &mediaType, std::vector<std::string> &artTypes)
+{
+  try
+  {
+    if (NULL == m_pDB.get()) return false;
+    if (NULL == m_pDS.get()) return false;
+
+    CStdString sql = PrepareSQL("SELECT DISTINCT type FROM art WHERE media_type='%s'", mediaType.c_str());
+    int numRows = RunQuery(sql);
+    if (numRows <= 0)
+      return numRows == 0;
+
+    while (!m_pDS->eof())
+    {
+      artTypes.push_back(m_pDS->fv(0).get_asString());
+      m_pDS->next();
+    }
+    m_pDS->close();
+    return true;
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s(%s) failed", __FUNCTION__, mediaType.c_str());
   }
   return false;
 }
@@ -4035,7 +4152,7 @@ bool CVideoDatabase::UpdateOldVersion(int iVersion)
   if (iVersion < 50)
   {
     m_pDS->exec("ALTER TABLE settings ADD ScalingMethod integer");
-    m_pDS->exec(PrepareSQL("UPDATE settings set ScalingMethod=%i", g_settings.m_defaultVideoSettings.m_ScalingMethod));
+    m_pDS->exec(PrepareSQL("UPDATE settings set ScalingMethod=%i", CMediaSettings::Get().GetDefaultVideoSettings().m_ScalingMethod));
   }
   if (iVersion < 51)
   {
@@ -4126,8 +4243,8 @@ bool CVideoDatabase::UpdateOldVersion(int iVersion)
     m_pDS->exec("CREATE TRIGGER delete_set AFTER DELETE ON sets FOR EACH ROW BEGIN DELETE FROM art WHERE media_id=old.idSet AND media_type='set'; END");
     m_pDS->exec("CREATE TRIGGER delete_person AFTER DELETE ON actors FOR EACH ROW BEGIN DELETE FROM art WHERE media_id=old.idActor AND media_type IN ('actor','artist','writer','director'); END");
 
-    g_settings.m_videoNeedsUpdate = 63;
-    g_settings.Save();
+    CMediaSettings::Get().SetVideoNeedsUpdate(63);
+    CSettings::Get().Save();
   }
   if (iVersion < 64)
   { // add idShow to episode table
@@ -4195,11 +4312,11 @@ bool CVideoDatabase::UpdateOldVersion(int iVersion)
     {
       std::string filename = i->second;
       bool update = URIUtils::UpdateUrlEncoding(filename) &&
-                    (!m_pDS->query(PrepareSQL("SELECT idFile FROM files WHERE strFilename = '%s'", i->second.c_str())) || m_pDS->num_rows() <= 0);
+                    (!m_pDS->query(PrepareSQL("SELECT idFile FROM files WHERE strFilename = '%s'", filename.c_str())) || m_pDS->num_rows() <= 0);
       m_pDS->close();
 
       if (update)
-        m_pDS->exec(PrepareSQL("UPDATE files SET strFilename='%s' WHERE idFile=%d", i->second.c_str(), i->first));
+        m_pDS->exec(PrepareSQL("UPDATE files SET strFilename='%s' WHERE idFile=%d", filename.c_str(), i->first));
     }
   }
   if (iVersion < 72)
@@ -4303,6 +4420,11 @@ bool CVideoDatabase::UpdateOldVersion(int iVersion)
     m_pDS->exec("CREATE INDEX ix_path ON path ( strPath(255) )");
     m_pDS->exec("CREATE INDEX ix_files ON files ( idPath, strFilename(255) )");
   }
+  if (iVersion < 76)
+  {
+    m_pDS->exec("ALTER TABLE settings ADD StereoMode integer");
+    m_pDS->exec("ALTER TABLE settings ADD StereoInvert bool");
+  }
   // always recreate the view after any table change
   CreateViews();
   return true;
@@ -4310,7 +4432,7 @@ bool CVideoDatabase::UpdateOldVersion(int iVersion)
 
 int CVideoDatabase::GetMinVersion() const
 {
-  return 75;
+  return 76;
 }
 
 bool CVideoDatabase::LookupByFolders(const CStdString &path, bool shows)
@@ -4580,45 +4702,70 @@ void CVideoDatabase::UpdateMovieTitle(int idMovie, const CStdString& strNewMovie
     if (NULL == m_pDB.get()) return ;
     if (NULL == m_pDS.get()) return ;
     CStdString content;
-    CStdString strSQL;
     if (iType == VIDEODB_CONTENT_MOVIES)
     {
       CLog::Log(LOGINFO, "Changing Movie:id:%i New Title:%s", idMovie, strNewMovieTitle.c_str());
-      strSQL = PrepareSQL("UPDATE movie SET c%02d='%s' WHERE idMovie=%i", VIDEODB_ID_TITLE, strNewMovieTitle.c_str(), idMovie );
       content = "movie";
     }
     else if (iType == VIDEODB_CONTENT_EPISODES)
     {
       CLog::Log(LOGINFO, "Changing Episode:id:%i New Title:%s", idMovie, strNewMovieTitle.c_str());
-      strSQL = PrepareSQL("UPDATE episode SET c%02d='%s' WHERE idEpisode=%i", VIDEODB_ID_EPISODE_TITLE, strNewMovieTitle.c_str(), idMovie );
       content = "episode";
     }
     else if (iType == VIDEODB_CONTENT_TVSHOWS)
     {
       CLog::Log(LOGINFO, "Changing TvShow:id:%i New Title:%s", idMovie, strNewMovieTitle.c_str());
-      strSQL = PrepareSQL("UPDATE tvshow SET c%02d='%s' WHERE idShow=%i", VIDEODB_ID_TV_TITLE, strNewMovieTitle.c_str(), idMovie );
       content = "tvshow";
     }
     else if (iType == VIDEODB_CONTENT_MUSICVIDEOS)
     {
       CLog::Log(LOGINFO, "Changing MusicVideo:id:%i New Title:%s", idMovie, strNewMovieTitle.c_str());
-      strSQL = PrepareSQL("UPDATE musicvideo SET c%02d='%s' WHERE idMVideo=%i", VIDEODB_ID_MUSICVIDEO_TITLE, strNewMovieTitle.c_str(), idMovie );
       content = "musicvideo";
     }
     else if (iType == VIDEODB_CONTENT_MOVIE_SETS)
     {
       CLog::Log(LOGINFO, "Changing Movie set:id:%i New Title:%s", idMovie, strNewMovieTitle.c_str());
-      strSQL = PrepareSQL("UPDATE sets SET strSet='%s' WHERE idSet=%i", strNewMovieTitle.c_str(), idMovie );
+      CStdString strSQL = PrepareSQL("UPDATE sets SET strSet='%s' WHERE idSet=%i", strNewMovieTitle.c_str(), idMovie );
+      m_pDS->exec(strSQL.c_str());
     }
-    m_pDS->exec(strSQL.c_str());
 
-    if (content.size() > 0)
+    if (!content.empty())
+    {
+      SetSingleValue(iType, idMovie, FieldTitle, strNewMovieTitle);
       AnnounceUpdate(content, idMovie);
+    }
   }
   catch (...)
   {
     CLog::Log(LOGERROR, "%s (int idMovie, const CStdString& strNewMovieTitle) failed on MovieID:%i and Title:%s", __FUNCTION__, idMovie, strNewMovieTitle.c_str());
   }
+}
+
+bool CVideoDatabase::UpdateVideoSortTitle(int idDb, const CStdString& strNewSortTitle, VIDEODB_CONTENT_TYPE iType /* = VIDEODB_CONTENT_MOVIES */)
+{
+  try
+  {
+    if (NULL == m_pDB.get() || NULL == m_pDS.get())
+      return false;
+    if (iType != VIDEODB_CONTENT_MOVIES && iType != VIDEODB_CONTENT_TVSHOWS)
+      return false;
+
+    CStdString content = "movie";
+    if (iType == VIDEODB_CONTENT_TVSHOWS)
+      content = "tvshow";
+
+    if (SetSingleValue(iType, idDb, FieldSortTitle, strNewSortTitle))
+    {
+      AnnounceUpdate(content, idDb);
+      return true;
+    }
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s (int idDb, const CStdString& strNewSortTitle, VIDEODB_CONTENT_TYPE iType) failed on ID: %i and Sort Title: %s", __FUNCTION__, idDb, strNewSortTitle.c_str());
+  }
+
+  return false;
 }
 
 /// \brief EraseVideoSettings() Erases the videoSettings table and reconstructs it
@@ -4659,7 +4806,7 @@ bool CVideoDatabase::GetNavCommon(const CStdString& strBaseDir, CFileItemList& i
 
     CStdString strSQL;
     Filter extFilter = filter;
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
     {
       if (idContent == VIDEODB_CONTENT_MOVIES)
       {
@@ -4740,7 +4887,7 @@ bool CVideoDatabase::GetNavCommon(const CStdString& strBaseDir, CFileItemList& i
       return true;
     }
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
     {
       map<int, pair<CStdString,int> > mapItems;
       map<int, pair<CStdString,int> >::iterator it;
@@ -4754,7 +4901,7 @@ bool CVideoDatabase::GetNavCommon(const CStdString& strBaseDir, CFileItemList& i
         if (it == mapItems.end())
         {
           // check path
-          if (g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv(2).get_asString()),g_settings.m_videoSources))
+          if (g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv(2).get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
           {
             if (idContent == VIDEODB_CONTENT_MOVIES || idContent == VIDEODB_CONTENT_MUSICVIDEOS)
               mapItems.insert(pair<int, pair<CStdString,int> >(id, pair<CStdString,int>(str,m_pDS->fv(3).get_asInt()))); //fv(3) is file.playCount
@@ -4910,12 +5057,11 @@ bool CVideoDatabase::GetTagsNav(const CStdString& strBaseDir, CFileItemList& ite
   return false;
 }
 
-bool CVideoDatabase::GetSetsNav(const CStdString& strBaseDir, CFileItemList& items, int idContent, bool ignoreSingleMovieSets /* = false */)
+bool CVideoDatabase::GetSetsNav(const CStdString& strBaseDir, CFileItemList& items, int idContent /* = -1 */, const Filter &filter /* = Filter() */, bool ignoreSingleMovieSets /* = false */)
 {
   if (idContent != VIDEODB_CONTENT_MOVIES)
     return false;
 
-  Filter filter;
   return GetSetsByWhere(strBaseDir, filter, items, ignoreSingleMovieSets);
 }
 
@@ -4940,7 +5086,7 @@ bool CVideoDatabase::GetSetsByWhere(const CStdString& strBaseDir, const Filter &
       return false;
 
     CFileItemList sets;
-    if (!GroupUtils::Group(GroupBySet, items, sets))
+    if (!GroupUtils::Group(GroupBySet, strBaseDir, items, sets))
       return false;
 
     items.ClearItems();
@@ -4964,7 +5110,7 @@ bool CVideoDatabase::GetMusicVideoAlbumsNav(const CStdString& strBaseDir, CFileI
 
     CStdString strSQL = "select %s from musicvideoview ";
     Filter extFilter = filter;
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
     {
       extFilter.fields = PrepareSQL("musicvideoview.c%02d, musicvideoview.idMVideo, actors.strActor, path.strPath", VIDEODB_ID_MUSICVIDEO_ALBUM);
       extFilter.AppendJoin("join artistlinkmusicvideo on artistlinkmusicvideo.idMVideo = musicvideoview.idMVideo join actors on actors.idActor = artistlinkmusicvideo.idArtist join files on files.idFile = musicvideoview.idFile join path on path.idPath = files.idPath");
@@ -5005,7 +5151,7 @@ bool CVideoDatabase::GetMusicVideoAlbumsNav(const CStdString& strBaseDir, CFileI
       return true;
     }
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
     {
       map<int, pair<CStdString,CStdString> > mapAlbums;
       map<int, pair<CStdString,CStdString> >::iterator it;
@@ -5018,7 +5164,7 @@ bool CVideoDatabase::GetMusicVideoAlbumsNav(const CStdString& strBaseDir, CFileI
         if (it == mapAlbums.end())
         {
           // check path
-          if (g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),g_settings.m_videoSources))
+          if (g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
             mapAlbums.insert(make_pair(lidMVideo, make_pair(strAlbum,m_pDS->fv(2).get_asString())));
         }
         m_pDS->next();
@@ -5128,7 +5274,7 @@ bool CVideoDatabase::GetPeopleNav(const CStdString& strBaseDir, CFileItemList& i
     // get primary genres for movies
     CStdString strSQL;
     Filter extFilter = filter;
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
     {
       if (idContent == VIDEODB_CONTENT_MOVIES)
       {
@@ -5232,7 +5378,7 @@ bool CVideoDatabase::GetPeopleNav(const CStdString& strBaseDir, CFileItemList& i
       return true;
     }
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
     {
       map<int, CActor> mapActors;
       map<int, CActor>::iterator it;
@@ -5250,7 +5396,7 @@ bool CVideoDatabase::GetPeopleNav(const CStdString& strBaseDir, CFileItemList& i
         if (it == mapActors.end())
         {
           // check path
-          if (g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),g_settings.m_videoSources))
+          if (g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
             mapActors.insert(pair<int, CActor>(idActor, actor));
         }
         m_pDS->next();
@@ -5333,7 +5479,7 @@ bool CVideoDatabase::GetYearsNav(const CStdString& strBaseDir, CFileItemList& it
 
     CStdString strSQL;
     Filter extFilter = filter;
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
     {
       if (idContent == VIDEODB_CONTENT_MOVIES)
       {
@@ -5382,7 +5528,7 @@ bool CVideoDatabase::GetYearsNav(const CStdString& strBaseDir, CFileItemList& it
     if (iRowsFound <= 0)
       return iRowsFound == 0;
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
     {
       map<int, pair<CStdString,int> > mapYears;
       map<int, pair<CStdString,int> >::iterator it;
@@ -5401,7 +5547,7 @@ bool CVideoDatabase::GetYearsNav(const CStdString& strBaseDir, CFileItemList& it
         if (it == mapYears.end())
         {
           // check path
-          if (g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),g_settings.m_videoSources))
+          if (g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
           {
             CStdString year;
             year.Format("%d", lYear);
@@ -5579,7 +5725,7 @@ bool CVideoDatabase::GetSeasonsNav(const CStdString& strBaseDir, CFileItemList& 
     CStdString showStudio = m_pDS->fv(6).get_asString();
     CStdString showMPAARating = m_pDS->fv(7).get_asString();
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
     {
       map<int, CSeason> mapSeasons;
       map<int, CSeason>::iterator it;
@@ -5588,7 +5734,7 @@ bool CVideoDatabase::GetSeasonsNav(const CStdString& strBaseDir, CFileItemList& 
         int iSeason = m_pDS->fv(0).get_asInt();
         it = mapSeasons.find(iSeason);
         // check path
-        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),g_settings.m_videoSources))
+        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
         {
           m_pDS->next();
           continue;
@@ -5699,7 +5845,7 @@ bool CVideoDatabase::GetSeasonsNav(const CStdString& strBaseDir, CFileItemList& 
       movieFilter.join  = PrepareSQL("join movielinktvshow on movielinktvshow.idMovie=movieview.idMovie");
       movieFilter.where = PrepareSQL("movielinktvshow.idShow %s", strIn.c_str());
       CFileItemList movieItems;
-      GetMoviesByWhere("videodb://1/2/", movieFilter, movieItems);
+      GetMoviesByWhere("videodb://movies/titles/", movieFilter, movieItems);
 
       if (movieItems.Size() > 0)
         items.Append(movieItems);
@@ -5759,6 +5905,98 @@ bool CVideoDatabase::GetSortedVideos(MediaType mediaType, const CStdString& strB
 
   items.SetContent(DatabaseUtils::MediaTypeToString(mediaType) + "s");
   return success;
+}
+
+bool CVideoDatabase::GetItems(const CStdString &strBaseDir, CFileItemList &items, const Filter &filter /* = Filter() */, const SortDescription &sortDescription /* = SortDescription() */)
+{
+  CVideoDbUrl videoUrl;
+  if (!videoUrl.FromString(strBaseDir))
+    return false;
+
+  return GetItems(strBaseDir, videoUrl.GetType(), videoUrl.GetItemType(), items, filter, sortDescription);
+}
+
+bool CVideoDatabase::GetItems(const CStdString &strBaseDir, const CStdString &mediaType, const CStdString &itemType, CFileItemList &items, const Filter &filter /* = Filter() */, const SortDescription &sortDescription /* = SortDescription() */)
+{
+  VIDEODB_CONTENT_TYPE contentType;
+  if (mediaType.Equals("movies"))
+    contentType = VIDEODB_CONTENT_MOVIES;
+  else if (mediaType.Equals("tvshows"))
+  {
+    if (itemType.Equals("episodes"))
+      contentType = VIDEODB_CONTENT_EPISODES;
+    else
+      contentType = VIDEODB_CONTENT_TVSHOWS;
+  }
+  else if (mediaType.Equals("musicvideos"))
+    contentType = VIDEODB_CONTENT_MUSICVIDEOS;
+  else
+    return false;
+
+  return GetItems(strBaseDir, contentType, itemType, items, filter, sortDescription);
+}
+
+bool CVideoDatabase::GetItems(const CStdString &strBaseDir, VIDEODB_CONTENT_TYPE mediaType, const CStdString &itemType, CFileItemList &items, const Filter &filter /* = Filter() */, const SortDescription &sortDescription /* = SortDescription() */)
+{
+  if (itemType.Equals("movies") && (mediaType == VIDEODB_CONTENT_MOVIES || mediaType == VIDEODB_CONTENT_MOVIE_SETS))
+    return GetMoviesByWhere(strBaseDir, filter, items, sortDescription);
+  else if (itemType.Equals("tvshows") && mediaType == VIDEODB_CONTENT_TVSHOWS)
+    return GetTvShowsByWhere(strBaseDir, filter, items, sortDescription);
+  else if (itemType.Equals("musicvideos") && mediaType == VIDEODB_CONTENT_MUSICVIDEOS)
+    return GetMusicVideosByWhere(strBaseDir, filter, items, true, sortDescription);
+  else if (itemType.Equals("episodes") && mediaType == VIDEODB_CONTENT_EPISODES)
+    return GetEpisodesByWhere(strBaseDir, filter, items, true, sortDescription);
+  else if (itemType.Equals("seasons") && mediaType == VIDEODB_CONTENT_TVSHOWS)
+    return GetSeasonsNav(strBaseDir, items);
+  else if (itemType.Equals("genres"))
+    return GetGenresNav(strBaseDir, items, mediaType, filter);
+  else if (itemType.Equals("years"))
+    return GetYearsNav(strBaseDir, items, mediaType, filter);
+  else if (itemType.Equals("actors"))
+    return GetActorsNav(strBaseDir, items, mediaType, filter);
+  else if (itemType.Equals("directors"))
+    return GetDirectorsNav(strBaseDir, items, mediaType, filter);
+  else if (itemType.Equals("writers"))
+    return GetWritersNav(strBaseDir, items, mediaType, filter);
+  else if (itemType.Equals("studios"))
+    return GetStudiosNav(strBaseDir, items, mediaType, filter);
+  else if (itemType.Equals("sets"))
+    return GetSetsNav(strBaseDir, items, mediaType, filter);
+  else if (itemType.Equals("countries"))
+    return GetCountriesNav(strBaseDir, items, mediaType, filter);
+  else if (itemType.Equals("tags"))
+    return GetTagsNav(strBaseDir, items, mediaType, filter);
+  else if (itemType.Equals("artists") && mediaType == VIDEODB_CONTENT_MUSICVIDEOS)
+    return GetActorsNav(strBaseDir, items, mediaType, filter);
+  else if (itemType.Equals("albums") && mediaType == VIDEODB_CONTENT_MUSICVIDEOS)
+    return GetMusicVideoAlbumsNav(strBaseDir, items, -1, filter);
+
+  return false;
+}
+
+CStdString CVideoDatabase::GetItemById(const CStdString &itemType, int id)
+{
+  if (itemType.Equals("genres"))
+    return GetGenreById(id);
+  else if (itemType.Equals("years"))
+  {
+    CStdString tmp; tmp.Format("%d", id);
+    return tmp;
+  }
+  else if (itemType.Equals("actors") || itemType.Equals("directors") || itemType.Equals("artists"))
+    return GetPersonById(id);
+  else if (itemType.Equals("studios"))
+    return GetStudioById(id);
+  else if (itemType.Equals("sets"))
+    return GetSetById(id);
+  else if (itemType.Equals("countries"))
+    return GetCountryById(id);
+  else if (itemType.Equals("tags"))
+    return GetTagById(id);
+  else if (itemType.Equals("albums"))
+    return GetMusicVideoAlbumById(id);
+
+  return "";
 }
 
 bool CVideoDatabase::GetMoviesNav(const CStdString& strBaseDir, CFileItemList& items,
@@ -5850,9 +6088,9 @@ bool CVideoDatabase::GetMoviesByWhere(const CStdString& strBaseDir, const Filter
       const dbiplus::sql_record* const record = data.at(targetRow);
 
       CVideoInfoTag movie = GetDetailsForMovie(record);
-      if (g_settings.GetMasterProfile().getLockMode() == LOCK_MODE_EVERYONE ||
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() == LOCK_MODE_EVERYONE ||
           g_passwordManager.bMasterUser                                   ||
-          g_passwordManager.IsDatabasePathUnlocked(movie.m_strPath, g_settings.m_videoSources))
+          g_passwordManager.IsDatabasePathUnlocked(movie.m_strPath, *CMediaSourceSettings::Get().GetSources("video")))
       {
         CFileItemPtr pItem(new CFileItem(movie));
 
@@ -5955,9 +6193,9 @@ bool CVideoDatabase::GetTvShowsByWhere(const CStdString& strBaseDir, const Filte
       const dbiplus::sql_record* const record = data.at(targetRow);
       
       CVideoInfoTag movie = GetDetailsForTvShow(record, false);
-      if ((g_settings.GetMasterProfile().getLockMode() == LOCK_MODE_EVERYONE ||
+      if ((CProfilesManager::Get().GetMasterProfile().getLockMode() == LOCK_MODE_EVERYONE ||
            g_passwordManager.bMasterUser                                     ||
-           g_passwordManager.IsDatabasePathUnlocked(movie.m_strPath, g_settings.m_videoSources)) &&
+           g_passwordManager.IsDatabasePathUnlocked(movie.m_strPath, *CMediaSourceSettings::Get().GetSources("video"))) &&
           (!g_advancedSettings.m_bVideoLibraryHideEmptySeries || movie.m_iEpisode > 0))
       {
         CFileItemPtr pItem(new CFileItem(movie));
@@ -6007,7 +6245,7 @@ void CVideoDatabase::Stack(CFileItemList& items, VIDEODB_CONTENT_TYPE type, bool
     case VIDEODB_CONTENT_TVSHOWS:
     {
       // sort by Title
-      items.Sort(SORT_METHOD_VIDEO_TITLE, SortOrderAscending);
+      items.Sort(SortBySortTitle, SortOrderAscending);
 
       int i = 0;
       while (i < items.Size())
@@ -6074,7 +6312,7 @@ void CVideoDatabase::Stack(CFileItemList& items, VIDEODB_CONTENT_TYPE type, bool
     case VIDEODB_CONTENT_EPISODES:
     {
       // sort by ShowTitle, Episode, Filename
-      items.Sort(SORT_METHOD_EPISODE, SortOrderAscending);
+      items.Sort(SortByEpisodeNumber, SortOrderAscending);
 
       int i = 0;
       while (i < items.Size())
@@ -6169,7 +6407,7 @@ void CVideoDatabase::Stack(CFileItemList& items, VIDEODB_CONTENT_TYPE type, bool
   if (maintainSortOrder)
   {
     // restore original sort order - essential for smartplaylists
-    items.Sort(SORT_METHOD_PROGRAM_COUNT, SortOrderAscending);
+    items.Sort(SortByProgramCount, SortOrderAscending);
   }
 }
 
@@ -6211,7 +6449,7 @@ bool CVideoDatabase::GetEpisodesNav(const CStdString& strBaseDir, CFileItemList&
     movieFilter.join  = PrepareSQL("join movielinktvshow on movielinktvshow.idMovie=movieview.idMovie");
     movieFilter.where = PrepareSQL("movielinktvshow.idShow %s", strIn.c_str());
     CFileItemList movieItems;
-    GetMoviesByWhere("videodb://1/2/", movieFilter, movieItems);
+    GetMoviesByWhere("videodb://movies/titles/", movieFilter, movieItems);
 
     if (movieItems.Size() > 0)
       items.Append(movieItems);
@@ -6276,9 +6514,9 @@ bool CVideoDatabase::GetEpisodesByWhere(const CStdString& strBaseDir, const Filt
       const dbiplus::sql_record* const record = data.at(targetRow);
 
       CVideoInfoTag movie = GetDetailsForEpisode(record);
-      if (g_settings.GetMasterProfile().getLockMode() == LOCK_MODE_EVERYONE ||
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() == LOCK_MODE_EVERYONE ||
           g_passwordManager.bMasterUser                                     ||
-          g_passwordManager.IsDatabasePathUnlocked(movie.m_strPath, g_settings.m_videoSources))
+          g_passwordManager.IsDatabasePathUnlocked(movie.m_strPath, *CMediaSourceSettings::Get().GetSources("video")))
       {
         CFileItemPtr pItem(new CFileItem(movie));
         formatter.FormatLabel(pItem.get());
@@ -6580,7 +6818,7 @@ ScraperPtr CVideoDatabase::GetScraperForPath(const CStdString& strPath, SScanSet
       if (!scraperID.empty() &&
         CAddonMgr::Get().GetAddon(scraperID, addon))
       {
-        scraper = boost::dynamic_pointer_cast<CScraper>(addon->Clone(addon));
+        scraper = boost::dynamic_pointer_cast<CScraper>(addon->Clone());
         if (!scraper)
           return ScraperPtr();
 
@@ -6623,7 +6861,7 @@ ScraperPtr CVideoDatabase::GetScraperForPath(const CStdString& strPath, SScanSet
           if (content != CONTENT_NONE &&
               CAddonMgr::Get().GetAddon(m_pDS->fv("path.strScraper").get_asString(), addon))
           {
-            scraper = boost::dynamic_pointer_cast<CScraper>(addon->Clone(addon));
+            scraper = boost::dynamic_pointer_cast<CScraper>(addon->Clone());
             scraper->SetPathSettings(content, m_pDS->fv("path.strSettings").get_asString());
             settings.parent_name = m_pDS->fv("path.useFolderNames").get_asBool();
             settings.recurse = m_pDS->fv("path.scanRecursive").get_asInt();
@@ -6709,7 +6947,7 @@ void CVideoDatabase::GetMovieGenresByName(const CStdString& strSearch, CFileItem
     if (NULL == m_pDB.get()) return;
     if (NULL == m_pDS.get()) return;
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
       strSQL=PrepareSQL("select genre.idGenre,genre.strGenre,path.strPath from genre,genrelinkmovie,movie,path,files where genre.idGenre=genrelinkmovie.idGenre and genrelinkmovie.idMovie=movie.idMovie and files.idFile=movie.idFile and path.idPath=files.idPath and genre.strGenre like '%%%s%%'",strSearch.c_str());
     else
       strSQL=PrepareSQL("select distinct genre.idGenre,genre.strGenre from genre,genrelinkmovie where genrelinkmovie.idGenre=genre.idGenre and strGenre like '%%%s%%'", strSearch.c_str());
@@ -6717,9 +6955,9 @@ void CVideoDatabase::GetMovieGenresByName(const CStdString& strSearch, CFileItem
 
     while (!m_pDS->eof())
     {
-      if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
         if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),
-                                                      g_settings.m_videoSources))
+                                                      *CMediaSourceSettings::Get().GetSources("video")))
         {
           m_pDS->next();
           continue;
@@ -6728,7 +6966,7 @@ void CVideoDatabase::GetMovieGenresByName(const CStdString& strSearch, CFileItem
       CFileItemPtr pItem(new CFileItem(m_pDS->fv("genre.strGenre").get_asString()));
       CStdString strDir;
       strDir.Format("%ld/", m_pDS->fv("genre.idGenre").get_asInt());
-      pItem->SetPath("videodb://1/1/"+ strDir);
+      pItem->SetPath("videodb://movies/genres/"+ strDir);
       pItem->m_bIsFolder=true;
       items.Add(pItem);
       m_pDS->next();
@@ -6750,7 +6988,7 @@ void CVideoDatabase::GetMovieCountriesByName(const CStdString& strSearch, CFileI
     if (NULL == m_pDB.get()) return;
     if (NULL == m_pDS.get()) return;
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
       strSQL=PrepareSQL("select country.idCountry,country.strCountry,path.strPath from country,countrylinkmovie,movie,path,files where country.idCountry=countrylinkmovie.idCountry and countrylinkmovie.idMovie=movie.idMovie and files.idFile=movie.idFile and path.idPath=files.idPath and country.strCountry like '%%%s%%'",strSearch.c_str());
     else
       strSQL=PrepareSQL("select distinct country.idCountry,country.strCountry from country,countrylinkmovie where countrylinkmovie.idCountry=country.idCountry and strCountry like '%%%s%%'", strSearch.c_str());
@@ -6758,9 +6996,9 @@ void CVideoDatabase::GetMovieCountriesByName(const CStdString& strSearch, CFileI
 
     while (!m_pDS->eof())
     {
-      if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
         if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),
-                                                      g_settings.m_videoSources))
+                                                      *CMediaSourceSettings::Get().GetSources("video")))
         {
           m_pDS->next();
           continue;
@@ -6769,7 +7007,7 @@ void CVideoDatabase::GetMovieCountriesByName(const CStdString& strSearch, CFileI
       CFileItemPtr pItem(new CFileItem(m_pDS->fv("country.strCountry").get_asString()));
       CStdString strDir;
       strDir.Format("%ld/", m_pDS->fv("country.idCountry").get_asInt());
-      pItem->SetPath("videodb://1/1/"+ strDir);
+      pItem->SetPath("videodb://movies/genres/"+ strDir);
       pItem->m_bIsFolder=true;
       items.Add(pItem);
       m_pDS->next();
@@ -6791,7 +7029,7 @@ void CVideoDatabase::GetTvShowGenresByName(const CStdString& strSearch, CFileIte
     if (NULL == m_pDB.get()) return;
     if (NULL == m_pDS.get()) return;
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
       strSQL=PrepareSQL("select genre.idGenre,genre.strGenre,path.strPath from genre,genrelinktvshow,tvshow,path,tvshowlinkpath where genre.idGenre=genrelinktvshow.idGenre and genrelinktvshow.idShow=tvshow.idShow and path.idPath=tvshowlinkpath.idPath and tvshowlinkpath.idShow=tvshow.idShow and genre.strGenre like '%%%s%%'",strSearch.c_str());
     else
       strSQL=PrepareSQL("select distinct genre.idGenre,genre.strGenre from genre,genrelinktvshow where genrelinktvshow.idGenre=genre.idGenre and strGenre like '%%%s%%'", strSearch.c_str());
@@ -6799,8 +7037,8 @@ void CVideoDatabase::GetTvShowGenresByName(const CStdString& strSearch, CFileIte
 
     while (!m_pDS->eof())
     {
-      if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
-        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),g_settings.m_videoSources))
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
         {
           m_pDS->next();
           continue;
@@ -6809,7 +7047,7 @@ void CVideoDatabase::GetTvShowGenresByName(const CStdString& strSearch, CFileIte
       CFileItemPtr pItem(new CFileItem(m_pDS->fv("genre.strGenre").get_asString()));
       CStdString strDir;
       strDir.Format("%ld/", m_pDS->fv("genre.idGenre").get_asInt());
-      pItem->SetPath("videodb://2/1/"+ strDir);
+      pItem->SetPath("videodb://tvshows/genres/"+ strDir);
       pItem->m_bIsFolder=true;
       items.Add(pItem);
       m_pDS->next();
@@ -6831,7 +7069,7 @@ void CVideoDatabase::GetMovieActorsByName(const CStdString& strSearch, CFileItem
     if (NULL == m_pDB.get()) return;
     if (NULL == m_pDS.get()) return;
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
       strSQL=PrepareSQL("select actors.idActor,actors.strActor,path.strPath from actorlinkmovie,actors,movie,files,path where actors.idActor=actorlinkmovie.idActor and actorlinkmovie.idMovie=movie.idMovie and files.idFile=movie.idFile and files.idPath=path.idPath and actors.strActor like '%%%s%%'",strSearch.c_str());
     else
       strSQL=PrepareSQL("select distinct actors.idActor,actors.strActor from actorlinkmovie,actors,movie where actors.idActor=actorlinkmovie.idActor and actorlinkmovie.idMovie=movie.idMovie and actors.strActor like '%%%s%%'",strSearch.c_str());
@@ -6839,8 +7077,8 @@ void CVideoDatabase::GetMovieActorsByName(const CStdString& strSearch, CFileItem
 
     while (!m_pDS->eof())
     {
-      if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
-        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),g_settings.m_videoSources))
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
         {
           m_pDS->next();
           continue;
@@ -6849,7 +7087,7 @@ void CVideoDatabase::GetMovieActorsByName(const CStdString& strSearch, CFileItem
       CFileItemPtr pItem(new CFileItem(m_pDS->fv("actors.strActor").get_asString()));
       CStdString strDir;
       strDir.Format("%ld/", m_pDS->fv("actors.idActor").get_asInt());
-      pItem->SetPath("videodb://1/4/"+ strDir);
+      pItem->SetPath("videodb://movies/actors/"+ strDir);
       pItem->m_bIsFolder=true;
       items.Add(pItem);
       m_pDS->next();
@@ -6871,7 +7109,7 @@ void CVideoDatabase::GetTvShowsActorsByName(const CStdString& strSearch, CFileIt
     if (NULL == m_pDB.get()) return;
     if (NULL == m_pDS.get()) return;
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
       strSQL=PrepareSQL("select actors.idActor,actors.strActor,path.strPath from actorlinktvshow,actors,tvshow,path,tvshowlinkpath where actors.idActor=actorlinktvshow.idActor and actorlinktvshow.idShow=tvshow.idShow and tvshowlinkpath.idPath=tvshow.idShow and tvshowlinkpath.idPath=path.idPath and actors.strActor like '%%%s%%'",strSearch.c_str());
     else
       strSQL=PrepareSQL("select distinct actors.idActor,actors.strActor from actorlinktvshow,actors,tvshow where actors.idActor=actorlinktvshow.idActor and actorlinktvshow.idShow=tvshow.idShow and actors.strActor like '%%%s%%'",strSearch.c_str());
@@ -6879,8 +7117,8 @@ void CVideoDatabase::GetTvShowsActorsByName(const CStdString& strSearch, CFileIt
 
     while (!m_pDS->eof())
     {
-      if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
-        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),g_settings.m_videoSources))
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
         {
           m_pDS->next();
           continue;
@@ -6889,7 +7127,7 @@ void CVideoDatabase::GetTvShowsActorsByName(const CStdString& strSearch, CFileIt
       CFileItemPtr pItem(new CFileItem(m_pDS->fv("actors.strActor").get_asString()));
       CStdString strDir;
       strDir.Format("%ld/", m_pDS->fv("actors.idActor").get_asInt());
-      pItem->SetPath("videodb://2/4/"+ strDir);
+      pItem->SetPath("videodb://tvshows/actors/"+ strDir);
       pItem->m_bIsFolder=true;
       items.Add(pItem);
       m_pDS->next();
@@ -6914,7 +7152,7 @@ void CVideoDatabase::GetMusicVideoArtistsByName(const CStdString& strSearch, CFi
     CStdString strLike;
     if (!strSearch.IsEmpty())
       strLike = "and actors.strActor like '%%%s%%'";
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
       strSQL=PrepareSQL("select actors.idActor,actors.strActor,path.strPath from artistlinkmusicvideo,actors,musicvideo,files,path where actors.idActor=artistlinkmusicvideo.idArtist and artistlinkmusicvideo.idMVideo=musicvideo.idMVideo and files.idFile=musicvideo.idFile and files.idPath=path.idPath "+strLike,strSearch.c_str());
     else
       strSQL=PrepareSQL("select distinct actors.idActor,actors.strActor from artistlinkmusicvideo,actors where actors.idActor=artistlinkmusicvideo.idArtist "+strLike,strSearch.c_str());
@@ -6922,8 +7160,8 @@ void CVideoDatabase::GetMusicVideoArtistsByName(const CStdString& strSearch, CFi
 
     while (!m_pDS->eof())
     {
-      if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
-        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),g_settings.m_videoSources))
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
         {
           m_pDS->next();
           continue;
@@ -6932,7 +7170,7 @@ void CVideoDatabase::GetMusicVideoArtistsByName(const CStdString& strSearch, CFi
       CFileItemPtr pItem(new CFileItem(m_pDS->fv("actors.strActor").get_asString()));
       CStdString strDir;
       strDir.Format("%ld/", m_pDS->fv("actors.idActor").get_asInt());
-      pItem->SetPath("videodb://3/4/"+ strDir);
+      pItem->SetPath("videodb://musicvideos/artist/"+ strDir);
       pItem->m_bIsFolder=true;
       items.Add(pItem);
       m_pDS->next();
@@ -6954,7 +7192,7 @@ void CVideoDatabase::GetMusicVideoGenresByName(const CStdString& strSearch, CFil
     if (NULL == m_pDB.get()) return;
     if (NULL == m_pDS.get()) return;
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
       strSQL=PrepareSQL("select genre.idGenre,genre.strGenre,path.strPath from genre,genrelinkmusicvideo,musicvideo,path,files where genre.idGenre=genrelinkmusicvideo.idGenre and genrelinkmusicvideo.idMVideo = musicvideo.idMVideo and files.idFile=musicvideo.idFile and path.idPath=files.idPath and genre.strGenre like '%%%s%%'",strSearch.c_str());
     else
       strSQL=PrepareSQL("select distinct genre.idGenre,genre.strGenre from genre,genrelinkmusicvideo where genrelinkmusicvideo.idGenre=genre.idGenre and genre.strGenre like '%%%s%%'", strSearch.c_str());
@@ -6962,8 +7200,8 @@ void CVideoDatabase::GetMusicVideoGenresByName(const CStdString& strSearch, CFil
 
     while (!m_pDS->eof())
     {
-      if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
-        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),g_settings.m_videoSources))
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
         {
           m_pDS->next();
           continue;
@@ -6972,7 +7210,7 @@ void CVideoDatabase::GetMusicVideoGenresByName(const CStdString& strSearch, CFil
       CFileItemPtr pItem(new CFileItem(m_pDS->fv("genre.strGenre").get_asString()));
       CStdString strDir;
       strDir.Format("%ld/", m_pDS->fv("genre.idGenre").get_asInt());
-      pItem->SetPath("videodb://3/1/"+ strDir);
+      pItem->SetPath("videodb://musicvideos/genres/"+ strDir);
       pItem->m_bIsFolder=true;
       items.Add(pItem);
       m_pDS->next();
@@ -7000,7 +7238,7 @@ void CVideoDatabase::GetMusicVideoAlbumsByName(const CStdString& strSearch, CFil
       strLike.Format("and musicvideo.c%02d",VIDEODB_ID_MUSICVIDEO_ALBUM);
       strLike += "like '%%s%%%'";
     }
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
       strSQL=PrepareSQL("select distinct musicvideo.c%02d,musicvideo.idMVideo,path.strPath from musicvideo,files,path where files.idFile=musicvideo.idFile and files.idPath=path.idPath"+strLike,VIDEODB_ID_MUSICVIDEO_ALBUM,strSearch.c_str());
     else
     {
@@ -7018,8 +7256,8 @@ void CVideoDatabase::GetMusicVideoAlbumsByName(const CStdString& strSearch, CFil
         continue;
       }
 
-      if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
-        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),g_settings.m_videoSources))
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
         {
           m_pDS->next();
           continue;
@@ -7028,7 +7266,7 @@ void CVideoDatabase::GetMusicVideoAlbumsByName(const CStdString& strSearch, CFil
       CFileItemPtr pItem(new CFileItem(m_pDS->fv(0).get_asString()));
       CStdString strDir;
       strDir.Format("%ld", m_pDS->fv(1).get_asInt());
-      pItem->SetPath("videodb://3/2/"+ strDir);
+      pItem->SetPath("videodb://musicvideos/titles/"+ strDir);
       pItem->m_bIsFolder=false;
       items.Add(pItem);
       m_pDS->next();
@@ -7050,7 +7288,7 @@ void CVideoDatabase::GetMusicVideosByAlbum(const CStdString& strSearch, CFileIte
     if (NULL == m_pDB.get()) return;
     if (NULL == m_pDS.get()) return;
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
       strSQL = PrepareSQL("select musicvideo.idMVideo,musicvideo.c%02d,musicvideo.c%02d,path.strPath from musicvideo,files,path where files.idFile=musicvideo.idFile and files.idPath=path.idPath and musicvideo.c%02d like '%%%s%%'",VIDEODB_ID_MUSICVIDEO_ALBUM,VIDEODB_ID_MUSICVIDEO_TITLE,VIDEODB_ID_MUSICVIDEO_ALBUM,strSearch.c_str());
     else
       strSQL = PrepareSQL("select musicvideo.idMVideo,musicvideo.c%02d,musicvideo.c%02d from musicvideo where musicvideo.c%02d like '%%%s%%'",VIDEODB_ID_MUSICVIDEO_ALBUM,VIDEODB_ID_MUSICVIDEO_TITLE,VIDEODB_ID_MUSICVIDEO_ALBUM,strSearch.c_str());
@@ -7058,8 +7296,8 @@ void CVideoDatabase::GetMusicVideosByAlbum(const CStdString& strSearch, CFileIte
 
     while (!m_pDS->eof())
     {
-      if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
-        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),g_settings.m_videoSources))
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
         {
           m_pDS->next();
           continue;
@@ -7137,8 +7375,8 @@ bool CVideoDatabase::GetMusicVideosByWhere(const CStdString &baseDir, const Filt
       const dbiplus::sql_record* const record = data.at(targetRow);
       
       CVideoInfoTag musicvideo = GetDetailsForMusicVideo(record);
-      if (!checkLocks || g_settings.GetMasterProfile().getLockMode() == LOCK_MODE_EVERYONE || g_passwordManager.bMasterUser ||
-          g_passwordManager.IsDatabasePathUnlocked(musicvideo.m_strPath, g_settings.m_videoSources))
+      if (!checkLocks || CProfilesManager::Get().GetMasterProfile().getLockMode() == LOCK_MODE_EVERYONE || g_passwordManager.bMasterUser ||
+          g_passwordManager.IsDatabasePathUnlocked(musicvideo.m_strPath, *CMediaSourceSettings::Get().GetSources("video")))
       {
         CFileItemPtr item(new CFileItem(musicvideo));
 
@@ -7200,17 +7438,13 @@ bool CVideoDatabase::GetRandomMusicVideo(CFileItem* item, int& idSong, const CSt
   {
     idSong = -1;
 
-    int iCount = GetMusicVideoCount(strWhere);
-    if (iCount <= 0)
-      return false;
-    int iRandom = rand() % iCount;
-
     if (NULL == m_pDB.get()) return false;
     if (NULL == m_pDS.get()) return false;
 
     // We don't use PrepareSQL here, as the WHERE clause is already formatted.
     CStdString strSQL;
-    strSQL.Format("select * from musicvideoview where %s order by idMVideo limit 1 offset %i",strWhere.c_str(),iRandom);
+    strSQL.Format("select * from musicvideoview where %s",strWhere.c_str());
+    strSQL += PrepareSQL(" order by RANDOM() limit 1");
     CLog::Log(LOGDEBUG, "%s query = %s", __FUNCTION__, strSQL.c_str());
     // run query
     if (!m_pDS->query(strSQL.c_str()))
@@ -7222,7 +7456,7 @@ bool CVideoDatabase::GetRandomMusicVideo(CFileItem* item, int& idSong, const CSt
       return false;
     }
     *item->GetVideoInfoTag() = GetDetailsForMusicVideo(m_pDS);
-    CStdString path; path.Format("videodb://3/2/%ld",item->GetVideoInfoTag()->m_iDbId);
+    CStdString path; path.Format("videodb://musicvideos/titles/%ld",item->GetVideoInfoTag()->m_iDbId);
     item->SetPath(path);
     idSong = m_pDS->fv("idMVideo").get_asInt();
     item->SetLabel(item->GetVideoInfoTag()->m_strTitle);
@@ -7246,14 +7480,14 @@ int CVideoDatabase::GetMatchingMusicVideo(const CStdString& strArtist, const CSt
     CStdString strSQL;
     if (strAlbum.IsEmpty() && strTitle.IsEmpty())
     { // we want to return matching artists only
-      if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
         strSQL=PrepareSQL("select distinct actors.idActor,path.strPath from artistlinkmusicvideo,actors,musicvideo,files,path where actors.idActor=artistlinkmusicvideo.idArtist and artistlinkmusicvideo.idMVideo=musicvideo.idMVideo and files.idFile=musicvideo.idFile and files.idPath=path.idPath and actors.strActor like '%s'",strArtist.c_str());
       else
         strSQL=PrepareSQL("select distinct actors.idActor from artistlinkmusicvideo,actors where actors.idActor=artistlinkmusicvideo.idArtist and actors.strActor like '%s'",strArtist.c_str());
     }
     else
     { // we want to return the matching musicvideo
-      if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
         strSQL = PrepareSQL("select musicvideo.idMVideo from musicvideo,files,path,artistlinkmusicvideo,actors where files.idFile=musicvideo.idFile and files.idPath=path.idPath and musicvideo.%c02d like '%s' and musicvideo.%c02d like '%s' and artistlinkmusicvideo.idMVideo=musicvideo.idMVideo and artistlinkmusicvideo.idArtist=actors.idActors and actors.strActor like '%s'",VIDEODB_ID_MUSICVIDEO_ALBUM,strAlbum.c_str(),VIDEODB_ID_MUSICVIDEO_TITLE,strTitle.c_str(),strArtist.c_str());
       else
         strSQL = PrepareSQL("select musicvideo.idMVideo from musicvideo join artistlinkmusicvideo on artistlinkmusicvideo.idMVideo=musicvideo.idMVideo join actors on actors.idActor=artistlinkmusicvideo.idArtist where musicvideo.c%02d like '%s' and musicvideo.c%02d like '%s' and actors.strActor like '%s'",VIDEODB_ID_MUSICVIDEO_ALBUM,strAlbum.c_str(),VIDEODB_ID_MUSICVIDEO_TITLE,strTitle.c_str(),strArtist.c_str());
@@ -7263,8 +7497,8 @@ int CVideoDatabase::GetMatchingMusicVideo(const CStdString& strArtist, const CSt
     if (m_pDS->eof())
       return -1;
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
-      if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),g_settings.m_videoSources))
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+      if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
       {
         m_pDS->close();
         return -1;
@@ -7290,7 +7524,7 @@ void CVideoDatabase::GetMoviesByName(const CStdString& strSearch, CFileItemList&
     if (NULL == m_pDB.get()) return;
     if (NULL == m_pDS.get()) return;
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
       strSQL = PrepareSQL("select movie.idMovie,movie.c%02d,path.strPath, movie.idSet from movie,files,path where files.idFile=movie.idFile and files.idPath=path.idPath and movie.c%02d like '%%%s%%'",VIDEODB_ID_TITLE,VIDEODB_ID_TITLE,strSearch.c_str());
     else
       strSQL = PrepareSQL("select movie.idMovie,movie.c%02d, movie.idSet from movie where movie.c%02d like '%%%s%%'",VIDEODB_ID_TITLE,VIDEODB_ID_TITLE,strSearch.c_str());
@@ -7298,8 +7532,8 @@ void CVideoDatabase::GetMoviesByName(const CStdString& strSearch, CFileItemList&
 
     while (!m_pDS->eof())
     {
-      if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
-        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),g_settings.m_videoSources))
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
         {
           m_pDS->next();
           continue;
@@ -7309,10 +7543,10 @@ void CVideoDatabase::GetMoviesByName(const CStdString& strSearch, CFileItemList&
       int setId = m_pDS->fv("movie.idSet").get_asInt();
       CFileItemPtr pItem(new CFileItem(m_pDS->fv(1).get_asString()));
       CStdString path;
-      if (setId <= 0)
-        path.Format("videodb://1/2/%i", movieId);
+      if (setId <= 0 || !CSettings::Get().GetBool("videolibrary.groupmoviesets"))
+        path.Format("videodb://movies/titles/%i", movieId);
       else
-        path.Format("videodb://1/7/%i/%i", setId, movieId);
+        path.Format("videodb://movies/sets/%i/%i", setId, movieId);
       pItem->SetPath(path);
       pItem->m_bIsFolder=false;
       items.Add(pItem);
@@ -7335,7 +7569,7 @@ void CVideoDatabase::GetTvShowsByName(const CStdString& strSearch, CFileItemList
     if (NULL == m_pDB.get()) return;
     if (NULL == m_pDS.get()) return;
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
       strSQL = PrepareSQL("select tvshow.idShow,tvshow.c%02d,path.strPath from tvshow,path,tvshowlinkpath where tvshowlinkpath.idPath=path.idPath and tvshowlinkpath.idShow=tvshow.idShow and tvshow.c%02d like '%%%s%%'",VIDEODB_ID_TV_TITLE,VIDEODB_ID_TV_TITLE,strSearch.c_str());
     else
       strSQL = PrepareSQL("select tvshow.idShow,tvshow.c%02d from tvshow where tvshow.c%02d like '%%%s%%'",VIDEODB_ID_TV_TITLE,VIDEODB_ID_TV_TITLE,strSearch.c_str());
@@ -7343,8 +7577,8 @@ void CVideoDatabase::GetTvShowsByName(const CStdString& strSearch, CFileItemList
 
     while (!m_pDS->eof())
     {
-      if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
-        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),g_settings.m_videoSources))
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
         {
           m_pDS->next();
           continue;
@@ -7352,7 +7586,7 @@ void CVideoDatabase::GetTvShowsByName(const CStdString& strSearch, CFileItemList
 
       CFileItemPtr pItem(new CFileItem(m_pDS->fv(1).get_asString()));
       CStdString strDir;
-      strDir.Format("2/2/%ld/", m_pDS->fv("tvshow.idShow").get_asInt());
+      strDir.Format("tvshows/titles/%ld/", m_pDS->fv("tvshow.idShow").get_asInt());
 
       pItem->SetPath("videodb://"+ strDir);
       pItem->m_bIsFolder=true;
@@ -7377,7 +7611,7 @@ void CVideoDatabase::GetEpisodesByName(const CStdString& strSearch, CFileItemLis
     if (NULL == m_pDB.get()) return;
     if (NULL == m_pDS.get()) return;
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
       strSQL = PrepareSQL("select episode.idEpisode,episode.c%02d,episode.c%02d,episode.idShow,tvshow.c%02d,path.strPath from episode,files,path,tvshow where files.idFile=episode.idFile and episode.idShow=tvshow.idShow and files.idPath=path.idPath and episode.c%02d like '%%%s%%'",VIDEODB_ID_EPISODE_TITLE,VIDEODB_ID_EPISODE_SEASON,VIDEODB_ID_TV_TITLE,VIDEODB_ID_EPISODE_TITLE,strSearch.c_str());
     else
       strSQL = PrepareSQL("select episode.idEpisode,episode.c%02d,episode.c%02d,episode.idShow,tvshow.c%02d from episode,tvshow where tvshow.idShow=episode.idShow and episode.c%02d like '%%%s%%'",VIDEODB_ID_EPISODE_TITLE,VIDEODB_ID_EPISODE_SEASON,VIDEODB_ID_TV_TITLE,VIDEODB_ID_EPISODE_TITLE,strSearch.c_str());
@@ -7385,15 +7619,15 @@ void CVideoDatabase::GetEpisodesByName(const CStdString& strSearch, CFileItemLis
 
     while (!m_pDS->eof())
     {
-      if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
-        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),g_settings.m_videoSources))
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
         {
           m_pDS->next();
           continue;
         }
 
       CFileItemPtr pItem(new CFileItem(m_pDS->fv(1).get_asString()+" ("+m_pDS->fv(4).get_asString()+")"));
-      CStdString path; path.Format("videodb://2/2/%ld/%ld/%ld",m_pDS->fv("episode.idShow").get_asInt(),m_pDS->fv(2).get_asInt(),m_pDS->fv(0).get_asInt());
+      CStdString path; path.Format("videodb://tvshows/titles/%ld/%ld/%ld",m_pDS->fv("episode.idShow").get_asInt(),m_pDS->fv(2).get_asInt(),m_pDS->fv(0).get_asInt());
       pItem->SetPath(path);
       pItem->m_bIsFolder=false;
       items.Add(pItem);
@@ -7412,7 +7646,7 @@ void CVideoDatabase::GetMusicVideosByName(const CStdString& strSearch, CFileItem
 // Alternative searching - not quite as fast though due to
 // retrieving all information
 //  Filter filter(PrepareSQL("c%02d like '%s%%' or c%02d like '%% %s%%'", VIDEODB_ID_MUSICVIDEO_TITLE, strSearch.c_str(), VIDEODB_ID_MUSICVIDEO_TITLE, strSearch.c_str()));
-//  GetMusicVideosByWhere("videodb://3/2/", filter, items);
+//  GetMusicVideosByWhere("videodb://musicvideos/titles/", filter, items);
   CStdString strSQL;
 
   try
@@ -7420,7 +7654,7 @@ void CVideoDatabase::GetMusicVideosByName(const CStdString& strSearch, CFileItem
     if (NULL == m_pDB.get()) return;
     if (NULL == m_pDS.get()) return;
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
       strSQL = PrepareSQL("select musicvideo.idMVideo,musicvideo.c%02d,path.strPath from musicvideo,files,path where files.idFile=musicvideo.idFile and files.idPath=path.idPath and musicvideo.c%02d like '%%%s%%'",VIDEODB_ID_MUSICVIDEO_TITLE,VIDEODB_ID_MUSICVIDEO_TITLE,strSearch.c_str());
     else
       strSQL = PrepareSQL("select musicvideo.idMVideo,musicvideo.c%02d from musicvideo where musicvideo.c%02d like '%%%s%%'",VIDEODB_ID_MUSICVIDEO_TITLE,VIDEODB_ID_MUSICVIDEO_TITLE,strSearch.c_str());
@@ -7428,8 +7662,8 @@ void CVideoDatabase::GetMusicVideosByName(const CStdString& strSearch, CFileItem
 
     while (!m_pDS->eof())
     {
-      if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
-        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),g_settings.m_videoSources))
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
         {
           m_pDS->next();
           continue;
@@ -7459,7 +7693,7 @@ void CVideoDatabase::GetEpisodesByPlot(const CStdString& strSearch, CFileItemLis
 //  Filter filter;
 //  filter.where = PrepareSQL("c%02d like '%s%%' or c%02d like '%% %s%%'", VIDEODB_ID_EPISODE_PLOT, strSearch.c_str(), VIDEODB_ID_EPISODE_PLOT, strSearch.c_str());
 //  filter.where += PrepareSQL("or c%02d like '%s%%' or c%02d like '%% %s%%'", VIDEODB_ID_EPISODE_TITLE, strSearch.c_str(), VIDEODB_ID_EPISODE_TITLE, strSearch.c_str());
-//  GetEpisodesByWhere("videodb://2/2/", filter, items);
+//  GetEpisodesByWhere("videodb://tvshows/titles/", filter, items);
 //  return;
   CStdString strSQL;
 
@@ -7468,7 +7702,7 @@ void CVideoDatabase::GetEpisodesByPlot(const CStdString& strSearch, CFileItemLis
     if (NULL == m_pDB.get()) return;
     if (NULL == m_pDS.get()) return;
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
       strSQL = PrepareSQL("select episode.idEpisode,episode.c%02d,episode.c%02d,episode.idShow,tvshow.c%02d,path.strPath from episode,files,path,tvshow where files.idFile=episode.idFile and files.idPath=path.idPath and tvshow.idShow=episode.idShow and episode.c%02d like '%%%s%%'",VIDEODB_ID_EPISODE_TITLE,VIDEODB_ID_EPISODE_SEASON,VIDEODB_ID_TV_TITLE,VIDEODB_ID_EPISODE_PLOT,strSearch.c_str());
     else
       strSQL = PrepareSQL("select episode.idEpisode,episode.c%02d,episode.c%02d,episode.idShow,tvshow.c%02d from episode,tvshow where tvshow.idShow=episode.idShow and episode.c%02d like '%%%s%%'",VIDEODB_ID_EPISODE_TITLE,VIDEODB_ID_EPISODE_SEASON,VIDEODB_ID_TV_TITLE,VIDEODB_ID_EPISODE_PLOT,strSearch.c_str());
@@ -7476,15 +7710,15 @@ void CVideoDatabase::GetEpisodesByPlot(const CStdString& strSearch, CFileItemLis
 
     while (!m_pDS->eof())
     {
-      if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
-        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),g_settings.m_videoSources))
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
         {
           m_pDS->next();
           continue;
         }
 
       CFileItemPtr pItem(new CFileItem(m_pDS->fv(1).get_asString()+" ("+m_pDS->fv(4).get_asString()+")"));
-      CStdString path; path.Format("videodb://2/2/%ld/%ld/%ld",m_pDS->fv("episode.idShow").get_asInt(),m_pDS->fv(2).get_asInt(),m_pDS->fv(0).get_asInt());
+      CStdString path; path.Format("videodb://tvshows/titles/%ld/%ld/%ld",m_pDS->fv("episode.idShow").get_asInt(),m_pDS->fv(2).get_asInt(),m_pDS->fv(0).get_asInt());
       pItem->SetPath(path);
       pItem->m_bIsFolder=false;
       items.Add(pItem);
@@ -7507,7 +7741,7 @@ void CVideoDatabase::GetMoviesByPlot(const CStdString& strSearch, CFileItemList&
     if (NULL == m_pDB.get()) return;
     if (NULL == m_pDS.get()) return;
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
       strSQL = PrepareSQL("select movie.idMovie, movie.c%02d, path.strPath from movie,files,path where files.idFile=movie.idFile and files.idPath=path.idPath and (movie.c%02d like '%%%s%%' or movie.c%02d like '%%%s%%' or movie.c%02d like '%%%s%%')",VIDEODB_ID_TITLE,VIDEODB_ID_PLOT,strSearch.c_str(),VIDEODB_ID_PLOTOUTLINE,strSearch.c_str(),VIDEODB_ID_TAGLINE,strSearch.c_str());
     else
       strSQL = PrepareSQL("select movie.idMovie, movie.c%02d from movie where (movie.c%02d like '%%%s%%' or movie.c%02d like '%%%s%%' or movie.c%02d like '%%%s%%')",VIDEODB_ID_TITLE,VIDEODB_ID_PLOT,strSearch.c_str(),VIDEODB_ID_PLOTOUTLINE,strSearch.c_str(),VIDEODB_ID_TAGLINE,strSearch.c_str());
@@ -7516,15 +7750,15 @@ void CVideoDatabase::GetMoviesByPlot(const CStdString& strSearch, CFileItemList&
 
     while (!m_pDS->eof())
     {
-      if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
-        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv(2).get_asString()),g_settings.m_videoSources))
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv(2).get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
         {
           m_pDS->next();
           continue;
         }
 
       CFileItemPtr pItem(new CFileItem(m_pDS->fv(1).get_asString()));
-      CStdString path; path.Format("videodb://1/2/%ld", m_pDS->fv(0).get_asInt());
+      CStdString path; path.Format("videodb://movies/titles/%ld", m_pDS->fv(0).get_asInt());
       pItem->SetPath(path);
       pItem->m_bIsFolder=false;
 
@@ -7549,7 +7783,7 @@ void CVideoDatabase::GetMovieDirectorsByName(const CStdString& strSearch, CFileI
     if (NULL == m_pDB.get()) return;
     if (NULL == m_pDS.get()) return;
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
       strSQL = PrepareSQL("select distinct directorlinkmovie.idDirector,actors.strActor,path.strPath from movie,files,path,actors,directorlinkmovie where files.idFile=movie.idFile and files.idPath=path.idPath and directorlinkmovie.idMovie=movie.idMovie and directorlinkmovie.idDirector=actors.idActor and actors.strActor like '%%%s%%'",strSearch.c_str());
     else
       strSQL = PrepareSQL("select distinct directorlinkmovie.idDirector,actors.strActor from movie,actors,directorlinkmovie where directorlinkmovie.idMovie=movie.idMovie and directorlinkmovie.idDirector=actors.idActor and actors.strActor like '%%%s%%'",strSearch.c_str());
@@ -7558,8 +7792,8 @@ void CVideoDatabase::GetMovieDirectorsByName(const CStdString& strSearch, CFileI
 
     while (!m_pDS->eof())
     {
-      if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
-        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),g_settings.m_videoSources))
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
         {
           m_pDS->next();
           continue;
@@ -7569,7 +7803,7 @@ void CVideoDatabase::GetMovieDirectorsByName(const CStdString& strSearch, CFileI
       strDir.Format("%ld/", m_pDS->fv("directorlinkmovie.idDirector").get_asInt());
       CFileItemPtr pItem(new CFileItem(m_pDS->fv("actors.strActor").get_asString()));
 
-      pItem->SetPath("videodb://1/5/"+ strDir);
+      pItem->SetPath("videodb://movies/directors/"+ strDir);
       pItem->m_bIsFolder=true;
       items.Add(pItem);
       m_pDS->next();
@@ -7591,7 +7825,7 @@ void CVideoDatabase::GetTvShowsDirectorsByName(const CStdString& strSearch, CFil
     if (NULL == m_pDB.get()) return;
     if (NULL == m_pDS.get()) return;
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
       strSQL = PrepareSQL("select distinct directorlinktvshow.idDirector,actors.strActor,path.strPath from tvshow,path,actors,directorlinktvshow,tvshowlinkpath where tvshowlinkpath.idPath=path.idPath and tvshowlinkpath.idShow=tvshow.idShow and directorlinktvshow.idShow=tvshow.idShow and directorlinktvshow.idDirector=actors.idActor and actors.strActor like '%%%s%%'",strSearch.c_str());
     else
       strSQL = PrepareSQL("select distinct directorlinktvshow.idDirector,actors.strActor from tvshow,actors,directorlinktvshow where directorlinktvshow.idShow=tvshow.idShow and directorlinktvshow.idDirector=actors.idActor and actors.strActor like '%%%s%%'",strSearch.c_str());
@@ -7600,8 +7834,8 @@ void CVideoDatabase::GetTvShowsDirectorsByName(const CStdString& strSearch, CFil
 
     while (!m_pDS->eof())
     {
-      if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
-        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),g_settings.m_videoSources))
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
         {
           m_pDS->next();
           continue;
@@ -7611,7 +7845,7 @@ void CVideoDatabase::GetTvShowsDirectorsByName(const CStdString& strSearch, CFil
       strDir.Format("%ld/", m_pDS->fv("directorlinktvshow.idDirector").get_asInt());
       CFileItemPtr pItem(new CFileItem(m_pDS->fv("actors.strActor").get_asString()));
 
-      pItem->SetPath("videodb://2/5/"+ strDir);
+      pItem->SetPath("videodb://tvshows/studios/"+ strDir);
       pItem->m_bIsFolder=true;
       items.Add(pItem);
       m_pDS->next();
@@ -7633,7 +7867,7 @@ void CVideoDatabase::GetMusicVideoDirectorsByName(const CStdString& strSearch, C
     if (NULL == m_pDB.get()) return;
     if (NULL == m_pDS.get()) return;
 
-    if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
       strSQL = PrepareSQL("select distinct directorlinkmusicvideo.idDirector,actors.strActor,path.strPath from musicvideo,files,path,actors,directorlinkmusicvideo where files.idFile=musicvideo.idFile and files.idPath=path.idPath and directorlinkmusicvideo.idMVideo=musicvideo.idMVideo and directorlinkmusicvideo.idDirector=actors.idActor and actors.strActor like '%%%s%%'",strSearch.c_str());
     else
       strSQL = PrepareSQL("select distinct directorlinkmusicvideo.idDirector,actors.strActor from musicvideo,actors,directorlinkmusicvideo where directorlinkmusicvideo.idMVideo=musicvideo.idMVideo and directorlinkmusicvideo.idDirector=actors.idActor and actors.strActor like '%%%s%%'",strSearch.c_str());
@@ -7642,8 +7876,8 @@ void CVideoDatabase::GetMusicVideoDirectorsByName(const CStdString& strSearch, C
 
     while (!m_pDS->eof())
     {
-      if (g_settings.GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
-        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),g_settings.m_videoSources))
+      if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
         {
           m_pDS->next();
           continue;
@@ -7653,7 +7887,7 @@ void CVideoDatabase::GetMusicVideoDirectorsByName(const CStdString& strSearch, C
       strDir.Format("%ld/", m_pDS->fv("directorlinkmusicvideo.idDirector").get_asInt());
       CFileItemPtr pItem(new CFileItem(m_pDS->fv("actors.strActor").get_asString()));
 
-      pItem->SetPath("videodb://3/5/"+ strDir);
+      pItem->SetPath("videodb://musicvideos/albums/"+ strDir);
       pItem->m_bIsFolder=true;
       items.Add(pItem);
       m_pDS->next();
@@ -7735,7 +7969,7 @@ void CVideoDatabase::CleanDatabase(CGUIDialogProgressBarHandle* handle, const se
     int current = 0;
 
     bool bIsSource;
-    VECSOURCES *pShares = g_settings.GetSourcesFromType("video");
+    VECSOURCES *pShares = CMediaSourceSettings::Get().GetSources("video");
 
     while (!m_pDS->eof())
     {
@@ -8082,28 +8316,26 @@ void CVideoDatabase::DumpToDummyFiles(const CStdString &path)
 {
   // get all tvshows
   CFileItemList items;
-  GetTvShowsByWhere("videodb://2/2/", "", items);
+  GetTvShowsByWhere("videodb://tvshows/titles/", "", items);
   CStdString showPath = URIUtils::AddFileToFolder(path, "shows");
   CDirectory::Create(showPath);
   for (int i = 0; i < items.Size(); i++)
   {
     // create a folder in this directory
     CStdString showName = CUtil::MakeLegalFileName(items[i]->GetVideoInfoTag()->m_strShowTitle);
-    CStdString TVFolder;
-    URIUtils::AddFileToFolder(showPath, showName, TVFolder);
+    CStdString TVFolder = URIUtils::AddFileToFolder(showPath, showName);
     if (CDirectory::Create(TVFolder))
     { // right - grab the episodes and dump them as well
       CFileItemList episodes;
       Filter filter(PrepareSQL("idShow=%i", items[i]->GetVideoInfoTag()->m_iDbId));
-      GetEpisodesByWhere("videodb://2/2/", filter, episodes);
+      GetEpisodesByWhere("videodb://tvshows/titles/", filter, episodes);
       for (int i = 0; i < episodes.Size(); i++)
       {
         CVideoInfoTag *tag = episodes[i]->GetVideoInfoTag();
         CStdString episode;
         episode.Format("%s.s%02de%02d.avi", showName.c_str(), tag->m_iSeason, tag->m_iEpisode);
         // and make a file
-        CStdString episodePath;
-        URIUtils::AddFileToFolder(TVFolder, episode, episodePath);
+        CStdString episodePath = URIUtils::AddFileToFolder(TVFolder, episode);
         CFile file;
         if (file.OpenForWrite(episodePath))
           file.Close();
@@ -8112,7 +8344,7 @@ void CVideoDatabase::DumpToDummyFiles(const CStdString &path)
   }
   // get all movies
   items.Clear();
-  GetMoviesByWhere("videodb://1/2/", "", items);
+  GetMoviesByWhere("videodb://movies/titles/", "", items);
   CStdString moviePath = URIUtils::AddFileToFolder(path, "movies");
   CDirectory::Create(moviePath);
   for (int i = 0; i < items.Size(); i++)
@@ -8245,7 +8477,9 @@ void CVideoDatabase::ExportToXML(const CStdString &path, bool singleFiles /* = f
 
           if (item.IsOpticalMediaFile())
           {
-            nfoFile = URIUtils::GetParentFolderURI(nfoFile, true);
+            nfoFile = URIUtils::AddFileToFolder(
+                                    URIUtils::GetParentPath(nfoFile),
+                                    URIUtils::GetFileName(nfoFile));
           }
 
           if (overwrite || !CFile::Exists(nfoFile, false))
@@ -8266,14 +8500,23 @@ void CVideoDatabase::ExportToXML(const CStdString &path, bool singleFiles /* = f
             }
           }
         }
-
+      }
+      if (singleFiles)
+      {
         xmlDoc.Clear();
         TiXmlDeclaration decl("1.0", "UTF-8", "yes");
         xmlDoc.InsertEndChild(decl);
       }
 
-      if (singleFiles && images && !bSkip)
+      if (images && !bSkip)
       {
+        if (!singleFiles)
+        {
+          CStdString strFileName(movie.m_strTitle);
+          if (movie.m_iYear > 0)
+            strFileName.AppendFormat("_%i", movie.m_iYear);
+          item.SetPath(GetSafeFile(moviesDir, strFileName) + ".avi");
+        }
         for (map<string, string>::const_iterator i = artwork.begin(); i != artwork.end(); ++i)
         {
           CStdString savedThumb = item.GetLocalArt(i->first, false);
@@ -8297,7 +8540,7 @@ void CVideoDatabase::ExportToXML(const CStdString &path, bool singleFiles /* = f
 
     while (!m_pDS->eof())
     {
-      CVideoInfoTag movie = GetDetailsForMusicVideo(m_pDS);
+      CVideoInfoTag movie = GetDetailsForMusicVideo(m_pDS, true);
       map<string, string> artwork;
       if (GetArtForItem(movie.m_iDbId, movie.m_type, artwork) && !singleFiles)
       {
@@ -8355,13 +8598,22 @@ void CVideoDatabase::ExportToXML(const CStdString &path, bool singleFiles /* = f
             }
           }
         }
-
+      }
+      if (singleFiles)
+      {
         xmlDoc.Clear();
         TiXmlDeclaration decl("1.0", "UTF-8", "yes");
         xmlDoc.InsertEndChild(decl);
       }
-      if (singleFiles && images && !bSkip)
+      if (images && !bSkip)
       {
+        if (!singleFiles)
+        {
+          CStdString strFileName(StringUtils::Join(movie.m_artist, g_advancedSettings.m_videoItemSeparator) + "." + movie.m_strTitle);
+          if (movie.m_iYear > 0)
+            strFileName.AppendFormat("_%i", movie.m_iYear);
+          item.SetPath(GetSafeFile(moviesDir, strFileName) + ".avi");
+        }
         for (map<string, string>::const_iterator i = artwork.begin(); i != artwork.end(); ++i)
         {
           CStdString savedThumb = item.GetLocalArt(i->first, false);
@@ -8436,8 +8688,7 @@ void CVideoDatabase::ExportToXML(const CStdString &path, bool singleFiles /* = f
         }
         else
         {
-          CStdString nfoFile;
-          URIUtils::AddFileToFolder(tvshow.m_strPath, "tvshow.nfo", nfoFile);
+          CStdString nfoFile = URIUtils::AddFileToFolder(tvshow.m_strPath, "tvshow.nfo");
 
           if (overwrite || !CFile::Exists(nfoFile, false))
           {
@@ -8457,13 +8708,18 @@ void CVideoDatabase::ExportToXML(const CStdString &path, bool singleFiles /* = f
             }
           }
         }
-
+      }
+      if (singleFiles)
+      {
         xmlDoc.Clear();
         TiXmlDeclaration decl("1.0", "UTF-8", "yes");
         xmlDoc.InsertEndChild(decl);
       }
-      if (singleFiles && images && !bSkip)
+      if (images && !bSkip)
       {
+        if (!singleFiles)
+          item.SetPath(GetSafeFile(tvshowsDir, tvshow.m_strTitle));
+
         for (map<string, string>::const_iterator i = artwork.begin(); i != artwork.end(); ++i)
         {
           CStdString savedThumb = item.GetLocalArt(i->first, true);
@@ -8555,14 +8811,22 @@ void CVideoDatabase::ExportToXML(const CStdString &path, bool singleFiles /* = f
               }
             }
           }
-
+        }
+        if (singleFiles)
+        {
           xmlDoc.Clear();
           TiXmlDeclaration decl("1.0", "UTF-8", "yes");
           xmlDoc.InsertEndChild(decl);
         }
 
-        if (singleFiles && images && !bSkip)
+        if (images && !bSkip)
         {
+          if (!singleFiles)
+          {
+            CStdString epName;
+            epName.Format("s%02ie%02i.avi", episode.m_iSeason, episode.m_iEpisode);
+            item.SetPath(URIUtils::AddFileToFolder(showDir, epName));
+          }
           for (map<string, string>::const_iterator i = artwork.begin(); i != artwork.end(); ++i)
           {
             CStdString savedThumb = item.GetLocalArt(i->first, false);
@@ -8716,11 +8980,11 @@ void CVideoDatabase::ImportFromXML(const CStdString &path)
     while (path)
     {
       CStdString strPath;
-      if (XMLUtils::GetString(path,"url",strPath))
+      if (XMLUtils::GetString(path,"url",strPath) && !strPath.empty())
         AddPath(strPath);
 
       CStdString content;
-      if (XMLUtils::GetString(path,"content", content))
+      if (XMLUtils::GetString(path,"content", content) && !content.empty())
       { // check the scraper exists, if so store the path
         AddonPtr addon;
         CStdString id;
@@ -8746,28 +9010,30 @@ void CVideoDatabase::ImportFromXML(const CStdString &path)
       {
         info.Load(movie);
         CFileItem item(info);
-        map<string, string> artwork;
-        if (ImportArtFromXML(movie->FirstChild("art"), artwork))
-          item.SetArt(artwork);
         bool useFolders = info.m_basePath.IsEmpty() ? LookupByFolders(item.GetPath()) : false;
+        CStdString filename = info.m_strTitle;
+        if (info.m_iYear > 0)
+          filename.AppendFormat("_%i", info.m_iYear);
+        CFileItem artItem(item);
+        artItem.SetPath(GetSafeFile(moviesDir, filename) + ".avi");
+        scanner.GetArtwork(&artItem, CONTENT_MOVIES, useFolders, true, actorsDir);
+        item.SetArt(artItem.GetArt());
         scanner.AddVideo(&item, CONTENT_MOVIES, useFolders, true, NULL, true);
-        CStdString strFileName(info.m_strTitle);
-        if (iVersion >= 1 && info.m_iYear > 0)
-          strFileName.AppendFormat("_%i", info.m_iYear);
         current++;
       }
       else if (strnicmp(movie->Value(), "musicvideo", 10) == 0)
       {
         info.Load(movie);
         CFileItem item(info);
-        map<string, string> artwork;
-        if (ImportArtFromXML(movie->FirstChild("art"), artwork))
-          item.SetArt(artwork);
         bool useFolders = info.m_basePath.IsEmpty() ? LookupByFolders(item.GetPath()) : false;
+        CStdString filename = StringUtils::Join(info.m_artist, g_advancedSettings.m_videoItemSeparator) + "." + info.m_strTitle;
+        if (info.m_iYear > 0)
+          filename.AppendFormat("_%i", info.m_iYear);
+        CFileItem artItem(item);
+        artItem.SetPath(GetSafeFile(musicvideosDir, filename) + ".avi");
+        scanner.GetArtwork(&artItem, CONTENT_MOVIES, useFolders, true, actorsDir);
+        item.SetArt(artItem.GetArt());
         scanner.AddVideo(&item, CONTENT_MUSICVIDEOS, useFolders, true, NULL, true);
-        CStdString strFileName(StringUtils::Join(info.m_artist, g_advancedSettings.m_videoItemSeparator) + "." + info.m_strTitle);
-        if (iVersion >= 1 && info.m_iYear > 0)
-          strFileName.AppendFormat("_%i", info.m_iYear);
         current++;
       }
       else if (strnicmp(movie->Value(), "tvshow", 6) == 0)
@@ -8778,30 +9044,21 @@ void CVideoDatabase::ImportFromXML(const CStdString &path)
         URIUtils::AddSlashAtEnd(info.m_strPath);
         DeleteTvShow(info.m_strPath);
         CFileItem showItem(info);
-        map<string, string> artwork;
-        if (ImportArtFromXML(movie->FirstChild("art"), artwork))
-          showItem.SetArt(artwork);
         bool useFolders = info.m_basePath.IsEmpty() ? LookupByFolders(showItem.GetPath(), true) : false;
+        CFileItem artItem(showItem);
+        CStdString artPath(GetSafeFile(tvshowsDir, info.m_strTitle));
+        artItem.SetPath(artPath);
+        scanner.GetArtwork(&artItem, CONTENT_MOVIES, useFolders, true, actorsDir);
+        showItem.SetArt(artItem.GetArt());
         int showID = scanner.AddVideo(&showItem, CONTENT_TVSHOWS, useFolders, true, NULL, true);
         // season artwork
-        TiXmlNode *art = movie->FirstChild("art");
-        if (art)
+        map<int, map<string, string> > seasonArt;
+        artItem.GetVideoInfoTag()->m_strPath = artPath;
+        scanner.GetSeasonThumbs(*artItem.GetVideoInfoTag(), seasonArt, CVideoThumbLoader::GetArtTypes("season"), true);
+        for (map<int, map<string, string> >::iterator i = seasonArt.begin(); i != seasonArt.end(); ++i)
         {
-          TiXmlElement *season = art->FirstChildElement("season");
-          while (season)
-          {
-            if (season->FirstChild())
-            {
-              int seasonNum = -1;
-              season->Attribute("num", &seasonNum);
-              map<string, string> artwork;
-              
-              int seasonID = AddSeason(showID, seasonNum);
-              if (ImportArtFromXML(season, artwork) &&  seasonID > -1)
-                SetArtForItem(seasonID, "season", artwork);
-            }
-            season = season->NextSiblingElement("season");
-          }
+          int seasonID = AddSeason(showID, i->first);
+          SetArtForItem(seasonID, "season", i->second);
         }
         current++;
         // now load the episodes
@@ -8812,9 +9069,12 @@ void CVideoDatabase::ImportFromXML(const CStdString &path)
           CVideoInfoTag info;
           info.Load(episode);
           CFileItem item(info);
-          map<string, string> artwork;
-          if (ImportArtFromXML(episode->FirstChild("art"), artwork))
-            item.SetArt(artwork);
+          CStdString filename;
+          filename.Format("s%02ie%02i.avi", info.m_iSeason, info.m_iEpisode);
+          CFileItem artItem(item);
+          artItem.SetPath(GetSafeFile(artPath, filename));
+          scanner.GetArtwork(&artItem, CONTENT_MOVIES, useFolders, true, actorsDir);
+          item.SetArt(artItem.GetArt());
           scanner.AddVideo(&item,CONTENT_TVSHOWS, false, false, showItem.GetVideoInfoTag(), true);
           episode = episode->NextSiblingElement("episodedetails");
         }
@@ -8845,11 +9105,12 @@ void CVideoDatabase::ImportFromXML(const CStdString &path)
 bool CVideoDatabase::ImportArtFromXML(const TiXmlNode *node, map<string, string> &artwork)
 {
   if (!node) return false;
-  CStdString art;
-  if (XMLUtils::GetString(node, "thumb", art))
-    artwork.insert(make_pair("thumb", art));
-  if (XMLUtils::GetString(node, "fanart", art))
-    artwork.insert(make_pair("fanart", art));
+  const TiXmlNode *art = node->FirstChild();
+  while (art && art->FirstChild())
+  {
+    artwork.insert(make_pair(art->ValueStr(), art->FirstChild()->ValueStr()));
+    art = art->NextSibling();
+  }
   return !artwork.empty();
 }
 
@@ -8859,7 +9120,7 @@ void CVideoDatabase::ConstructPath(CStdString& strDest, const CStdString& strPat
       URIUtils::IsInArchive(strFileName) || URIUtils::IsPlugin(strPath))
     strDest = strFileName;
   else
-    URIUtils::AddFileToFolder(strPath, strFileName, strDest);
+    strDest = URIUtils::AddFileToFolder(strPath, strFileName);
 }
 
 void CVideoDatabase::SplitPath(const CStdString& strFileNameAndPath, CStdString& strPath, CStdString& strFileName)
@@ -8910,42 +9171,84 @@ bool CVideoDatabase::CommitTransaction()
   return false;
 }
 
-void CVideoDatabase::SetDetail(const CStdString& strDetail, int id, int field,
-                               VIDEODB_CONTENT_TYPE type)
+bool CVideoDatabase::SetSingleValue(VIDEODB_CONTENT_TYPE type, int dbId, int dbField, const std::string &strValue)
 {
+  string strSQL;
   try
   {
-    if (NULL == m_pDB.get()) return;
-    if (NULL == m_pDS.get()) return;
+    if (NULL == m_pDB.get() || NULL == m_pDS.get())
+      return false;
 
-    CStdString strTable, strField;
+    string strTable, strField;
     if (type == VIDEODB_CONTENT_MOVIES)
     {
       strTable = "movie";
       strField = "idMovie";
     }
-    if (type == VIDEODB_CONTENT_TVSHOWS)
+    else if (type == VIDEODB_CONTENT_TVSHOWS)
     {
       strTable = "tvshow";
       strField = "idShow";
     }
-    if (type == VIDEODB_CONTENT_MUSICVIDEOS)
+    else if (type == VIDEODB_CONTENT_EPISODES)
+    {
+      strTable = "episode";
+      strField = "idEpisode";
+    }
+    else if (type == VIDEODB_CONTENT_MUSICVIDEOS)
     {
       strTable = "musicvideo";
       strField = "idMVideo";
     }
 
-    if (strTable.IsEmpty())
-      return;
+    if (strTable.empty())
+      return false;
 
-    CStdString strSQL = PrepareSQL("update %s set c%02u='%s' where %s=%u",
-                                  strTable.c_str(), field, strDetail.c_str(), strField.c_str(), id);
-    m_pDS->exec(strSQL.c_str());
+    return SetSingleValue(strTable, StringUtils::Format("c%02u", dbField), strValue, strField, dbId);
   }
   catch (...)
   {
-    CLog::Log(LOGERROR, "%s failed", __FUNCTION__);
+    CLog::Log(LOGERROR, "%s (%s) failed", __FUNCTION__, strSQL.c_str());
   }
+  return false;
+}
+
+bool CVideoDatabase::SetSingleValue(VIDEODB_CONTENT_TYPE type, int dbId, Field dbField, const std::string &strValue)
+{
+  MediaType mediaType = DatabaseUtils::MediaTypeFromVideoContentType(type);
+  if (mediaType == MediaTypeNone)
+    return false;
+
+  int dbFieldIndex = DatabaseUtils::GetField(dbField, mediaType);
+  if (dbFieldIndex < 0)
+    return false;
+
+  return SetSingleValue(type, dbId, dbFieldIndex, strValue);
+}
+
+bool CVideoDatabase::SetSingleValue(const std::string &table, const std::string &fieldName, const std::string &strValue,
+                                    const std::string &conditionName /* = "" */, int conditionValue /* = -1 */)
+{
+  if (table.empty() || fieldName.empty())
+    return false;
+
+  std::string sql;
+  try
+  {
+    if (NULL == m_pDB.get() || NULL == m_pDS.get())
+      return false;
+
+    sql = PrepareSQL("UPDATE %s SET %s='%s'", table.c_str(), fieldName.c_str(), strValue.c_str());
+    if (!conditionName.empty())
+      sql += PrepareSQL(" WHERE %s=%u", conditionName.c_str(), conditionValue);
+    if (m_pDS->exec(sql.c_str()) == 0)
+      return true;
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s (%s) failed", __FUNCTION__, sql.c_str());
+  }
+  return false;
 }
 
 CStdString CVideoDatabase::GetSafeFile(const CStdString &dir, const CStdString &name) const
@@ -8993,22 +9296,22 @@ bool CVideoDatabase::GetItemsForPath(const CStdString &content, const CStdString
   if (content == "movies")
   {
     Filter filter(PrepareSQL("c%02d=%d", VIDEODB_ID_PARENTPATHID, pathID));
-    GetMoviesByWhere("videodb://1/2/", filter, items);
+    GetMoviesByWhere("videodb://movies/titles/", filter, items);
   }
   else if (content == "episodes")
   {
     Filter filter(PrepareSQL("c%02d=%d", VIDEODB_ID_EPISODE_PARENTPATHID, pathID));
-    GetEpisodesByWhere("videodb://2/2/", filter, items);
+    GetEpisodesByWhere("videodb://tvshows/titles/", filter, items);
   }
   else if (content == "tvshows")
   {
     Filter filter(PrepareSQL("c%02d=%d", VIDEODB_ID_TV_PARENTPATHID, pathID));
-    GetTvShowsByWhere("videodb://2/2/", filter, items);
+    GetTvShowsByWhere("videodb://tvshows/titles/", filter, items);
   }
   else if (content == "musicvideos")
   {
     Filter filter(PrepareSQL("c%02d=%d", VIDEODB_ID_MUSICVIDEO_PARENTPATHID, pathID));
-    GetMusicVideosByWhere("videodb://3/2/", filter, items);
+    GetMusicVideosByWhere("videodb://musicvideos/titles/", filter, items);
   }
   for (int i = 0; i < items.Size(); i++)
     items[i]->SetPath(items[i]->GetVideoInfoTag()->m_basePath);
@@ -9424,9 +9727,10 @@ bool CVideoDatabase::GetFilter(CDbUrl &videoUrl, Filter &filter, SortDescription
 
     // check if the filter playlist matches the item type
     if (xsp.GetType() == itemType ||
-        // handle episode listings with videodb://2/2/ which get the rest
+       (xsp.GetGroup() == itemType && !xsp.IsGroupMixed()) ||
+        // handle episode listings with videodb://tvshows/titles/ which get the rest
         // of the path (season and episodeid) appended later
-        (xsp.GetType() == "episodes" && itemType == "tvshows"))
+       (xsp.GetType() == "episodes" && itemType == "tvshows"))
     {
       std::set<CStdString> playlists;
       filter.AppendWhere(xsp.GetWhereClause(*this, playlists));
@@ -9437,7 +9741,7 @@ bool CVideoDatabase::GetFilter(CDbUrl &videoUrl, Filter &filter, SortDescription
         sorting.sortBy = xsp.GetOrder();
       if (xsp.GetOrderDirection() != SortOrderNone)
         sorting.sortOrder = xsp.GetOrderDirection();
-      if (g_guiSettings.GetBool("filelists.ignorethewhensorting"))
+      if (CSettings::Get().GetBool("filelists.ignorethewhensorting"))
         sorting.sortAttributes = SortAttributeIgnoreArticle;
     }
   }

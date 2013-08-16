@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,7 +38,8 @@
 #include "utils/TimeUtils.h"
 #include "utils/log.h"
 #include "cores/AudioEngine/AEFactory.h"
-#if defined(_WIN32)
+#if defined(TARGET_WINDOWS)
+  #include "utils/CharsetConverter.h"
   #include "Windows.h"
   #ifdef HAS_IRSERVERSUITE
     #include "input/windows/IRServerSuite.h"
@@ -46,6 +47,9 @@
 #endif
 #if defined(HAS_LIRC)
   #include "input/linux/LIRC.h"
+#endif
+#if defined(TARGET_ANDROID)
+  #include "android/activity/XBMCApp.h"
 #endif
 
 // If the process ends in less than this time (ms), we assume it's a launcher
@@ -58,13 +62,13 @@
 
 using namespace XFILE;
 
-#if defined(_WIN32)
+#if defined(TARGET_WINDOWS)
 extern HWND g_hWnd;
 #endif
 
 CExternalPlayer::CExternalPlayer(IPlayerCallback& callback)
     : IPlayer(callback),
-      CThread("CExternalPlayer")
+      CThread("ExternalPlayer")
 {
   m_bAbortRequest = false;
   m_bIsPlaying = false;
@@ -82,8 +86,12 @@ CExternalPlayer::CExternalPlayer(IPlayerCallback& callback)
   m_playOneStackItem = false;
 
   m_dialog = NULL;
+  m_hwndXbmc = NULL;
+  m_xPos = 0;
+  m_yPos = 0;
 
-#if defined(_WIN32)
+
+#if defined(TARGET_WINDOWS)
   memset(&m_processInfo, 0, sizeof(m_processInfo));
 #endif
 }
@@ -118,7 +126,7 @@ bool CExternalPlayer::CloseFile()
 
   if (m_dialog && m_dialog->IsActive()) m_dialog->Close();
 
-#if defined(_WIN32)
+#if defined(TARGET_WINDOWS)
   if (m_bIsPlaying && m_processInfo.hProcess)
   {
     TerminateProcess(m_processInfo.hProcess, 1);
@@ -151,7 +159,16 @@ void CExternalPlayer::Process()
     if (protocol == "musicdb")
       mainFile = CMusicDatabaseFile::TranslateUrl(url);
     if (protocol == "bluray")
-      mainFile = URIUtils::AddFileToFolder(url.GetHostName(), url.GetFileName());
+    {
+      CURL base(url.GetHostName());
+      if(base.GetProtocol() == "udf")
+      {
+        mainFile = base.GetHostName(); /* image file */
+        archiveContent = base.GetFileName();
+      }
+      else
+        mainFile = URIUtils::AddFileToFolder(base.Get(), url.GetFileName());
+    }
   }
 
   if (m_filenameReplacers.size() > 0)
@@ -214,7 +231,7 @@ void CExternalPlayer::Process()
   // make sure we surround the arguments with quotes where necessary
   CStdString strFName;
   CStdString strFArgs;
-#if defined(_WIN32)
+#if defined(TARGET_WINDOWS)
   // W32 batch-file handline
   if (m_filename.Right(4) == ".bat" || m_filename.Right(4) == ".cmd")
   {
@@ -245,7 +262,7 @@ void CExternalPlayer::Process()
     strFArgs.append("\"");
   }
 
-#if defined(_WIN32)
+#if defined(TARGET_WINDOWS)
   if (m_warpcursor)
   {
     GetCursorPos(&m_ptCursorpos);
@@ -278,7 +295,7 @@ void CExternalPlayer::Process()
     CLog::Log(LOGNOTICE, "%s: Hiding XBMC window", __FUNCTION__);
     g_Windowing.Hide();
   }
-#if defined(_WIN32)
+#if defined(TARGET_WINDOWS)
   else if (currentStyle & WS_EX_TOPMOST)
   {
     CLog::Log(LOGNOTICE, "%s: Lowering XBMC window", __FUNCTION__);
@@ -300,9 +317,11 @@ void CExternalPlayer::Process()
 
 
   BOOL ret = TRUE;
-#if defined(_WIN32)
+#if defined(TARGET_WINDOWS)
   ret = ExecuteAppW32(strFName.c_str(),strFArgs.c_str());
-#elif defined(_LINUX) || defined(TARGET_DARWIN_OSX)
+#elif defined(TARGET_ANDROID)
+  ret = ExecuteAppAndroid(m_filename.c_str(), mainFile.c_str());
+#elif defined(TARGET_POSIX) || defined(TARGET_DARWIN_OSX)
   ret = ExecuteAppLinux(strFArgs.c_str());
 #endif
   int64_t elapsedMillis = XbmcThreads::SystemClockMillis() - m_playbackStartTime;
@@ -330,7 +349,7 @@ void CExternalPlayer::Process()
   m_bIsPlaying = false;
   CLog::Log(LOGNOTICE, "%s: Stop", __FUNCTION__);
 
-#if defined(_WIN32)
+#if defined(TARGET_WINDOWS)
   g_Windowing.Restore();
 
   if (currentStyle & WS_EX_TOPMOST)
@@ -346,7 +365,7 @@ void CExternalPlayer::Process()
     g_Windowing.Show();
   }
 
-#if defined(_WIN32)
+#if defined(TARGET_WINDOWS)
   if (m_warpcursor)
   {
     m_xPos = 0;
@@ -377,7 +396,7 @@ void CExternalPlayer::Process()
     m_callback.OnPlayBackEnded();
 }
 
-#if defined(_WIN32)
+#if defined(TARGET_WINDOWS)
 BOOL CExternalPlayer::ExecuteAppW32(const char* strPath, const char* strSwitches)
 {
   CLog::Log(LOGNOTICE, "%s: %s %s", __FUNCTION__, strPath, strSwitches);
@@ -434,7 +453,7 @@ BOOL CExternalPlayer::ExecuteAppW32(const char* strPath, const char* strSwitches
 }
 #endif
 
-#if defined(_LINUX) || defined(TARGET_DARWIN_OSX)
+#if !defined(TARGET_ANDROID) && (defined(TARGET_POSIX) || defined(TARGET_DARWIN_OSX))
 BOOL CExternalPlayer::ExecuteAppLinux(const char* strSwitches)
 {
   CLog::Log(LOGNOTICE, "%s: %s", __FUNCTION__, strSwitches);
@@ -450,6 +469,22 @@ BOOL CExternalPlayer::ExecuteAppLinux(const char* strSwitches)
   g_RemoteControl.setUsed(remoteused);
   g_RemoteControl.Initialize();
 #endif
+
+  if (ret != 0)
+  {
+    CLog::Log(LOGNOTICE, "%s: Failure: %d", __FUNCTION__, ret);
+  }
+
+  return ret == 0;
+}
+#endif
+
+#if defined(TARGET_ANDROID)
+BOOL CExternalPlayer::ExecuteAppAndroid(const char* strSwitches,const char* strPath)
+{
+  CLog::Log(LOGNOTICE, "%s: %s", __FUNCTION__, strSwitches);
+
+  int ret = CXBMCApp::StartActivity(strSwitches, "android.intent.action.VIEW", "video/*", strPath);
 
   if (ret != 0)
   {
@@ -610,7 +645,7 @@ bool CExternalPlayer::Initialize(TiXmlElement* pConfig)
   XMLUtils::GetBoolean(pConfig, "hidexbmc", m_hidexbmc);
   if (!XMLUtils::GetBoolean(pConfig, "hideconsole", m_hideconsole))
   {
-#ifdef _WIN32
+#ifdef TARGET_WINDOWS
     // Default depends on whether player is a batch file
     m_hideconsole = m_filename.Right(4) == ".bat";
 #endif
@@ -621,7 +656,7 @@ bool CExternalPlayer::Initialize(TiXmlElement* pConfig)
     m_warpcursor = WARP_BOTTOM_RIGHT;
 
   CStdString warpCursor;
-  if (XMLUtils::GetString(pConfig, "warpcursor", warpCursor))
+  if (XMLUtils::GetString(pConfig, "warpcursor", warpCursor) && !warpCursor.empty())
   {
     if (warpCursor == "bottomright") m_warpcursor = WARP_BOTTOM_RIGHT;
     else if (warpCursor == "bottomleft") m_warpcursor = WARP_BOTTOM_LEFT;
@@ -643,7 +678,7 @@ bool CExternalPlayer::Initialize(TiXmlElement* pConfig)
           m_islauncher ? "true" : "false",
           warpCursor.c_str());
 
-#ifdef _WIN32
+#ifdef TARGET_WINDOWS
   m_filenameReplacers.push_back("^smb:// , / , \\\\ , g");
   m_filenameReplacers.push_back("^smb:\\\\\\\\ , smb:(\\\\\\\\[^\\\\]*\\\\) , \\1 , ");
 #endif

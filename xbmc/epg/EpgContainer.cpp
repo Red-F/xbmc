@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2012-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,8 @@
 #include "Application.h"
 #include "threads/SingleLock.h"
 #include "settings/AdvancedSettings.h"
-#include "settings/GUISettings.h"
+#include "settings/Setting.h"
+#include "settings/Settings.h"
 #include "dialogs/GUIDialogExtendedProgressBar.h"
 #include "dialogs/GUIDialogProgress.h"
 #include "guilib/GUIWindowManager.h"
@@ -43,7 +44,7 @@ using namespace PVR;
 typedef std::map<int, CEpg*>::iterator EPGITR;
 
 CEpgContainer::CEpgContainer(void) :
-    CThread("EPG updater")
+    CThread("EPGUpdater")
 {
   m_progressHandle = NULL;
   m_bStop = true;
@@ -100,6 +101,7 @@ void CEpgContainer::Clear(bool bClearDb /* = false */)
     m_epgs.clear();
     m_iNextEpgUpdate  = 0;
     m_bIsInitialising = true;
+    m_iNextEpgId = 0;
   }
 
   /* clear the database entries */
@@ -130,7 +132,6 @@ void CEpgContainer::Start(void)
 
   m_bIsInitialising = true;
   m_bStop = false;
-  g_guiSettings.RegisterObserver(this);
   LoadSettings();
 
   m_iNextEpgUpdate  = 0;
@@ -156,14 +157,19 @@ bool CEpgContainer::Stop(void)
 
 void CEpgContainer::Notify(const Observable &obs, const ObservableMessage msg)
 {
-  /* settings were updated */
-  if (msg == ObservableMessageGuiSettings)
+  SetChanged();
+  NotifyObservers(msg);
+}
+
+void CEpgContainer::OnSettingChanged(const CSetting *setting)
+{
+  if (setting == NULL)
+    return;
+
+  const std::string &settingId = setting->GetId();
+  if (settingId == "epg.ignoredbforclient" || settingId == "epg.epgupdate" ||
+      settingId == "epg.daystodisplay")
     LoadSettings();
-  else
-  {
-    SetChanged();
-    NotifyObservers(msg);
-  }
 }
 
 void CEpgContainer::LoadFromDB(void)
@@ -173,6 +179,8 @@ void CEpgContainer::LoadFromDB(void)
 
   if (!m_database.IsOpen())
     m_database.Open();
+
+  m_iNextEpgId = m_database.GetLastEPGId();
 
   bool bLoaded(true);
   unsigned int iCounter(0);
@@ -225,6 +233,12 @@ void CEpgContainer::Process(void)
   bool bUpdateEpg(true);
   bool bHasPendingUpdates(false);
 
+  if (!CPVRManager::Get().WaitUntilInitialised())
+  {
+    CLog::Log(LOGDEBUG, "EPG - %s - pvr manager failed to load - exiting", __FUNCTION__);
+    return;
+  }
+
   while (!m_bStop && !g_application.m_bStop)
   {
     CDateTime::GetCurrentDateTime().GetAsUTCDateTime().GetAsTime(iNow);
@@ -266,8 +280,6 @@ void CEpgContainer::Process(void)
 
     Sleep(1000);
   }
-
-  g_guiSettings.UnregisterObserver(this);
 }
 
 CEpg *CEpgContainer::GetById(int iEpgId) const
@@ -292,14 +304,20 @@ CEpg *CEpgContainer::GetByChannel(const CPVRChannel &channel) const
 
 void CEpgContainer::InsertFromDatabase(int iEpgID, const CStdString &strName, const CStdString &strScraperName)
 {
+  // table might already have been created when pvr channels were loaded
   CEpg* epg = GetById(iEpgID);
   if (epg)
   {
     if (!epg->Name().Equals(strName) || !epg->ScraperName().Equals(strScraperName))
+    {
+      // current table data differs from the info in the db
+      epg->SetChanged();
       SetChanged();
+    }
   }
   else
   {
+    // create a new epg table
     epg = new CEpg(iEpgID, strName, strScraperName, true);
     if (epg)
     {
@@ -344,9 +362,9 @@ CEpg *CEpgContainer::CreateChannelEpg(CPVRChannelPtr channel)
 
 bool CEpgContainer::LoadSettings(void)
 {
-  m_bIgnoreDbForClient = g_guiSettings.GetBool("epg.ignoredbforclient");
-  m_iUpdateTime        = g_guiSettings.GetInt ("epg.epgupdate") * 60;
-  m_iDisplayTime       = g_guiSettings.GetInt ("epg.daystodisplay") * 24 * 60 * 60;
+  m_bIgnoreDbForClient = CSettings::Get().GetBool("epg.ignoredbforclient");
+  m_iUpdateTime        = CSettings::Get().GetInt ("epg.epgupdate") * 60;
+  m_iDisplayTime       = CSettings::Get().GetInt ("epg.daystodisplay") * 24 * 60 * 60;
 
   return true;
 }
@@ -432,7 +450,7 @@ bool CEpgContainer::InterruptUpdate(void) const
   lock.Leave();
 
   return bReturn ||
-    (g_guiSettings.GetBool("epg.preventupdateswhileplayingtv") &&
+    (CSettings::Get().GetBool("epg.preventupdateswhileplayingtv") &&
      g_PVRManager.IsStarted() &&
      g_PVRManager.IsPlaying());
 }
@@ -510,6 +528,18 @@ bool CEpgContainer::UpdateEPG(bool bOnlyPending /* = false */)
 
     if (bShowProgress && !bOnlyPending)
       UpdateProgressDialog(++iCounter, m_epgs.size(), epg->Name());
+
+    // we currently only support update via pvr add-ons. skip update when the pvr manager isn't started
+    if (!g_PVRManager.IsStarted())
+      continue;
+
+    // check the pvr manager when the channel pointer isn't set
+    if (!epg->Channel())
+    {
+      CPVRChannelPtr channel = g_PVRChannelGroups->GetChannelByEpgId(epg->EpgID());
+      if (channel)
+        epg->SetChannel(channel);
+    }
 
     if ((!bOnlyPending || epg->UpdatePending()) && epg->Update(start, end, m_iUpdateTime, bOnlyPending))
       iUpdatedTables++;

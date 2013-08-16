@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,14 +25,14 @@
 #include "GraphicContext.h"
 #include "utils/log.h"
 #include "addons/Skin.h"
-#include "settings/GUISettings.h"
+#include "settings/Settings.h"
 #include "filesystem/SpecialProtocol.h"
 #include "utils/EndianSwap.h"
 #include "utils/URIUtils.h"
 #include "XBTF.h"
 #include <lzo/lzo1x.h>
 
-#ifdef _WIN32
+#ifdef TARGET_WINDOWS
 #pragma comment(lib,"liblzo2.lib")
 #endif
 
@@ -58,7 +58,7 @@ bool CTextureBundleXBT::OpenBundle()
   {
     // if we are the theme bundle, we only load if the user has chosen
     // a valid theme (or the skin has a default one)
-    CStdString theme = g_guiSettings.GetString("lookandfeel.skintheme");
+    CStdString theme = CSettings::Get().GetString("lookandfeel.skintheme");
     if (!theme.IsEmpty() && theme.CompareNoCase("SKINDEFAULT"))
     {
       CStdString themeXBT(URIUtils::ReplaceExtension(theme, ".xbt"));
@@ -220,7 +220,7 @@ bool CTextureBundleXBT::ConvertFrameToTexture(const CStdString& name, CXBTFFrame
       return false;
     }
     lzo_uint s = (lzo_uint)frame.GetUnpackedSize();
-    if (lzo1x_decompress(buffer, (lzo_uint)frame.GetPackedSize(), unpacked, &s, NULL) != LZO_E_OK ||
+    if (lzo1x_decompress_safe(buffer, (lzo_uint)frame.GetPackedSize(), unpacked, &s, NULL) != LZO_E_OK ||
         s != frame.GetUnpackedSize())
     {
       CLog::Log(LOGERROR, "Error loading texture: %s: Decompression error", name.c_str());

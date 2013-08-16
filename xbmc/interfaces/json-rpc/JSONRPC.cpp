@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2005-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -100,6 +100,12 @@ void CJSONRPC::Initialize()
   
   m_initialized = true;
   CLog::Log(LOGINFO, "JSONRPC v%s: Successfully initialized", CJSONServiceDescription::GetVersion());
+}
+
+void CJSONRPC::Cleanup()
+{
+  CJSONServiceDescription::Cleanup();
+  m_initialized = false;
 }
 
 JSONRPC_STATUS CJSONRPC::Introspect(const CStdString &method, ITransportLayer *transport, IClient *client, const CVariant& parameterObject, CVariant &result)
@@ -275,7 +281,6 @@ bool CJSONRPC::HandleMethodCall(const CVariant& request, CVariant& response, ITr
     JSONRPC::MethodCall method;
     CVariant params;
 
-    CLog::Log(LOGDEBUG, "JSONRPC: Calling %s", methodName.c_str());
     if ((errorCode = CJSONServiceDescription::CheckCall(methodName, request["params"], transport, client, isNotification, method, params)) == OK)
       errorCode = method(methodName, transport, client, params, result);
     else

@@ -1,6 +1,6 @@
 /*
- *      Copyright (C) 2012 Team XBMC
- *      http://www.xbmc.org
+ *      Copyright (C) 2012-2013 Team XBMC
+ *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ map<string, string> fillMimeTypes()
   mimeTypes.insert(pair<string, string>("asp",       "text/asp"));
   mimeTypes.insert(pair<string, string>("asx",       "video/x-ms-asf"));
   mimeTypes.insert(pair<string, string>("au",        "audio/basic"));
-  mimeTypes.insert(pair<string, string>("avi",       "video/x-msvideo"));
+  mimeTypes.insert(pair<string, string>("avi",       "video/avi"));
   mimeTypes.insert(pair<string, string>("avs",       "video/avs-video"));
   mimeTypes.insert(pair<string, string>("bcpio",     "application/x-bcpio"));
   mimeTypes.insert(pair<string, string>("bin",       "application/octet-stream"));
@@ -100,6 +100,7 @@ map<string, string> fillMimeTypes()
   mimeTypes.insert(pair<string, string>("dif",       "video/x-dv"));
   mimeTypes.insert(pair<string, string>("dir",       "application/x-director"));
   mimeTypes.insert(pair<string, string>("dl",        "video/dl"));
+  mimeTypes.insert(pair<string, string>("divx",      "video/x-msvideo"));
   mimeTypes.insert(pair<string, string>("doc",       "application/msword"));
   mimeTypes.insert(pair<string, string>("docx",      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"));
   mimeTypes.insert(pair<string, string>("dot",       "application/msword"));
@@ -192,7 +193,8 @@ map<string, string> fillMimeTypes()
   mimeTypes.insert(pair<string, string>("jpeg",      "image/jpeg"));
   mimeTypes.insert(pair<string, string>("jpg",       "image/jpeg"));
   mimeTypes.insert(pair<string, string>("jps",       "image/x-jps"));
-  mimeTypes.insert(pair<string, string>("js",        "application/x-javascript"));
+  mimeTypes.insert(pair<string, string>("js",        "application/javascript"));
+  mimeTypes.insert(pair<string, string>("json",      "application/json"));
   mimeTypes.insert(pair<string, string>("jut",       "image/jutvision"));
   mimeTypes.insert(pair<string, string>("kar",       "music/x-karaoke"));
   mimeTypes.insert(pair<string, string>("ksh",       "application/x-ksh"));
@@ -403,6 +405,7 @@ map<string, string> fillMimeTypes()
   mimeTypes.insert(pair<string, string>("text",      "text/plain"));
   mimeTypes.insert(pair<string, string>("tgz",       "application/x-compressed"));
   mimeTypes.insert(pair<string, string>("tif",       "image/tiff"));
+  mimeTypes.insert(pair<string, string>("tiff",      "image/tiff"));
   mimeTypes.insert(pair<string, string>("tr",        "application/x-troff"));
   mimeTypes.insert(pair<string, string>("ts",        "video/mp2t"));
   mimeTypes.insert(pair<string, string>("tsi",       "audio/tsp-audio"));
@@ -491,6 +494,7 @@ map<string, string> fillMimeTypes()
   mimeTypes.insert(pair<string, string>("xpm",       "image/xpm"));
   mimeTypes.insert(pair<string, string>("x-png",     "image/png"));
   mimeTypes.insert(pair<string, string>("xsr",       "video/x-amt-showrun"));
+  mimeTypes.insert(pair<string, string>("xvid",      "video/x-msvideo"));
   mimeTypes.insert(pair<string, string>("xwd",       "image/x-xwd"));
   mimeTypes.insert(pair<string, string>("xyz",       "chemical/x-pdb"));
   mimeTypes.insert(pair<string, string>("z",         "application/x-compressed"));

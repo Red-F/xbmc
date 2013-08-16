@@ -1,5 +1,5 @@
 /*
- *      Copyright (C) 2005-2012 Team XBMC
+ *      Copyright (C) 2005-2013 Team XBMC
  *      http://xbmc.org
  *
  *  This Program is free software; you can redistribute it and/or modify
@@ -31,7 +31,7 @@ static GUID USB_NIC_GUID =  { 0xAD498944, 0x762F, 0x11D0, { 0x8D, 0xCB, 0x00, 0x
 using namespace PERIPHERALS;
 
 CPeripheralBusUSB::CPeripheralBusUSB(CPeripherals *manager) :
-    CPeripheralBus(manager, PERIPHERAL_BUS_USB)
+    CPeripheralBus("PeripBusUSB", manager, PERIPHERAL_BUS_USB)
 {
   /* device removals aren't always triggering OnDeviceRemoved events, so poll for changes every 5 seconds to be sure we don't miss anything */
   m_iRescanTime = 5000;
@@ -104,14 +104,15 @@ bool CPeripheralBusUSB::PerformDeviceScan(const GUID *guid, const PeripheralType
 
         if ((strTmp.Find("&mi_") < 0) || (strTmp.Find("&mi_00") >= 0))
         {
-          PeripheralScanResult prevDevice;
+          PeripheralScanResult prevDevice(m_type);
           if (!results.GetDeviceOnLocation(devicedetailData->DevicePath, &prevDevice))
           {
-            PeripheralScanResult result;
+            PeripheralScanResult result(m_type);
             result.m_strLocation  = devicedetailData->DevicePath;
             result.m_type         = type;
             result.m_iVendorId    = PeripheralTypeTranslator::HexStringToInt(strVendorId.c_str());
             result.m_iProductId   = PeripheralTypeTranslator::HexStringToInt(strProductId.c_str());
+            result.m_iSequence    = GetNumberOfPeripheralsWithId(result.m_iVendorId, result.m_iProductId);
 
             if (!results.ContainsResult(result))
               results.m_results.push_back(result);
