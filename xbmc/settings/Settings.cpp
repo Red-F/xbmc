@@ -766,8 +766,7 @@ void CSettings::InitializeConditions()
 #endif
 #if defined(TARGET_WINDOWS) && defined(HAS_DX)
   m_settingsManager->AddCondition("has_dx");
-  if (g_sysinfo.IsWindowsVersionAtLeast(CSysInfo::WindowsVersionVista))
-    m_settingsManager->AddCondition("hasdxva2");
+  m_settingsManager->AddCondition("hasdxva2");
 #endif
 
   if (g_application.IsStandAlone())
@@ -869,6 +868,7 @@ void CSettings::InitializeISettingCallbacks()
   settingSet.insert("audiooutput.guisoundmode");
   settingSet.insert("audiooutput.stereoupmix");
   settingSet.insert("audiooutput.ac3passthrough");
+  settingSet.insert("audiooutput.eac3passthrough");
   settingSet.insert("audiooutput.dtspassthrough");
   settingSet.insert("audiooutput.passthroughaac");
   settingSet.insert("audiooutput.truehdpassthrough");

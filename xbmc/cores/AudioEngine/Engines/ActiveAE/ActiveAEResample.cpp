@@ -36,7 +36,7 @@ CActiveAEResample::~CActiveAEResample()
   m_dllSwResample.Unload();
 }
 
-bool CActiveAEResample::Init(uint64_t dst_chan_layout, int dst_channels, int dst_rate, AVSampleFormat dst_fmt, int dst_bits, uint64_t src_chan_layout, int src_channels, int src_rate, AVSampleFormat src_fmt, int src_bits, CAEChannelInfo *remapLayout, AEQuality quality)
+bool CActiveAEResample::Init(uint64_t dst_chan_layout, int dst_channels, int dst_rate, AVSampleFormat dst_fmt, int dst_bits, uint64_t src_chan_layout, int src_channels, int src_rate, AVSampleFormat src_fmt, int src_bits, bool upmix, CAEChannelInfo *remapLayout, AEQuality quality)
 {
   if (!m_dllAvUtil.Load() || !m_dllSwResample.Load())
     return false;
@@ -102,6 +102,10 @@ bool CActiveAEResample::Init(uint64_t dst_chan_layout, int dst_channels, int dst
       }
     }
 
+    m_dst_chan_layout = m_dllAvUtil.av_get_default_channel_layout(m_dst_channels);
+    m_dllAvUtil.av_opt_set_int(m_pContext, "out_channel_count", m_dst_channels, 0);
+    m_dllAvUtil.av_opt_set_int(m_pContext, "out_channel_layout", m_dst_chan_layout, 0);
+
     if (m_dllSwResample.swr_set_matrix(m_pContext, (const double*)m_rematrix, AE_CH_MAX) < 0)
     {
       CLog::Log(LOGERROR, "CActiveAEResample::Init - setting channel matrix failed");
@@ -109,7 +113,7 @@ bool CActiveAEResample::Init(uint64_t dst_chan_layout, int dst_channels, int dst
     }
   }
   // stereo upmix
-  else if (m_src_channels == 2 && m_dst_channels > 2)
+  else if (upmix && m_src_channels == 2 && m_dst_channels > 2)
   {
     memset(m_rematrix, 0, sizeof(m_rematrix));
     for (int out=0; out<m_dst_channels; out++)
