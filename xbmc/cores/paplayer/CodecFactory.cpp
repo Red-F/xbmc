@@ -40,6 +40,7 @@
 #include "URL.h"
 #include "DVDPlayerCodec.h"
 #include "PCMCodec.h"
+#include "utils/StringUtils.h"
 
 ICodec* CodecFactory::CreateCodec(const CStdString& strFileType)
 {
@@ -119,24 +120,20 @@ ICodec* CodecFactory::CreateCodecDemux(const CStdString& strFile, const CStdStri
   ||  strContent.Equals("audio/mpeg3")
   ||  strContent.Equals("audio/mp3") )
     return new MP3Codec();
-  else if (strContent.Left(9).Equals("audio/l16"))
+  else if (StringUtils::StartsWithNoCase(strContent, "audio/l16"))
   {
     PCMCodec * pcm_codec = new PCMCodec();
     pcm_codec->SetMimeParams(strContent);
     return pcm_codec;
   }
-  else if( strContent.Equals("audio/aac")
-    || strContent.Equals("audio/aacp") )
+  else if( strContent.Equals("audio/aac") || strContent.Equals("audio/aacp") ||
+      strContent.Equals("audio/x-ms-wma") ||
+      strContent.Equals("audio/x-ape") || strContent.Equals("audio/ape"))
   {
     DVDPlayerCodec *pCodec = new DVDPlayerCodec;
-    if (urlFile.GetProtocol() == "shout" )
-      pCodec->SetContentType(strContent);
+    pCodec->SetContentType(strContent);
     return pCodec;
   }
-  else if( strContent.Equals("audio/x-ms-wma") )
-    return new DVDPlayerCodec();
-  else if( strContent.Equals("audio/x-ape") || strContent.Equals("audio/ape") )
-    return new DVDPlayerCodec();
   else if( strContent.Equals("application/ogg") || strContent.Equals("audio/ogg"))
     return CreateOGGCodec(strFile,filecache);
   else if (strContent.Equals("audio/x-xbmc-pcm"))

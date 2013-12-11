@@ -857,10 +857,6 @@ msgctxt "#249"
 msgid "Music"
 msgstr "Musik"
 
-msgctxt "#250"
-msgid "Visualization"
-msgstr "Visualisasi"
-
 msgctxt "#251"
 msgid "Select destination directory"
 msgstr "Pilih direktori tujuan"
@@ -1049,10 +1045,6 @@ msgctxt "#298"
 msgid "Bookmarks"
 msgstr "Bookmarks"
 
-msgctxt "#299"
-msgid "AAC capable receiver"
-msgstr "Penerima berkemampuan AAC"
-
 msgctxt "#300"
 msgid "MP1 capable receiver"
 msgstr "Penerima berkemampuan MP1"
@@ -1189,17 +1181,9 @@ msgctxt "#336"
 msgid "Framerate conversion"
 msgstr "Atur Framerate"
 
-msgctxt "#337"
-msgid "Audio output"
-msgstr "Keluaran Audio"
-
 msgctxt "#338"
-msgid "Analog"
-msgstr "Analog"
-
-msgctxt "#339"
-msgid "Optical/Coax"
-msgstr "Digital"
+msgid "Fixed"
+msgstr "Sudah tetap"
 
 msgctxt "#340"
 msgid "Various artists"
@@ -1225,17 +1209,9 @@ msgctxt "#345"
 msgid "Year"
 msgstr "Tahun"
 
-msgctxt "#346"
-msgid "Boost volume level on downmix"
-msgstr "Dorong tingkat suara pada downmix"
-
 msgctxt "#347"
 msgid "DTS-HD capable receiver"
 msgstr "Penerima berkemampuan DTS-HD"
-
-msgctxt "#348"
-msgid "Multichannel LPCM capable receiver"
-msgstr "Penerima berkemampuan Multichannel LPCM"
 
 msgctxt "#349"
 msgid "TrueHD capable receiver"
@@ -1513,10 +1489,6 @@ msgctxt "#419"
 msgid "High"
 msgstr "Video/Aktor"
 
-msgctxt "#420"
-msgid "HDMI"
-msgstr "Video/Tahun"
-
 msgctxt "#422"
 msgid "Delete album info"
 msgstr "Hapus informasi Album"
@@ -1588,10 +1560,6 @@ msgstr "Buka File"
 msgctxt "#439"
 msgid "Cache"
 msgstr "Cache"
-
-msgctxt "#440"
-msgid "Harddisk"
-msgstr "Harddisk"
 
 msgctxt "#441"
 msgid "UDF"
@@ -1828,10 +1796,6 @@ msgstr "Memuat informasi media dari file..."
 msgctxt "#507"
 msgid "Sort by: Usage"
 msgstr "Sortir : Pemakaian"
-
-msgctxt "#510"
-msgid "Enable visualizations"
-msgstr "Aktifkan Visualisasi"
 
 msgctxt "#511"
 msgid "Enable video mode switching"
@@ -2273,14 +2237,6 @@ msgctxt "#636"
 msgid "Custom"
 msgstr "Kustom"
 
-msgctxt "#637"
-msgid "Replay gain"
-msgstr "Replay Gain"
-
-msgctxt "#638"
-msgid "Replaygain volume adjustments"
-msgstr "Replay Gain Mode"
-
 msgctxt "#639"
 msgid "Use track levels"
 msgstr "Gunakan Level Trek"
@@ -2288,18 +2244,6 @@ msgstr "Gunakan Level Trek"
 msgctxt "#640"
 msgid "Use album levels"
 msgstr "Gunakan Level Album"
-
-msgctxt "#641"
-msgid "PreAmp Level - Replay gained files"
-msgstr "PreAmp Level - Replay Gained Files"
-
-msgctxt "#642"
-msgid "PreAmp Level - Non replay gained files"
-msgstr "PreAmp Level - Non Replay Gained Files"
-
-msgctxt "#643"
-msgid "Avoid clipping on replay gained files"
-msgstr "Avoid Clipping on Replay Gained Files"
 
 msgctxt "#644"
 msgid "Crop black bars"
@@ -2937,10 +2881,6 @@ msgctxt "#1043"
 msgid "Program Add-ons"
 msgstr "Tambahan Program"
 
-msgctxt "#1044"
-msgid "Set plugin thumb"
-msgstr "Pasang plugin thumb"
-
 msgctxt "#1045"
 msgid "Add-on settings"
 msgstr "Pengaturan add-on"
@@ -3501,29 +3441,9 @@ msgctxt "#10035"
 msgid "Reset"
 msgstr "Atur Ulang"
 
-msgctxt "#10036"
-msgid "Level: Basic"
-msgstr "Tingkatan: Dasar"
-
 msgctxt "#10037"
-msgid "Level: Standard"
-msgstr "Tingkatan: Standar"
-
-msgctxt "#10038"
-msgid "Level: Advanced"
-msgstr "Tingkatan: Lanjutan"
-
-msgctxt "#10039"
-msgid "Level: Expert"
-msgstr "Tingkatan: Ahli"
-
-msgctxt "#10040"
-msgid "Addon browser"
-msgstr "Addon browser"
-
-msgctxt "#10041"
-msgid "Reset settings"
-msgstr "Atur ulang pengaturan"
+msgid "Standard"
+msgstr "Standar"
 
 msgctxt "#10042"
 msgid "Are you sure you want to reset the settings in this category?"
@@ -3536,14 +3456,6 @@ msgstr "Bantuan"
 msgctxt "#10044"
 msgid "No help available"
 msgstr "Tidak ada bantuan tersedia"
-
-msgctxt "#10100"
-msgid "Yes/No dialog"
-msgstr "Dialog Ya/tidak"
-
-msgctxt "#10101"
-msgid "Progress dialog"
-msgstr "Dialog Kemajuan"
 
 msgctxt "#10126"
 msgid "File browser"
@@ -3685,17 +3597,9 @@ msgctxt "#10524"
 msgid "Movie info"
 msgstr "Info Film"
 
-msgctxt "#12000"
-msgid "Select dialog"
-msgstr "Pilih dialog"
-
 msgctxt "#12001"
 msgid "Music/Info"
 msgstr "Musik/info"
-
-msgctxt "#12002"
-msgid "Dialog OK"
-msgstr "Dialog OK"
 
 msgctxt "#12003"
 msgid "Videos/Info"
@@ -3708,14 +3612,6 @@ msgstr "Skrip/Info"
 msgctxt "#12005"
 msgid "Fullscreen video"
 msgstr "Video Tampilan Penuh"
-
-msgctxt "#12006"
-msgid "Audio visualization"
-msgstr "Visualisasi Audio"
-
-msgctxt "#12008"
-msgid "File stacking dialog"
-msgstr "Filestacking dialog"
 
 msgctxt "#12009"
 msgid "Rebuild index..."
@@ -3872,10 +3768,6 @@ msgstr "Akses Ditolak"
 msgctxt "#12346"
 msgid "Password retry limit exceeded."
 msgstr "Batas memasukan Password telah lewat."
-
-msgctxt "#12347"
-msgid "The system will now shut off."
-msgstr "XBOX akan dimatikan sekarang."
 
 msgctxt "#12348"
 msgid "Item locked"
@@ -4053,10 +3945,6 @@ msgctxt "#13013"
 msgid "Reboot"
 msgstr "Reboot"
 
-msgctxt "#13014"
-msgid "Minimize"
-msgstr "Minimalkan"
-
 msgctxt "#13015"
 msgid "Power button action"
 msgstr "Aksi Tombol POwer"
@@ -4177,10 +4065,6 @@ msgctxt "#13110"
 msgid "Save resolution?"
 msgstr "Simpan resolusi?"
 
-msgctxt "#13111"
-msgid "Would you like to keep this resolution?"
-msgstr "Apakah anda ingin tetap menggunakan resolusi ini?"
-
 msgctxt "#13112"
 msgid "High quality upscaling"
 msgstr "Upscaling kualitas tinggi"
@@ -4220,10 +4104,6 @@ msgstr "VDPAU"
 msgctxt "#13121"
 msgid "VDPAU HQ Upscaling level"
 msgstr "Tingkat Upscaling VDPAU HQ"
-
-msgctxt "#13122"
-msgid "VDPAU Studio level color conversion"
-msgstr "Tingkat pengubahan warna VDPAU Studio"
 
 msgctxt "#13130"
 msgid "Blank other displays"
@@ -4276,10 +4156,6 @@ msgstr "Gateway:"
 msgctxt "#13161"
 msgid "Primary DNS"
 msgstr "DNS"
-
-msgctxt "#13162"
-msgid "Initialize failed"
-msgstr "Gagal Inisialisasi"
 
 msgctxt "#13170"
 msgid "Never"
@@ -4525,10 +4401,6 @@ msgctxt "#13318"
 msgid "Recursive slideshow"
 msgstr "Slideshow Berulang"
 
-msgctxt "#13319"
-msgid "Randomize"
-msgstr "Acak"
-
 msgctxt "#13320"
 msgid "Stereo"
 msgstr "Stereo"
@@ -4741,21 +4613,9 @@ msgctxt "#13388"
 msgid "Preset"
 msgstr "Presets"
 
-msgctxt "#13389"
-msgid "There are no presets available\nfor this visualization"
-msgstr "Tidak tersedia preset \nutk visualisasi ini"
-
-msgctxt "#13390"
-msgid "There are no settings available\nfor this visualization"
-msgstr "Tidak tersedia setelan \nutk visualisasi ini"
-
 msgctxt "#13391"
 msgid "Eject/Load"
 msgstr "Keluarkan/Pasangkan"
-
-msgctxt "#13392"
-msgid "Use visualization if playing audio"
-msgstr "Gunakan Visualisasi jika memainkan audio"
 
 msgctxt "#13393"
 msgid "Calculate size"
@@ -4944,10 +4804,6 @@ msgstr "Clock Video (Drop/Dupe audio)"
 msgctxt "#13503"
 msgid "Video clock (Resample audio)"
 msgstr "Clock Video (audio resample)"
-
-msgctxt "#13504"
-msgid "Maximum resample amount (%)"
-msgstr "Jumlah maksimal resample (%)"
 
 msgctxt "#13505"
 msgid "Resample quality"
@@ -5140,10 +4996,6 @@ msgstr "Tidak ada TV"
 msgctxt "#14024"
 msgid "Enter the nearest large town"
 msgstr "Masukkan kota besar terdekat atau kode ZIP US"
-
-msgctxt "#14025"
-msgid "Video/Audio/DVD cache - Harddisk"
-msgstr "Video/Audio/DVD Cache - Harddisk"
 
 msgctxt "#14026"
 msgid "Video cache - DVD-ROM"
@@ -5489,10 +5341,6 @@ msgctxt "#15213"
 msgid "Play using..."
 msgstr "Mainkan Menggunakan..."
 
-msgctxt "#15214"
-msgid "Use smoothed A/V synchronization"
-msgstr "Gunakan Sinkronisasi A/V halus"
-
 msgctxt "#15215"
 msgid "Hide file names in thumbs view"
 msgstr "Sembunyikan Nama File pada Tampilan Thumb"
@@ -5632,10 +5480,6 @@ msgstr "Mode Party dibatalkan."
 msgctxt "#16031"
 msgid "No matching songs in the library."
 msgstr "Tidak ada lagu yang sesuai di database."
-
-msgctxt "#16032"
-msgid "Could not initialize database."
-msgstr "Tidak bisa meng-inisilisasi database."
 
 msgctxt "#16033"
 msgid "Could not open database."
@@ -5785,10 +5629,6 @@ msgctxt "#16314"
 msgid "Inverse Telecine"
 msgstr "Telecine Inverse"
 
-msgctxt "#16315"
-msgid "Lanczos3 optimized"
-msgstr "Lanczos3 teroptimisasi"
-
 msgctxt "#16316"
 msgid "Auto"
 msgstr "Auto"
@@ -5817,17 +5657,9 @@ msgctxt "#16322"
 msgid "Spline36"
 msgstr "Spline36"
 
-msgctxt "#16323"
-msgid "Spline36 optimized"
-msgstr "Spline36 teroptimisasi"
-
 msgctxt "#16324"
 msgid "Software Blend"
 msgstr "Blend Perangkat Lunak"
-
-msgctxt "#16325"
-msgid "Auto - ION Optimized"
-msgstr "Otomatis - Optimisasikan ION"
 
 msgctxt "#16400"
 msgid "Post-processing"
@@ -6481,10 +6313,6 @@ msgctxt "#19170"
 msgid "Timeout when starting playback"
 msgstr "Timeout ketika memulai playback"
 
-msgctxt "#19171"
-msgid "Start playback minimized"
-msgstr "Mulai playback minimal"
-
 msgctxt "#19172"
 msgid "Instant recording duration"
 msgstr "Durasi perekaman instan"
@@ -6552,10 +6380,6 @@ msgstr "EPG sedang di reset"
 msgctxt "#19189"
 msgid "Continue last channel on startup"
 msgstr "Lanjutkan saluran terakhir pada saat mulai"
-
-msgctxt "#19190"
-msgid "Minimized"
-msgstr "Minimalkan"
 
 msgctxt "#19191"
 msgid "PVR service"
@@ -6685,10 +6509,6 @@ msgctxt "#19222"
 msgid "EPG"
 msgstr "EPG"
 
-msgctxt "#19223"
-msgid "No PVR add-on could be enabled. Check your settings or the log for more info."
-msgstr "Tidak ada tambahan PVR yang dapat diaktifkan. Periksa pengaturan anda atau log untuk info lebih lanjut."
-
 msgctxt "#19224"
 msgid "Recording aborted"
 msgstr "Perekaman dibatalkan"
@@ -6713,10 +6533,6 @@ msgctxt "#19229"
 msgid "Close channel OSD after switching channels"
 msgstr "Menutup saluran OSD setelah berpindah saluran"
 
-msgctxt "#19230"
-msgid "Prevent EPG updates while playing a TV stream"
-msgstr "Cegah pembaruan EPG ketika memainkan siaran TV"
-
 msgctxt "#19231"
 msgid "Always use the channel order from the backend(s)"
 msgstr "Selalu gunakan urutan saluran dari backend(-backend)"
@@ -6728,10 +6544,6 @@ msgstr "Bersihkan hasil pencarian "
 msgctxt "#19233"
 msgid "Display a notification on timer updates"
 msgstr "Tampilkan notifikasi pada pemutakhiran timer"
-
-msgctxt "#19234"
-msgid "Use backend channels numbers (only works with 1 enabled PVR addon)"
-msgstr "Gunakan nomor saluran dari backend (hanya bekerja dengan 1 tambahan yang diaktifkan)"
 
 msgctxt "#19235"
 msgid "PVR manager is starting up"
@@ -6753,17 +6565,9 @@ msgctxt "#19239"
 msgid "Starting background threads"
 msgstr "Memulai thread di belakang layar"
 
-msgctxt "#19240"
-msgid "No PVR add-on enabled"
-msgstr "Tidak ada tambahan PVR yang aktif"
-
 msgctxt "#19241"
 msgid "The PVR manager has been enabled without any"
 msgstr "Pengelola PVR diaktifkan tanpa"
-
-msgctxt "#19242"
-msgid "enabled PVR add-on. Enable at least one add-on"
-msgstr "mengaktifkan tambahan PVR. Aktifkan setidaknya 1 tambahan."
 
 msgctxt "#19243"
 msgid "in order to use the PVR functionality."
@@ -6877,17 +6681,9 @@ msgctxt "#19270"
 msgid "* All recordings"
 msgstr "* Semua rekaman"
 
-msgctxt "#19271"
-msgid "No PVR add-ons could be found"
-msgstr "Tidak ada tambahan PVR yang ditemukan"
-
 msgctxt "#19272"
 msgid "You need a tuner, backend software, and an"
 msgstr "Anda butuh tuner, software backend, dan sebuah"
-
-msgctxt "#19273"
-msgid "add-on for the backend to be able to use PVR."
-msgstr "tambahan untuk backend agar bisa menggunakan PVR."
 
 msgctxt "#19274"
 msgid "Please visit xbmc.org/pvr to learn more."
@@ -7556,14 +7352,6 @@ msgstr "Tampilkan info Cuaca"
 msgctxt "#20085"
 msgid "Show system info"
 msgstr "Tampilkan info Sistem"
-
-msgctxt "#20086"
-msgid "Show available disc space C: E: F:"
-msgstr "Tampilkan Ruang Disk Tersedia C: E: F:"
-
-msgctxt "#20087"
-msgid "Show available disc space E: F: G:"
-msgstr "Tampilkan Ruang Disk Tersedia E: F: G:"
 
 msgctxt "#20088"
 msgid "Weather info"
@@ -8500,10 +8288,6 @@ msgstr "Ratakan TV show"
 msgctxt "#20413"
 msgid "Get fanart"
 msgstr "Dapatkan fanart"
-
-msgctxt "#20414"
-msgid "Show Fanart in video and music libraries"
-msgstr "Tampilkan Fanart pada pustaka video dan musik"
 
 msgctxt "#20415"
 msgid "Scanning for new content"
@@ -9577,10 +9361,6 @@ msgctxt "#22020"
 msgid "Guide"
 msgstr "Panduan"
 
-msgctxt "#22021"
-msgid "Allowed error in aspect ratio to minimize black bars"
-msgstr "Perbolehkan galat pada aspek rasio untuk meminimalisasi panel hitam"
-
 msgctxt "#22022"
 msgid "Show video files in listings"
 msgstr "Perlihatkan berkas video pada daftar"
@@ -9741,10 +9521,6 @@ msgctxt "#24009"
 msgid "Script"
 msgstr "Skrip"
 
-msgctxt "#24010"
-msgid "Visualization"
-msgstr "Visualisasi"
-
 msgctxt "#24011"
 msgid "Add-on repository"
 msgstr "Repositori Tambahan"
@@ -9865,21 +9641,9 @@ msgctxt "#24043"
 msgid "Available Updates"
 msgstr "Pemutakhiran tersedia"
 
-msgctxt "#24044"
-msgid "Dependencies not met"
-msgstr "Dependensi tidak terpenuhi"
-
 msgctxt "#24045"
 msgid "Add-on does not have the correct structure"
 msgstr "Tambahan tidak mempunyai struktur yang benar"
-
-msgctxt "#24046"
-msgid "%s is used by the following installed add-on(s)"
-msgstr "%s digunakan unutk memasang tambahan(-tambahan)"
-
-msgctxt "#24047"
-msgid "This add-on cannot be uninstalled"
-msgstr "Tambahan ini tidak dapat dihapus"
 
 msgctxt "#24048"
 msgid "Rollback"
@@ -9996,10 +9760,6 @@ msgstr "(saat ini)"
 msgctxt "#24095"
 msgid "(blacklisted)"
 msgstr "(daftar hitam)"
-
-msgctxt "#24096"
-msgid "Add-on has been marked as broken in repository."
-msgstr "Tambahan ditandai rusak pada repositori"
 
 msgctxt "#24097"
 msgid "Would you like to disable it on your system?"
@@ -10132,10 +9892,6 @@ msgstr "Tanya untuk mengunduh sebelum memutar video"
 msgctxt "#33016"
 msgid "Clips"
 msgstr "Klip"
-
-msgctxt "#33017"
-msgid "Restart plugin to enable"
-msgstr "Restart plugin untuk mengaktifkan"
 
 msgctxt "#33018"
 msgid "Tonight"
@@ -10501,10 +10257,6 @@ msgctxt "#34401"
 msgid "Failed to init video filters/scalers, falling back to bilinear scaling"
 msgstr "Gagal untuk memulai filter/scaler video, kembalik ke bilinear scaling"
 
-msgctxt "#34402"
-msgid "Failed to initialize audio device"
-msgstr "Gagal untuk memulai perangkat audio"
-
 msgctxt "#34403"
 msgid "Check your audiosettings"
 msgstr "Periksa pengaturan suara anda"
@@ -10536,10 +10288,6 @@ msgstr "Peripheral"
 msgctxt "#35001"
 msgid "Generic HID device"
 msgstr "Perangkan HID Generik"
-
-msgctxt "#35002"
-msgid "Generic network adapter"
-msgstr "Adapter jaringan generik"
 
 msgctxt "#35003"
 msgid "Generic disk"
@@ -10597,10 +10345,6 @@ msgctxt "#35504"
 msgid "Product ID"
 msgstr "ID Produk"
 
-msgctxt "#36000"
-msgid "Pulse-Eight CEC adapter"
-msgstr "Adapter CEC Pulse-Eight"
-
 msgctxt "#36001"
 msgid "Pulse-Eight Nyxboard"
 msgstr "Nyxboard Pulse-Eight"
@@ -10620,10 +10364,6 @@ msgstr "Tekan perintah tombol \"pengguna\" "
 msgctxt "#36005"
 msgid "Enable switch side commands"
 msgstr "Aktifkan pemindahan perintah sampingan"
-
-msgctxt "#36006"
-msgid "Could not open the adapter"
-msgstr "Tidak dapat membuka adapter"
 
 msgctxt "#36007"
 msgid "Devices to power on when starting XBMC"
@@ -10645,10 +10385,6 @@ msgctxt "#36011"
 msgid "Could not detect the CEC com port. Set it up manually."
 msgstr "Tidak dapat mendeteksi port CEC com. Atur manual."
 
-msgctxt "#36012"
-msgid "Could not initialise the CEC adapter. Please check your settings."
-msgstr "Tidak dapat memulai adapter CEC. Silakan periksa pengaturan anda."
-
 msgctxt "#36015"
 msgid "HDMI port number"
 msgstr "Nomor port HDMI"
@@ -10656,10 +10392,6 @@ msgstr "Nomor port HDMI"
 msgctxt "#36016"
 msgid "Connected"
 msgstr "Xbox sedang Tersambung"
-
-msgctxt "#36017"
-msgid "Could not initialise the CEC adapter: libCEC was not found on your system."
-msgstr "Tidak dapat memulai adapter CEC: libCEC tidak terdapat pada sistem anda."
 
 msgctxt "#36018"
 msgid "Use the TV's language setting"
@@ -10713,14 +10445,6 @@ msgctxt "#36030"
 msgid "Connection lost"
 msgstr "Koneksi putus"
 
-msgctxt "#36031"
-msgid "This user does not have permissions to open the CEC adapter"
-msgstr "Pengguna ini tidak mempunyai izin untuk membuka adapter CEC"
-
-msgctxt "#36032"
-msgid "The port is busy. Only one program can access the CEC adapter"
-msgstr "Port sedang sibuk. Hanya satu program yang dapat mengakses adapter CEC"
-
 msgctxt "#36033"
 msgid "Pause playback when switching to another source"
 msgstr "Jeda playback ketika berpindah ke sumber lain"
@@ -10752,10 +10476,6 @@ msgstr "Versi libCEC tidak didukung. %x lebih rendah dari versi XBMC mendukung (
 msgctxt "#36041"
 msgid "* Item folder"
 msgstr "* Item folder"
-
-msgctxt "#36042"
-msgid "Use limited color range (16-235)"
-msgstr "Gunakan rentang warna terbatas (16-235)"
 
 msgctxt "#36101"
 msgid "Change the look and feel of the User Interface."
@@ -10873,10 +10593,6 @@ msgctxt "#36129"
 msgid "Set the amount of idle time required before displaying the screensaver."
 msgstr "Tentukan lama waktu diam sebelum menampilkan screensaver."
 
-msgctxt "#36130"
-msgid "Select the screensaver. XBMC will force the 'Dim' screensaver when fullscreen video playback is paused or a dialog box is active."
-msgstr "Pilih screensaver. XBMC akan memaksa screensaver 'Redup' ketika pemutaran video layar penuh dijeda atau sebuah kotak dialog aktif."
-
 msgctxt "#36131"
 msgid "Change specific screensaver settings. The available options are dependent on the screensaver used."
 msgstr "Ubah pengaturan screensaver tertentu. Pilihan yang tersedia bergantung pada screensaver yang digunakan."
@@ -10884,10 +10600,6 @@ msgstr "Ubah pengaturan screensaver tertentu. Pilihan yang tersedia bergantung p
 msgctxt "#36132"
 msgid "Preview the selected screensaver."
 msgstr "Pratinjau screensaver yang dipilih."
-
-msgctxt "#36133"
-msgid "If music is being played, XBMC will start the selected visualization instead of displaying the screensaver."
-msgstr "Jika musik sedang dimainkan, XBMC akan memulai visualisasi terpilih bukannya menampilkan screensaver."
 
 msgctxt "#36134"
 msgid "Dim the display when media is paused. Not valid for the 'Dim' screensaver mode."
@@ -11009,21 +10721,9 @@ msgctxt "#36164"
 msgid "Select when the refresh rate adjustments should take place."
 msgstr "Pilih kapan penyesuaian laju penyegaran mesti terjadi."
 
-msgctxt "#36166"
-msgid "Synchronize the video to the refresh rate of the monitor."
-msgstr "Selaraskan video ke laju penyegaran monitor."
-
 msgctxt "#36167"
 msgid "Audio has to stay in sync, this can either be done by resampling, skipping/duplicating packets, or adjusting the clock if it gets out of sync too far."
 msgstr "Audio mesti tetap selaras, ini bisa dilakukan dengan pencuplikan ulang, melompati/menggandakan paket, atau menyetel jam bila tak selaras terlalu jauh."
-
-msgctxt "#36168"
-msgid "No info available yet."
-msgstr "Belum ada info tersedia."
-
-msgctxt "#36169"
-msgid "No info available yet."
-msgstr "Belum ada info tersedia."
 
 msgctxt "#36170"
 msgid "Allow video player to ignoring aspect ratio by a certain amount to fill a larger amount of the screen with video."
@@ -11046,14 +10746,6 @@ msgid "No info available yet."
 msgstr "Belum ada info tersedia."
 
 msgctxt "#36181"
-msgid "No info available yet."
-msgstr "Belum ada info tersedia."
-
-msgctxt "#36182"
-msgid "No info available yet."
-msgstr "Belum ada info tersedia."
-
-msgctxt "#36183"
 msgid "No info available yet."
 msgstr "Belum ada info tersedia."
 
@@ -11452,3 +11144,7 @@ msgstr "Belum ada info tersedia."
 msgctxt "#36420"
 msgid "No info available yet."
 msgstr "Belum ada info tersedia."
+
+msgctxt "#36544"
+msgid "Enable hardware decoding of video files."
+msgstr "Fungsikan pendekodean perangkat keras atas berkas video."

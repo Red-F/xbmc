@@ -22,6 +22,7 @@
 #include "settings/AdvancedSettings.h"
 #include "guilib/LocalizeStrings.h"
 #include "utils/log.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "PosixMountProvider.h"
 
@@ -38,7 +39,7 @@ CUDiskDevice::CUDiskDevice(const char *DeviceKitUDI)
   m_isFileSystem = false;
   m_isSystemInternal = false;
   m_isOptical = false;
-  m_PartitionSizeGiB = 0.0f;
+  m_PartitionSize = 0;
   Update();
 }
 
@@ -66,7 +67,7 @@ void CUDiskDevice::Update()
   else
     m_MountPath.clear();
 
-  m_PartitionSizeGiB = properties["PartitionSize"].asUnsignedInteger() / 1024.0 / 1024.0 / 1024.0;
+  m_PartitionSize = properties["PartitionSize"].asUnsignedInteger();
   m_isPartition = properties["DeviceIsPartition"].asBoolean();
   m_isSystemInternal = properties["DeviceIsSystemInternal"].asBoolean();
   m_isOptical = properties["DeviceIsOpticalDisc"].asBoolean();
@@ -139,7 +140,10 @@ CMediaSource CUDiskDevice::ToMediaShare()
   CMediaSource source;
   source.strPath = m_MountPath;
   if (m_Label.empty())
-    source.strName.Format("%.1f GB %s", m_PartitionSizeGiB, g_localizeStrings.Get(155).c_str());
+  {
+    std::string strSize = StringUtils::SizeToString(m_PartitionSize);
+    source.strName = StringUtils::Format("%s %s", strSize.c_str(), g_localizeStrings.Get(155).c_str());
+  }
   else
     source.strName = m_Label;
   if (m_isOptical)
@@ -162,15 +166,12 @@ bool CUDiskDevice::IsApproved()
 
 CStdString CUDiskDevice::toString()
 {
-  CStdString str;
-  str.Format("DeviceUDI %s: IsFileSystem %s HasFileSystem %s "
+  return StringUtils::Format("DeviceUDI %s: IsFileSystem %s HasFileSystem %s "
       "IsSystemInternal %s IsMounted %s IsRemovable %s IsPartition %s "
       "IsOptical %s",
-      m_DeviceKitUDI.c_str(), BOOL2SZ(m_isFileSystem), m_FileSystem,
+      m_DeviceKitUDI.c_str(), BOOL2SZ(m_isFileSystem), m_FileSystem.c_str(),
       BOOL2SZ(m_isSystemInternal), BOOL2SZ(m_isMounted),
       BOOL2SZ(m_isRemovable), BOOL2SZ(m_isPartition), BOOL2SZ(m_isOptical));
-
-  return str;
 }
 
 CUDisksProvider::CUDisksProvider()

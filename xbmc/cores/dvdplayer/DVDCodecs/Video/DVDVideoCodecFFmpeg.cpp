@@ -60,6 +60,7 @@
 #ifdef TARGET_DARWIN_OSX
 #include "VDA.h"
 #endif
+#include "utils/StringUtils.h"
 
 using namespace boost;
 
@@ -75,11 +76,11 @@ enum PixelFormat CDVDVideoCodecFFmpeg::GetFormat( struct AVCodecContext * avctx
   while(*cur != PIX_FMT_NONE)
   {
 #ifdef HAVE_LIBVDPAU
-    if(CVDPAU::IsVDPAUFormat(*cur) && CSettings::Get().GetBool("videoplayer.usevdpau"))
+    if(VDPAU::CDecoder::IsVDPAUFormat(*cur) && CSettings::Get().GetBool("videoplayer.usevdpau"))
     {
       CLog::Log(LOGNOTICE,"CDVDVideoCodecFFmpeg::GetFormat - Creating VDPAU(%ix%i)", avctx->width, avctx->height);
-      CVDPAU* vdp = new CVDPAU();
-      if(vdp->Open(avctx, *cur))
+      VDPAU::CDecoder* vdp = new VDPAU::CDecoder();
+      if(vdp->Open(avctx, *cur, ctx->m_uSurfacesCount))
       {
         ctx->SetHardware(vdp);
         return *cur;
@@ -106,11 +107,6 @@ enum PixelFormat CDVDVideoCodecFFmpeg::GetFormat( struct AVCodecContext * avctx
     if(*cur == PIX_FMT_VAAPI_VLD && CSettings::Get().GetBool("videoplayer.usevaapi") 
     && (avctx->codec_id != AV_CODEC_ID_MPEG4 || g_advancedSettings.m_videoAllowMpeg4VAAPI)) 
     {
-      if (ctx->GetHardware() != NULL)
-      {
-        ctx->SetHardware(NULL);
-      }
-
       VAAPI::CDecoder* dec = new VAAPI::CDecoder();
       if(dec->Open(avctx, *cur, ctx->m_uSurfacesCount))
       {
@@ -253,6 +249,11 @@ bool CDVDVideoCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
     CLog::Log(LOGDEBUG,"CDVDVideoCodecFFmpeg::Open() Keep default threading for Hi10p: %d",
                         m_pCodecContext->thread_type);
   }
+  else if (CSettings::Get().GetBool("videoplayer.useframemtdec"))
+  {
+    CLog::Log(LOGDEBUG,"CDVDVideoCodecFFmpeg::Open() Keep default threading %d by videoplayer.useframemtdec",
+                        m_pCodecContext->thread_type);
+  }
   else
     m_pCodecContext->thread_type = FF_THREAD_SLICE;
 
@@ -375,7 +376,7 @@ void CDVDVideoCodecFFmpeg::SetDropState(bool bDrop)
 
 unsigned int CDVDVideoCodecFFmpeg::SetFilters(unsigned int flags)
 {
-  m_filters_next.Empty();
+  m_filters_next.clear();
 
   if(m_pHardware)
     return 0;
@@ -707,7 +708,7 @@ int CDVDVideoCodecFFmpeg::FilterOpen(const CStdString& filters, bool scale)
   if (m_pFilterGraph)
     FilterClose();
 
-  if (filters.IsEmpty() && !scale)
+  if (filters.empty() && !scale)
     return 0;
 
   if (m_pHardware)
@@ -725,16 +726,14 @@ int CDVDVideoCodecFFmpeg::FilterOpen(const CStdString& filters, bool scale)
   AVFilter* srcFilter = m_dllAvFilter.avfilter_get_by_name("buffer");
   AVFilter* outFilter = m_dllAvFilter.avfilter_get_by_name("buffersink"); // should be last filter in the graph for now
 
-  CStdString args;
-
-  args.Format("%d:%d:%d:%d:%d:%d:%d",
-    m_pCodecContext->width,
-    m_pCodecContext->height,
-    m_pCodecContext->pix_fmt,
-    m_pCodecContext->time_base.num,
-    m_pCodecContext->time_base.den,
-    m_pCodecContext->sample_aspect_ratio.num,
-    m_pCodecContext->sample_aspect_ratio.den);
+  CStdString args = StringUtils::Format("%d:%d:%d:%d:%d:%d:%d",
+                                        m_pCodecContext->width,
+                                        m_pCodecContext->height,
+                                        m_pCodecContext->pix_fmt,
+                                        m_pCodecContext->time_base.num,
+                                        m_pCodecContext->time_base.den,
+                                        m_pCodecContext->sample_aspect_ratio.num,
+                                        m_pCodecContext->sample_aspect_ratio.den);
 
   if ((result = m_dllAvFilter.avfilter_graph_create_filter(&m_pFilterIn, srcFilter, "src", args, NULL, m_pFilterGraph)) < 0)
   {

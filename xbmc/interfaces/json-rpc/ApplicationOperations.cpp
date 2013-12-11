@@ -28,6 +28,7 @@
 #include "GUIInfoManager.h"
 #include "system.h"
 #include "GitRevision.h"
+#include "utils/StringUtils.h"
 
 using namespace JSONRPC;
 
@@ -123,11 +124,11 @@ JSONRPC_STATUS CApplicationOperations::GetPropertyValue(const CStdString &proper
     if (GetXbmcGitRevision())
       result["revision"] = GetXbmcGitRevision();
     CStdString tag(VERSION_TAG);
-    if (tag.ToLower().Equals("-pre"))
+    if (StringUtils::EqualsNoCase(tag, "-pre"))
       result["tag"] = "alpha";
-    else if (tag.ToLower().Left(5).Equals("-beta"))
+    else if (StringUtils::StartsWithNoCase(tag, "-beta"))
       result["tag"] = "beta";
-    else if (tag.ToLower().Left(3).Equals("-rc"))
+    else if (StringUtils::StartsWithNoCase(tag, "-rc"))
       result["tag"] = "releasecandidate";
     else if (tag.empty())
       result["tag"] = "stable";

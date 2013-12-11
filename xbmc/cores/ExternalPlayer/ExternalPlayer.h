@@ -36,7 +36,7 @@ public:
   virtual void RegisterAudioCallback(IAudioCallback* pCallback) {}
   virtual void UnRegisterAudioCallback()                        {}
   virtual bool OpenFile(const CFileItem& file, const CPlayerOptions &options);
-  virtual bool CloseFile();
+  virtual bool CloseFile(bool reopen = false);
   virtual bool IsPlaying() const;
   virtual void Pause();
   virtual bool IsPaused() const;
@@ -46,7 +46,7 @@ public:
   virtual void SwitchToNextLanguage();
   virtual void ToggleSubtitles();
   virtual bool CanSeek();
-  virtual void Seek(bool bPlus, bool bLargeStep);
+  virtual void Seek(bool bPlus, bool bLargeStep, bool bChapterOverride);
   virtual void SeekPercentage(float iPercent);
   virtual float GetPercentage();
   virtual void SetVolume(float volume) {}

@@ -220,6 +220,11 @@ SortDescription CGUIViewState::GetSortMethod() const
   return sorting;
 }
 
+bool CGUIViewState::HasMultipleSortMethods() const
+{
+  return m_sortMethods.size() > 1;
+}
+
 int CGUIViewState::GetSortMethodLabel() const
 {
   if (m_currentSortMethod>=0 && m_currentSortMethod<(int)m_sortMethods.size())
@@ -236,10 +241,10 @@ void CGUIViewState::GetSortMethodLabelMasks(LABEL_MASKS& masks) const
     return;
   }
 
-  masks.m_strLabelFile.Empty();
-  masks.m_strLabel2File.Empty();
-  masks.m_strLabelFolder.Empty();
-  masks.m_strLabel2Folder.Empty();
+  masks.m_strLabelFile.clear();
+  masks.m_strLabel2File.clear();
+  masks.m_strLabelFolder.clear();
+  masks.m_strLabel2Folder.clear();
   return;
 }
 
@@ -293,6 +298,7 @@ void CGUIViewState::SetSortMethod(SortBy sortBy, SortAttribute sortAttributes /*
       break;
     }
   }
+  SetSortOrder(m_sortOrder);
 }
 
 void CGUIViewState::SetSortMethod(SortDescription sortDescription)
@@ -308,6 +314,7 @@ SortDescription CGUIViewState::SetNextSortMethod(int direction /* = 1 */)
     m_currentSortMethod = 0;
   if (m_currentSortMethod < 0)
     m_currentSortMethod = m_sortMethods.size() ? (int)m_sortMethods.size() - 1 : 0;
+  SetSortOrder(m_sortOrder);
 
   SaveViewState();
 
@@ -390,7 +397,7 @@ void CGUIViewState::AddAddonsSource(const CStdString &content, const CStdString 
     CMediaSource source;
     source.strPath = "addons://sources/" + content + "/";    
     source.strName = label;
-    if (!thumb.IsEmpty() && g_TextureManager.HasTexture(thumb))
+    if (!thumb.empty() && g_TextureManager.HasTexture(thumb))
       source.m_strThumbnailImage = thumb;
     source.m_iDriveType = CMediaSource::SOURCE_TYPE_LOCAL;
     source.m_ignore = true;
@@ -408,7 +415,7 @@ void CGUIViewState::AddAndroidSource(const CStdString &content, const CStdString
     CMediaSource source;
     source.strPath = "androidapp://sources/" + content + "/";
     source.strName = label;
-    if (!thumb.IsEmpty() && g_TextureManager.HasTexture(thumb))
+    if (!thumb.empty() && g_TextureManager.HasTexture(thumb))
       source.m_strThumbnailImage = thumb;
     source.m_iDriveType = CMediaSource::SOURCE_TYPE_LOCAL;
     source.m_ignore = true;

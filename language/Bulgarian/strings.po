@@ -131,47 +131,47 @@ msgstr "декември"
 
 msgctxt "#41"
 msgid "Mon"
-msgstr "пн"
+msgstr "пон."
 
 msgctxt "#42"
 msgid "Tue"
-msgstr "вт"
+msgstr "втор."
 
 msgctxt "#43"
 msgid "Wed"
-msgstr "ср"
+msgstr "ср."
 
 msgctxt "#44"
 msgid "Thu"
-msgstr "чт"
+msgstr "четв."
 
 msgctxt "#45"
 msgid "Fri"
-msgstr "пт"
+msgstr "пет."
 
 msgctxt "#46"
 msgid "Sat"
-msgstr "сб"
+msgstr "съб."
 
 msgctxt "#47"
 msgid "Sun"
-msgstr "нд"
+msgstr "нед."
 
 msgctxt "#51"
 msgid "Jan"
-msgstr "яну"
+msgstr "ян."
 
 msgctxt "#52"
 msgid "Feb"
-msgstr "фев"
+msgstr "февр."
 
 msgctxt "#53"
 msgid "Mar"
-msgstr "мар"
+msgstr "март"
 
 msgctxt "#54"
 msgid "Apr"
-msgstr "апр"
+msgstr "апр."
 
 msgctxt "#55"
 msgid "May"
@@ -187,23 +187,23 @@ msgstr "юли"
 
 msgctxt "#58"
 msgid "Aug"
-msgstr "авг"
+msgstr "авг."
 
 msgctxt "#59"
 msgid "Sep"
-msgstr "сеп"
+msgstr "септ."
 
 msgctxt "#60"
 msgid "Oct"
-msgstr "окт"
+msgstr "окт."
 
 msgctxt "#61"
 msgid "Nov"
-msgstr "ное"
+msgstr "ное."
 
 msgctxt "#62"
 msgid "Dec"
-msgstr "дек"
+msgstr "дек."
 
 msgctxt "#71"
 msgid "N"
@@ -271,7 +271,7 @@ msgstr "ССЗ"
 
 msgctxt "#87"
 msgid "VAR"
-msgstr "Променливa"
+msgstr "Променлива"
 
 msgctxt "#88"
 msgid "South"
@@ -315,15 +315,15 @@ msgstr "Сканиране"
 
 msgctxt "#103"
 msgid "Sort by: Name"
-msgstr "Сорт.: Име"
+msgstr "Сортиране: Име"
 
 msgctxt "#104"
 msgid "Sort by: Date"
-msgstr "Сорт.: Дата"
+msgstr "Сортиране: Дата"
 
 msgctxt "#105"
 msgid "Sort by: Size"
-msgstr "Сорт.: Размер"
+msgstr "Сортиране: Размер"
 
 msgctxt "#106"
 msgid "No"
@@ -569,13 +569,17 @@ msgctxt "#166"
 msgid "Skin"
 msgstr "Облик"
 
+msgctxt "#168"
+msgid "%s- %s"
+msgstr "%s- %s"
+
 msgctxt "#169"
 msgid "Resolution"
 msgstr "Резолюция"
 
 msgctxt "#170"
 msgid "Adjust display refresh rate to match video"
-msgstr "Съгласувай честота на обновяване на екрана с тази на видеото"
+msgstr "Синхронизирай честотата на екрана с видеото"
 
 msgctxt "#172"
 msgid "Release date"
@@ -671,11 +675,11 @@ msgstr "Изискване на инф. от %s"
 
 msgctxt "#198"
 msgid "Loading movie details"
-msgstr "Зареждане на подробностите за филма"
+msgstr "Зареждане на детайлите за филма"
 
 msgctxt "#199"
 msgid "Web interface"
-msgstr "Web интерфейс"
+msgstr "Уеб интерфейс"
 
 msgctxt "#202"
 msgid "Tagline"
@@ -739,7 +743,7 @@ msgstr "Моля, поставете диск"
 
 msgctxt "#220"
 msgid "Remote share"
-msgstr "Отдалечено споделяне"
+msgstr "Отдалечен споделен ресурс"
 
 msgctxt "#221"
 msgid "Network is not connected"
@@ -850,7 +854,7 @@ msgid "Music"
 msgstr "музика"
 
 msgctxt "#250"
-msgid "Visualization"
+msgid "Visualisation"
 msgstr "Визуализация"
 
 msgctxt "#251"
@@ -859,7 +863,7 @@ msgstr "Изберете целева папка"
 
 msgctxt "#252"
 msgid "Output stereo to all speakers"
-msgstr "Изпращай стерео сигнала до всички високоговорители"
+msgstr "Извеждай стерео сигнала до всички високоговорители"
 
 msgctxt "#253"
 msgid "Number of channels"
@@ -883,7 +887,7 @@ msgstr "Грешка"
 
 msgctxt "#258"
 msgid "Enable tag reading"
-msgstr "Прочитай и информацията от tag-овете"
+msgstr "Прочитай и информацията от етикетите (tag-овете)"
 
 msgctxt "#259"
 msgid "Opening"
@@ -923,7 +927,7 @@ msgstr "Сорт. по: Време"
 
 msgctxt "#268"
 msgid "Sort by: Title"
-msgstr "Сорт. по: Заглавие"
+msgstr "Сортиране : Заглавие"
 
 msgctxt "#269"
 msgid "Sort by: Artist"
@@ -959,7 +963,7 @@ msgstr "Ползвайте стрелките, за да промените over
 
 msgctxt "#277"
 msgid "Adjust the bar to change the subtitles position"
-msgstr "Преместете лентата, за да промените\nпозицията на субтитрите"
+msgstr "Преместете лентата, за да промените позицията на субтитрите"
 
 msgctxt "#278"
 msgid "Adjust the rectangle so it is perfectly square"
@@ -1041,10 +1045,6 @@ msgctxt "#298"
 msgid "Bookmarks"
 msgstr "Отметки"
 
-msgctxt "#299"
-msgid "AAC capable receiver"
-msgstr "Ресивърът ми поддържа AAC"
-
 msgctxt "#300"
 msgid "MP1 capable receiver"
 msgstr "Ресивърът ми поддържа MP1"
@@ -1079,7 +1079,7 @@ msgstr "Език на оригиналния поток"
 
 msgctxt "#309"
 msgid "User Interface language"
-msgstr "Език на потренителския интерфейс"
+msgstr "Език на потребителския интерфейс"
 
 msgctxt "#312"
 msgid "(0=auto)"
@@ -1182,16 +1182,12 @@ msgid "Framerate conversion"
 msgstr "Конвертиране честотата на кадрите"
 
 msgctxt "#337"
-msgid "Audio output"
-msgstr "Аудио изход"
+msgid "Output configuration"
+msgstr "Настройки на извеждането"
 
 msgctxt "#338"
-msgid "Analog"
-msgstr "Аналогов"
-
-msgctxt "#339"
-msgid "Optical/Coax"
-msgstr "Цифров"
+msgid "Fixed"
+msgstr "Фиксирана"
 
 msgctxt "#340"
 msgid "Various artists"
@@ -1217,17 +1213,13 @@ msgctxt "#345"
 msgid "Year"
 msgstr "Година"
 
-msgctxt "#346"
-msgid "Boost volume level on downmix"
-msgstr "Усили звука при смесване за намаляване броя на каналите"
-
 msgctxt "#347"
 msgid "DTS-HD capable receiver"
 msgstr "Ресивърът ми поддържа DTS-HD"
 
 msgctxt "#348"
-msgid "Multichannel LPCM capable receiver"
-msgstr "Ресивърът ми поддържа Multichannel LPCM"
+msgid "Enable passthrough"
+msgstr "Включи режима \"Предаване на аудиото\""
 
 msgctxt "#349"
 msgid "TrueHD capable receiver"
@@ -1263,7 +1255,7 @@ msgstr "Скрийнсейвър"
 
 msgctxt "#357"
 msgid "Shutdown function timer"
-msgstr "Таймер за автоматично изключване"
+msgstr "Брояч за автоматично изключване"
 
 msgctxt "#358"
 msgid "All albums"
@@ -1295,15 +1287,15 @@ msgstr "Ресивърът ми поддържа Dolby Digital (AC3)"
 
 msgctxt "#365"
 msgid "Sort by: Name"
-msgstr "Сорт. по: Име"
+msgstr "Сортиране: Име"
 
 msgctxt "#366"
 msgid "Sort by: Year"
-msgstr "Сорт. по: Година"
+msgstr "Сортиране: Година"
 
 msgctxt "#367"
 msgid "Sort by: Rating"
-msgstr "Сорт. по: Рейтинг"
+msgstr "Сортиране: Рейтинг"
 
 msgctxt "#368"
 msgid "IMDb"
@@ -1419,7 +1411,7 @@ msgstr "Мараня"
 
 msgctxt "#396"
 msgid "Select location"
-msgstr "Изберете място"
+msgstr "Изберете локация"
 
 msgctxt "#397"
 msgid "Refresh time"
@@ -1505,9 +1497,9 @@ msgctxt "#419"
 msgid "High"
 msgstr "Макс"
 
-msgctxt "#420"
-msgid "HDMI"
-msgstr "HDMI"
+msgctxt "#421"
+msgid "Keep audio device alive"
+msgstr "Поддържай аудио устройството включено"
 
 msgctxt "#422"
 msgid "Delete album info"
@@ -1555,7 +1547,7 @@ msgstr "Премахване на филм от библиотеката"
 
 msgctxt "#433"
 msgid "Really remove '%s'?"
-msgstr "Наистина ли желаете премахването на\n\"%s\"?"
+msgstr "Наистина ли желаете премахването на: \"%s\"?"
 
 msgctxt "#434"
 msgid "From %s at %i %s"
@@ -1582,7 +1574,7 @@ msgid "Cache"
 msgstr "Кеш"
 
 msgctxt "#440"
-msgid "Harddisk"
+msgid "Hard disk"
 msgstr "Твърд диск"
 
 msgctxt "#441"
@@ -1612,6 +1604,10 @@ msgstr "DVD"
 msgctxt "#447"
 msgid "Autorun media"
 msgstr "Автоматично възпроизвеждане"
+
+msgctxt "#448"
+msgid "Dolby Digital Plus (E-AC3) capable receiver"
+msgstr "Ресивърът ми поддържа Dolby Digital Plus (E-AC3)"
 
 msgctxt "#449"
 msgid "Enabled"
@@ -1687,7 +1683,7 @@ msgstr "Тип"
 
 msgctxt "#468"
 msgid "Move the bar to change the OSD position"
-msgstr "Преместете лентата, за да промените\nпозицията на OSD"
+msgstr "Преместете лентата, за да промените позицията на OSD"
 
 msgctxt "#469"
 msgid "OSD position"
@@ -1787,7 +1783,7 @@ msgstr "Показвай разширенията на файловете"
 
 msgctxt "#498"
 msgid "Sort by: Type"
-msgstr "Сорт. по: Тип"
+msgstr "Сортиране: Тип"
 
 msgctxt "#499"
 msgid "Unable to connect to online lookup service"
@@ -1820,10 +1816,6 @@ msgstr "Зареждане на информация от файлове..."
 msgctxt "#507"
 msgid "Sort by: Usage"
 msgstr "Сорт. по: Употреба"
-
-msgctxt "#510"
-msgid "Enable visualizations"
-msgstr "Включи визуализациите"
 
 msgctxt "#511"
 msgid "Enable video mode switching"
@@ -1955,11 +1947,11 @@ msgstr "Информация"
 
 msgctxt "#545"
 msgid "Audio output device"
-msgstr "Аудио изход (устройство)"
+msgstr "Аудио извод (устройство)"
 
 msgctxt "#546"
 msgid "Passthrough output device"
-msgstr "Преходно устройство (за звука)"
+msgstr "Устройство към което да се предава аудиото"
 
 msgctxt "#547"
 msgid "No biography for this artist"
@@ -2077,6 +2069,10 @@ msgctxt "#576"
 msgid "Times played"
 msgstr "Брой възпроизвеждания"
 
+msgctxt "#577"
+msgid "Date Taken"
+msgstr "Дата на заснемане"
+
 msgctxt "#580"
 msgid "Sort direction"
 msgstr "Посока на сортиране"
@@ -2193,6 +2189,10 @@ msgctxt "#611"
 msgid "Enter number"
 msgstr "Въведете номер"
 
+msgctxt "#614"
+msgid "Virtual folder"
+msgstr "Виртуална папка"
+
 msgctxt "#620"
 msgid "Audio CDs"
 msgstr "Аудио CD-та"
@@ -2249,14 +2249,6 @@ msgctxt "#636"
 msgid "Custom"
 msgstr "Персонално"
 
-msgctxt "#637"
-msgid "Replay gain"
-msgstr "Replay gain"
-
-msgctxt "#638"
-msgid "Replaygain volume adjustments"
-msgstr "Replaygain - коригиране силата на звука"
-
 msgctxt "#639"
 msgid "Use track levels"
 msgstr "С нива от песните"
@@ -2264,18 +2256,6 @@ msgstr "С нива от песните"
 msgctxt "#640"
 msgid "Use album levels"
 msgstr "С нива от албумите"
-
-msgctxt "#641"
-msgid "PreAmp Level - Replay gained files"
-msgstr "PreAmp Level - Replay gained files"
-
-msgctxt "#642"
-msgid "PreAmp Level - Non replay gained files"
-msgstr "PreAmp Level - Non replay gained files"
-
-msgctxt "#643"
-msgid "Avoid clipping on replay gained files"
-msgstr "Avoid clipping on replay gained files"
 
 msgctxt "#644"
 msgid "Crop black bars"
@@ -2365,6 +2345,10 @@ msgctxt "#665"
 msgid "Compression level"
 msgstr "Степен на компресиране"
 
+msgctxt "#666"
+msgid "Verbose logging..."
+msgstr "Подробно водене на дневника..."
+
 msgctxt "#700"
 msgid "Cleaning up library"
 msgstr "Почистване на библиотеката"
@@ -2443,7 +2427,7 @@ msgstr "Промените не са записани. Продължаване 
 
 msgctxt "#727"
 msgid "Web server"
-msgstr "Web сървър"
+msgstr "Уеб сървър"
 
 msgctxt "#728"
 msgid "FTP server"
@@ -2539,7 +2523,7 @@ msgstr "Добави препратка към програма"
 
 msgctxt "#755"
 msgid "Edit program path"
-msgstr "Редактирне на пътя до програмата"
+msgstr "Редактиране на пътя до програмата"
 
 msgctxt "#756"
 msgid "Edit program name"
@@ -2591,7 +2575,7 @@ msgstr "Грешка %i: споделеното не е налично"
 
 msgctxt "#772"
 msgid "Audio output"
-msgstr "Аудио изход"
+msgstr "Аудио извод"
 
 msgctxt "#773"
 msgid "Seeking"
@@ -2693,6 +2677,10 @@ msgctxt "#799"
 msgid "Library Update"
 msgstr "Опресняване библиотека"
 
+msgctxt "#800"
+msgid "Music library needs to rescan tags from files."
+msgstr "Музикалната библиотека изисква повторно сканиране на етикетите от музикалните файлове."
+
 msgctxt "#801"
 msgid "Would you like to scan now?"
 msgstr "Искате ли да сканирате сега?"
@@ -2721,13 +2709,17 @@ msgctxt "#999"
 msgid "Add Videos..."
 msgstr "Добави видео..."
 
+msgctxt "#1000"
+msgid "Preview"
+msgstr "Преглед"
+
 msgctxt "#1001"
 msgid "Unable to connect"
 msgstr "Не може да бъде осъществена връзка"
 
 msgctxt "#1002"
 msgid "XBMC was unable to connect to the network location."
-msgstr "XBMC не може да се свърже към мрежовото място."
+msgstr "XBMC не може да се свърже към мястото от мрежата."
 
 msgctxt "#1003"
 msgid "This could be due to the network not being connected."
@@ -2889,10 +2881,6 @@ msgctxt "#1043"
 msgid "Program Add-ons"
 msgstr "Добавки тип програми"
 
-msgctxt "#1044"
-msgid "Set plugin thumb"
-msgstr "Изберете миниатюра за приставката"
-
 msgctxt "#1045"
 msgid "Add-on settings"
 msgstr "Настройки на добавката"
@@ -2919,7 +2907,7 @@ msgstr "Единични"
 
 msgctxt "#1051"
 msgid "Enter web address"
-msgstr "Въведете web адрес"
+msgstr "Въведете уеб адрес"
 
 msgctxt "#1180"
 msgid "Proxy type"
@@ -3087,11 +3075,11 @@ msgstr "AirTunes"
 
 msgctxt "#1300"
 msgid "Custom audio device"
-msgstr "Друго аудио устройство"
+msgstr "Задаено аудио устройство"
 
 msgctxt "#1301"
 msgid "Custom passthrough device"
-msgstr "Друго преходно устройство"
+msgstr "Зададено към устройство което да се предава"
 
 msgctxt "#1396"
 msgid "Drifting"
@@ -3213,6 +3201,10 @@ msgctxt "#1432"
 msgid "Sand"
 msgstr "Пясък"
 
+msgctxt "#1435"
+msgid "Sandstorm"
+msgstr "Пясъчна буря"
+
 msgctxt "#1438"
 msgid "Small"
 msgstr "Малка"
@@ -3248,6 +3240,10 @@ msgstr "\"Приспиване\" на екрана при бездействие
 msgctxt "#2050"
 msgid "Runtime"
 msgstr "Времетраене"
+
+msgctxt "#2080"
+msgid "Empty list"
+msgstr "Празен списък"
 
 msgctxt "#2100"
 msgid "Script failed! : %s"
@@ -3343,7 +3339,7 @@ msgstr "Скриптове"
 
 msgctxt "#10021"
 msgid "Web Browser"
-msgstr "Web браузър"
+msgstr "Уеб браузър"
 
 msgctxt "#10025"
 msgid "Videos"
@@ -3366,28 +3362,24 @@ msgid "Reset"
 msgstr "Нулиране"
 
 msgctxt "#10036"
-msgid "Level: Basic"
-msgstr "Основни настр."
+msgid "Basic"
+msgstr "Основни"
 
 msgctxt "#10037"
-msgid "Level: Standard"
-msgstr "Стандартни настр."
+msgid "Standard"
+msgstr "Стандарт"
 
 msgctxt "#10038"
-msgid "Level: Advanced"
-msgstr "Допълнителни настр."
+msgid "Advanced"
+msgstr "За напреднали"
 
 msgctxt "#10039"
-msgid "Level: Expert"
-msgstr "Експертни настр."
-
-msgctxt "#10040"
-msgid "Addon browser"
-msgstr "Браузyр за добавки"
+msgid "Expert"
+msgstr "За експерти"
 
 msgctxt "#10041"
-msgid "Reset settings"
-msgstr "Нулиране на насройките"
+msgid "Reset above settings to default"
+msgstr "Нулиране на горните настройки"
 
 msgctxt "#10042"
 msgid "Are you sure you want to reset the settings in this category?"
@@ -3401,21 +3393,29 @@ msgctxt "#10044"
 msgid "No help available"
 msgstr "Не е налична помощ"
 
-msgctxt "#10100"
-msgid "Yes/No dialog"
-msgstr "С/Без прозорец"
+msgctxt "#10045"
+msgid "Resets all the visible settings to their default values."
+msgstr "Нулира всички видими настройки към стандартните им стойности"
 
-msgctxt "#10101"
-msgid "Progress dialog"
-msgstr "Прозорец за напредъка"
+msgctxt "#10046"
+msgid "No categories available"
+msgstr "Няма налични категории"
+
+msgctxt "#10047"
+msgid "Try changing the setting level to see additional categories and settings."
+msgstr "Променете нивото на настройките, за да видите допълнителните категории от настройки."
 
 msgctxt "#10126"
 msgid "File browser"
 msgstr "Браузер на файлове"
 
+msgctxt "#10128"
+msgid "Network setup"
+msgstr "Настройки на мрежата"
+
 msgctxt "#10129"
 msgid "Media source"
-msgstr "Медиини източници"
+msgstr "Медийни източници"
 
 msgctxt "#10130"
 msgid "Profile settings"
@@ -3425,13 +3425,37 @@ msgctxt "#10131"
 msgid "Lock settings"
 msgstr "Заключи настройките"
 
+msgctxt "#10132"
+msgid "Content settings"
+msgstr "Настроки на съдържанието"
+
 msgctxt "#10134"
 msgid "Favourites"
 msgstr "Любими"
 
+msgctxt "#10135"
+msgid "Songs/Info"
+msgstr "Песни / Информация"
+
+msgctxt "#10136"
+msgid "Smart playlist editor"
+msgstr "Редактор на \"умни\" плейлисти"
+
+msgctxt "#10137"
+msgid "Smart playlist rule editor"
+msgstr "Редактор на правила за \"умни\" плейлисти"
+
+msgctxt "#10139"
+msgid "Pictures/Info"
+msgstr "Снимки / Информация"
+
 msgctxt "#10140"
 msgid "Add-on settings"
 msgstr "Настройки на добавката"
+
+msgctxt "#10146"
+msgid "Add-ons/Info"
+msgstr "Добавки / Информация"
 
 msgctxt "#10210"
 msgid "Looking for subtitles..."
@@ -3521,36 +3545,28 @@ msgctxt "#10524"
 msgid "Movie info"
 msgstr "Инф. за филма"
 
-msgctxt "#12000"
-msgid "Select dialog"
-msgstr "Изберете прозорец"
-
 msgctxt "#12001"
 msgid "Music/Info"
-msgstr "Музика/Информация"
-
-msgctxt "#12002"
-msgid "Dialog OK"
-msgstr "Прозорец \"Добре\""
+msgstr "Музика / Информация"
 
 msgctxt "#12003"
 msgid "Videos/Info"
-msgstr "Видео/Информация"
+msgstr "Видео / Информация"
 
 msgctxt "#12004"
 msgid "Scripts/Info"
-msgstr "Скриптове/Информация"
+msgstr "Скриптове / Информация"
 
 msgctxt "#12005"
 msgid "Fullscreen video"
 msgstr "Видео на цял екран"
 
 msgctxt "#12006"
-msgid "Audio visualization"
+msgid "Audio visualisation"
 msgstr "Аудио визуализация"
 
 msgctxt "#12008"
-msgid "File stacking dialog"
+msgid "File stacking dialogue"
 msgstr "Прозорец за групиране на файлове"
 
 msgctxt "#12009"
@@ -3710,7 +3726,7 @@ msgid "Password retry limit exceeded."
 msgstr "Достигнахте лимита на опитите за отключване."
 
 msgctxt "#12347"
-msgid "The system will now shut off."
+msgid "The system will now power down."
 msgstr "Сега системата ще се изключи."
 
 msgctxt "#12348"
@@ -3886,7 +3902,7 @@ msgid "Reboot"
 msgstr "Рестартиране"
 
 msgctxt "#13014"
-msgid "Minimize"
+msgid "Minimise"
 msgstr "Минимизиране"
 
 msgctxt "#13015"
@@ -3929,9 +3945,13 @@ msgctxt "#13025"
 msgid "Joystick unplugged"
 msgstr "Откачен е джойстик"
 
+msgctxt "#13026"
+msgid "Try to wake remote servers on access"
+msgstr "Събуждане на отдалечен сървър при опит за достъп"
+
 msgctxt "#13027"
 msgid "Wake on Lan (%s)"
-msgstr "Включване по мрежата (%s)"
+msgstr "Събуждане по LAN (%s)"
 
 msgctxt "#13028"
 msgid "Waiting for network to connect..."
@@ -3939,7 +3959,7 @@ msgstr "Изчаква се свързване към мрежа..."
 
 msgctxt "#13029"
 msgid "Failed to execute Wake on Lan!"
-msgstr "Събуждането по мрежата се провали!"
+msgstr "Събуждането по LAN се провали!"
 
 msgctxt "#13030"
 msgid "Waiting for server to wake up..."
@@ -3963,11 +3983,11 @@ msgstr "Актуализиран за %s"
 
 msgctxt "#13035"
 msgid "Found for %s"
-msgstr "Открит е за %s"
+msgstr "Открит е за \"%s\""
 
 msgctxt "#13036"
 msgid "Failed for %s"
-msgstr "Не е открит за %s"
+msgstr "Не е открит за \"%s\""
 
 msgctxt "#13050"
 msgid "Running low on battery"
@@ -4006,8 +4026,8 @@ msgid "Save resolution?"
 msgstr "Запазване на резолюцията?"
 
 msgctxt "#13111"
-msgid "Would you like to keep this resolution?"
-msgstr "Желаете ли резолюцията да бъде запазена?"
+msgid "Would you like to keep this change?"
+msgstr "Желаете ли запазването на промяната?"
 
 msgctxt "#13112"
 msgid "High quality upscaling"
@@ -4049,9 +4069,9 @@ msgctxt "#13121"
 msgid "VDPAU HQ Upscaling level"
 msgstr "VDPAU ниво на Upscaling с високо качество"
 
-msgctxt "#13122"
-msgid "VDPAU Studio level color conversion"
-msgstr "VDPAU цветово конвертиране на студийно ниво"
+msgctxt "#13123"
+msgid "Keep skin?"
+msgstr "Желаете да ползвате този облик?"
 
 msgctxt "#13130"
 msgid "Blank other displays"
@@ -4106,7 +4126,7 @@ msgid "Primary DNS"
 msgstr "Основен DNS"
 
 msgctxt "#13162"
-msgid "Initialize failed"
+msgid "Initialise failed"
 msgstr "Инициализирането се провали"
 
 msgctxt "#13170"
@@ -4353,10 +4373,6 @@ msgctxt "#13318"
 msgid "Recursive slideshow"
 msgstr "Рекурсивно слайдшоу"
 
-msgctxt "#13319"
-msgid "Randomize"
-msgstr "Разбъркай"
-
 msgctxt "#13320"
 msgid "Stereo"
 msgstr "Стерео"
@@ -4570,20 +4586,20 @@ msgid "Preset"
 msgstr "Шаблон"
 
 msgctxt "#13389"
-msgid "There are no presets available\nfor this visualization"
+msgid "There are no presets available\nfor this visualisation"
 msgstr "Няма налични шаблони\nза визуализацията"
 
 msgctxt "#13390"
-msgid "There are no settings available\nfor this visualization"
-msgstr "Няма налични настройки\nза визуализацията"
+msgid "There are no settings available\nfor this visualisation"
+msgstr "Няма налични настройки за визуализацията"
 
 msgctxt "#13391"
 msgid "Eject/Load"
 msgstr "Отвори/Затвори"
 
 msgctxt "#13392"
-msgid "Use visualization if playing audio"
-msgstr "Ползване на визуализация при възпроизвеждане на аудио"
+msgid "Use visualisation if playing audio"
+msgstr "Ползвай визуализация при възпроизвеждане на аудио"
 
 msgctxt "#13393"
 msgid "Calculate size"
@@ -4753,6 +4769,18 @@ msgctxt "#13434"
 msgid "Play only this"
 msgstr "Възпроизведи само това"
 
+msgctxt "#13436"
+msgid "Allow hardware acceleration (libstagefright)"
+msgstr "Разреши хардуерното ускорение (libstagefright)"
+
+msgctxt "#13438"
+msgid "Allow hardware acceleration (amcodec)"
+msgstr "Разреши хардуерното ускорение (amcodec)"
+
+msgctxt "#13439"
+msgid "Allow hardware acceleration (MediaCodec)"
+msgstr "Разреши хардуерното ускорение (MediaCodec)"
+
 msgctxt "#13500"
 msgid "A/V sync method"
 msgstr "Метод за Аудио/Видео синхронизиране"
@@ -4768,10 +4796,6 @@ msgstr "Видео часовника (Drop/Dupe audio)"
 msgctxt "#13503"
 msgid "Video clock (Resample audio)"
 msgstr "Видео часовника (Resample audio)"
-
-msgctxt "#13504"
-msgid "Maximum resample amount (%)"
-msgstr "Максимално количество resample (%)"
 
 msgctxt "#13505"
 msgid "Resample quality"
@@ -4799,7 +4823,7 @@ msgstr "Съгласувай честотата на обновяване на �
 
 msgctxt "#13511"
 msgid "Choose art"
-msgstr "Изберете картинка"
+msgstr "Избери картинка"
 
 msgctxt "#13512"
 msgid "Current art"
@@ -4817,9 +4841,13 @@ msgctxt "#13515"
 msgid "No art"
 msgstr "Без картинка"
 
+msgctxt "#13516"
+msgid "Add art"
+msgstr "Добави картинка"
+
 msgctxt "#13550"
 msgid "Pause during refresh rate change"
-msgstr "Пауза при промя на честота за обновяване"
+msgstr "Пауза при промя на честота на обновяване"
 
 msgctxt "#13551"
 msgid "Off"
@@ -4832,6 +4860,14 @@ msgstr "%.1f секунда"
 msgctxt "#13553"
 msgid "%.1f Seconds"
 msgstr "%.1f секунди"
+
+msgctxt "#13554"
+msgid "%d Minute"
+msgstr "%d минута"
+
+msgctxt "#13555"
+msgid "%d Minutes"
+msgstr "%d минути"
 
 msgctxt "#13600"
 msgid "Apple remote"
@@ -4960,10 +4996,6 @@ msgstr "Без ТВ"
 msgctxt "#14024"
 msgid "Enter the nearest large town"
 msgstr "Въведете най-близкия голям град"
-
-msgctxt "#14025"
-msgid "Video/Audio/DVD cache - Harddisk"
-msgstr "Видео/Аудио/DVD кеш - Твърд диск"
 
 msgctxt "#14026"
 msgid "Video cache - DVD-ROM"
@@ -5227,7 +5259,7 @@ msgstr "Възпроизвеждане"
 
 msgctxt "#14099"
 msgid "Eject disc when CD ripping is complete"
-msgstr "Отваряне на CD устройствоте след приключване"
+msgstr "Отваряне на дисковото устройство (CD-то) след приключване"
 
 msgctxt "#14100"
 msgid "Stop ripping CD"
@@ -5308,10 +5340,6 @@ msgstr "Не сте свързан"
 msgctxt "#15213"
 msgid "Play using..."
 msgstr "Възпроизведи чрез..."
-
-msgctxt "#15214"
-msgid "Use smoothed A/V synchronization"
-msgstr "Ползвай гладка Аудио/Видео синхронизация"
 
 msgctxt "#15215"
 msgid "Hide file names in thumbs view"
@@ -5435,7 +5463,7 @@ msgstr "Възпроизвеждането се провали"
 
 msgctxt "#16027"
 msgid "One or more items failed to play."
-msgstr "Възпроизвеждането на един или\nповече елемента се провали."
+msgstr "Възпроизвеждането на един или повече елемента се провали."
 
 msgctxt "#16028"
 msgid "Enter value"
@@ -5443,7 +5471,7 @@ msgstr "Въведете стойност"
 
 msgctxt "#16029"
 msgid "Check the log file for details."
-msgstr "Проверете дневника за подробности."
+msgstr "Проверете дневника за детайли."
 
 msgctxt "#16030"
 msgid "Party mode aborted."
@@ -5454,8 +5482,8 @@ msgid "No matching songs in the library."
 msgstr "Няма съвпадаща песен в библиотеката."
 
 msgctxt "#16032"
-msgid "Could not initialize database."
-msgstr "Библиотеката не може да се инициализира."
+msgid "Could not initialise database."
+msgstr "Базата от данни не може да се инициализира."
 
 msgctxt "#16033"
 msgid "Could not open database."
@@ -5516,6 +5544,10 @@ msgstr "Маркирай като негледан"
 msgctxt "#16105"
 msgid "Edit title"
 msgstr "Редактирай заглавието"
+
+msgctxt "#16107"
+msgid "Edit sort title"
+msgstr "Заглавие за сортиране"
 
 msgctxt "#16200"
 msgid "Operation was aborted"
@@ -5605,10 +5637,6 @@ msgctxt "#16314"
 msgid "Inverse Telecine"
 msgstr "Обратен Telecine"
 
-msgctxt "#16315"
-msgid "Lanczos3 optimized"
-msgstr "Lanczos3 оптимизиран"
-
 msgctxt "#16316"
 msgid "Auto"
 msgstr "Автоматично"
@@ -5637,17 +5665,9 @@ msgctxt "#16322"
 msgid "Spline36"
 msgstr "Spline36"
 
-msgctxt "#16323"
-msgid "Spline36 optimized"
-msgstr "Spline36 оптимизиран"
-
 msgctxt "#16324"
 msgid "Software Blend"
 msgstr "Software Blend"
-
-msgctxt "#16325"
-msgid "Auto - ION Optimized"
-msgstr "Автоматично оптимизиране - ION"
 
 msgctxt "#16400"
 msgid "Post-processing"
@@ -5679,7 +5699,7 @@ msgstr "Разделете думите за търсене с И, ИЛИ"
 
 msgctxt "#19002"
 msgid "or use phrases to find an exact match, like \"The wizard of Oz\"."
-msgstr "или използвайте фрази за пълно съвпадение"
+msgstr "или използвайте фрази за пълно съвпадение."
 
 msgctxt "#19003"
 msgid "Find similar programs"
@@ -5755,7 +5775,7 @@ msgstr "Бъдещи записи"
 
 msgctxt "#19026"
 msgid "Add timer..."
-msgstr "Добави таймер"
+msgstr "Добави брояч"
 
 msgctxt "#19027"
 msgid "No search results"
@@ -5785,9 +5805,13 @@ msgctxt "#19034"
 msgid "Already started recording on this channel"
 msgstr "Каналът вече се записва"
 
+msgctxt "#19035"
+msgid "%s could not be played. Check the log for details."
+msgstr "\"%s\" не може да бъде възпроизведен. Проверете дневника за детайли."
+
 msgctxt "#19036"
 msgid "This recording cannot be played. Check the log for details."
-msgstr "Записът не може да бъде възпроизведен.\nПроверете дневника за подробности."
+msgstr "Записът не може да бъде възпроизведен. Проверете дневника за детайли."
 
 msgctxt "#19037"
 msgid "Show signal quality"
@@ -5799,15 +5823,15 @@ msgstr "Да скрия ли канала?"
 
 msgctxt "#19040"
 msgid "Timer"
-msgstr " Таймер"
+msgstr " Брояч"
 
 msgctxt "#19041"
 msgid "Are you sure you want to rename this recording?"
-msgstr "Наистина ли желаете да \nпреименувате записа?"
+msgstr "Наистина ли желаете да преименувате записа?"
 
 msgctxt "#19042"
 msgid "Are you sure you want to rename this timer?"
-msgstr "Да преименувам ли таймера?"
+msgstr "Да преименувам ли брояча?"
 
 msgctxt "#19043"
 msgid "Recording"
@@ -5859,27 +5883,27 @@ msgstr "Няма налична информация"
 
 msgctxt "#19056"
 msgid "New timer"
-msgstr "Нов таймер"
+msgstr "Нов брояч"
 
 msgctxt "#19057"
 msgid "Edit timer"
-msgstr "Редактирай таймера"
+msgstr "Редактирай брояча"
 
 msgctxt "#19058"
 msgid "Timer enabled"
-msgstr "Таймер включен"
+msgstr "Включен брояч"
 
 msgctxt "#19059"
 msgid "Stop recording"
-msgstr "Край на запсиването"
+msgstr "Край на записването"
 
 msgctxt "#19060"
 msgid "Delete timer"
-msgstr "Изтрий таймера"
+msgstr "Изтрий брояча"
 
 msgctxt "#19061"
 msgid "Add timer"
-msgstr "Добави таймер"
+msgstr "Добави брояч"
 
 msgctxt "#19062"
 msgid "Sort by: Channel"
@@ -5887,11 +5911,11 @@ msgstr "Сорт.: Канал"
 
 msgctxt "#19063"
 msgid "Go to begin"
-msgstr "Oтиди в началото"
+msgstr "Отиди в началото"
 
 msgctxt "#19064"
 msgid "Go to end"
-msgstr "Oтиди в края"
+msgstr "Отиди в края"
 
 msgctxt "#19067"
 msgid "This event is already being recorded."
@@ -5899,7 +5923,7 @@ msgstr "Събитието вече се записва"
 
 msgctxt "#19068"
 msgid "This recording could not be deleted. Check the log for details."
-msgstr "Записът не може да бъде изтрит.\nПроверете дневника за подробности."
+msgstr "Записът не може да бъде изтрит. Проверете дневника за детайли."
 
 msgctxt "#19069"
 msgid "EPG"
@@ -5963,7 +5987,7 @@ msgstr "пон-__-__-__-__-__-__"
 
 msgctxt "#19087"
 msgid "__-Tu-__-__-__-__-__"
-msgstr "__-вт-__-__-__-__-__"
+msgstr "__-втор-__-__-__-__-__"
 
 msgctxt "#19088"
 msgid "__-__-We-__-__-__-__"
@@ -5987,19 +6011,19 @@ msgstr "__-__-__-__-__-__-нед"
 
 msgctxt "#19093"
 msgid "Mo-Tu-We-Th-Fr-__-__"
-msgstr "пон-вт-ср-чет-пет-__-__"
+msgstr "пон-втор-ср-четв-пет-__-__"
 
 msgctxt "#19094"
 msgid "Mo-Tu-We-Th-Fr-Sa-__"
-msgstr "пон-вт-ср-чет-пет-съ-__"
+msgstr "пон-втор-ср-четв-пет-съб-__"
 
 msgctxt "#19095"
 msgid "Mo-Tu-We-Th-Fr-Sa-Su"
-msgstr "пон-вт-ср-чет-пет-съ-нед"
+msgstr "пон-втор-ср-четв-пет-съб-нед"
 
 msgctxt "#19096"
 msgid "__-__-__-__-__-Sa-Su"
-msgstr "__-__-__-__-__-съ-нед"
+msgstr "__-__-__-__-__-съб-нед"
 
 msgctxt "#19097"
 msgid "Enter the name for the recording"
@@ -6008,6 +6032,14 @@ msgstr "Въведете име за записа"
 msgctxt "#19098"
 msgid "Warning"
 msgstr "Внимание"
+
+msgctxt "#19099"
+msgid "Service"
+msgstr "Услуга"
+
+msgctxt "#19101"
+msgid "Provider"
+msgstr "Доставчик"
 
 msgctxt "#19102"
 msgid "Please switch to another channel."
@@ -6019,15 +6051,15 @@ msgstr "Въведете името на папката за записа"
 
 msgctxt "#19106"
 msgid "Next timer on"
-msgstr "Следващ таймер"
+msgstr "Следващ брояч"
 
 msgctxt "#19109"
 msgid "Couldn't save timer. Check the log for details."
-msgstr "Незапазен таймер. Проверете лога за детайли."
+msgstr "Незапазен брояч. Проверете дневника за детайли."
 
 msgctxt "#19110"
 msgid "An unexpected error occurred. Try again later or check the log for details."
-msgstr "Неочаквана грешка. Опитайте по-късно или проверете лога за детайли."
+msgstr "Неочаквана грешка. Опитайте по-късно или проверете дневника за детайли."
 
 msgctxt "#19114"
 msgid "Version"
@@ -6059,7 +6091,7 @@ msgstr "Избягване на повторения"
 
 msgctxt "#19122"
 msgid "This timer is still recording. Are you sure you want to delete this timer?"
-msgstr "Този таймер записва. Да го изтрия ли?"
+msgstr "Този брояч записва. Да го изтрия ли?"
 
 msgctxt "#19126"
 msgid "Start time"
@@ -6139,31 +6171,31 @@ msgstr "Канал"
 
 msgctxt "#19149"
 msgid "Mo"
-msgstr "пон"
+msgstr "пон."
 
 msgctxt "#19150"
 msgid "Tu"
-msgstr "вт"
+msgstr "втор."
 
 msgctxt "#19151"
 msgid "We"
-msgstr "ср"
+msgstr "ср."
 
 msgctxt "#19152"
 msgid "Th"
-msgstr "чет"
+msgstr "четв."
 
 msgctxt "#19153"
 msgid "Fr"
-msgstr "пет"
+msgstr "пет."
 
 msgctxt "#19154"
 msgid "Sa"
-msgstr "съ"
+msgstr "съб."
 
 msgctxt "#19155"
 msgid "Su"
-msgstr "нед"
+msgstr "нед."
 
 msgctxt "#19156"
 msgid "from"
@@ -6195,7 +6227,7 @@ msgstr "Записи"
 
 msgctxt "#19164"
 msgid "Cannot start recording. Check the log for details."
-msgstr "Записът не може да бъде започнат.\nПроверете дневника за подробности."
+msgstr "Записът не може да бъде започнат. Проверете дневника за детайли."
 
 msgctxt "#19166"
 msgid "PVR information"
@@ -6245,13 +6277,17 @@ msgctxt "#19185"
 msgid "Reset the PVR database"
 msgstr "Нулиране базата от данни на PVR"
 
+msgctxt "#19187"
+msgid "Reset the EPG database"
+msgstr "Нулиране базата от данни на EPG "
+
+msgctxt "#19188"
+msgid "EPG is being reset"
+msgstr "Нулиране на EPG"
+
 msgctxt "#19189"
 msgid "Continue last channel on startup"
 msgstr "При стартиране продължи от последно гледания канал"
-
-msgctxt "#19190"
-msgid "Minimized"
-msgstr "Минимизиран"
 
 msgctxt "#19191"
 msgid "PVR service"
@@ -6259,7 +6295,7 @@ msgstr "PVR услуга"
 
 msgctxt "#19193"
 msgid "The channel scan cannot be started. Check the log for details."
-msgstr "Сканирането на канали не може да започне. Проверете лога."
+msgstr "Сканирането за канали не може да започне. Проверете дневника за детайли."
 
 msgctxt "#19194"
 msgid "Continue?"
@@ -6371,7 +6407,7 @@ msgstr "Изчисти резултатите от търсенето"
 
 msgctxt "#19233"
 msgid "Display a notification on timer updates"
-msgstr "Уведомяване при обновяване на таймер"
+msgstr "Уведомяване при обновяване на брояч"
 
 msgctxt "#19236"
 msgid "Loading channels from clients"
@@ -6379,7 +6415,7 @@ msgstr "Зареждане на канал от клиент"
 
 msgctxt "#19237"
 msgid "Loading timers from clients"
-msgstr "Зареждане на таймери от клиенти"
+msgstr "Зареждане на броячи от клиенти"
 
 msgctxt "#19238"
 msgid "Loading recordings from clients"
@@ -6405,13 +6441,17 @@ msgctxt "#19249"
 msgid "Filter channels"
 msgstr "Филтриране на канали"
 
+msgctxt "#19251"
+msgid "Update EPG information"
+msgstr "Актуализиране на EPG информацията"
+
 msgctxt "#19255"
 msgid "Start recording"
 msgstr "Начало на запис"
 
 msgctxt "#19256"
 msgid "Stop recording"
-msgstr "Край на запсиването"
+msgstr "Край на записването"
 
 msgctxt "#19257"
 msgid "Lock channel"
@@ -6443,7 +6483,7 @@ msgstr "Неправилен код"
 
 msgctxt "#19265"
 msgid "The entered PIN number was incorrect."
-msgstr "Въведеният коде е неправилен."
+msgstr "Въведеният код е неправилен."
 
 msgctxt "#19266"
 msgid "Parental locked"
@@ -7022,12 +7062,12 @@ msgid "Show system info"
 msgstr "Показвай инф. за системна"
 
 msgctxt "#20086"
-msgid "Show available disc space C: E: F:"
-msgstr "Показвай наличното мяско на дисковете C: E: F:"
+msgid "Show available disk space C: E: F:"
+msgstr "Показвай наличното място на дисковете C: E: F:"
 
 msgctxt "#20087"
-msgid "Show available disc space E: F: G:"
-msgstr "Показвай наличното мяско на дисковете E: F: G:"
+msgid "Show available disk space E: F: G:"
+msgstr "Показвай наличното място на дисковете E: F: G:"
 
 msgctxt "#20088"
 msgid "Weather info"
@@ -7251,7 +7291,7 @@ msgstr "Въведете парола за"
 
 msgctxt "#20144"
 msgid "Shutdown timer"
-msgstr "Таймер за изключване"
+msgstr "Брояч за изключване"
 
 msgctxt "#20145"
 msgid "Shutdown interval (in minutes)"
@@ -7275,11 +7315,11 @@ msgstr "Изключване след 120 минути"
 
 msgctxt "#20150"
 msgid "Custom shutdown timer"
-msgstr "Изключване по таймер"
+msgstr "Изключване с брояч"
 
 msgctxt "#20151"
 msgid "Cancel shutdown timer"
-msgstr "Спри таймера за изключване"
+msgstr "Спри брояча за изключване"
 
 msgctxt "#20152"
 msgid "Lock preferences for %s"
@@ -7383,7 +7423,7 @@ msgstr "Показвай инф. за текущото видео"
 
 msgctxt "#20177"
 msgid "Done"
-msgstr "Готово"
+msgstr "Завършено"
 
 msgctxt "#20178"
 msgid "Shift"
@@ -7531,7 +7571,7 @@ msgstr "MythTV client"
 
 msgctxt "#20259"
 msgid "Network Filesystem (NFS)"
-msgstr "Network Filesystem (NFS)"
+msgstr "Мрежова файлова система (NFS)"
 
 msgctxt "#20260"
 msgid "Secure Shell (SSH/SFTP)"
@@ -7543,11 +7583,11 @@ msgstr "Apple Filing Protocol (AFP)"
 
 msgctxt "#20300"
 msgid "Web server directory (HTTP)"
-msgstr "Web сървър директория (HTTP)"
+msgstr "Директория на уеб сървъра (HTTP)"
 
 msgctxt "#20301"
 msgid "Web server directory (HTTPS)"
-msgstr "Web сървър директория (HTTPS)"
+msgstr "Директория на уеб сървъра (HTTPS)"
 
 msgctxt "#20302"
 msgid "Unable to write to folder:"
@@ -7583,7 +7623,7 @@ msgstr "Видео - Библиотека"
 
 msgctxt "#20316"
 msgid "Sort by: ID"
-msgstr "Сорт. по: ID"
+msgstr "Сортиране: ID"
 
 msgctxt "#20317"
 msgid "Scanning movies using %s"
@@ -7627,7 +7667,7 @@ msgstr "Преглед за цел"
 
 msgctxt "#20329"
 msgid "Movies are in separate folders that match the movie title"
-msgstr "Филмите са в отделни папки, имеувани със заглавието на филма"
+msgstr "Филмите са в отделни папки, именувани със заглавието на филма"
 
 msgctxt "#20330"
 msgid "Use folder names for lookups"
@@ -7723,7 +7763,7 @@ msgstr "Инф. за епизода"
 
 msgctxt "#20353"
 msgid "Loading TV show details"
-msgstr "Зареждане на подробности за ТВ Сериал"
+msgstr "Зареждане на детайлите за ТВ Сериал"
 
 msgctxt "#20354"
 msgid "Fetching episode guide"
@@ -7755,7 +7795,7 @@ msgstr "Епизоди"
 
 msgctxt "#20361"
 msgid "Loading episode details"
-msgstr "Зареждане подробностите за епизода"
+msgstr "Зареждане детайлите за епизода"
 
 msgctxt "#20362"
 msgid "Remove episode from library"
@@ -7962,7 +8002,7 @@ msgid "Get fanart"
 msgstr "Fanart"
 
 msgctxt "#20414"
-msgid "Show Fanart in video and music libraries"
+msgid "Show fanart in video and music libraries"
 msgstr "Показвай fanart във видео и музикалната библиотека"
 
 msgctxt "#20415"
@@ -7979,7 +8019,7 @@ msgstr "Сценарист"
 
 msgctxt "#20419"
 msgid "Replace file names with library titles"
-msgstr "Показвай метаинформацията и след филтриране"
+msgstr "Заменяй имената на файловете със заглавията от библиотеката"
 
 msgctxt "#20420"
 msgid "Never"
@@ -8040,6 +8080,10 @@ msgstr "Извличай миниатюри и инф. за видеата"
 msgctxt "#20434"
 msgid "Sets"
 msgstr "Поредици"
+
+msgctxt "#20435"
+msgid "Combine split video items"
+msgstr "Обединявай отделениете елементи на едно видео"
 
 msgctxt "#20436"
 msgid "Export actor thumbs?"
@@ -8121,6 +8165,10 @@ msgctxt "#20455"
 msgid "Listeners"
 msgstr "Слушатели"
 
+msgctxt "#20456"
+msgid "Flatten library hierarchy"
+msgstr "Плоска йерархична структура на библиотеката"
+
 msgctxt "#20457"
 msgid "Movie set"
 msgstr "Поредица"
@@ -8133,6 +8181,14 @@ msgctxt "#20459"
 msgid "Tags"
 msgstr "Етикети"
 
+msgctxt "#20460"
+msgid "Add %s"
+msgstr "Добави \"%s\""
+
+msgctxt "#20461"
+msgid "Remove %s"
+msgstr "Премахни \"%s\""
+
 msgctxt "#20462"
 msgid "New tag..."
 msgstr "Нов етикет..."
@@ -8140,6 +8196,10 @@ msgstr "Нов етикет..."
 msgctxt "#20463"
 msgid "A tag with the name '%s' already exists."
 msgstr "Вече съществува етикет с името \"%s\"."
+
+msgctxt "#20464"
+msgid "Select %s"
+msgstr "Избери \"%s\""
 
 msgctxt "#20465"
 msgid "Manage movie set"
@@ -8247,7 +8307,7 @@ msgstr "Налагане на DVD район"
 
 msgctxt "#21373"
 msgid "Video output"
-msgstr "Видео изход"
+msgstr "Видео извод"
 
 msgctxt "#21374"
 msgid "Video aspect"
@@ -8291,7 +8351,7 @@ msgstr "Включи лентите за плъзгане"
 
 msgctxt "#21384"
 msgid "Make watched filtering a toggle in video library"
-msgstr "Ползвай филтритането (за гледани/негледани) като превключвач във видео библиотеката"
+msgstr "Ползвай филтрирането (за гледани/негледани) като превключвач във видео библиотеката"
 
 msgctxt "#21385"
 msgid "Open"
@@ -8487,7 +8547,7 @@ msgstr "Име на плейлиста"
 
 msgctxt "#21434"
 msgid "Find items where"
-msgstr "Търси елемети, за които е вярно:"
+msgstr "Намери елемети, за които е вярно:"
 
 msgctxt "#21435"
 msgid "Edit"
@@ -8613,6 +8673,30 @@ msgctxt "#21465"
 msgid "Above video"
 msgstr "Над видеото"
 
+msgctxt "#21467"
+msgid "%.1f to %.1f"
+msgstr "%.1f до %.1f"
+
+msgctxt "#21468"
+msgid "%d to %d"
+msgstr "%d до %d"
+
+msgctxt "#21469"
+msgid "%s to %s"
+msgstr "%s до %s"
+
+msgctxt "#21600"
+msgid "Prefer external subtitles"
+msgstr "Приоритизирай външните субтитри"
+
+msgctxt "#21601"
+msgid "Prefer external subtitles to internal ones"
+msgstr "XBMC ще зарежда външните субтитри вместо вградените, когато и двата вида са налични"
+
+msgctxt "#21602"
+msgid "(External)"
+msgstr "(Външни)"
+
 msgctxt "#21800"
 msgid "File name"
 msgstr "Име на файла"
@@ -8691,7 +8775,7 @@ msgstr "Експонация"
 
 msgctxt "#21830"
 msgid "Exposure time"
-msgstr "Експонационно време"
+msgstr "Време за експонация"
 
 msgctxt "#21831"
 msgid "Exposure bias"
@@ -8699,7 +8783,7 @@ msgstr "Exposure bias"
 
 msgctxt "#21832"
 msgid "Exposure mode"
-msgstr "Rежим на експонация"
+msgstr "Rежим на експозиция"
 
 msgctxt "#21833"
 msgid "Flash used"
@@ -8947,7 +9031,7 @@ msgstr "OpenGL доставчик:"
 
 msgctxt "#22008"
 msgid "OpenGL renderer:"
-msgstr "OpenGL рендер:"
+msgstr "OpenGL рендър:"
 
 msgctxt "#22009"
 msgid "OpenGL version:"
@@ -8998,12 +9082,12 @@ msgid "Guide"
 msgstr "Справочник"
 
 msgctxt "#22021"
-msgid "Allowed error in aspect ratio to minimize black bars"
-msgstr "Макс промяна на формата за редукция на черните ленти"
+msgid "Allowed error in aspect ratio to minimise black bars"
+msgstr "Макс промяна на формата (аспекта) с цел редукция на черните ленти"
 
 msgctxt "#22022"
 msgid "Show video files in listings"
-msgstr "Показвай и видео файлове в списъците"
+msgstr "Показвай и видео файлове в списъците със снимки"
 
 msgctxt "#22023"
 msgid "DirectX vendor:"
@@ -9158,8 +9242,8 @@ msgid "Script"
 msgstr "Скриптове"
 
 msgctxt "#24010"
-msgid "Visualization"
-msgstr "Визуализации"
+msgid "Visualisation"
+msgstr "Визуализация"
 
 msgctxt "#24011"
 msgid "Add-on repository"
@@ -9282,24 +9366,28 @@ msgid "Available Updates"
 msgstr "Налични актуализации"
 
 msgctxt "#24044"
-msgid "Dependencies not met"
-msgstr "Липсват компоненти"
+msgid "Dependencies not met. Please contact Add-on author."
+msgstr "Добавката не отговаря на изискванията. Свържете се с автора ѝ."
 
 msgctxt "#24045"
 msgid "Add-on does not have the correct structure"
 msgstr "Добавката има неправилна структура"
 
 msgctxt "#24046"
-msgid "%s is used by the following installed add-on(s)"
+msgid "%s is used by the following installed Add-on(s)"
 msgstr "%s се ползва от следните инсталирани добавки"
 
 msgctxt "#24047"
-msgid "This add-on cannot be uninstalled"
+msgid "This Add-on cannot be uninstalled"
 msgstr "Добавката не може да бъде деинсталирана"
 
 msgctxt "#24048"
 msgid "Rollback"
 msgstr "Върни стара версия"
+
+msgctxt "#24049"
+msgid "Incompatible"
+msgstr "Несъвместима"
 
 msgctxt "#24050"
 msgid "Available Add-ons"
@@ -9405,6 +9493,10 @@ msgctxt "#24090"
 msgid "Lock Add-on manager"
 msgstr "Заключи управлението на добавки"
 
+msgctxt "#24091"
+msgid "This Add-on cannot be disabled"
+msgstr "Добавката не може да бъде изключена"
+
 msgctxt "#24094"
 msgid "(current)"
 msgstr "(текуща)"
@@ -9414,8 +9506,8 @@ msgid "(blacklisted)"
 msgstr "(в черния списък)"
 
 msgctxt "#24096"
-msgid "Add-on has been marked as broken in repository."
-msgstr "Добавка е маркирана като повредена в хранилището."
+msgid "Add-on is incompatible or has been marked broken in repository."
+msgstr "Добавка е несъвместима или е маркирана като повредена в хранилището."
 
 msgctxt "#24097"
 msgid "Would you like to disable it on your system?"
@@ -9445,13 +9537,61 @@ msgctxt "#24103"
 msgid "Skin is missing some files"
 msgstr "Липсват някои файлове от облика"
 
+msgctxt "#24104"
+msgid "Add-on is incompatible due to unmet dependencies."
+msgstr "Добавката е несъвместима защото не отговаря на изискванията"
+
+msgctxt "#24105"
+msgid "Pause when searching for subtitles"
+msgstr "Активирай режима \"На  пауза\" при търсене на субтитри"
+
+msgctxt "#24106"
+msgid "If not saved to movie folder subtitles will be downloaded to custom subtitle folder"
+msgstr "Ако не се съхраняват в папките на отделните филми, свалените субтитри ще бъдат записвани в зададената папка."
+
+msgctxt "#24107"
+msgid "Searching for subtitles ..."
+msgstr "Търсене за субтитри..."
+
+msgctxt "#24108"
+msgid "%d subtitles found"
+msgstr "Намерени са %d"
+
+msgctxt "#24109"
+msgid "No subtitles found"
+msgstr "Не са намерени субтитри"
+
+msgctxt "#24110"
+msgid "Downloading subtitles ..."
+msgstr "Сваляне на субтитри..."
+
+msgctxt "#24111"
+msgid "Languages to download subtitles for"
+msgstr "Сваляй субтитри за следните езици"
+
+msgctxt "#24112"
+msgid "Set languages to use when searching for subtitles. Not all subtitle services will use all languages."
+msgstr "Определя на какъв език да се търсят субтитри. Някои от услугите предоставящи субтитри може да не разполагат със субтитри за предпочитания от Вас език."
+
+msgctxt "#24113"
+msgid "Failed to download subtitle"
+msgstr "Свалянето на субтитри се провали"
+
+msgctxt "#24114"
+msgid "No subtitle services installed"
+msgstr "Не сте инсталирали услуга за субтитри"
+
+msgctxt "#24115"
+msgid "Save subtitles to movie folder"
+msgstr "Записвай субтитрите в папката на филма"
+
 msgctxt "#25000"
 msgid "Notifications"
 msgstr "Известия"
 
 msgctxt "#25001"
 msgid "Hide foreign"
-msgstr "Скриване на чуждестранните"
+msgstr "Без чуждестранните"
 
 msgctxt "#25002"
 msgid "Select from all titles ..."
@@ -9460,6 +9600,10 @@ msgstr "Избор измежду всички заглавия..."
 msgctxt "#25003"
 msgid "Show bluray menus"
 msgstr "Показвай менютата на BluRay дискове"
+
+msgctxt "#25004"
+msgid "Play main title: %d"
+msgstr "Възпроизведи основното заглавие: %d"
 
 msgctxt "#25005"
 msgid "Title: %d"
@@ -9479,7 +9623,7 @@ msgstr "QWERTY клавиатура"
 
 msgctxt "#29802"
 msgid "Passthrough Audio in use"
-msgstr "Активен е режимът \"Passthrough Audio\""
+msgstr "Активен е режимът \"Предаване на аудиото\""
 
 msgctxt "#33001"
 msgid "Trailer quality"
@@ -9546,8 +9690,8 @@ msgid "Clips"
 msgstr "Клипове"
 
 msgctxt "#33017"
-msgid "Restart plugin to enable"
-msgstr "За да активиране добавката я рестартирайте"
+msgid "Restart plug-in to enable"
+msgstr "Рестартирайте добавката, за да я включите"
 
 msgctxt "#33018"
 msgid "Tonight"
@@ -9595,7 +9739,7 @@ msgstr "Залез"
 
 msgctxt "#33029"
 msgid "Details"
-msgstr "Подробности"
+msgstr "Детайли"
 
 msgctxt "#33030"
 msgid "Outlook"
@@ -9639,7 +9783,7 @@ msgstr "Аларма"
 
 msgctxt "#33050"
 msgid "Alerts"
-msgstr "Аларми"
+msgstr "Тревоги"
 
 msgctxt "#33051"
 msgid "Choose Your"
@@ -9779,7 +9923,7 @@ msgstr "Стартирането се провали"
 
 msgctxt "#33101"
 msgid "Webserver"
-msgstr "Web сървър"
+msgstr "Уеб сървър"
 
 msgctxt "#33102"
 msgid "Event Server"
@@ -9869,6 +10013,10 @@ msgctxt "#34110"
 msgid "7.1"
 msgstr "7.1"
 
+msgctxt "#34111"
+msgid "Select the behaviour when no sound is required for either playback or GUI sounds. [Always] - continuous inaudible signal is output, this keeps the receiving audio device alive for any new sounds, however this might also block sound from other applications. [1- 10 Minutes] - same as Always except that after the selected period of time audio enters a suspended state [Off] - audio output enters a suspended state. Note - sounds can be missed if audio enters suspended state."
+msgstr "Изберете поведение когато не се възпроизвежда звук. [Винаги] - непрекъснато извеждане на сигнал, който не можете да чуете. Така приемника няма да се изключи и ще бъде в готовност веднага да възпроизвежда при необходимост, но може да доведе до блокиране на звука от други приложения. [1- 10 минути] - действа като [Винаги], но след избрания период от време преустановява извеждането на сигнал. [Изключено] - аудио извода се привежда в суспендирано суспендирано състояни. БЕЛЕЖКА: при последните два режима е възможно да пропуснете част от възпроизведения материал - докато приемника се приведе в работен режим от суспендирано/изключено състояние!"
+
 msgctxt "#34120"
 msgid "Play GUI sounds"
 msgstr "Просвирвай звуци от потребителския интерфейс"
@@ -9884,6 +10032,26 @@ msgstr "Винаги"
 msgctxt "#34123"
 msgid "Never"
 msgstr "Никога"
+
+msgctxt "#34124"
+msgid "44.1"
+msgstr "44.1"
+
+msgctxt "#34125"
+msgid "48.0"
+msgstr "48.0"
+
+msgctxt "#34126"
+msgid "88.2"
+msgstr "88.2"
+
+msgctxt "#34127"
+msgid "96.0"
+msgstr "96.0"
+
+msgctxt "#34128"
+msgid "192.0"
+msgstr "192.0"
 
 msgctxt "#34201"
 msgid "Can't find a next item to play"
@@ -9911,7 +10079,7 @@ msgstr "Спирането на Zeroconf не е възможно"
 
 msgctxt "#34304"
 msgid "AirPlay and AirTunes depend on Zeroconf running."
-msgstr "AirPlay и AirTunes исикват включването на Zeroconf."
+msgstr "AirPlay и AirTunes изискват включването на Zeroconf."
 
 msgctxt "#34400"
 msgid "Video Rendering"
@@ -9922,7 +10090,7 @@ msgid "Failed to init video filters/scalers, falling back to bilinear scaling"
 msgstr "Failed to init video filters/scalers, falling back to bilinear scaling"
 
 msgctxt "#34402"
-msgid "Failed to initialize audio device"
+msgid "Failed to initialise audio device"
 msgstr "Инициализиране на аудио устройство се провали"
 
 msgctxt "#34403"
@@ -9958,8 +10126,8 @@ msgid "Generic HID device"
 msgstr "Генерично HID устройство"
 
 msgctxt "#35002"
-msgid "Generic network adapter"
-msgstr "Генеричен мрежови адаптер"
+msgid "Generic network adaptor"
+msgstr "Генеричен мрежови адаптор"
 
 msgctxt "#35003"
 msgid "Generic disk"
@@ -9967,7 +10135,7 @@ msgstr "Генеричен диск"
 
 msgctxt "#35004"
 msgid "There are no settings available\nfor this peripheral."
-msgstr "Няма налични настройки\nза периферното устройство."
+msgstr "Няма налични настройки за периферното устройство."
 
 msgctxt "#35005"
 msgid "New device configured"
@@ -9997,9 +10165,13 @@ msgctxt "#35102"
 msgid "Disable joystick when this device is present"
 msgstr "Изключване на джойстика при наличие на устройството"
 
+msgctxt "#35103"
+msgid "Enable system keys in fullscreen"
+msgstr "Включи системните клавиши и при режим \"На цял екран\""
+
 msgctxt "#35500"
 msgid "Location"
-msgstr "Място"
+msgstr "Локация"
 
 msgctxt "#35501"
 msgid "Class"
@@ -10018,8 +10190,8 @@ msgid "Product ID"
 msgstr "ID на продукта"
 
 msgctxt "#36000"
-msgid "Pulse-Eight CEC adapter"
-msgstr "Pulse-Eight CEC адаптер"
+msgid "Pulse-Eight CEC adaptor"
+msgstr "Pulse-Eight CEC адаптор"
 
 msgctxt "#36001"
 msgid "Pulse-Eight Nyxboard"
@@ -10042,8 +10214,8 @@ msgid "Enable switch side commands"
 msgstr "Включи командите за превключване на страните"
 
 msgctxt "#36006"
-msgid "Could not open the adapter"
-msgstr "Адаптерът не може да бъде отворен"
+msgid "Could not open the adaptor"
+msgstr "Адапторът не може да бъде отворен"
 
 msgctxt "#36007"
 msgid "Devices to power on when starting XBMC"
@@ -10066,8 +10238,8 @@ msgid "Could not detect the CEC com port. Set it up manually."
 msgstr "Не мога да открия  порт CEC. Настройте ръчно."
 
 msgctxt "#36012"
-msgid "Could not initialise the CEC adapter. Please check your settings."
-msgstr "Не мога да открия  адаптер CEC."
+msgid "Could not initialise the CEC adaptor. Please check your settings."
+msgstr "Инициализирането на CEC адаптора се провали. Проверете настройките."
 
 msgctxt "#36015"
 msgid "HDMI port number"
@@ -10078,8 +10250,8 @@ msgid "Connected"
 msgstr "Свързан"
 
 msgctxt "#36017"
-msgid "Could not initialise the CEC adapter: libCEC was not found on your system."
-msgstr "Адаптера е намерен, но libcec не е достъпен"
+msgid "Could not initialise the CEC adaptor: libCEC was not found on your system."
+msgstr "Инициализирането на CEC адаптора се провали: libCEC библиотеката не е налична в системата."
 
 msgctxt "#36018"
 msgid "Use the TV's language setting"
@@ -10117,6 +10289,10 @@ msgctxt "#36026"
 msgid "Put devices in standby mode when putting the PC in standby"
 msgstr "При активен режим \"Изчакване\" за компютъра задай режима и за усройствата"
 
+msgctxt "#36027"
+msgid "This device needs servicing"
+msgstr "Устройството се нуждае от обслужване/ремонт"
+
 msgctxt "#36028"
 msgid "Ignore"
 msgstr "Игнорирай"
@@ -10130,12 +10306,12 @@ msgid "Connection lost"
 msgstr "Връзката пропадна"
 
 msgctxt "#36031"
-msgid "This user does not have permissions to open the CEC adapter"
-msgstr "Потребителят няма разрешение за ползване на CEC адаптора"
+msgid "This user does not have permissions to open the CEC adaptor"
+msgstr "Потребителят няма разрешение да ползва CEC адаптор"
 
 msgctxt "#36032"
-msgid "The port is busy. Only one program can access the CEC adapter"
-msgstr "Портът е зает. Само една програма може да има достъп до CEC адаптора"
+msgid "The port is busy. Only one program can access the CEC adaptor"
+msgstr "Портът е зает. CEC адапторът не може да се ползва от две програми"
 
 msgctxt "#36033"
 msgid "Pause playback when switching to another source"
@@ -10166,7 +10342,7 @@ msgid "Unsupported libCEC interface version. %x is lower than the version XBMC s
 msgstr "Версията на libCEC интерфейса не се поддържа. %x е по-стара от необходимата %x"
 
 msgctxt "#36042"
-msgid "Use limited color range (16-235)"
+msgid "Use limited colour range (16-235)"
 msgstr "Ползвай ограничена цветова гама (16-256)"
 
 msgctxt "#36101"
@@ -10175,7 +10351,7 @@ msgstr "Променете външния вид на потребителски
 
 msgctxt "#36102"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36103"
 msgid "Select the skin for the User Interface. This will define the look and feel of XBMC."
@@ -10195,7 +10371,7 @@ msgstr "Променете цветовете на избрания облик."
 
 msgctxt "#36107"
 msgid "Choose the fonts displayed in the User Interface. The font sets are configured by your skin."
-msgstr "Избере цветовете на потребителския интерфейс. Цветовите комбинации се настройват от избрания облик."
+msgstr "Избере шрифт за потребителския интерфейс. Наличните шрифтове се определят от избрания облик."
 
 msgctxt "#36108"
 msgid "Resize the view of the GUI."
@@ -10207,7 +10383,7 @@ msgstr "При стартиране на  XBMC коя от началните с
 
 msgctxt "#36110"
 msgid "Select or disable the sound scheme used in the User Interface."
-msgstr "Изберете (изключете) пакет от звуци, който да се ползва при работата с потребителския интерфейс."
+msgstr "Изберете пакет от звуци, който да се ползва при работата с потребителския интерфейс. Ако желаете можете да изключите звуковите ефекти."
 
 msgctxt "#36111"
 msgid "Turn this off to remove the scrolling RSS news ticker."
@@ -10219,31 +10395,31 @@ msgstr "Редактиране на RSS емисиите."
 
 msgctxt "#36113"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36114"
 msgid "Chooses the language of the User Interface."
-msgstr "Изберете език за потребителския интерфйс."
+msgstr "Изберете език за потребителския интерфейс."
 
 msgctxt "#36115"
 msgid "Select the formats for temperature, time and date. The available options depend on the selected language."
-msgstr "Изберете формат за темпратура, дата и час. Наличните опции зависят от избрания език за потребителския интерфейс. "
+msgstr "Изберете формат за температура, дата и час. Наличните опции зависят от избрания език за потребителския интерфейс. "
 
 msgctxt "#36116"
 msgid "Choose which character set is used for displaying text in the GUI."
-msgstr "Изберете кой набор от знаци да се ползва за изобразяване на текст в поребителския интерфейс."
+msgstr "Изберете кой набор от знаци да се ползва за изобразяване на текста в потребителския интерфейс."
 
 msgctxt "#36117"
 msgid "Select country location."
-msgstr "Изберете местоположението на сраната, в която се намирате."
+msgstr "Изберете местоположението на страната, в която се намирате."
 
 msgctxt "#36118"
 msgid "Select your current timezone."
-msgstr "Изберете часавия пояс, в който се намирате."
+msgstr "Изберете часовия пояс, в който се намирате."
 
 msgctxt "#36119"
 msgid "Select the default audio track when different language tracks are available."
-msgstr "Изберете стандартен аудио запис, за случайте когато са налични аудио записи на различни езици."
+msgstr "Изберете стандартен аудио запис, за случаите когато са налични аудио записи на различни езици."
 
 msgctxt "#36120"
 msgid "Select the default subtitles when different languages are available."
@@ -10251,7 +10427,7 @@ msgstr "Изберете стандартни субтитри, за случа�
 
 msgctxt "#36121"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36122"
 msgid "Display the (..) item in lists for visiting the parent folder."
@@ -10265,61 +10441,65 @@ msgctxt "#36125"
 msgid "Allow files to be deleted and renamed through the user interface, via the contextual menu (press C on a keyboard, for example, to bring up this menu)."
 msgstr "Разрешава изтриването и преименуването на файлове от потребителския интерфейс на XBMC, чрез контекстното меню (извиква се с клавиша \"C\" от клавиатурата)."
 
+msgctxt "#36126"
+msgid "Show the add source button from root sections of the user interface."
+msgstr "Изобразява бутон за добавяне на източници (\"Добави снимки...\", \"Добави видео\" и Добави музика...\") в списъците с файлове на съответните секции (Снимки, Видео и Музика)."
+
 msgctxt "#36127"
 msgid "Show hidden files and directories."
 msgstr "Показва скритите папки и файлове."
 
 msgctxt "#36128"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36129"
 msgid "Set the amount of idle time required before displaying the screensaver."
 msgstr "Задава количеството време бездействие след което се задейства скрийнсейвъра."
 
 msgctxt "#36130"
-msgid "Select the screensaver. XBMC will force the 'Dim' screensaver when fullscreen video playback is paused or a dialog box is active."
-msgstr "Изберете скрийнсейвър. XBMC ще наложи \"Dim\" (затъмняващия скрийнсейвър) при неактивност по време  а въпроизвождане на целия екран и при неактивност на даден прозорец."
+msgid "Select the screensaver. XBMC will force the 'Dim' screensaver when fullscreen video playback is paused or a dialogue box is active."
+msgstr "Изберете скрийнсейвър. XBMC ще наложи \"Dim\" (затъмняващия скрийнсейвър) при състояние \"На пауза\" по време на въпроизвождане на цял екран или при липса на активност."
 
 msgctxt "#36131"
 msgid "Change specific screensaver settings. The available options are dependent on the screensaver used."
-msgstr "Променете настройките специфични за скрийнсейвъра. Наличните опции зависият от избрания скрийнсейвър."
+msgstr "Променете настройките специфични за скрийнсейвъра. Наличните опции зависят от избрания скрийнсейвър."
 
 msgctxt "#36132"
 msgid "Preview the selected screensaver."
 msgstr "Преглед на избрания скрийнсейвър."
 
 msgctxt "#36133"
-msgid "If music is being played, XBMC will start the selected visualization instead of displaying the screensaver."
-msgstr "Ако се възпроизвежда музика XBMC ще стартира избраната визуализация вместо скрийсейвъра."
+msgid "If music is being played, XBMC will start the selected visualisation instead of displaying the screensaver."
+msgstr "Ако се възпроизвежда музика XBMC ще стартира избраната от Вас визуализация вместо скрийсейвъра."
 
 msgctxt "#36134"
 msgid "Dim the display when media is paused. Not valid for the 'Dim' screensaver mode."
-msgstr "Затъмняване на екрана при състояние \"На пауза\". Неважи при режим със скрийсейвър \"Dim\"."
+msgstr "Затъмняване на екрана при състояние \"На пауза\". Не важи при режим със скрийсейвър \"Dim\"."
 
 msgctxt "#36135"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36136"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36137"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36138"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36139"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36140"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36141"
 msgid "Show plot information for unwatched media in the Video Library."
@@ -10327,11 +10507,15 @@ msgstr "Показва сюжета и за негледаните файлов�
 
 msgctxt "#36142"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36143"
 msgid "Get thumbnails for actors when scanning media."
-msgstr "Сваля миниатюри на актюрите по време на сканирането за ново медийно съдържание."
+msgstr "Сваля миниатюри на актьорите по време на сканирането за ново медийно съдържание."
+
+msgctxt "#36144"
+msgid "Remove the TV show season node, toggles between 'If only one season' (default), 'Always' and 'Never'."
+msgstr "Премахва елементите означаващи отделените сезони на ТВ Сериал. Наличните опции са три: \"Само ако сериала има един сезон\", \"Винаги\" и \"Никога\"."
 
 msgctxt "#36145"
 msgid "Group movies into 'Movie sets' when browsing the movie library."
@@ -10343,7 +10527,7 @@ msgstr "Проверява за нови медийни файлове при в
 
 msgctxt "#36147"
 msgid "Hide the library scanning progress bar during scans."
-msgstr "Скрива лентата с прогреса на сканирането."
+msgstr "При актуализиране на библиотеката ще скрива лентата с прогреса на сканирането."
 
 msgctxt "#36148"
 msgid "Remove items from your library that can't be found (either renamed, deleted, or on removable storage that is currently unplugged)."
@@ -10359,15 +10543,19 @@ msgstr "Внася съдържанието на .XML файл в базата �
 
 msgctxt "#36151"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36152"
 msgid "Enable automatic playback of the next file in the list of the selected item."
-msgstr "Включва автоматичното възпризвеждане на следващия файл от списъка с избрани елементи."
+msgstr "Включва автоматичното възпроизвеждане на следващия файл от списъка с избрани елементи."
 
 msgctxt "#36153"
 msgid "Adjust the method used to process and display video."
 msgstr "Променя използвания метод за обработка и изобразяване на видео."
+
+msgctxt "#36154"
+msgid "No info available yet."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36155"
 msgid "Enable hardware decoding of video files."
@@ -10375,103 +10563,127 @@ msgstr "Включва хардуерното декодиране на виде
 
 msgctxt "#36156"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36157"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36158"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36159"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36160"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36161"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36162"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36163"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36164"
 msgid "Select when the refresh rate adjustments should take place."
-msgstr "Определете кога да се коригира честотата на обновяване."
+msgstr "Определя кога да се коригира честотата на обновяване. Възможностите са 3: \"Винаги\", \"Никога\" и \"При пускане/спиране\"."
+
+msgctxt "#36165"
+msgid "Pause for a small amount of time during a refresh rate change. Activate to automatically set the refresh rate which is best matched with the video that is playing. This potentially allows for perfectly smooth video reproduction, as video material can be recorded in a variety of frame rates which need to be properly matched by the refresh rate of the display in order to be displayed smoothly."
+msgstr "Пауза за много кратък период от време при промяна на честотата на обновяване. Активирането на опцията ще доведе до автоматично променяне честотата на обновяване, на екрана, към такава която съответства най-добре на възпроизвеждания видео материал. Позволява възможно най-ненакъсано и гладко възпроизвеждане на картината. Видеото може да бъде заснето с най-различни честоти, което налага адаптирането на честота на екрана към тази на видеото."
 
 msgctxt "#36166"
-msgid "Synchronize the video to the refresh rate of the monitor."
+msgid "Synchronise the video to the refresh rate of the monitor."
 msgstr "Синхронизира видеото към честотата на обновяване на монитора."
 
-msgctxt "#36168"
-msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgctxt "#36170"
+msgid "Allow video player to ignoring aspect ratio by a certain amount to fill a larger amount of the screen with video."
+msgstr "XBMC ще опита да напасне видеото към екрана, за да не се виждат черни ленти, като за целта ще игнорира формата на видеото. След определен процент може да доведе до лека промяна на пропорциите (изкривяване на пропорциите)."
 
-msgctxt "#36169"
-msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgctxt "#36171"
+msgid "Select the zoom level that 4:3 videos are shown on widescreen displays."
+msgstr "Изберете ниво за увеличаване на картината, от видео файлове във формат 4:3, при възпроизвеждане на широкоформатен екран. Опцията \"Разтягане и увеличаване\" би трябвало да даде най-добър резултат."
 
 msgctxt "#36173"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36174"
+msgid "Enable Teletext when watching a live TV stream."
+msgstr "Активиране на функцията \"Телетекст\" при гледане на телевизионни потоци (телевизия на живо)."
 
 msgctxt "#36176"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36177"
+msgid "Toggle between Choose, Play (default), Resume and Show Information. Choose will select an item, e.g. open a directory in files mode. Resume will automatically resume videos from the last position that you were viewing them, even after restarting the system."
+msgstr "Превключва между \"Запитване\", \"Възпроизведи\", \"Възобнови\" и \"Покажи информация\". \"Запитване\" ще извежда меню с наличните опции. \"Възобнови\" ще започва възпроизвеждане на видео файла от точката до която сте гледали последния път. \"Покажи информация\" ще извежда прозорец с информация за избрания елемент."
 
 msgctxt "#36178"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36179"
+msgid "When a file is scanned into the library it will display the metadata title instead of the file name."
+msgstr "Когато файл бъде добавен в библиотекта, след сканиране, той ще бъде изобразяван чрез заглавието от метраинформацията, вместо чрез името на файла."
+
+msgctxt "#36180"
+msgid "Extract thumbnails and information, such as codecs and aspect ratio, to display in Library Mode."
+msgstr "Извличане на миниатюри и информация, като кодек и формат на картината, за изобразяване в Библиотеката."
 
 msgctxt "#36181"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36182"
-msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgid "Enables direct playback of videos that are in folders, without having to open those folders first, as well as displaying multi-part video files as single items in non-library views."
+msgstr "Позволява директното възпроизвеждане на видео материал, разделен в отделни папки без да се налага да ги отваряте предварително. Също така ще доведе до представянето на видео материалите разделени в няколко файла като един, единствен елемент когато преглеждате файловете (тоест не ползвате Библиотеката)"
 
 msgctxt "#36183"
-msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgid "Removes the title, genre etc nodes from the library view. Selecting a category takes you straight to the title view."
+msgstr "Премахва елементите (\"Жанрове\", \"Заглавие\", \"Година\" и т.н.) на библиотеката. Избирането на \"Библиотека\" ще Ви отведе директно към заглавията."
 
 msgctxt "#36184"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36185"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36186"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36187"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36188"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36189"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36190"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36191"
+msgid "Set a custom directory for your subtitles. This can be a file share."
+msgstr "Задайте директорията, която да съхранява субтитрите (ако ползвате такива). Може да бъде споделен ресурс от мрежата."
 
 msgctxt "#36192"
 msgid "Location of subtitles on the screen."
@@ -10479,99 +10691,159 @@ msgstr "Позициониране на субтитрите на екрана."
 
 msgctxt "#36193"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36194"
+msgid "Autorun DVD video when inserted in drive."
+msgstr "Автоматично стартира възпроизвеждането при поставяне на DVD диск в оптичното устройство."
+
+msgctxt "#36195"
+msgid "Force a region for DVD playback."
+msgstr "Някои DVD дискове са предназначени за определен район от земното кълбо. Ако разполагате с диск предназначен за район различен от този в който се намирате няма да можете да го възпроизведете, освен ако не се възползвате от настройката, която ще \"излъже\" диска, че се намира в разрешен район."
+
+msgctxt "#36196"
+msgid "Attempt to skip 'unskippable' introductions before DVD menu."
+msgstr "XBMC ще опита да прескочи клипчетата предхождащи менюто на DVD-тата, които обикновено не можете да пропускате."
 
 msgctxt "#36197"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36198"
+msgid "Select the default movie information source. See the Add-ons Manager for options."
+msgstr "Изберете стандартния източник на информация за филми. За повече опции отворете диспечера на добавки."
+
+msgctxt "#36199"
+msgid "Select the default TV show information source. See the Add-ons Manager for options."
+msgstr "Изберете стандартния източник на информация за ТВ сериали. За повече опции отворете диспечера на добавки."
+
+msgctxt "#36200"
+msgid "Default scraper used for adding music videos to your library."
+msgstr "Стандартен източник на инф, за музикалните видео файлове в библиотеката."
 
 msgctxt "#36201"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36202"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36210"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36211"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36212"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36213"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36214"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36215"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36216"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36217"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36218"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36226"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36230"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36232"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36233"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36240"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36243"
+msgid "The command to execute. Defaults to '/usr/bin/setwakeup.sh'."
+msgstr "Команда за изпълнение. Стандартно е \"/usr/bin/setwakeup.sh\"."
+
+msgctxt "#36245"
+msgid "Execute the wakeup command every day at the given time."
+msgstr "Изпълнение на командата за събуждане всеки ден в точен час."
+
+msgctxt "#36246"
+msgid "When to execute the daily wakeup command."
+msgstr "Кога да се изпълнява командата за ежедневно събуждане."
 
 msgctxt "#36247"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36251"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36252"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36253"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36254"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36255"
+msgid "Determine if artists that appear only on compilations are shown in the library artist view."
+msgstr "Да се показват ли музикантите, които учатват само в сборни албуми, в елемента \"Артисти\" на музикалната библиотека."
+
+msgctxt "#36256"
+msgid "Automatically fetch album and artist information via scrapers during scan."
+msgstr "Автоматично сваляне на информация за албуми и артисти (от услугите предоставящи информаци) по време на сканирането."
+
+msgctxt "#36257"
+msgid "Select the default album information source"
+msgstr "Изберете стандартния източник на информация за албуми. За повече опции отворете диспечера на добавки."
+
+msgctxt "#36258"
+msgid "Select the default artist information source. See the Add-ons Manager for options."
+msgstr "Изберете стандартния източник на информация за артисти (музиканти). За повече опции отворете диспечера на добавки."
 
 msgctxt "#36259"
 msgid "Check for new and removed media files on XBMC startup."
 msgstr "Проверява за нови и премахнати медийни файлове при стартиране на XBMC."
+
+msgctxt "#36260"
+msgid "No info available yet."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36261"
+msgid "Path where taken screenshots will be stored."
+msgstr "Определя в коя папка ще се съхраняват снимките на екрана"
 
 msgctxt "#36262"
 msgid "Export the Music Library database to XML files. This will optionally overwrite your current XML files."
@@ -10583,79 +10855,163 @@ msgstr "Внася .XML файл в базата от данни на музик
 
 msgctxt "#36264"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36265"
+msgid "XBMC automatically plays the next item in the current folder. For example, in Files View: After a track has been played, XBMC would automatically play the next track in the same folder."
+msgstr "XBMC ще възпроизвежда автоматично следващия елемент в текущата папка. Например при активен файлов изглед: когато приключи възпроизвеждането на песен XBMC ще започне възпроизвеждането на следващата песен от папката автоматично."
+
+msgctxt "#36266"
+msgid "When songs are added to a playlist they are queued instead of playback starting immediately."
+msgstr "При добавяне на песен към плейлист тя ще бъде добавяна към опашката за възпроизвеждане (песни чакащи ред) вместо да започне незабавното ѝ възпроизвеждане."
+
+msgctxt "#36268"
+msgid "Default is 89dB per standard. Change with caution."
+msgstr "Стандартната сойност е 89dB. Променяйте я внимателно!"
+
+msgctxt "#36269"
+msgid "Default is 89dB per standard. Change with caution."
+msgstr "Стандартната сойност е 89dB. Променяйте я внимателно!"
+
+msgctxt "#36271"
+msgid "Smoothly fade from one audio track to the next. You can set the amount of overlap from 1-15 seconds."
+msgstr "Изглажда прехода от една песен към друга. Песента, която приключва, постепенно затихва, докато съществременно започва да звучи следващата, кото се увилва. Можете да зададете продължителносттта на застъпването (времето когато и двете песни звучат едновременно) между 1 и 15 секунди."
+
+msgctxt "#36272"
+msgid "Allow crassfading to occur when both tracks are from the same album."
+msgstr "Плавен преход ще има само между песните от един и същ албум."
+
+msgctxt "#36273"
+msgid "Select the visualisation that will be displayed while listening to music."
+msgstr "Определя коя визуализация да се изобразява когато слушате музика."
+
+msgctxt "#36274"
+msgid "Read the tag information from song files. For large directories this can slow down read time, especially over a network."
+msgstr "Прочита информацията от етикетите на музикалните файлове. Когато имате много файлове може да удължено по продължителност сканиране, особено когато достъпа до файловете става по мрежата."
+
+msgctxt "#36275"
+msgid "Control the way that the names of songs are displayed in the User Interface. In order to function properly, ID3 tags need to be enabled."
+msgstr "Шаблон определящ начина по който имената на песните се визуализират в потребителския интерфейс. За правилното функциониране се изисква активирането по горната опция, свързана с прочитането на информацията от ID3 етикетите."
+
+msgctxt "#36276"
+msgid "Used for the information on the right-hand side of the UI. It is commonly used to display the length of tracks."
+msgstr "Определя вида на информацията налична в дясната част на потребителския интерфейс. Обикновено се ползва за представяне на информация относно продължителност на песните."
 
 msgctxt "#36277"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36278"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36279"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36280"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36281"
+msgid "XBMC will search for thumbs on remote shares and optical media. This can often slow down the listing of network folders."
+msgstr "XBMC ще търси за миниатюри на отдалечени споделени ресурси и от оптични устройства. Активирането на опцията може да забави изобразяването на съдържанието на папки, които не се намират на отдалечени компютри."
 
 msgctxt "#36282"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36283"
 msgid "Autorun CDs when inserted in drive."
 msgstr "Възпроизвежда автоматично дисковете при поставянето им в дисковото устройство."
 
+msgctxt "#36284"
+msgid "Read the information belonging to an audio CD from an internet database."
+msgstr "Прочита информацията за дадения аудио диск от база от данни в интернет."
+
 msgctxt "#36285"
 msgid "Select the location on your hard drive where ripped tracks will be saved to."
-msgstr "Изберете къде точно на твърдия диск да се съхраняват аудио записите следд извлеченето им от дискове."
+msgstr "Изберете къде точно на твърдия диск да се съхраняват аудио записите след извличането им от диска."
 
 msgctxt "#36286"
 msgid "Tags: [B]%N[/B]: TrackNumber, [B]%S[/B]: DiscNumber, [B]%A[/B]: Artist, [B]%T[/B]: Title, [B]%B[/B]: Album, [B]%G[/B]: Genre, [B]%Y[/B]: Year, [B]%F[/B]: FileName, [B]%D[/B]: Duration, [B]%J[/B]: Date, [B]%R[/B]: Rating, [B]%I[/B]: FileSize."
 msgstr "Етикети: [B]%N[/B]: № на аудио записа, [B]%S[/B]: № на диска, [B]%A[/B]: артист, [B]%T[/B]: заглавие, [B]%B[/B]: албум, [B]%G[/B]: жанр, [B]%Y[/B]: година, [B]%F[/B]: име на файла, [B]%D[/B]: времетраене, [B]%J[/B]: дата, [B]%R[/B]: оценка, [B]%I[/B]: размер на файла."
 
+msgctxt "#36287"
+msgid "Select which audio encoder to use when ripping."
+msgstr "Изберете кой аудио енкодер да се ползва при извличане от дискове."
+
+msgctxt "#36288"
+msgid "Select which quality you want to rip your files."
+msgstr "Задайте качеството на извличаните файлове."
+
 msgctxt "#36290"
 msgid "For FLAC define compression level, default 5"
 msgstr "За FLAC опреелете ниво на компресия. Стандартното е 5."
 
+msgctxt "#36291"
+msgid "Auto eject disc after rip is complete."
+msgstr "Дисковото устройство ще се отвори автоматично след приключване на процеса по извличане."
+
 msgctxt "#36292"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36293"
+msgid "When playing any music file, XBMC will look for a matching .cdg file and display its graphics."
+msgstr "При възпроизвеждане на аудио файл XBMC ще потърси съвпадащ .cdg файл и ако намери, ще изобрази гарфичните символи, който се съдържат в него."
 
 msgctxt "#36294"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36295"
+msgid "Select the font used during karoake."
+msgstr "Изберете шрифт, който да се ползва за караокето."
+
+msgctxt "#36296"
+msgid "Select the size of the font used during karoake."
+msgstr "Изберете размер за шрифта, който ще се ползва."
+
+msgctxt "#36297"
+msgid "Select the font colour used during karoake."
+msgstr "Изберете цвят за шрифта, който ще се ползва."
+
+msgctxt "#36298"
+msgid "Select the character set used during karoake."
+msgstr "Изберете набор от знаци, за караокето."
 
 msgctxt "#36299"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36300"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36301"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36302"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36303"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36304"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36305"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36306"
+msgid "If EXIF information exists (date, time, camera used, etc.), it will be displayed."
+msgstr "Да се изобразява ли EXIF информацията (дата, час на заснемате, ползвана камера/апарат и др.) от снимките, които съдържат такава?"
 
 msgctxt "#36307"
 msgid "Automatically generate picture thumbnails when entering picture folder."
@@ -10665,45 +11021,57 @@ msgctxt "#36308"
 msgid "Pictures will automatically rotate according to information in the EXIF tag, if found."
 msgstr "Автоматично ротиране на изображенията съобразно съдържанието на EXIF етикета, ако имат такъв."
 
+msgctxt "#36309"
+msgid "Show video media in picture file lists, since most digital cameras nowadays have video recording capabilities."
+msgstr "Показване на видеофайлове, наред с файловете на снимките. Опцията може да е полена защото модерните фотоапарати записват и видео."
+
 msgctxt "#36310"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36311"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36312"
 msgid "Select the amount of time that each image is displayed in a slideshow."
-msgstr "Определя по колко време ще бъде иобразявано всяко изображение по време на слайдшоу."
+msgstr "Определя по колко време ще бъде изобразявано всяко изображение по време на слайдшоу."
+
+msgctxt "#36314"
+msgid "View slideshow images in a random order."
+msgstr "Преглеждане на изображенията в случаен ред."
 
 msgctxt "#36315"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36316"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36317"
 msgid "Select up to three locations for which the weather can be displayed."
 msgstr "Изберете до 3 локации, за които да се изобразява метеорологичната прогноза."
 
+msgctxt "#36318"
+msgid "Specify the default weather information source. See the Add-ons Manager for options."
+msgstr "Изберете стандартния източник на информация за метеорологичната прогноза. За повече опции отворете диспечера на добавки."
+
 msgctxt "#36319"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36320"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36321"
 msgid "Display name of the XBMC installation when using various network services."
-msgstr "Името с което ще се предсавя XBMC пред останалите мрежови услуги."
+msgstr "Името с което ще се представя XBMC пред останалите мрежови услуги."
 
 msgctxt "#36322"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36323"
 msgid "Enable the UPnP server. This will allow you to stream media to any UPnP client."
@@ -10711,19 +11079,19 @@ msgstr "Включва UPnP сървъра на XBMC. Това ще позвол
 
 msgctxt "#36324"
 msgid "When a manual or automatical library update occurs, notify UPnP clients."
-msgstr "Изветява UPnP клиентите при актуалииране на библиотеката (ръчно или автоматично)."
+msgstr "Известявай UPnP клиентите при актуализиране на библиотеката (ръчно или автоматично)."
 
 msgctxt "#36325"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36326"
 msgid "Enable the UPnP client. This will allow you to stream media from any UPnP server with a control point and control playback from that server."
-msgstr "Включва UPnP клиента на XBMC. Това ще позволи поточното приемане на медийни файлове, с цел локално възпроизвеждане, от UPnP сървър (поседством UPnP контролна точка)."
+msgstr "Включва UPnP клиента на XBMC. Това ще позволи поточното приемане на медийни файлове, с цел локално възпроизвеждане, от UPnP сървър (посредством UPnP контролна точка)."
 
 msgctxt "#36327"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36328"
 msgid "Enable remote users to control XBMC through the built-in webserver."
@@ -10735,27 +11103,31 @@ msgstr "Определете порт за уеб сървъра."
 
 msgctxt "#36330"
 msgid "Define the webserver username."
-msgstr "Определете потребителско име за уеб съръвъра."
+msgstr "Определете потребителско име за уеб сървъра."
 
 msgctxt "#36331"
 msgid "Define webserver password."
-msgstr "Определете парола за уебсървъра."
+msgstr "Определете парола за уеб сървъра."
 
 msgctxt "#36332"
 msgid "Select between web interfaces installed via the Add-on Manager."
-msgstr "Избиерете измежду уеб интерфейси инсталирани посредством диспечера на добавки."
+msgstr "Изберете стандартен уеб интерфейс измежду инсталираните посредством диспечера на добавки."
+
+msgctxt "#36333"
+msgid "No info available yet."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36335"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36336"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36337"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36338"
 msgid "Allow programs on the network to control XBMC."
@@ -10763,75 +11135,87 @@ msgstr "Разрешава на програми от мрежата да кон
 
 msgctxt "#36339"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36340"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36341"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36342"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36343"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36344"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36345"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36346"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36347"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36348"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36349"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36350"
+msgid "Automatically send 'Wake-On-Lan' to server(s) right before trying to access shared files or services."
+msgstr "Преди изискването на споделени файлове/услуги изпраща команда за събуждане по LAN (Wake-on-LAN или просто \"Отдалечено събуждане\") до сървърите, които ги споделят ."
 
 msgctxt "#36351"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36352"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36353"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36354"
+msgid "The main benefit is for multi-screen configurations, so XBMC can be used without automatically minimising other applications. Uses a bit more resources and playback may be slightly less smooth."
+msgstr "От полза е главно за конфигурации с повече от един екран. Позволява ползването на XBMC без да се налага минимизиране на останалите приложения. Опцията изисква малко повече ресурси и може да направи възпроизвеждането не съвсем плавно (да причини известно накъсване)."
+
+msgctxt "#36355"
+msgid "In a multi-screen configuration, the screens where XBMC is not displayed are blacked out."
+msgstr "Когато ползвате няколко екрана тези които не изобразяват XBMC ще бъдат затъмнени."
 
 msgctxt "#36359"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36360"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
-
-msgctxt "#36361"
-msgid "Type of connection to the audio equipment."
-msgstr "Тип на връката между аудио компонентите."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36362"
-msgid "Select your physical speaker layout."
-msgstr "Изберете подредбата на високоговорителите."
+msgid "Select the maximum number of audio channels/speakers available for audio decoded."
+msgstr "Задайте максималния брой налични аудио канали/високоговорители за възпроизвеждане на декодирания аудио сигнал."
+
+msgctxt "#36363"
+msgid "Boost AC3 streams that have been downmixed to 2 channels."
+msgstr "Увеличава AC3 потоците които са смесени до 2 канала (крайният резултат обикновено са 2 тихи канала, които се нуждаят от усилване)"
 
 msgctxt "#36365"
 msgid "Select this option if your receiver is capable of decoding AC3 streams."
@@ -10842,12 +11226,12 @@ msgid "Select this option if your receiver is capable of decoding DTS streams."
 msgstr "Изберете опцията ако приемникът Ви може да декодира DTS поток."
 
 msgctxt "#36367"
-msgid "Select this option if your receiver is capable of decoding AAC streams."
-msgstr "Изберете опцията ако приемникът Ви може да декодира AAC поток."
+msgid "Select the maximum number of audio channels/speakers available for audio decoded. If optical/coax digital outputs are used this must be set to 2.0"
+msgstr "Задайте максималния брой налични аудио канали/високоговорители за възпроизвеждане на аудио сигнала. Ако извеждате сигнала посредством оптичен или коаксиален изход е необходимо да зададете стойност 2.0"
 
 msgctxt "#36368"
-msgid "Select this option if your receiver is capable of decoding LPCM streams."
-msgstr "Изберете опцията ако приемникът Ви може да декодира LPCM поток."
+msgid "Select to enable the passthrough audio options for playback of encoded audio such as Dolby Digital."
+msgstr "Изберете настройките за директно предаване на аудиото към устройство, което да го обработи и възпроизведе."
 
 msgctxt "#36369"
 msgid "Select this option if your receiver is capable of decoding TrueHD streams."
@@ -10857,17 +11241,45 @@ msgctxt "#36370"
 msgid "Select this option if your receiver is capable of decoding DTS-HD streams."
 msgstr "Изберете опцията ако приемникът Ви може да декодира DTS-HD поток."
 
+msgctxt "#36371"
+msgid "Select the device to be used for playback of audio that has been decoded such as mp3"
+msgstr "Изберете кое устройство да възпроизвежда декодирания аудио сигнал (например от\n.mp3 файлове)"
+
+msgctxt "#36372"
+msgid "Select the device to be used for playback of encoded formats, these are any of the formats below in the 'capable receiver' options."
+msgstr "Изберете устройство което да декодира кодираните формати. Това са форматите от списъка \"Приемникът ми поддържа...\" по-долу."
+
 msgctxt "#36374"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36375"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36376"
+msgid "When activated, your keyboard arrows will move the selection on the virtual keyboard. When deactivated, they will move the cursor from your text."
+msgstr "Стрелките от клавиатурата ще преместват маркираното от виртуалната клавиатура, когато опцията е включена. Изключите ли я местят курсора измежду символите на въведения текст."
+
+msgctxt "#36377"
+msgid "Use a mouse or touch screen device to control XBMC. Note: disabling will cause you to lose control over XBMC when no keyboard or remote is present."
+msgstr "Активирайте когато желаете да контролирате XBMC посредством мишка или екран чувствителен на допир. ЗАБЛЕЖКА: Изключите ли опцията ще загубите контрола над XBMC ако не разполагате с клавиатура."
+
+msgctxt "#36378"
+msgid "Use a joystick to control XBMC."
+msgstr "Активирайте когато желаете да контролирате XBMC посредством джойстик."
 
 msgctxt "#36379"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36380"
+msgid "If your internet connection uses a proxy, configure it here."
+msgstr "Ако ползвате proxy за да се свържете с интернет въведете настройките тук."
+
+msgctxt "#36381"
+msgid "Configure which proxy type is used."
+msgstr "Изберете какъв тип proxy ползвате."
 
 msgctxt "#36382"
 msgid "Configure the proxy server address."
@@ -10885,9 +11297,17 @@ msgctxt "#36385"
 msgid "Configure the proxy server password."
 msgstr "Задайте паролата за proxy сървъра."
 
+msgctxt "#36386"
+msgid "If you have limited bandwidth available, XBMC will try to keep within these limits."
+msgstr "Ако разполагате с ограничен, по скорост, интернет XBMC ще опита да се съобрази и да се вмести в него."
+
+msgctxt "#36387"
+msgid "Turn off display when idle. Useful for TVs that turn off when there is no display signal detected, but you don't want to suspend/shutdown the whole computer."
+msgstr "Изключване на екрана при липса на действие. Полезно е ако телевизорът Ви се изключва при липса на сигнал, но не желаете да суспендирате/изклювате компютъра."
+
 msgctxt "#36388"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36389"
 msgid "Define how long XBMC should idle before shutting down."
@@ -10897,90 +11317,210 @@ msgctxt "#36390"
 msgid "Define what action XBMC should do when it has been idle for a long period of time."
 msgstr "Определете какво действие трябва да предприеме XBMC, след като бездейства дълъг период от време."
 
+msgctxt "#36391"
+msgid "Turn debug logging on or off. Useful for troubleshooting."
+msgstr "Включва/Изключва воденето на debug дневник. Опцията е полезна когато е необходимо да се събере възможно най-много информация за отстраняването на даддена неизправност."
+
 msgctxt "#36392"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36393"
+msgid "Folder used to save screenshots taken within XBMC."
+msgstr "Папката в която се съхраняват снимките на екрани от XBMC."
+
+msgctxt "#36394"
+msgid "Specify additional libraries to be included in the debug log."
+msgstr "Посочете кои допълнителни библиотеки да бъдат включени в debug дневника."
+
+msgctxt "#36396"
+msgid "Define the PIN code used for the master lock."
+msgstr "Определете PIN код за заключването с главен код."
+
+msgctxt "#36397"
+msgid "If enabled, the master lock code is required to unlock XBMC on startup "
+msgstr "Активирането на опцията ще изисква въвеждането на главния заключващ код при всяко стартиране, за да се отключи интерфейса и функционалността на XBMC."
+
+msgctxt "#36398"
+msgid "Define the maximum number of retries before XBMC is closed down."
+msgstr "Определя след колко грешни опита XBMC да се изключва."
 
 msgctxt "#36399"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36400"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36401"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36402"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36403"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36404"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36405"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36406"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36407"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36408"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36409"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36410"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36411"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36412"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36413"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36414"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36415"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36417"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
 
 msgctxt "#36418"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36419"
+msgid "Define locations used for retrieving weather information."
+msgstr "Определя за кои местоположения/локации да се извлича информация."
 
 msgctxt "#36420"
 msgid "No info available yet."
-msgstr "Все още не е налична инфомация."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36422"
+msgid "Enable hardware video decode using AMLogic decoder"
+msgstr "Включва хардуерното декодиране на видео файлове от AMLogic декодер."
+
+msgctxt "#36500"
+msgid "Stereoscopic mode (current)"
+msgstr "Стереоскопичен режим (текущ)"
+
+msgctxt "#36501"
+msgid "Stereoscopic mode"
+msgstr "Стереоскопичен режим"
+
+msgctxt "#36521"
+msgid "Ask me"
+msgstr "Запитване"
+
+msgctxt "#36524"
+msgid "Preferred mode"
+msgstr "Предпочитан режим"
+
+msgctxt "#36526"
+msgid "Disable stereoscopic mode when playback is stopped"
+msgstr "Изключване на стереоскопичния режим при спиране на възпроизвеждането"
+
+msgctxt "#36527"
+msgid "This video is stereoscopic. Select playback mode"
+msgstr "Видеото е стереоскопично. Изберете метод за възпроизвеждане"
+
+msgctxt "#36528"
+msgid "Select stereoscopic mode"
+msgstr "Избор на стереоскопичен режим"
+
+msgctxt "#36529"
+msgid "Mono (2D)"
+msgstr "Моно (2D)"
+
+msgctxt "#36530"
+msgid "Preferred mode"
+msgstr "Предпочитан режим"
+
+msgctxt "#36531"
+msgid "Select alternate mode..."
+msgstr "Избор на заместващ режим..."
+
+msgctxt "#36535"
+msgid "Stereoscopic mode of video"
+msgstr "Стереоскопичен режим за видео"
+
+msgctxt "#36537"
+msgid "No info available yet."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36538"
+msgid "No info available yet."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36539"
+msgid "No info available yet."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36540"
+msgid "No info available yet."
+msgstr "Все още не е налична информация."
+
+msgctxt "#36542"
+msgid "Output to both analogue (headphones) and HDMI"
+msgstr "Двойно извеждане - аналогово (слушалки) и HDMI"
+
+msgctxt "#36543"
+msgid "Enable this to make dialogue louder compared to background sounds when downmixing multichannel audio"
+msgstr "Включете опцията за да усилите звука от диалога и да го направите по-лесно различим от фоновия шум, при смесване на каналите за намаляване броя им."
+
+msgctxt "#36544"
+msgid "Enable hardware decoding of video files."
+msgstr "Включва хардуерното декодиране на видео файлове."
 
 msgctxt "#37014"
 msgid "Last used profile"
 msgstr "Последно ползван профил"
+
+msgctxt "#37016"
+msgid "Select this option if your receiver is capable of decoding E-AC3 streams."
+msgstr "Изберете опцията ако приемникът Ви може да декодира Е-AC3 поток."
+
+msgctxt "#37017"
+msgid "Dual audio output"
+msgstr "Двойно извеждане на аудиото"
+
+msgctxt "#37018"
+msgid "Boost centre channel when downmixing"
+msgstr "Усилвай централния канал при смесване на каналите за намаляване броя"
+
+msgctxt "#37019"
+msgid "Enables system keys like printscreen, alt-tab and volume keys when in fullscreen"
+msgstr "Системните клавиши като PrintScreen (PrtScr), Alt-Tab и клавишите за контрол на звука ще бъда активни и по време на режим \"На цял екран\"."

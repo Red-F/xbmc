@@ -24,7 +24,7 @@
 #include <vector>
 #include <string.h>
 #include <stdint.h>
-
+#include "utils/StringUtils.h"
 #include "MediaSource.h"
 
 // A list of filesystem types for LegalPath/FileName
@@ -47,10 +47,19 @@ struct sortstringbyname
   {
     CStdString strLine1 = strItem1;
     CStdString strLine2 = strItem2;
-    strLine1 = strLine1.ToLower();
-    strLine2 = strLine2.ToLower();
+    StringUtils::ToLower(strLine1);
+    StringUtils::ToLower(strLine2);
     return strcmp(strLine1.c_str(), strLine2.c_str()) < 0;
   }
+};
+
+struct ExternalStreamInfo
+{
+  std::string name;
+  std::string language;
+  unsigned int flag;
+
+  ExternalStreamInfo() : flag(0){};
 };
 
 class CUtil
@@ -86,12 +95,12 @@ public:
   static void ClearSubtitles();
   static void ScanForExternalSubtitles(const CStdString& strMovie, std::vector<CStdString>& vecSubtitles );
   static int ScanArchiveForSubtitles( const CStdString& strArchivePath, const CStdString& strMovieFileNameNoExt, std::vector<CStdString>& vecSubtitles );
+  static void GetExternalStreamDetailsFromFilename(const CStdString& strMovie, const CStdString& strSubtitles, ExternalStreamInfo& info); 
   static bool FindVobSubPair( const std::vector<CStdString>& vecSubtitles, const CStdString& strIdxPath, CStdString& strSubPath );
   static bool IsVobSub( const std::vector<CStdString>& vecSubtitles, const CStdString& strSubPath );  
   static int64_t ToInt64(uint32_t high, uint32_t low);
   static CStdString GetNextFilename(const CStdString &fn_template, int max);
   static CStdString GetNextPathname(const CStdString &path_template, int max);
-  static void Tokenize(const CStdString& path, std::vector<CStdString>& tokens, const std::string& delimiters);
   static void StatToStatI64(struct _stati64 *result, struct stat *stat);
   static void Stat64ToStatI64(struct _stati64 *result, struct __stat64 *stat);
   static void StatI64ToStat64(struct __stat64 *result, struct _stati64 *stat);
@@ -143,7 +152,7 @@ public:
   static void ForceForwardSlashes(CStdString& strPath);
 
   static double AlbumRelevance(const CStdString& strAlbumTemp1, const CStdString& strAlbum1, const CStdString& strArtistTemp1, const CStdString& strArtist1);
-  static bool MakeShortenPath(CStdString StrInput, CStdString& StrOutput, int iTextMaxLength);
+  static bool MakeShortenPath(CStdString StrInput, CStdString& StrOutput, size_t iTextMaxLength);
   /*! \brief Checks wether the supplied path supports Write file operations (e.g. Rename, Delete, ...)
 
    \param strPath the path to be checked

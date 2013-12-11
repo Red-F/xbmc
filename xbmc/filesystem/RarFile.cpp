@@ -31,6 +31,7 @@
 #include "FileItem.h"
 #include "utils/log.h"
 #include "UnrarXLib/rar.hpp"
+#include "utils/StringUtils.h"
 
 #ifndef TARGET_POSIX
 #include <process.h>
@@ -112,10 +113,10 @@ void CRarFileExtractThread::Process()
 
 CRarFile::CRarFile()
 {
-  m_strCacheDir.Empty();
-  m_strRarPath.Empty();
-  m_strPassword.Empty();
-  m_strPathInRar.Empty();
+  m_strCacheDir.clear();
+  m_strRarPath.clear();
+  m_strPassword.clear();
+  m_strPathInRar.clear();
   m_bFileOptions = 0;
 #ifdef HAS_FILESYSTEM_RAR
   m_pArc = NULL;
@@ -545,18 +546,19 @@ void CRarFile::InitFromUrl(const CURL& url)
   m_strPassword = url.GetUserName();
   m_strPathInRar = url.GetFileName();
 
-  vector<CStdString> options;
-  CUtil::Tokenize(url.GetOptions().Mid(1), options, "&");
+  vector<std::string> options;
+  if (!url.GetOptions().empty())
+    StringUtils::Tokenize(url.GetOptions().substr(1), options, "&");
 
   m_bFileOptions = 0;
 
-  for( vector<CStdString>::iterator it = options.begin();it != options.end(); it++)
+  for( vector<std::string>::iterator it = options.begin();it != options.end(); it++)
   {
-    int iEqual = (*it).Find('=');
-    if( iEqual >= 0 )
+    size_t iEqual = (*it).find('=');
+    if(iEqual != std::string::npos)
     {
-      CStdString strOption = (*it).Left(iEqual);
-      CStdString strValue = (*it).Mid(iEqual+1);
+      CStdString strOption = StringUtils::Left((*it), iEqual);
+      CStdString strValue = StringUtils::Mid((*it), iEqual+1);
 
       if( strOption.Equals("flags") )
         m_bFileOptions = atoi(strValue.c_str());
@@ -707,7 +709,7 @@ bool CRarFile::OpenInArchive()
 
         /* replace back slashes into forward slashes */
         /* this could get us into troubles, file could two different files, one with / and one with \ */
-        strFileName.Replace('\\', '/');
+        StringUtils::Replace(strFileName, '\\', '/');
 
         if (strFileName == m_strPathInRar)
         {

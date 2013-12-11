@@ -27,12 +27,14 @@
 #include "settings/Settings.h"
 #include "LangInfo.h"
 #include "utils/log.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "filesystem/File.h"
 #include "filesystem/Directory.h"
 #include "DllLibbluray.h"
 #include "URL.h"
 #include "guilib/Geometry.h"
+#include "utils/StringUtils.h"
 
 #define LIBBLURAY_BYTESEEK 0
 
@@ -255,7 +257,7 @@ bool CDVDInputStreamBluray::Open(const char* strFile, const std::string& content
   CStdString filename;
   CStdString root;
 
-  if(strPath.Left(7).Equals("bluray:"))
+  if(StringUtils::StartsWithNoCase(strPath, "bluray:"))
   {
     CURL url(strPath);
     root     = url.GetHostName();

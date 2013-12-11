@@ -22,6 +22,7 @@
 #include "DVDInputStreams/DVDFactoryInputStream.h"
 #include "DVDInputStreams/DVDInputStream.h"
 #include "utils/CharsetConverter.h"
+#include "utils/Utf8Utils.h"
 
 using namespace std;
 
@@ -61,7 +62,7 @@ bool CDVDSubtitleStream::Open(const string& strFile)
       {
         buffer[size_read] = buffer[size_read + 1] = '\0';
         CStdStringW temp; 
-        g_charsetConverter.utf16LEtoW(CStdString16((uint16_t*)buffer),temp); 
+        g_charsetConverter.utf16LEtoW(std::u16string((char16_t*)buffer),temp); 
         wstringstream << temp; 
       }
       delete pInputStream;
@@ -81,7 +82,7 @@ bool CDVDSubtitleStream::Open(const string& strFile)
       delete pInputStream;
 
       if (!isUTF8)
-        isUTF8 = g_charsetConverter.isValidUtf8(m_stringstream.str());
+        isUTF8 = CUtf8Utils::isValidUtf8(m_stringstream.str());
 
       if (!isUTF8)
       {

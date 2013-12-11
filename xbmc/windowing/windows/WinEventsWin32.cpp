@@ -25,7 +25,7 @@
 
 #include "utils/log.h"
 #include "Windowsx.h"
-#include "windowing/WinEvents.h"
+#include "WinEventsWin32.h"
 #include "WIN32Util.h"
 #include "storage/windows/Win32StorageProvider.h"
 #include "Application.h"
@@ -51,6 +51,7 @@
 #include "network/ZeroconfBrowser.h"
 #include "GUIUserMessages.h"
 #include "utils/CharsetConverter.h"
+#include "utils/StringUtils.h"
 
 #ifdef TARGET_WINDOWS
 
@@ -390,6 +391,12 @@ bool CWinEventsWin32::MessagePump()
     DispatchMessage( &msg );
   }
   return true;
+}
+
+size_t CWinEventsWin32::GetQueueSize()
+{
+  MSG  msg;
+  return PeekMessage( &msg, NULL, 0U, 0U, PM_NOREMOVE );
 }
 
 LRESULT CALLBACK CWinEventsWin32::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -759,8 +766,7 @@ LRESULT CALLBACK CWinEventsWin32::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
               // optical medium
               if (lpdbv -> dbcv_flags & DBTF_MEDIA)
               {
-                CStdString strdrive;
-                strdrive.Format("%c:\\", CWIN32Util::FirstDriveFromMask(lpdbv ->dbcv_unitmask));
+                CStdString strdrive = StringUtils::Format("%c:\\", CWIN32Util::FirstDriveFromMask(lpdbv ->dbcv_unitmask));
                 if(wParam == DBT_DEVICEARRIVAL)
                 {
                   CLog::Log(LOGDEBUG, __FUNCTION__": Drive %s Media has arrived.", strdrive.c_str());

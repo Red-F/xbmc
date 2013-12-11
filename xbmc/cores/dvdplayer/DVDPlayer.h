@@ -39,6 +39,8 @@
 #include "Edl.h"
 #include "FileItem.h"
 #include "threads/SingleLock.h"
+#include "utils/StreamDetails.h"
+#include "threads/SystemClock.h"
 
 
 class CDVDInputStream;
@@ -152,6 +154,14 @@ public:
     return streams;
   }
 
+  template<typename Filter>
+  SelectionStreams RemoveIf(StreamType type, Filter filter)
+  {
+    SelectionStreams streams = Get(type);
+    streams.erase(std::remove_if(streams.begin(), streams.end(), filter), streams.end());
+    return streams;
+  }
+
   void             Clear   (StreamType type, StreamSource source);
   int              Source  (StreamSource source, std::string filename);
 
@@ -171,7 +181,7 @@ public:
   CDVDPlayer(IPlayerCallback& callback);
   virtual ~CDVDPlayer();
   virtual bool OpenFile(const CFileItem& file, const CPlayerOptions &options);
-  virtual bool CloseFile();
+  virtual bool CloseFile(bool reopen = false);
   virtual bool IsPlaying() const;
   virtual void Pause();
   virtual bool IsPaused() const;
@@ -179,7 +189,7 @@ public:
   virtual bool HasAudio() const;
   virtual bool IsPassthrough() const;
   virtual bool CanSeek();
-  virtual void Seek(bool bPlus, bool bLargeStep);
+  virtual void Seek(bool bPlus, bool bLargeStep, bool bChapterOverride);
   virtual bool SeekScene(bool bPlus = true);
   virtual void SeekPercentage(float iPercent);
   virtual float GetPercentage();
@@ -230,12 +240,8 @@ public:
 
   virtual int GetSourceBitrate();
   virtual void GetVideoStreamInfo(SPlayerVideoStreamInfo &info);
-  virtual int GetPictureWidth();
-  virtual int GetPictureHeight();
   virtual bool GetStreamDetails(CStreamDetails &details);
   virtual void GetAudioStreamInfo(int index, SPlayerAudioStreamInfo &info);
-
-  virtual bool GetCurrentSubtitle(CStdString& strSubtitle);
 
   virtual CStdString GetPlayerState();
   virtual bool SetPlayerState(CStdString state);
@@ -274,6 +280,12 @@ protected:
   bool OpenAudioStream(int iStream, int source, bool reset = true);
   bool OpenVideoStream(int iStream, int source, bool reset = true);
   bool OpenSubtitleStream(int iStream, int source);
+
+  /** \brief Switches forced subtitles to forced subtitles matching the language of the current audio track.
+  *          If these are not available, subtitles are disabled.
+  *   \return true if the subtitles were changed, false otherwise.
+  */
+  bool AdaptForcedSubtitles();
   bool OpenTeletextStream(int iStream, int source);
   bool CloseAudioStream(bool bWaitForBuffers);
   bool CloseVideoStream(bool bWaitForBuffers);
@@ -339,7 +351,7 @@ protected:
   std::string  m_mimetype;  // hold a hint to what content file contains (mime type)
   ECacheState  m_caching;
   CFileItem    m_item;
-  unsigned int m_iChannelEntryTimeOut;
+  XbmcThreads::EndTime m_ChannelEntryTimeOut;
 
 
   CCurrentStream m_CurrentAudio;
@@ -491,4 +503,6 @@ protected:
 
   bool m_HasVideo;
   bool m_HasAudio;
+
+  bool m_DemuxerPausePending;
 };

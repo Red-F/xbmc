@@ -43,7 +43,6 @@
 #include "utils/StringUtils.h"
 #include "AddonDatabase.h"
 #include "settings/AdvancedSettings.h"
-#include "settings/MediaSourceSettings.h"
 #include "storage/MediaManager.h"
 #include "LangInfo.h"
 #include "guilib/Key.h"
@@ -80,7 +79,7 @@ bool CGUIWindowAddonBrowser::OnMessage(CGUIMessage& message)
       m_rootDir.AllowNonLocalSources(false);
 
       // is this the first time the window is opened?
-      if (m_vecItems->GetPath() == "?" && message.GetStringParam().IsEmpty())
+      if (m_vecItems->GetPath() == "?" && message.GetStringParam().empty())
         m_vecItems->SetPath("");
     }
     break;
@@ -315,7 +314,7 @@ bool CGUIWindowAddonBrowser::GetDirectory(const CStdString& strDirectory,
     }
   }
 
-  if (strDirectory.IsEmpty() && CAddonInstaller::Get().IsDownloading())
+  if (strDirectory.empty() && CAddonInstaller::Get().IsDownloading())
   {
     CFileItemPtr item(new CFileItem("addons://downloading/",true));
     item->SetLabel(g_localizeStrings.Get(24067));
@@ -338,8 +337,7 @@ void CGUIWindowAddonBrowser::SetItemLabel2(CFileItemPtr item)
   unsigned int percent;
   if (CAddonInstaller::Get().GetProgress(item->GetProperty("Addon.ID").asString(), percent))
   {
-    CStdString progress;
-    progress.Format(g_localizeStrings.Get(24042).c_str(), percent);
+    CStdString progress = StringUtils::Format(g_localizeStrings.Get(24042).c_str(), percent);
     item->SetProperty("Addon.Status", progress);
     item->SetProperty("Addon.Downloading", true);
   }
@@ -380,7 +378,7 @@ int CGUIWindowAddonBrowser::SelectAddonID(ADDON::TYPE type, CStdStringArray &add
 int CGUIWindowAddonBrowser::SelectAddonID(const vector<ADDON::TYPE> &types, CStdString &addonID, bool showNone /*= false*/)
 {
   CStdStringArray addonIDs;
-  if (!addonID.IsEmpty())
+  if (!addonID.empty())
     addonIDs.push_back(addonID);
   int retval = SelectAddonID(types, addonIDs, showNone, false);
   if (addonIDs.size() > 0)
@@ -422,7 +420,7 @@ int CGUIWindowAddonBrowser::SelectAddonID(const vector<ADDON::TYPE> &types, CStd
         items.Add(item);
     }
 
-    if (!heading.IsEmpty())
+    if (!heading.empty())
       heading += ", ";
     heading += TranslateType(*it, true);
   }
@@ -481,7 +479,7 @@ int CGUIWindowAddonBrowser::SelectAddonID(const vector<ADDON::TYPE> &types, CStd
 
 CStdString CGUIWindowAddonBrowser::GetStartFolder(const CStdString &dir)
 {
-  if (dir.Left(9).Equals("addons://"))
+  if (StringUtils::StartsWithNoCase(dir, "addons://"))
     return dir;
   return CGUIMediaWindow::GetStartFolder(dir);
 }

@@ -857,10 +857,6 @@ msgctxt "#249"
 msgid "Music"
 msgstr "Muusika"
 
-msgctxt "#250"
-msgid "Visualization"
-msgstr "Visualiseerimine"
-
 msgctxt "#251"
 msgid "Select destination directory"
 msgstr "Vali sihtkataloog"
@@ -1049,10 +1045,6 @@ msgctxt "#298"
 msgid "Bookmarks"
 msgstr "Järjehoidjad"
 
-msgctxt "#299"
-msgid "AAC capable receiver"
-msgstr "AAC toetav vastuvõtja"
-
 msgctxt "#300"
 msgid "MP1 capable receiver"
 msgstr "MP1 toetav vastuvõtja"
@@ -1189,17 +1181,9 @@ msgctxt "#336"
 msgid "Framerate conversion"
 msgstr "Kaadrisageduse konverteerimine"
 
-msgctxt "#337"
-msgid "Audio output"
-msgstr "Heliväljund"
-
 msgctxt "#338"
-msgid "Analog"
-msgstr "Analoog"
-
-msgctxt "#339"
-msgid "Optical/Coax"
-msgstr "Optiline/Koaksiaal"
+msgid "Fixed"
+msgstr "Fikseeritud"
 
 msgctxt "#340"
 msgid "Various artists"
@@ -1225,17 +1209,9 @@ msgctxt "#345"
 msgid "Year"
 msgstr "Aasta"
 
-msgctxt "#346"
-msgid "Boost volume level on downmix"
-msgstr "Võimenda helinivood down-miksil"
-
 msgctxt "#347"
 msgid "DTS-HD capable receiver"
 msgstr "DTS-HD toetav vastuvõtja"
-
-msgctxt "#348"
-msgid "Multichannel LPCM capable receiver"
-msgstr "Mitme kanaliga LPCM toetav vastuvõtja"
 
 msgctxt "#349"
 msgid "TrueHD capable receiver"
@@ -1513,10 +1489,6 @@ msgctxt "#419"
 msgid "High"
 msgstr "Max"
 
-msgctxt "#420"
-msgid "HDMI"
-msgstr "HDMI"
-
 msgctxt "#422"
 msgid "Delete album info"
 msgstr "Kustuta albumi andmed"
@@ -1590,7 +1562,7 @@ msgid "Cache"
 msgstr "Vahemälu"
 
 msgctxt "#440"
-msgid "Harddisk"
+msgid "Hard disk"
 msgstr "Kõvaketas"
 
 msgctxt "#441"
@@ -1828,10 +1800,6 @@ msgstr "Meedia info laadimine failidest.."
 msgctxt "#507"
 msgid "Sort by: Usage"
 msgstr "Järjesta: Kasutus"
-
-msgctxt "#510"
-msgid "Enable visualizations"
-msgstr "Luba visuaalid"
 
 msgctxt "#511"
 msgid "Enable video mode switching"
@@ -2273,14 +2241,6 @@ msgctxt "#636"
 msgid "Custom"
 msgstr "Kohandatud"
 
-msgctxt "#637"
-msgid "Replay gain"
-msgstr "Taasesituse võimendustegur"
-
-msgctxt "#638"
-msgid "Replaygain volume adjustments"
-msgstr "Heli reguleerimine taasesitusel (ReplayGain)"
-
 msgctxt "#639"
 msgid "Use track levels"
 msgstr "Kasuta lugude nivood"
@@ -2288,18 +2248,6 @@ msgstr "Kasuta lugude nivood"
 msgctxt "#640"
 msgid "Use album levels"
 msgstr "Kasuta albumi nivood"
-
-msgctxt "#641"
-msgid "PreAmp Level - Replay gained files"
-msgstr "Eelvõimendi tase - ReplayGain failid"
-
-msgctxt "#642"
-msgid "PreAmp Level - Non replay gained files"
-msgstr "Eelvõimendi tase - Ilma ReplayGain'ita failid"
-
-msgctxt "#643"
-msgid "Avoid clipping on replay gained files"
-msgstr "Väldi hüplemist ReplayGain failides"
 
 msgctxt "#644"
 msgid "Crop black bars"
@@ -2933,10 +2881,6 @@ msgctxt "#1043"
 msgid "Program Add-ons"
 msgstr "Programmide lisamoodulid"
 
-msgctxt "#1044"
-msgid "Set plugin thumb"
-msgstr "Säti pisiprogrammi pilt"
-
 msgctxt "#1045"
 msgid "Add-on settings"
 msgstr "Lisamooduli seaded"
@@ -3481,29 +3425,9 @@ msgctxt "#10035"
 msgid "Reset"
 msgstr "Lähtesta"
 
-msgctxt "#10036"
-msgid "Level: Basic"
-msgstr "Tase: Lihtne"
-
 msgctxt "#10037"
-msgid "Level: Standard"
-msgstr "Tase: Tavaline"
-
-msgctxt "#10038"
-msgid "Level: Advanced"
-msgstr "Tase: Edasijõudnud"
-
-msgctxt "#10039"
-msgid "Level: Expert"
-msgstr "Tase: Ekspert"
-
-msgctxt "#10040"
-msgid "Addon browser"
-msgstr "Lisamoodulite brauser"
-
-msgctxt "#10041"
-msgid "Reset settings"
-msgstr "Lähtesta seaded"
+msgid "Standard"
+msgstr "Normaalne"
 
 msgctxt "#10042"
 msgid "Are you sure you want to reset the settings in this category?"
@@ -3518,11 +3442,11 @@ msgid "No help available"
 msgstr "Abi pole saadaval"
 
 msgctxt "#10100"
-msgid "Yes/No dialog"
+msgid "Yes/No dialogue"
 msgstr "Jah/Ei dialoog"
 
 msgctxt "#10101"
-msgid "Progress dialog"
+msgid "Progress dialogue"
 msgstr "Edenemise dialoog"
 
 msgctxt "#10126"
@@ -3666,7 +3590,7 @@ msgid "Movie info"
 msgstr "Filmi andmed"
 
 msgctxt "#12000"
-msgid "Select dialog"
+msgid "Select dialogue"
 msgstr "Valiku dialoog"
 
 msgctxt "#12001"
@@ -3674,7 +3598,7 @@ msgid "Music/Info"
 msgstr "Muusika/Info"
 
 msgctxt "#12002"
-msgid "Dialog OK"
+msgid "Dialogue OK"
 msgstr "Dialoog OK"
 
 msgctxt "#12003"
@@ -3690,11 +3614,11 @@ msgid "Fullscreen video"
 msgstr "Video täisekraanil"
 
 msgctxt "#12006"
-msgid "Audio visualization"
+msgid "Audio visualisation"
 msgstr "Audio visualiseerimine"
 
 msgctxt "#12008"
-msgid "File stacking dialog"
+msgid "File stacking dialogue"
 msgstr "Failide tõste-dialoog"
 
 msgctxt "#12009"
@@ -3852,10 +3776,6 @@ msgstr "Juurdepääs keelatud"
 msgctxt "#12346"
 msgid "Password retry limit exceeded."
 msgstr "Salasõnade proovimise limiit on ületatud."
-
-msgctxt "#12347"
-msgid "The system will now shut off."
-msgstr "Süsteem sulgub nüüd."
 
 msgctxt "#12348"
 msgid "Item locked"
@@ -4030,8 +3950,8 @@ msgid "Reboot"
 msgstr "Taaskäivita"
 
 msgctxt "#13014"
-msgid "Minimize"
-msgstr "Minimeeri"
+msgid "Minimise"
+msgstr "Vähenda"
 
 msgctxt "#13015"
 msgid "Power button action"
@@ -4125,10 +4045,6 @@ msgctxt "#13110"
 msgid "Save resolution?"
 msgstr "Salvesta resolutsioon?"
 
-msgctxt "#13111"
-msgid "Would you like to keep this resolution?"
-msgstr "Kas soovid selle resolutsiooni säilitada?"
-
 msgctxt "#13112"
 msgid "High quality upscaling"
 msgstr "Audio visualiseerimine"
@@ -4168,10 +4084,6 @@ msgstr "VDPAU"
 msgctxt "#13121"
 msgid "VDPAU HQ Upscaling level"
 msgstr "VDPAU HQ suurenduse aste"
-
-msgctxt "#13122"
-msgid "VDPAU Studio level color conversion"
-msgstr "VDPAU stuudio astme värvi konverteerimine"
 
 msgctxt "#13130"
 msgid "Blank other displays"
@@ -4226,7 +4138,7 @@ msgid "Primary DNS"
 msgstr "Esmane DNS"
 
 msgctxt "#13162"
-msgid "Initialize failed"
+msgid "Initialise failed"
 msgstr "Algatamine ebaõnnestus"
 
 msgctxt "#13170"
@@ -4469,10 +4381,6 @@ msgctxt "#13318"
 msgid "Recursive slideshow"
 msgstr "Rekursiivne slaidiesitlus"
 
-msgctxt "#13319"
-msgid "Randomize"
-msgstr "Juhuvalik"
-
 msgctxt "#13320"
 msgid "Stereo"
 msgstr "Stereo"
@@ -4685,21 +4593,9 @@ msgctxt "#13388"
 msgid "Preset"
 msgstr "Eelhäälestus"
 
-msgctxt "#13389"
-msgid "There are no presets available\nfor this visualization"
-msgstr "Selle visuaali jaoks\npuuduvad eelhäälestused"
-
-msgctxt "#13390"
-msgid "There are no settings available\nfor this visualization"
-msgstr "Selle visuaali jaoks\npuuduvad seaded"
-
 msgctxt "#13391"
 msgid "Eject/Load"
 msgstr "Väljasta/Sisesta"
-
-msgctxt "#13392"
-msgid "Use visualization if playing audio"
-msgstr "Kasuta heli esitamisel visuaale"
 
 msgctxt "#13393"
 msgid "Calculate size"
@@ -4885,10 +4781,6 @@ msgctxt "#13503"
 msgid "Video clock (Resample audio)"
 msgstr "Video kell (sämpelda heli)"
 
-msgctxt "#13504"
-msgid "Maximum resample amount (%)"
-msgstr "Maksimaalne ümersämplimise maht (%)"
-
 msgctxt "#13505"
 msgid "Resample quality"
 msgstr "Ümbersämplimise kvaliteet"
@@ -5056,10 +4948,6 @@ msgstr "Pole TV-d"
 msgctxt "#14024"
 msgid "Enter the nearest large town"
 msgstr "Sisesta lähim suurem linn"
-
-msgctxt "#14025"
-msgid "Video/Audio/DVD cache - Harddisk"
-msgstr "Video/Audio/DVD vahemälu - Kõvaketas"
 
 msgctxt "#14026"
 msgid "Video cache - DVD-ROM"
@@ -5405,10 +5293,6 @@ msgctxt "#15213"
 msgid "Play using..."
 msgstr "Esita kasutades..."
 
-msgctxt "#15214"
-msgid "Use smoothed A/V synchronization"
-msgstr "Kasuta pehmendatud A/V sünkoniseerimist"
-
 msgctxt "#15215"
 msgid "Hide file names in thumbs view"
 msgstr "Peida pisipiltide vaates failinimed"
@@ -5548,10 +5432,6 @@ msgstr "Plaadimasin katkestati."
 msgctxt "#16031"
 msgid "No matching songs in the library."
 msgstr "Sobivaid laule teegist ei leitud."
-
-msgctxt "#16032"
-msgid "Could not initialize database."
-msgstr "Andmebaasi ei saanud algatada."
 
 msgctxt "#16033"
 msgid "Could not open database."
@@ -5701,10 +5581,6 @@ msgctxt "#16314"
 msgid "Inverse Telecine"
 msgstr "Inverse Telecine"
 
-msgctxt "#16315"
-msgid "Lanczos3 optimized"
-msgstr "Lanczos3 optimeeritud"
-
 msgctxt "#16316"
 msgid "Auto"
 msgstr "Automaatne"
@@ -5733,17 +5609,9 @@ msgctxt "#16322"
 msgid "Spline36"
 msgstr "Spline36"
 
-msgctxt "#16323"
-msgid "Spline36 optimized"
-msgstr "Spline36 optimeeritud"
-
 msgctxt "#16324"
 msgid "Software Blend"
 msgstr "Tarkvara segu"
-
-msgctxt "#16325"
-msgid "Auto - ION Optimized"
-msgstr "Automaatne - ION Optimeerimine"
 
 msgctxt "#16400"
 msgid "Post-processing"
@@ -6397,10 +6265,6 @@ msgctxt "#19170"
 msgid "Timeout when starting playback"
 msgstr "Taasesituse aegumine"
 
-msgctxt "#19171"
-msgid "Start playback minimized"
-msgstr "Alusta taasesitust minimiseeritult"
-
 msgctxt "#19172"
 msgid "Instant recording duration"
 msgstr "Kohese salvestuse kestvus"
@@ -6468,10 +6332,6 @@ msgstr "Elektroonilisele saatekavale tehakse algseadistust"
 msgctxt "#19189"
 msgid "Continue last channel on startup"
 msgstr "Käivitamisel jätka viimase kanaliga"
-
-msgctxt "#19190"
-msgid "Minimized"
-msgstr "minimeeritud"
 
 msgctxt "#19191"
 msgid "PVR service"
@@ -6601,10 +6461,6 @@ msgctxt "#19222"
 msgid "EPG"
 msgstr "Elektrooniline saatekava"
 
-msgctxt "#19223"
-msgid "No PVR add-on could be enabled. Check your settings or the log for more info."
-msgstr "Ühtki PVR lisamoodulit ei saanud lubada. Kontrolli oma seadeid või täpema info saamiseks vaata logi."
-
 msgctxt "#19224"
 msgid "Recording aborted"
 msgstr "Salvestamine katkestatud"
@@ -6629,10 +6485,6 @@ msgctxt "#19229"
 msgid "Close channel OSD after switching channels"
 msgstr "Sulge kanali OSD pärast kanali vahetust"
 
-msgctxt "#19230"
-msgid "Prevent EPG updates while playing a TV stream"
-msgstr "Hoidu telekanalit näidates elektroonilise saatekava uuendustest"
-
 msgctxt "#19232"
 msgid "Clear search results"
 msgstr "Puhasta otsingutulemused"
@@ -6649,17 +6501,9 @@ msgctxt "#19238"
 msgid "Loading recordings from clients"
 msgstr "Kliendist salvestuste laadimine"
 
-msgctxt "#19240"
-msgid "No PVR add-on enabled"
-msgstr "Ühtegi PVR lisamoodulit pole lubatud"
-
 msgctxt "#19241"
 msgid "The PVR manager has been enabled without any"
 msgstr "PVR haldur lubati ilma ühegi"
-
-msgctxt "#19242"
-msgid "enabled PVR add-on. Enable at least one add-on"
-msgstr "lubatud PVR lisamoodulita. Luba vähemalt üks lisamoodul"
 
 msgctxt "#19243"
 msgid "in order to use the PVR functionality."
@@ -6768,10 +6612,6 @@ msgstr "Ära näita 'Ühendus kadus' hoiatusi"
 msgctxt "#19270"
 msgid "* All recordings"
 msgstr "* Kõik salvestised"
-
-msgctxt "#19271"
-msgid "No PVR add-ons could be found"
-msgstr "Ühtegi PVR lisamoodulit ei leitud"
 
 msgctxt "#19272"
 msgid "You need a tuner, backend software, and an"
@@ -7424,14 +7264,6 @@ msgstr "Näita ilma andmeid"
 msgctxt "#20085"
 msgid "Show system info"
 msgstr "Näita süsteemi andmeid"
-
-msgctxt "#20086"
-msgid "Show available disc space C: E: F:"
-msgstr "Näita vaba kettaruumi C: E: F:"
-
-msgctxt "#20087"
-msgid "Show available disc space E: F: G:"
-msgstr "Näita vaba kettaruumi E: F: G:"
 
 msgctxt "#20088"
 msgid "Weather info"
@@ -8368,10 +8200,6 @@ msgstr "Tasanda seriaalid"
 msgctxt "#20413"
 msgid "Get fanart"
 msgstr "Hangi fännipilte"
-
-msgctxt "#20414"
-msgid "Show Fanart in video and music libraries"
-msgstr "Näita fännipilte video- ja muusikakogus"
 
 msgctxt "#20415"
 msgid "Scanning for new content"
@@ -9405,10 +9233,6 @@ msgctxt "#22020"
 msgid "Guide"
 msgstr "Telekava"
 
-msgctxt "#22021"
-msgid "Allowed error in aspect ratio to minimize black bars"
-msgstr "Lubatud kuvasuhte viga mustade servade eemaldamisel"
-
 msgctxt "#22022"
 msgid "Show video files in listings"
 msgstr "Näita faililoendites ka videofaile"
@@ -9569,10 +9393,6 @@ msgctxt "#24009"
 msgid "Script"
 msgstr "Skript"
 
-msgctxt "#24010"
-msgid "Visualization"
-msgstr "Visuaalid"
-
 msgctxt "#24011"
 msgid "Add-on repository"
 msgstr "Lisamoodulite hoidla"
@@ -9693,21 +9513,9 @@ msgctxt "#24043"
 msgid "Available Updates"
 msgstr "Saadaolevad uuendused"
 
-msgctxt "#24044"
-msgid "Dependencies not met"
-msgstr "Sõltuvustingimused ei ole täidetud"
-
 msgctxt "#24045"
 msgid "Add-on does not have the correct structure"
 msgstr "Lisamoodulil puudub korrektne struktuur"
-
-msgctxt "#24046"
-msgid "%s is used by the following installed add-on(s)"
-msgstr "%s on kasutusel järgmis(t)e paigaldatud lisamooduli(te) poolt"
-
-msgctxt "#24047"
-msgid "This add-on cannot be uninstalled"
-msgstr "Seda lisamoodulit ei saa eemaldada"
 
 msgctxt "#24048"
 msgid "Rollback"
@@ -9824,10 +9632,6 @@ msgstr "(käibiv)"
 msgctxt "#24095"
 msgid "(blacklisted)"
 msgstr "(blokeeritud)"
-
-msgctxt "#24096"
-msgid "Add-on has been marked as broken in repository."
-msgstr "Lisamoodul on hoidlas vigaseks märgitud."
 
 msgctxt "#24097"
 msgid "Would you like to disable it on your system?"
@@ -9960,10 +9764,6 @@ msgstr "Küsi allalaadimise kinnitust enne video mängimist"
 msgctxt "#33016"
 msgid "Clips"
 msgstr "Klipid"
-
-msgctxt "#33017"
-msgid "Restart plugin to enable"
-msgstr "Lubamiseks taaskäivita plugin"
 
 msgctxt "#33018"
 msgid "Tonight"
@@ -10337,10 +10137,6 @@ msgctxt "#34401"
 msgid "Failed to init video filters/scalers, falling back to bilinear scaling"
 msgstr "Video filtrite/suurendajate algatamine ebaõnnestus, tagasipöördumine bilineaarse suurndamise juurde"
 
-msgctxt "#34402"
-msgid "Failed to initialize audio device"
-msgstr "Heliseadme algatamine ebaõnnestus"
-
 msgctxt "#34403"
 msgid "Check your audiosettings"
 msgstr "Kontrolli oma heliseadeid"
@@ -10372,10 +10168,6 @@ msgstr "Välisseadmed"
 msgctxt "#35001"
 msgid "Generic HID device"
 msgstr "Üldine HID-seade"
-
-msgctxt "#35002"
-msgid "Generic network adapter"
-msgstr "Üldine võrguadapter"
 
 msgctxt "#35003"
 msgid "Generic disk"
@@ -10429,10 +10221,6 @@ msgctxt "#35504"
 msgid "Product ID"
 msgstr "Tootetunnus (ID)"
 
-msgctxt "#36000"
-msgid "Pulse-Eight CEC adapter"
-msgstr "Pulse-Eight CEC adapter"
-
 msgctxt "#36001"
 msgid "Pulse-Eight Nyxboard"
 msgstr "Pulse-Eight Nyxboard"
@@ -10453,10 +10241,6 @@ msgctxt "#36005"
 msgid "Enable switch side commands"
 msgstr "Luba pooli vahetavaid käske"
 
-msgctxt "#36006"
-msgid "Could not open the adapter"
-msgstr "Adapterit ei saa avada"
-
 msgctxt "#36007"
 msgid "Devices to power on when starting XBMC"
 msgstr "Seadmed, mis XBMC alustamisel sisse lülitada"
@@ -10473,10 +10257,6 @@ msgctxt "#36011"
 msgid "Could not detect the CEC com port. Set it up manually."
 msgstr "Ei õnnestunud tuvastada CEC COM-porti. Määra see manuaalselt."
 
-msgctxt "#36012"
-msgid "Could not initialise the CEC adapter. Please check your settings."
-msgstr "CEC adapterit ei õnnestunud algatada. Palun kontrolli oma seadeid."
-
 msgctxt "#36015"
 msgid "HDMI port number"
 msgstr "HDMI pordi number"
@@ -10484,10 +10264,6 @@ msgstr "HDMI pordi number"
 msgctxt "#36016"
 msgid "Connected"
 msgstr "Ühendatud"
-
-msgctxt "#36017"
-msgid "Could not initialise the CEC adapter: libCEC was not found on your system."
-msgstr "CEC adapterit ei õnnestunud algatada: libCEC-i ei leitud sinu süsteemist."
 
 msgctxt "#36018"
 msgid "Use the TV's language setting"
@@ -10540,14 +10316,6 @@ msgstr "Kui teler on välja lülitatud"
 msgctxt "#36030"
 msgid "Connection lost"
 msgstr "Ühendus kadus"
-
-msgctxt "#36031"
-msgid "This user does not have permissions to open the CEC adapter"
-msgstr "Sellel kasutajal puudub CEC adapteri avamiseks luba"
-
-msgctxt "#36032"
-msgid "The port is busy. Only one program can access the CEC adapter"
-msgstr "See port on hõivatud. Ainult üks programm saab kasutada CEC adapterit"
 
 msgctxt "#36033"
 msgid "Pause playback when switching to another source"
@@ -10689,14 +10457,6 @@ msgctxt "#36163"
 msgid "No info available yet."
 msgstr "Info pole veel saadaval."
 
-msgctxt "#36168"
-msgid "No info available yet."
-msgstr "Info pole veel saadaval."
-
-msgctxt "#36169"
-msgid "No info available yet."
-msgstr "Info pole veel saadaval."
-
 msgctxt "#36173"
 msgid "No info available yet."
 msgstr "Info pole veel saadaval."
@@ -10710,14 +10470,6 @@ msgid "No info available yet."
 msgstr "Info pole veel saadaval."
 
 msgctxt "#36181"
-msgid "No info available yet."
-msgstr "Info pole veel saadaval."
-
-msgctxt "#36182"
-msgid "No info available yet."
-msgstr "Info pole veel saadaval."
-
-msgctxt "#36183"
 msgid "No info available yet."
 msgstr "Info pole veel saadaval."
 
@@ -10901,10 +10653,6 @@ msgctxt "#36296"
 msgid "Select the size of the font used during karoake."
 msgstr "Vali karaokes kasutatava fondi suurus."
 
-msgctxt "#36297"
-msgid "Select the font color used during karoake."
-msgstr "Vali karaokes kasutatava fondi värv."
-
 msgctxt "#36298"
 msgid "Select the character set used during karoake."
 msgstr "Vali karaokes kasutatav märgistik."
@@ -11081,10 +10829,6 @@ msgctxt "#36360"
 msgid "No info available yet."
 msgstr "Info pole veel saadaval."
 
-msgctxt "#36362"
-msgid "Select your physical speaker layout."
-msgstr "Vali kõlarite füüsilise asetuse plaan."
-
 msgctxt "#36374"
 msgid "No info available yet."
 msgstr "Info pole veel saadaval."
@@ -11220,6 +10964,30 @@ msgstr "Info pole veel saadaval."
 msgctxt "#36420"
 msgid "No info available yet."
 msgstr "Info pole veel saadaval."
+
+msgctxt "#36524"
+msgid "Preferred mode"
+msgstr "Eelistatud režiim"
+
+msgctxt "#36529"
+msgid "Mono (2D)"
+msgstr "Mono (2D)"
+
+msgctxt "#36530"
+msgid "Preferred mode"
+msgstr "Eelistatud režiim"
+
+msgctxt "#36531"
+msgid "Select alternate mode..."
+msgstr "Vali alternatiivne režiim…"
+
+msgctxt "#36532"
+msgid "Same as movie"
+msgstr "Filmiga sama"
+
+msgctxt "#36544"
+msgid "Enable hardware decoding of video files."
+msgstr "Luba riistvaraline videofailide dekodeerimine."
 
 msgctxt "#37001"
 msgid "(Directors Comments)"
