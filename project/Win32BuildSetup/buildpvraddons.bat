@@ -9,7 +9,7 @@ SET DEPS_DIR=..\BuildDependencies
 SET TMP_DIR=%DEPS_DIR%\tmp
 
 SET LIBNAME=xbmc-pvr-addons
-SET VERSION=d4cb4d5c0e7fc1a4b9a3b911c3053df178c36944
+SET VERSION=1d9e336efb1462d08f311cd9d29f162445961c61
 SET SOURCE=%LIBNAME%
 SET GIT_URL=git://github.com/opdenkamp/%LIBNAME%.git
 SET SOURCE_DIR=%TMP_DIR%\%SOURCE%
@@ -64,6 +64,10 @@ REM build xbmc-pvr-addons.sln
 ECHO Building PVR addons
 %1 %OPTS_EXE%
 
+IF %errorlevel%==1 (
+  goto fail
+)
+
 REM copy the built pvr addons into ADDONS_DIR
 CD "%BUILT_ADDONS_DIR%"
 SET ADDONS_DIR=..\..\..\..\Win32BuildSetup\BUILD_WIN32\Xbmc\xbmc-pvr-addons
@@ -89,6 +93,10 @@ GOTO done
 
 :error
 ECHO No git command available. Unable to fetch and build xbmc-pvr-addons.
+SET EXITCODE=1
+
+:fail
+ECHO Failed to build one or more pvr addons
 SET EXITCODE=1
 
 :done

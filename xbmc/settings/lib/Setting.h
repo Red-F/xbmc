@@ -101,6 +101,7 @@ public:
   int GetHelp() const { return m_help; }
   void SetHelp(int help) { m_help = help; }
   bool IsEnabled() const;
+  bool IsDefault() const { return !m_changed; }
   const std::string& GetParent() const { return m_parentSetting; }
   SettingLevel GetLevel() const { return m_level; }
   const ISettingControl* GetControl() const { return m_control; }
@@ -166,8 +167,8 @@ public:
   const CSetting* GetDefinition() const { return m_definition; }
 
   const std::string& GetDelimiter() const { return m_delimiter; }
-  int GetMinimum() const { return m_minimum; }
-  int GetMaximum() const { return m_maximum; }
+  int GetMinimumItems() const { return m_minimumItems; }
+  int GetMaximumItems() const { return m_maximumItems; }
   
   bool FromString(const std::vector<std::string> &value);
 
@@ -187,8 +188,8 @@ protected:
   SettingPtrList m_defaults;
   CSetting *m_definition;
   std::string m_delimiter;
-  int m_minimum;
-  int m_maximum;
+  int m_minimumItems;
+  int m_maximumItems;
 };
 
 /*!

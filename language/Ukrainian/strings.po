@@ -861,10 +861,6 @@ msgctxt "#251"
 msgid "Select destination directory"
 msgstr "Виберіть папку призначення"
 
-msgctxt "#252"
-msgid "Output stereo to all speakers"
-msgstr "Виводити стерео на всі динаміки"
-
 msgctxt "#253"
 msgid "Number of channels"
 msgstr "Кількість каналів"
@@ -1077,10 +1073,6 @@ msgctxt "#308"
 msgid "Original stream's language"
 msgstr "Мова потоку за промовчанням"
 
-msgctxt "#309"
-msgid "User Interface language"
-msgstr "Мова інтерфейсу"
-
 msgctxt "#312"
 msgid "(0=auto)"
 msgstr "(0=авто)"
@@ -1209,6 +1201,14 @@ msgctxt "#345"
 msgid "Year"
 msgstr "Рік"
 
+msgctxt "#347"
+msgid "DTS-HD capable receiver"
+msgstr "Виводити звук у форматі DTS-HD"
+
+msgctxt "#349"
+msgid "TrueHD capable receiver"
+msgstr "Виводити звук у форматі TrueHD"
+
 msgctxt "#350"
 msgid "Programs"
 msgstr "Програми"
@@ -1264,6 +1264,10 @@ msgstr "Рівень затемнення екрану"
 msgctxt "#363"
 msgid "Sort by: File"
 msgstr "Сорт. за файлами"
+
+msgctxt "#364"
+msgid "Dolby Digital (AC3) capable receiver"
+msgstr "Виводити звук у форматі Dolby Digital (AC3)"
 
 msgctxt "#365"
 msgid "Sort by: Name"
@@ -1660,10 +1664,6 @@ msgstr "Положення екранного меню (OSD)"
 msgctxt "#470"
 msgid "Credits"
 msgstr "Автори"
-
-msgctxt "#471"
-msgid "Modchip"
-msgstr "МOD-схема"
 
 msgctxt "#474"
 msgid "Off"
@@ -2321,6 +2321,10 @@ msgctxt "#665"
 msgid "Compression level"
 msgstr "Ступінь стиснення"
 
+msgctxt "#666"
+msgid "Verbose logging..."
+msgstr "Детальний журнал…"
+
 msgctxt "#700"
 msgid "Cleaning up library"
 msgstr "Очищення медіатеки…"
@@ -2357,6 +2361,10 @@ msgctxt "#713"
 msgid "HTTP proxy"
 msgstr "HTTP-проксі"
 
+msgctxt "#715"
+msgid "Assignment"
+msgstr "Призначення"
+
 msgctxt "#716"
 msgid "Automatic (DHCP)"
 msgstr "Автоматично (DHCP)"
@@ -2368,6 +2376,18 @@ msgstr "Уручну (статична)"
 msgctxt "#719"
 msgid "IP address"
 msgstr "IP-адреса"
+
+msgctxt "#720"
+msgid "Netmask"
+msgstr "Маска мережі"
+
+msgctxt "#721"
+msgid "Default gateway"
+msgstr "Основний шлюз"
+
+msgctxt "#722"
+msgid "DNS server"
+msgstr "Сервер DNS"
 
 msgctxt "#723"
 msgid "Save & restart"
@@ -2416,6 +2436,10 @@ msgstr "Кодування"
 msgctxt "#736"
 msgid "Style"
 msgstr "Стиль"
+
+msgctxt "#737"
+msgid "Colour"
+msgstr "Колір"
 
 msgctxt "#738"
 msgid "Normal"
@@ -2549,6 +2573,14 @@ msgctxt "#776"
 msgid "Wireless network name (ESSID)"
 msgstr "Ім'я бездротової мережі (ESSID)"
 
+msgctxt "#777"
+msgid "Wireless password"
+msgstr "Пароль бездротової мережі"
+
+msgctxt "#778"
+msgid "Wireless security"
+msgstr "Захист бездротової мережі"
+
 msgctxt "#779"
 msgid "Save and apply network interface settings"
 msgstr "Зберегти та застосувати налаштування мережі"
@@ -2633,6 +2665,10 @@ msgctxt "#799"
 msgid "Library Update"
 msgstr "Оновлення медіатеки"
 
+msgctxt "#800"
+msgid "Music library needs to rescan tags from files."
+msgstr "Потрібне повторне сканування тегів музичних файлів"
+
 msgctxt "#801"
 msgid "Would you like to scan now?"
 msgstr "Сканували зараз?"
@@ -2648,6 +2684,10 @@ msgstr "Доступний діапазон портів: 1–65535"
 msgctxt "#852"
 msgid "Valid port range is 1024-65535"
 msgstr "Доступний діапазон портів: 1024–65535"
+
+msgctxt "#997"
+msgid "Add Pictures..."
+msgstr "Додати фото…"
 
 msgctxt "#998"
 msgid "Add Music..."
@@ -2857,6 +2897,14 @@ msgctxt "#1051"
 msgid "Enter web address"
 msgstr "Уведіть веб-адресу"
 
+msgctxt "#1180"
+msgid "Proxy type"
+msgstr "Тип проксі-сервера"
+
+msgctxt "#1181"
+msgid "HTTP"
+msgstr "HTTP"
+
 msgctxt "#1182"
 msgid "SOCKS4"
 msgstr "SOCKS4"
@@ -2868,6 +2916,10 @@ msgstr "SOCKS4A"
 msgctxt "#1184"
 msgid "SOCKS5"
 msgstr "SOCKS5"
+
+msgctxt "#1185"
+msgid "SOCKS5 with remote dns resolving"
+msgstr "SOCKS5 із віддаленим визначенням DNS"
 
 msgctxt "#1200"
 msgid "SMB client"
@@ -3005,9 +3057,17 @@ msgctxt "#1271"
 msgid "Device name"
 msgstr "Ім'я пристрою"
 
+msgctxt "#1272"
+msgid "Use password protection"
+msgstr "Захист за допомогою паролю"
+
 msgctxt "#1273"
 msgid "AirPlay"
 msgstr "AirPlay"
+
+msgctxt "#1274"
+msgid "AirTunes"
+msgstr "AirTunes"
 
 msgctxt "#1275"
 msgid "Filter %s"
@@ -3365,29 +3425,85 @@ msgctxt "#10034"
 msgid "Settings - Profiles"
 msgstr "Налаштування - Профілі"
 
+msgctxt "#10035"
+msgid "Reset"
+msgstr "Скинути"
+
 msgctxt "#10037"
 msgid "Standard"
 msgstr "Стандартний"
+
+msgctxt "#10038"
+msgid "Advanced"
+msgstr "Більше"
+
+msgctxt "#10040"
+msgid "Add-on browser"
+msgstr "Браузер надбудов"
+
+msgctxt "#10042"
+msgid "Are you sure you want to reset the settings in this category?"
+msgstr "Справді скинути налаштування в цій категорії?"
 
 msgctxt "#10043"
 msgid "Help"
 msgstr "Допомога"
 
+msgctxt "#10044"
+msgid "No help available"
+msgstr "Довідка відсутня"
+
+msgctxt "#10126"
+msgid "File browser"
+msgstr "Файловий браузер"
+
 msgctxt "#10128"
 msgid "Network setup"
 msgstr "Налаштування мережи"
+
+msgctxt "#10129"
+msgid "Media source"
+msgstr "Медіа-джерело"
+
+msgctxt "#10130"
+msgid "Profile settings"
+msgstr "Налаштування профілю"
 
 msgctxt "#10131"
 msgid "Lock settings"
 msgstr "Заблокувати \"Налаштування\""
 
+msgctxt "#10132"
+msgid "Content settings"
+msgstr "Налаштування вмісту"
+
 msgctxt "#10134"
 msgid "Favourites"
 msgstr "Обране"
 
+msgctxt "#10135"
+msgid "Songs/Info"
+msgstr "Композиції/відомості"
+
+msgctxt "#10136"
+msgid "Smart playlist editor"
+msgstr "Редактор розширених списків відтворення"
+
+msgctxt "#10137"
+msgid "Smart playlist rule editor"
+msgstr "Редактор правил розширених списків відтворення"
+
+msgctxt "#10139"
+msgid "Pictures/Info"
+msgstr "Фото/відомості"
+
 msgctxt "#10140"
 msgid "Add-on settings"
 msgstr "Налаштування надбудови"
+
+msgctxt "#10146"
+msgid "Add-ons/Info"
+msgstr "Надбудови/відомості"
 
 msgctxt "#10210"
 msgid "Looking for subtitles..."
@@ -3864,6 +3980,50 @@ msgstr "Джойстик підключено"
 msgctxt "#13025"
 msgid "Joystick unplugged"
 msgstr "Джойстик відключено"
+
+msgctxt "#13026"
+msgid "Try to wake remote servers on access"
+msgstr "Намагатися розбудити віддалені сервери"
+
+msgctxt "#13027"
+msgid "Wake on Lan (%s)"
+msgstr "Wake on Lan (%s)"
+
+msgctxt "#13028"
+msgid "Waiting for network to connect..."
+msgstr "Очікування підключення до мережі…"
+
+msgctxt "#13029"
+msgid "Failed to execute Wake on Lan!"
+msgstr "Не вдалося виконати Wake on Lan!"
+
+msgctxt "#13030"
+msgid "Waiting for server to wake up..."
+msgstr "Очікування прокидання сервера…"
+
+msgctxt "#13031"
+msgid "Extended wait for server to wake up..."
+msgstr "Тривале очікування прокидання сервера…"
+
+msgctxt "#13032"
+msgid "Waiting for services to launch..."
+msgstr "Очікування запуску служб…"
+
+msgctxt "#13033"
+msgid "MAC Discovery"
+msgstr "Виявлення MAC"
+
+msgctxt "#13034"
+msgid "Updated for %s"
+msgstr "Оновлено для %s"
+
+msgctxt "#13035"
+msgid "Found for %s"
+msgstr "Знайдено для %s"
+
+msgctxt "#13036"
+msgid "Failed for %s"
+msgstr "Не вдалося для %s"
 
 msgctxt "#13050"
 msgid "Running low on battery"
@@ -4346,8 +4506,8 @@ msgid "Scan for new content"
 msgstr "Сканувати вміст"
 
 msgctxt "#13350"
-msgid "Now playing..."
-msgstr "Поточн. список відтворення…"
+msgid "Current playlist"
+msgstr "Поточний список відтворення"
 
 msgctxt "#13351"
 msgid "Album information"
@@ -4621,6 +4781,14 @@ msgctxt "#13434"
 msgid "Play only this"
 msgstr "Грати лише цей файл"
 
+msgctxt "#13435"
+msgid "Enable HQ Scalers for scalings above"
+msgstr "Високоякісне масштабування більше, ніж"
+
+msgctxt "#13455"
+msgid "Software"
+msgstr "Програмний"
+
 msgctxt "#13500"
 msgid "A/V sync method"
 msgstr "Синхронізація А/В"
@@ -4681,6 +4849,10 @@ msgctxt "#13515"
 msgid "No art"
 msgstr "Без картинки"
 
+msgctxt "#13516"
+msgid "Add art"
+msgstr "Додати картинку"
+
 msgctxt "#13550"
 msgid "Pause during refresh rate change"
 msgstr "Пауза для зміни частоти дисплею"
@@ -4728,10 +4900,6 @@ msgstr "Мульти-ДК (Harmony)"
 msgctxt "#13620"
 msgid "Apple Remote Error"
 msgstr "Помилка ДК Apple"
-
-msgctxt "#13621"
-msgid "Apple Remote support could be enabled."
-msgstr "Можна ввімкнути підтримку ДК Apple."
 
 msgctxt "#14000"
 msgid "Stack"
@@ -4829,25 +4997,9 @@ msgctxt "#14026"
 msgid "Video cache - DVD-ROM"
 msgstr "Кеш відео - з DVD-диска"
 
-msgctxt "#14027"
-msgid "Local Network"
-msgstr "Локальна мережа"
-
-msgctxt "#14028"
-msgid "Internet"
-msgstr "Інтернет"
-
 msgctxt "#14030"
 msgid "Audio cache - DVD-ROM"
 msgstr "Кеш аудіо - з DVD-диска"
-
-msgctxt "#14031"
-msgid "Local Network"
-msgstr "Локальна мережа"
-
-msgctxt "#14032"
-msgid "Internet"
-msgstr "Інтернет"
 
 msgctxt "#14034"
 msgid "DVD cache - DVD-ROM"
@@ -5581,10 +5733,6 @@ msgctxt "#19017"
 msgid "TV recordings"
 msgstr "Записи ТБ"
 
-msgctxt "#19018"
-msgid "Default folder for PVR thumbnails"
-msgstr "Папка для ескізів PVR за промовчанням"
-
 msgctxt "#19019"
 msgid "Channels"
 msgstr "Канали"
@@ -5648,6 +5796,10 @@ msgstr "Відомості"
 msgctxt "#19034"
 msgid "Already started recording on this channel"
 msgstr "Запис цього каналу вже почався"
+
+msgctxt "#19035"
+msgid "%s could not be played. Check the log for details."
+msgstr "Не вдалося відтворити %s. Див. журнал."
 
 msgctxt "#19036"
 msgid "This recording cannot be played. Check the log for details."
@@ -5940,10 +6092,6 @@ msgstr "Пошук каналів"
 msgctxt "#19118"
 msgid "Cannot use PVR functions while searching."
 msgstr "Під час пошуку функції PVR недоступні."
-
-msgctxt "#19119"
-msgid "On which server you want to search?"
-msgstr "Виберіть сервер для пошуку."
 
 msgctxt "#19120"
 msgid "Client number"
@@ -6325,13 +6473,13 @@ msgctxt "#19220"
 msgid "Channels in"
 msgstr "каналів у"
 
-msgctxt "#19221"
-msgid "Synchronise channel groups with backends"
-msgstr "Синхронізувати групи каналів зі серверами."
-
 msgctxt "#19222"
 msgid "EPG"
 msgstr "EPG"
+
+msgctxt "#19223"
+msgid "No PVR Add-on could be enabled. Check your settings or the log for more info."
+msgstr "Не вдалося ввімкнути надбудови PVR. Перевірте налаштування або див. журнал."
 
 msgctxt "#19224"
 msgid "Recording aborted"
@@ -6369,6 +6517,10 @@ msgctxt "#19233"
 msgid "Display a notification on timer updates"
 msgstr "Показувати сповіщення про зміну таймерів"
 
+msgctxt "#19234"
+msgid "Use backend channels numbers (only works with 1 enabled PVR Add-on)"
+msgstr "Використовувати номери каналів із сервера (має використовуватися 1 надбудова PVR)."
+
 msgctxt "#19235"
 msgid "PVR manager is starting up"
 msgstr "Менеджер PVR запускається"
@@ -6389,9 +6541,17 @@ msgctxt "#19239"
 msgid "Starting background threads"
 msgstr "Запуск фонових служб"
 
+msgctxt "#19240"
+msgid "No PVR Add-on enabled"
+msgstr "Немає активних надбудов PVR"
+
 msgctxt "#19241"
 msgid "The PVR manager has been enabled without any"
 msgstr "Менеджер PVR увімкнено без жодних"
+
+msgctxt "#19242"
+msgid "enabled PVR Add-on. Enable at least one Add-on"
+msgstr "активних надбудов PVR. Активуйте принаймні 1 надбудову"
 
 msgctxt "#19243"
 msgid "in order to use the PVR functionality."
@@ -6505,9 +6665,17 @@ msgctxt "#19270"
 msgid "* All recordings"
 msgstr "* Усі записи"
 
+msgctxt "#19271"
+msgid "No PVR Add-ons could be found"
+msgstr "Не вдалося знайти надбудови PVR"
+
 msgctxt "#19272"
 msgid "You need a tuner, backend software, and an"
 msgstr "Для використання PVR потрібен тюнер,"
+
+msgctxt "#19273"
+msgid "Add-on for the backend to be able to use PVR."
+msgstr "Серверна програма й відповідна надбудова PVR."
 
 msgctxt "#19274"
 msgid "Please visit xbmc.org/pvr to learn more."
@@ -6825,10 +6993,6 @@ msgctxt "#19647"
 msgid "Motoring"
 msgstr "Авто/мото"
 
-msgctxt "#19648"
-msgid "Fitness &amp; Health"
-msgstr "Здоров'я та фітнес"
-
 msgctxt "#19649"
 msgid "Cooking"
 msgstr "Кулінарія"
@@ -6848,10 +7012,6 @@ msgstr "Особливі властивості"
 msgctxt "#19661"
 msgid "Original Language"
 msgstr "Оригінальна мова"
-
-msgctxt "#19662"
-msgid "Black &amp; White"
-msgstr "Ч-Б"
 
 msgctxt "#19663"
 msgid "Unpublished"
@@ -7765,10 +7925,6 @@ msgctxt "#20326"
 msgid "This will reset the calibration values for %s"
 msgstr "Калібрувальні значення для %s буде скинуто"
 
-msgctxt "#20327"
-msgid "to it's default values."
-msgstr "до значень за промовчанням"
-
 msgctxt "#20328"
 msgid "Browse for destination"
 msgstr "Вкажіть призначення"
@@ -7985,10 +8141,6 @@ msgctxt "#20381"
 msgid "Specials"
 msgstr "Надбудови"
 
-msgctxt "#20382"
-msgid "Automatically grab season thumbs"
-msgstr "Автоматично завантажувати ескізи сезонів"
-
 msgctxt "#20383"
 msgid "Selected folder contains a single video"
 msgstr "Вказана папка містить окремий відеофайл"
@@ -8105,10 +8257,6 @@ msgctxt "#20411"
 msgid "Flatten"
 msgstr "Без категорій"
 
-msgctxt "#20412"
-msgid "Flatten TV shows"
-msgstr "Приховувати списки сезонів серіалів"
-
 msgctxt "#20413"
 msgid "Get fanart"
 msgstr "Фанарт"
@@ -8124,6 +8272,10 @@ msgstr "Прем'єра"
 msgctxt "#20417"
 msgid "Writer"
 msgstr "Сценарій"
+
+msgctxt "#20418"
+msgid "Writers"
+msgstr "Сценаристи"
 
 msgctxt "#20419"
 msgid "Replace file names with library titles"
@@ -8301,6 +8453,26 @@ msgctxt "#20464"
 msgid "Select %s"
 msgstr "Вибрати %s"
 
+msgctxt "#20465"
+msgid "Manage movie set"
+msgstr "Змінити кіноцикл"
+
+msgctxt "#20466"
+msgid "Select movie set"
+msgstr "Вибрати кіноцикл"
+
+msgctxt "#20467"
+msgid "No set (Remove from %s)"
+msgstr "Не в циклі (видалити з %s)"
+
+msgctxt "#20468"
+msgid "Add movie to a new set"
+msgstr "Додати фільм до нового циклу"
+
+msgctxt "#20469"
+msgid "Keep current set (%s)"
+msgstr "Зберегти поточний цикл (%s)"
+
 msgctxt "#21330"
 msgid "Show hidden files and directories"
 msgstr "Показувати приховані файли та папки"
@@ -8341,9 +8513,17 @@ msgctxt "#21360"
 msgid "Share video and music libraries through UPnP"
 msgstr "Увімкнути доступ до медіатеки за UPnP"
 
+msgctxt "#21361"
+msgid "Look for remote UPnP players"
+msgstr "Шукати віддалені плеєри UPnP"
+
 msgctxt "#21362"
 msgid "Bookmark created"
 msgstr "Закладку створено"
+
+msgctxt "#21363"
+msgid "Episode Bookmark created"
+msgstr "Створено закладку серії"
 
 msgctxt "#21364"
 msgid "Edit media share"
@@ -8353,10 +8533,6 @@ msgctxt "#21365"
 msgid "Remove media share"
 msgstr "Видалити медіаресурс"
 
-msgctxt "#21366"
-msgid "Subtitle folder"
-msgstr "Папка субтитрів"
-
 msgctxt "#21367"
 msgid "Movie & alternate subtitle directory"
 msgstr "Папка для фільмів і альтернативних субтитрів"
@@ -8364,10 +8540,6 @@ msgstr "Папка для фільмів і альтернативних суб�
 msgctxt "#21368"
 msgid "Override ASS/SSA subtitles fonts"
 msgstr "Ігнорувати шрифти субтитрів ASS/SSA"
-
-msgctxt "#21369"
-msgid "Enable mouse and Touch Screen support"
-msgstr "Увімкнути мишу та сенсорний екран"
 
 msgctxt "#21370"
 msgid "Play navigation sounds during media playback"
@@ -8721,9 +8893,9 @@ msgctxt "#21458"
 msgid "Group by"
 msgstr "Групування"
 
-msgctxt "#21460"
-msgid "Subtitle location"
-msgstr "Розміщення субтитрів"
+msgctxt "#21459"
+msgid "mixed"
+msgstr "мікс"
 
 msgctxt "#21461"
 msgid "Fixed"
@@ -8888,6 +9060,18 @@ msgstr "Висота GPS"
 msgctxt "#21843"
 msgid "Orientation"
 msgstr "Орієнтація"
+
+msgctxt "#21857"
+msgid "Sub-location"
+msgstr "Дод. розміщення"
+
+msgctxt "#21858"
+msgid "Image type"
+msgstr "Тим картинки"
+
+msgctxt "#21859"
+msgid "Time created"
+msgstr "Час створення"
 
 msgctxt "#21860"
 msgid "Supplemental categories"
@@ -9334,6 +9518,10 @@ msgid "Enable"
 msgstr "Увімкнути"
 
 msgctxt "#24023"
+msgid "Disabled"
+msgstr "Вимкн."
+
+msgctxt "#24024"
 msgid "Add-on disabled"
 msgstr "Надбудову вимкнено"
 
@@ -9553,6 +9741,10 @@ msgctxt "#24103"
 msgid "Skin is missing some files"
 msgstr "У обкладинці бракує файлів"
 
+msgctxt "#24121"
+msgid "Enter search string"
+msgstr "Рядок пошуку"
+
 msgctxt "#25000"
 msgid "Notifications"
 msgstr "Сповіщення"
@@ -9564,10 +9756,6 @@ msgstr "Приховувати іншомовні"
 msgctxt "#25002"
 msgid "Select from all titles ..."
 msgstr "Вибрати тайтл…"
-
-msgctxt "#25003"
-msgid "Show bluray menus"
-msgstr "Показувати меню BluRay"
 
 msgctxt "#25004"
 msgid "Play main title: %d"
@@ -9922,8 +10110,8 @@ msgid "Flac"
 msgstr "Flac"
 
 msgctxt "#34100"
-msgid "Speaker Configuration"
-msgstr "Конфігурація динаміків"
+msgid "Number of channels"
+msgstr "Кількість каналів"
 
 msgctxt "#34101"
 msgid "2.0"
@@ -10213,10 +10401,6 @@ msgctxt "#36041"
 msgid "* Item folder"
 msgstr "* Папка об'єкту"
 
-msgctxt "#36102"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
 msgctxt "#36105"
 msgid "Change the theme associated with your selected skin."
 msgstr "Змінити тему, що асоційована з вибраною шкіркою."
@@ -10225,29 +10409,13 @@ msgctxt "#36106"
 msgid "Change the colours of your selected skin."
 msgstr "Зміна кольорів вибраної шкірки."
 
-msgctxt "#36108"
-msgid "Resize the view of the GUI."
-msgstr "Змінити розмір вигляду GUI"
-
 msgctxt "#36112"
 msgid "Edit the RSS feeds."
 msgstr "Редагування потоків RSS."
 
-msgctxt "#36113"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
 msgctxt "#36117"
 msgid "Select country location."
 msgstr "Вказати розміщення країни."
-
-msgctxt "#36121"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36128"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
 
 msgctxt "#36135"
 msgid "No info available yet."
@@ -10261,103 +10429,7 @@ msgctxt "#36137"
 msgid "No info available yet."
 msgstr "Ще немає доступної інформації."
 
-msgctxt "#36138"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36139"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36140"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36142"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36151"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36156"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36157"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36158"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36159"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36160"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36161"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36162"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36163"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36173"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36176"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36178"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
 msgctxt "#36181"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36184"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36185"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36186"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36187"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36188"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36189"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36190"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36193"
 msgid "No info available yet."
 msgstr "Ще немає доступної інформації."
 
@@ -10365,127 +10437,19 @@ msgctxt "#36197"
 msgid "No info available yet."
 msgstr "Ще немає доступної інформації."
 
-msgctxt "#36201"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
+msgctxt "#36198"
+msgid "Select the default movie information source. See the Add-ons Manager for options."
+msgstr "Вибір основного джерела відомостей про фільми. Доступні варіанти див. у менеджері надбудов."
 
-msgctxt "#36202"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
+msgctxt "#36199"
+msgid "Select the default TV show information source. See the Add-ons Manager for options."
+msgstr "Вибір основного джерела відомостей про серіали. Доступні варіанти див. у менеджері надбудов."
 
-msgctxt "#36210"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
+msgctxt "#36258"
+msgid "Select the default artist information source. See the Add-ons Manager for options."
+msgstr "Вибір основного джерела відомостей про виконавців. Доступні варіанти див. у менеджері надбудов."
 
-msgctxt "#36211"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36212"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36213"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36214"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36215"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36216"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36217"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36218"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36226"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36230"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36232"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36233"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36240"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36247"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36251"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36252"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36253"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36254"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36264"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36277"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36278"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36279"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36280"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36282"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36292"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36294"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36299"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36300"
+msgctxt "#36260"
 msgid "No info available yet."
 msgstr "Ще немає доступної інформації."
 
@@ -10501,189 +10465,17 @@ msgctxt "#36303"
 msgid "No info available yet."
 msgstr "Ще немає доступної інформації."
 
-msgctxt "#36304"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36305"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
 msgctxt "#36310"
 msgid "No info available yet."
 msgstr "Ще немає доступної інформації."
 
-msgctxt "#36311"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
+msgctxt "#36318"
+msgid "Specify the default weather information source. See the Add-ons Manager for options."
+msgstr "Вибір основного джерела відомостей про погоду. Доступні варіанти див. у менеджері надбудов."
 
-msgctxt "#36315"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36316"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36319"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36320"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36322"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36325"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36327"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36335"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36336"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36337"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36339"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36340"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36341"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36342"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36343"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36344"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36345"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36346"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36347"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36348"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36349"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36351"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36352"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36353"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36359"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36360"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36374"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36375"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36379"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36388"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36392"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36399"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36400"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36401"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36402"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36403"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36404"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36405"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36406"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36407"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36408"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36409"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
+msgctxt "#36332"
+msgid "Select between web interfaces installed via the Add-on Manager."
+msgstr "Вибір доступних веб-інтерфейсів, встановлених за допомогою менеджера надбудов."
 
 msgctxt "#36410"
 msgid "No info available yet."
@@ -10709,14 +10501,10 @@ msgctxt "#36415"
 msgid "No info available yet."
 msgstr "Ще немає доступної інформації."
 
-msgctxt "#36417"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
+msgctxt "#36426"
+msgid "Switch to channel"
+msgstr "Переключитися на канал"
 
-msgctxt "#36418"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
-
-msgctxt "#36420"
-msgid "No info available yet."
-msgstr "Ще немає доступної інформації."
+msgctxt "#36428"
+msgid "Record"
+msgstr "Запис"

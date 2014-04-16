@@ -37,7 +37,6 @@
 #include "VideoShaders/YUV2RGBShader.h"
 #include "VideoShaders/VideoFilterShader.h"
 #include "windowing/WindowingFactory.h"
-#include "dialogs/GUIDialogKaiToast.h"
 #include "guilib/Texture.h"
 #include "guilib/LocalizeStrings.h"
 #include "threads/SingleLock.h"
@@ -48,6 +47,7 @@
 #include "RenderCapture.h"
 #include "RenderFormats.h"
 #include "cores/IPlayer.h"
+#include "cores/dvdplayer/DVDCodecs/DVDCodecUtils.h"
 
 #ifdef HAVE_LIBVDPAU
 #include "cores/dvdplayer/DVDCodecs/Video/VDPAU.h"
@@ -742,10 +742,27 @@ unsigned int CLinuxRendererGL::PreInit()
 
   m_iYV12RenderBuffer = 0;
 
+  m_formats.clear();
   m_formats.push_back(RENDER_FMT_YUV420P);
   GLint size;
   glTexImage2D(GL_PROXY_TEXTURE_2D, 0, GL_LUMINANCE16, NP2(1920), NP2(1080), 0, GL_LUMINANCE, GL_UNSIGNED_SHORT, NULL);
   glGetTexLevelParameteriv(GL_PROXY_TEXTURE_2D, 0, GL_TEXTURE_LUMINANCE_SIZE, &size);
+#ifdef TARGET_DARWIN_OSX
+  /* From VLC commit 701d1347faa29f52b0a04c587724deb6de1ae28e
+   * OpenGL 1.x on OS X does _not_ support 16bit shaders, but pretends to.
+   * That's why we enforce return false here, even though the actual code below
+   * would return true.
+   * This fixes playback of 10bit content on the Intel GMA 950 chipset, which is
+   * the only "GPU" supported by 10.6 and 10.7 with just an OpenGL 1.4 driver.
+   *
+   * Presumely, this also improves playback on the GMA 3100, GeForce FX 5200,
+   * GeForce4 Ti, GeForce3, GeForce2 MX/4 MX and the Radeon 8500 when
+   * running OS X 10.5. */
+  unsigned int maj, min;
+  g_Windowing.GetRenderVersion(maj, min);
+  if (maj < 2)
+    size = 8;
+#endif
   if(size >= 16)
   {
     m_formats.push_back(RENDER_FMT_YUV420P10);
@@ -901,7 +918,6 @@ void CLinuxRendererGL::UpdateVideoFilter()
     break;
   }
 
-  CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Error, g_localizeStrings.Get(34400), g_localizeStrings.Get(34401));
   CLog::Log(LOGERROR, "GL: Falling back to bilinear due to failure to init scaler");
   if (m_pVideoFilterShader)
   {
@@ -3099,9 +3115,11 @@ void CLinuxRendererGL::ToRGBFrame(YV12Image* im, unsigned flipIndexPlane, unsign
   int      srcStride[4] = {};
   int      srcFormat    = -1;
 
-  if (m_format == RENDER_FMT_YUV420P)
+  if (m_format == RENDER_FMT_YUV420P ||
+      m_format == RENDER_FMT_YUV420P10 ||
+      m_format == RENDER_FMT_YUV420P16)
   {
-    srcFormat = PIX_FMT_YUV420P;
+    srcFormat = CDVDCodecUtils::PixfmtFromEFormat(m_format);
     for (int i = 0; i < 3; i++)
     {
       src[i]       = im->plane[i];

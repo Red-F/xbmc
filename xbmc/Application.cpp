@@ -337,6 +337,7 @@
 #if defined(TARGET_ANDROID)
 #include "android/activity/XBMCApp.h"
 #include "android/activity/AndroidFeatures.h"
+#include "android/jni/Build.h"
 #endif
 
 #ifdef TARGET_WINDOWS
@@ -515,23 +516,66 @@ bool CApplication::OnEvent(XBMC_Event& newEvent)
       return g_application.OnAppCommand(newEvent.appcommand.action);
     case XBMC_TOUCH:
     {
-      int windowId = g_windowManager.GetActiveWindow() & WINDOW_ID_MASK;
-
       if (newEvent.touch.action == ACTION_TOUCH_TAP)
       { // Send a mouse motion event with no dx,dy for getting the current guiitem selected
         g_application.OnAction(CAction(ACTION_MOUSE_MOVE, 0, newEvent.touch.x, newEvent.touch.y, 0, 0));
       }
       int actionId = 0;
       if (newEvent.touch.action == ACTION_GESTURE_BEGIN || newEvent.touch.action == ACTION_GESTURE_END)
-      {
         actionId = newEvent.touch.action;
-        windowId = WINDOW_INVALID;
+      else
+      {
+        int iWin = g_windowManager.GetActiveWindow() & WINDOW_ID_MASK;
+        // change this if we have a dialog up
+        if (g_windowManager.HasModalDialog())
+        {
+          iWin = g_windowManager.GetTopMostModalDialogID() & WINDOW_ID_MASK;
+        }
+        if (iWin == WINDOW_DIALOG_FULLSCREEN_INFO)
+        { // fullscreen info dialog - special case
+          CButtonTranslator::GetInstance().TranslateTouchAction(iWin, newEvent.touch.action, newEvent.touch.pointers, actionId);
+          if (actionId <= 0)
+            iWin = WINDOW_FULLSCREEN_VIDEO;  // fallthrough to the main window
+        }
+        if (actionId <= 0)
+        {
+          if (iWin == WINDOW_FULLSCREEN_VIDEO)
+          {
+            // current active window is full screen video.
+            if (g_application.m_pPlayer->IsInMenu())
+            {
+              // if player is in some sort of menu, (ie DVDMENU) map buttons differently
+              CButtonTranslator::GetInstance().TranslateTouchAction(WINDOW_VIDEO_MENU, newEvent.touch.action, newEvent.touch.pointers, actionId);
+            }
+            else if (g_PVRManager.IsStarted() && g_application.CurrentFileItem().HasPVRChannelInfoTag())
+            {
+              // check for PVR specific keymaps in FULLSCREEN_VIDEO window
+              CButtonTranslator::GetInstance().TranslateTouchAction(WINDOW_FULLSCREEN_LIVETV, newEvent.touch.action, newEvent.touch.pointers, actionId);
+
+              // if no PVR specific action/mapping is found, fall back to default
+              if (actionId <= 0)
+                CButtonTranslator::GetInstance().TranslateTouchAction(iWin, newEvent.touch.action, newEvent.touch.pointers, actionId);
+            }
+            else
+            {
+              // in any other case use the fullscreen window section of keymap.xml to map key->action
+              CButtonTranslator::GetInstance().TranslateTouchAction(iWin, newEvent.touch.action, newEvent.touch.pointers, actionId);
+            }
+          }
+          else  // iWin != WINDOW_FULLSCREEN_VIDEO
+            CButtonTranslator::GetInstance().TranslateTouchAction(iWin, newEvent.touch.action, newEvent.touch.pointers, actionId);
+        }
       }
-      else if (!CButtonTranslator::GetInstance().TranslateTouchAction(newEvent.touch.action, newEvent.touch.pointers, windowId, actionId) ||
-          actionId <= 0)
+
+      if (actionId <= 0)
         return false;
 
-      CApplicationMessenger::Get().SendAction(CAction(actionId, 0, newEvent.touch.x, newEvent.touch.y, newEvent.touch.x2, newEvent.touch.y2), windowId, false);
+      if ((actionId >= ACTION_TOUCH_TAP && actionId <= ACTION_GESTURE_END)
+          || (actionId >= ACTION_MOUSE_START && actionId <= ACTION_MOUSE_END) )
+        CApplicationMessenger::Get().SendAction(CAction(actionId, 0, newEvent.touch.x, newEvent.touch.y, newEvent.touch.x2, newEvent.touch.y2), WINDOW_INVALID, false);
+      else
+        CApplicationMessenger::Get().SendAction(CAction(actionId), WINDOW_INVALID, false);
+
       // Post an unfocus message for touch device after the action.
       if (newEvent.touch.action == ACTION_GESTURE_END || newEvent.touch.action == ACTION_TOUCH_TAP)
       {
@@ -540,6 +584,13 @@ bool CApplication::OnEvent(XBMC_Event& newEvent)
       }
       break;
     }
+    case XBMC_SETFOCUS:
+      // Reset the screensaver
+      g_application.ResetScreenSaver();
+      g_application.WakeUpScreenSaverAndDPMS();
+      // Send a mouse motion event with no dx,dy for getting the current guiitem selected
+      g_application.OnAction(CAction(ACTION_MOUSE_MOVE, 0, newEvent.focus.x, newEvent.focus.y, 0, 0));
+      break;
   }
   return true;
 }
@@ -684,6 +735,8 @@ bool CApplication::Create()
   CLog::Log(LOGNOTICE, "Running on Darwin iOS %d-bit %s%s", g_sysinfo.GetKernelBitness(), g_sysinfo.IsAppleTV2() ? "(AppleTV2) " : "", g_sysinfo.GetUnameVersion().c_str());
 #elif defined(TARGET_FREEBSD)
   CLog::Log(LOGNOTICE, "Running on FreeBSD %d-bit %s", g_sysinfo.GetKernelBitness(), g_sysinfo.GetUnameVersion().c_str());
+#elif defined(TARGET_ANDROID)
+  CLog::Log(LOGNOTICE, "Running on Android %d-bit API level %d (%s, %s)", g_sysinfo.GetKernelBitness(), CJNIBuild::SDK_INT, g_sysinfo.GetLinuxDistro().c_str(), g_sysinfo.GetUnameVersion().c_str());
 #elif defined(TARGET_POSIX)
   CLog::Log(LOGNOTICE, "Running on Linux %d-bit (%s, %s)", g_sysinfo.GetKernelBitness(), g_sysinfo.GetLinuxDistro().c_str(), g_sysinfo.GetUnameVersion().c_str());
 #elif defined(TARGET_WINDOWS)
@@ -696,6 +749,13 @@ bool CApplication::Create()
   CLog::Log(LOGNOTICE, "Running with %s rights", (CWIN32Util::IsCurrentUserLocalAdministrator() == TRUE) ? "administrator" : "restricted");
   CLog::Log(LOGNOTICE, "Aero is %s", (g_sysinfo.IsAeroDisabled() == true) ? "disabled" : "enabled");
 #endif
+#if defined(TARGET_ANDROID)
+  CLog::Log(LOGNOTICE,
+        "Product: %s, Device: %s, Board: %s - Manufacturer: %s, Brand: %s, Model: %s, Hardware: %s",
+        CJNIBuild::PRODUCT.c_str(), CJNIBuild::DEVICE.c_str(), CJNIBuild::BOARD.c_str(),
+        CJNIBuild::MANUFACTURER.c_str(), CJNIBuild::BRAND.c_str(), CJNIBuild::MODEL.c_str(), CJNIBuild::HARDWARE.c_str());
+#endif
+
 #if defined(__arm__)
   if (g_cpuInfo.GetCPUFeatures() & CPU_FEATURE_NEON)
     CLog::Log(LOGNOTICE, "ARM Features: Neon enabled");
@@ -1577,9 +1637,12 @@ void CApplication::OnSettingChanged(const CSetting *setting)
   {
     // if the skin changes and the current theme is not the default one, reset
     // the theme to the default value (which will also change lookandfeel.skincolors
-    // which in turn will reload the skin
+    // which in turn will reload the skin.  Similarly, if the current skin font is not
+    // the default, reset it as well.
     if (settingId == "lookandfeel.skin" && CSettings::Get().GetString("lookandfeel.skintheme") != "SKINDEFAULT")
       CSettings::Get().SetString("lookandfeel.skintheme", "SKINDEFAULT");
+    else if (settingId == "lookandfeel.skin" && CSettings::Get().GetString("lookandfeel.font") != "Default")
+      CSettings::Get().SetString("lookandfeel.font", "Default");
     else
     {
       std::string builtin("ReloadSkin");
@@ -1606,7 +1669,10 @@ void CApplication::OnSettingChanged(const CSetting *setting)
       CApplicationMessenger::Get().ExecBuiltIn("ReloadSkin");
   }
   else if (settingId == "lookandfeel.skinzoom")
-    g_windowManager.SendMessage(GUI_MSG_NOTIFY_ALL, 0, 0, GUI_MSG_WINDOW_RESIZE);
+  {
+    CGUIMessage msg(GUI_MSG_NOTIFY_ALL, 0, 0, GUI_MSG_WINDOW_RESIZE);
+    g_windowManager.SendThreadMessage(msg);
+  }
   else if (StringUtils::StartsWithNoCase(settingId, "audiooutput."))
   {
     // AE is master of audio settings and needs to be informed first
@@ -2630,7 +2696,8 @@ bool CApplication::OnAction(const CAction &action)
 
   // Now check with the player if action can be handled.
   if (g_windowManager.GetActiveWindow() == WINDOW_FULLSCREEN_VIDEO ||
-      (g_windowManager.GetActiveWindow() == WINDOW_DIALOG_VIDEO_OSD && (action.GetID() == ACTION_NEXT_ITEM || action.GetID() == ACTION_PREV_ITEM || action.GetID() == ACTION_CHANNEL_UP || action.GetID() == ACTION_CHANNEL_DOWN)))
+      (g_windowManager.GetActiveWindow() == WINDOW_DIALOG_VIDEO_OSD && (action.GetID() == ACTION_NEXT_ITEM || action.GetID() == ACTION_PREV_ITEM || action.GetID() == ACTION_CHANNEL_UP || action.GetID() == ACTION_CHANNEL_DOWN)) ||
+      action.GetID() == ACTION_STOP)
   {
     if (m_pPlayer->OnAction(action))
       return true;
@@ -2745,6 +2812,13 @@ bool CApplication::OnAction(const CAction &action)
         g_application.m_pPlayer->SetPlaySpeed(1, g_application.m_muted);
         return true;
       }
+    }
+
+    // record current file
+    if (action.GetID() == ACTION_RECORD)
+    {
+      if (m_pPlayer->CanRecord())
+        m_pPlayer->Record(!m_pPlayer->IsRecording());
     }
 
     if (m_playerController->OnAction(action))
@@ -3478,12 +3552,12 @@ void CApplication::Stop(int exitCode)
 
     CApplicationMessenger::Get().Cleanup();
 
+    CLog::Log(LOGNOTICE, "stop player");
+    m_pPlayer->ClosePlayer();
+
     StopPVRManager();
     StopServices();
     //Sleep(5000);
-
-    CLog::Log(LOGNOTICE, "stop player");
-    m_pPlayer->ClosePlayer();
 
 #if HAS_FILESYTEM_DAAP
     CLog::Log(LOGNOTICE, "stop daap clients");
@@ -4517,14 +4591,17 @@ bool CApplication::WakeUpScreenSaver(bool bPowerOffKeyPressed /* = false */)
     m_iScreenSaveLock = 0;
     ResetScreenSaverTimer();
 
-    if (m_screenSaver->ID() == "screensaver.xbmc.builtin.dim" || m_screenSaver->ID() == "screensaver.xbmc.builtin.black" || m_screenSaver->ID().empty())
+    if (m_screenSaver->ID() == "visualization")
+    {
+      // we can just continue as usual from vis mode
+      return false;
+    }
+    else if (m_screenSaver->ID() == "screensaver.xbmc.builtin.dim" || m_screenSaver->ID() == "screensaver.xbmc.builtin.black" || m_screenSaver->ID().empty())
       return true;
     else if (!m_screenSaver->ID().empty())
     { // we're in screensaver window
-      if (g_windowManager.GetActiveWindow() == WINDOW_SCREENSAVER
-          || g_windowManager.GetActiveWindow() == WINDOW_VISUALISATION)
+      if (g_windowManager.GetActiveWindow() == WINDOW_SCREENSAVER)
         g_windowManager.PreviousWindow();  // show the previous window
-
       if (g_windowManager.GetActiveWindow() == WINDOW_SLIDESHOW)
         CApplicationMessenger::Get().SendAction(CAction(ACTION_STOP), WINDOW_SLIDESHOW);
     }
@@ -4595,6 +4672,12 @@ void CApplication::CheckScreenSaverAndDPMS()
 // the type of screensaver displayed
 void CApplication::ActivateScreenSaver(bool forceType /*= false */)
 {
+  if (m_pPlayer->IsPlayingAudio() && CSettings::Get().GetBool("screensaver.usemusicvisinstead") && !CSettings::Get().GetString("musicplayer.visualisation").empty())
+  { // just activate the visualisation if user toggled the usemusicvisinstead option
+    g_windowManager.ActivateWindow(WINDOW_VISUALISATION);
+    return;
+  }
+
   m_bScreenSave = true;
 
   // Get Screensaver Mode
@@ -4613,15 +4696,6 @@ void CApplication::ActivateScreenSaver(bool forceType /*= false */)
     {
       if (!CAddonMgr::Get().GetAddon("screensaver.xbmc.builtin.dim", m_screenSaver))
         m_screenSaver.reset(new CScreenSaver(""));
-    }
-    // Check if we are Playing Audio and Vis instead Screensaver!
-    else if (m_pPlayer->IsPlayingAudio() && CSettings::Get().GetBool("screensaver.usemusicvisinstead") && !CSettings::Get().GetString("musicplayer.visualisation").empty())
-    { // activate the visualisation
-      m_screenSaver.reset(new CScreenSaver("visualization"));
-      // prevent music info popup if vis is already running
-      if (g_windowManager.GetActiveWindow() != WINDOW_VISUALISATION)
-        g_windowManager.ActivateWindow(WINDOW_VISUALISATION);
-      return;
     }
   }
   if (m_screenSaver->ID() == "screensaver.xbmc.builtin.dim" || m_screenSaver->ID().empty())
@@ -4644,24 +4718,12 @@ void CApplication::SetInBackground(bool background)
 void CApplication::CheckShutdown()
 {
   // first check if we should reset the timer
-  bool resetTimer = m_bInhibitIdleShutdown;
-
-  if (m_pPlayer->IsPlaying() || m_pPlayer->IsPausedPlayback()) // is something playing?
-    resetTimer = true;
-
-  if (m_musicInfoScanner->IsScanning())
-    resetTimer = true;
-
-  if (m_videoInfoScanner->IsScanning())
-    resetTimer = true;
-
-  if (g_windowManager.IsWindowActive(WINDOW_DIALOG_PROGRESS)) // progress dialog is onscreen
-    resetTimer = true;
-
-  if (CSettings::Get().GetBool("pvrmanager.enabled") &&  !g_PVRManager.IsIdle())
-    resetTimer = true;
-
-  if (resetTimer)
+  if (m_bInhibitIdleShutdown
+      || m_pPlayer->IsPlaying() || m_pPlayer->IsPausedPlayback() // is something playing?
+      || m_musicInfoScanner->IsScanning()
+      || m_videoInfoScanner->IsScanning()
+      || g_windowManager.IsWindowActive(WINDOW_DIALOG_PROGRESS) // progress dialog is onscreen
+      || (CSettings::Get().GetBool("pvrmanager.enabled") && !g_PVRManager.IsIdle()))
   {
     m_shutdownTimer.StartZero();
     return;
@@ -4932,7 +4994,6 @@ bool CApplication::ExecuteXBMCAction(std::string actionStr)
   //We don't know if there is unsecure information in this yet, so we
   //postpone any logging
   const std::string in_actionStr(actionStr);
-  CLog::Log(LOGDEBUG,"%s : Translating action string", __FUNCTION__);
   CGUIInfoLabel info(actionStr, "");
   actionStr = info.GetLabel(0);
 
@@ -5128,6 +5189,7 @@ void CApplication::ProcessSlow()
     CAddonInstaller::Get().UpdateRepos();
 
   CAEFactory::GarbageCollect();
+
 }
 
 // Global Idle Time in Seconds
@@ -5214,6 +5276,14 @@ CFileItem& CApplication::CurrentFileItem()
   return *m_itemCurrentFile;
 }
 
+CFileItem& CApplication::CurrentUnstackedItem()
+{
+  if (m_itemCurrentFile->IsStack() && m_currentStack->Size() > 0)
+    return *(*m_currentStack)[m_currentStackPosition];
+  else
+    return *m_itemCurrentFile;
+}
+
 void CApplication::ShowVolumeBar(const CAction *action)
 {
   CGUIDialog *volumeBar = (CGUIDialog *)g_windowManager.GetWindow(WINDOW_DIALOG_VOLUME_BAR);
@@ -5285,16 +5355,7 @@ void CApplication::SetHardwareVolume(float hardwareVolume)
   hardwareVolume = std::max(VOLUME_MINIMUM, std::min(VOLUME_MAXIMUM, hardwareVolume));
   m_volumeLevel = hardwareVolume;
 
-  float value = 0.0f;
-  if (hardwareVolume > VOLUME_MINIMUM)
-  {
-    float dB = CAEUtil::PercentToGain(hardwareVolume);
-    value = CAEUtil::GainToScale(dB);
-  }
-  if (value >= 0.99f)
-    value = 1.0f;
-
-  CAEFactory::SetVolume(value);
+  CAEFactory::SetVolume(hardwareVolume);
 }
 
 float CApplication::GetVolume(bool percentage /* = true */) const

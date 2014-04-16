@@ -22,20 +22,7 @@
 #include "AEFactory.h"
 #include "Utils/AEUtil.h"
 
-#if defined(TARGET_DARWIN)
-  #include "Engines/CoreAudio/CoreAudioAE.h"
-  #include "settings/lib/SettingsManager.h"
-#else
-  #include "Engines/ActiveAE/ActiveAE.h"
-#endif
-
-#if defined(HAS_PULSEAUDIO)
-  #include "Engines/PulseAE/PulseAE.h"
-#endif
-
-#if defined(TARGET_RASPBERRY_PI)
-  #include "Engines/PiAudio/PiAudioAE.h"
-#endif
+#include "Engines/ActiveAE/ActiveAE.h"
 
 #include "guilib/LocalizeStrings.h"
 #include "settings/lib/Setting.h"
@@ -53,38 +40,7 @@ IAE *CAEFactory::GetEngine()
 
 bool CAEFactory::LoadEngine()
 {
-  bool loaded = false;
-
-#if defined(TARGET_RASPBERRY_PI)
-  return CAEFactory::LoadEngine(AE_ENGINE_PIAUDIO);
-#elif defined(TARGET_DARWIN)
-  return CAEFactory::LoadEngine(AE_ENGINE_COREAUDIO);
-#endif
-
-  std::string engine;
-  if (getenv("AE_ENGINE"))
-  {
-    engine = (std::string)getenv("AE_ENGINE");
-    std::transform(engine.begin(), engine.end(), engine.begin(), ::toupper);
-
-    #if defined(HAS_PULSEAUDIO)
-    if (!loaded && engine == "PULSE")
-      loaded = CAEFactory::LoadEngine(AE_ENGINE_PULSE);
-    #endif
-    
-    if (!loaded && engine == "ACTIVE")
-      loaded = CAEFactory::LoadEngine(AE_ENGINE_ACTIVE);
-  }
-
-#if defined(HAS_PULSEAUDIO)
-  if (!loaded)
-    loaded = CAEFactory::LoadEngine(AE_ENGINE_PULSE);
-#endif
-
-  if (!loaded)
-    loaded = CAEFactory::LoadEngine(AE_ENGINE_ACTIVE);
-
-  return loaded;
+  return CAEFactory::LoadEngine(AE_ENGINE_ACTIVE);
 }
 
 bool CAEFactory::LoadEngine(enum AEEngine engine)
@@ -96,17 +52,7 @@ bool CAEFactory::LoadEngine(enum AEEngine engine)
   switch(engine)
   {
     case AE_ENGINE_NULL     :
-#if defined(TARGET_DARWIN)
-    case AE_ENGINE_COREAUDIO: AE = new CCoreAudioAE(); break;
-#else
     case AE_ENGINE_ACTIVE   : AE = new ActiveAE::CActiveAE(); break;
-#endif
-#if defined(HAS_PULSEAUDIO)
-    case AE_ENGINE_PULSE    : AE = new CPulseAE(); break;
-#endif
-#if defined(TARGET_RASPBERRY_PI)
-    case AE_ENGINE_PIAUDIO  : AE = new PiAudioAE::CPiAudioAE(); break;
-#endif
     default:
       return false;
   }
@@ -234,7 +180,7 @@ std::string CAEFactory::GetDefaultDevice(bool passthrough)
   return "default";
 }
 
-bool CAEFactory::SupportsRaw(AEDataFormat format)
+bool CAEFactory::SupportsRaw(AEDataFormat format, int samplerate)
 {
   // check if passthrough is enabled
   if (!CSettings::Get().GetBool("audiooutput.passthrough"))
@@ -257,7 +203,7 @@ bool CAEFactory::SupportsRaw(AEDataFormat format)
     return false;
 
   if(AE)
-    return AE->SupportsRaw(format);
+    return AE->SupportsRaw(format, samplerate);
 
   return false;
 }
@@ -396,12 +342,10 @@ void CAEFactory::SettingOptionsAudioDevicesFillerGeneral(const CSetting *setting
   bool foundValue = false;
   AEDeviceList sinkList;
   EnumerateOutputDevices(sinkList, passthrough);
-#if !defined(TARGET_DARWIN)
   if (sinkList.size() == 0)
     list.push_back(std::make_pair("Error - no devices found", "error"));
   else
   {
-#endif
     for (AEDeviceList::const_iterator sink = sinkList.begin(); sink != sinkList.end(); ++sink)
     {
       if (sink == sinkList.begin())
@@ -412,9 +356,7 @@ void CAEFactory::SettingOptionsAudioDevicesFillerGeneral(const CSetting *setting
       if (StringUtils::EqualsNoCase(current, sink->second))
         foundValue = true;
     }
-#if !defined(TARGET_DARWIN)
   }
-#endif
 
   if (!foundValue)
     current = firstDevice;
@@ -444,4 +386,10 @@ void CAEFactory::KeepConfiguration(unsigned int millis)
 {
   if (AE)
     AE->KeepConfiguration(millis);
+}
+
+void CAEFactory::DeviceChange()
+{
+  if (AE)
+    AE->DeviceChange();
 }

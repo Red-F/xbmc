@@ -42,6 +42,7 @@
 #include "threads/Atomics.h"
 #include "windows/GUIWindowPVRCommon.h"
 #include "utils/JobManager.h"
+#include "interfaces/AnnouncementManager.h"
 
 #include "PVRManager.h"
 #include "PVRDatabase.h"
@@ -62,6 +63,7 @@ using namespace std;
 using namespace MUSIC_INFO;
 using namespace PVR;
 using namespace EPG;
+using namespace ANNOUNCEMENT;
 
 CPVRManager::CPVRManager(void) :
     CThread("PVRManager"),
@@ -79,13 +81,24 @@ CPVRManager::CPVRManager(void) :
     m_managerState(ManagerStateStopped),
     m_bOpenPVRWindow(false)
 {
+  CAnnouncementManager::AddAnnouncer(this);
   ResetProperties();
 }
 
 CPVRManager::~CPVRManager(void)
 {
+  CAnnouncementManager::RemoveAnnouncer(this);
   Stop();
   CLog::Log(LOGDEBUG,"PVRManager - destroyed");
+}
+
+void CPVRManager::Announce(AnnouncementFlag flag, const char *sender, const char *message, const CVariant &data)
+{
+  if (!IsStarted() || (flag & (System)) == 0)
+   return;
+
+  if (strcmp(message, "OnWake") == 0)
+    ContinueLastChannel();
 }
 
 CPVRManager &CPVRManager::Get(void)
@@ -285,6 +298,8 @@ void CPVRManager::Cleanup(void)
     delete m_pendingUpdates.at(iJobPtr);
   m_pendingUpdates.clear();
 
+  HideProgressDialog();
+
   SetState(ManagerStateStopped);
 }
 
@@ -435,9 +450,14 @@ void CPVRManager::Process(void)
   while (IsStarted() && m_addons && m_addons->HasConnectedClients() && !bRestart)
   {
     /* continue last watched channel after first startup */
-    if (m_bFirstStart && CSettings::Get().GetInt("pvrplayback.startlast") != START_LAST_CHANNEL_OFF)
+    if (m_bFirstStart)
+    {
+      {
+        CSingleLock lock(m_critSection);
+        m_bFirstStart = false;
+      }
       ContinueLastChannel();
-
+    }
     /* execute the next pending jobs if there are any */
     try
     {
@@ -636,22 +656,17 @@ bool CPVRManager::ChannelUpDown(unsigned int *iNewChannelNumber, bool bPreview, 
 
 bool CPVRManager::ContinueLastChannel(void)
 {
-  {
-    CSingleLock lock(m_critSection);
-    if (!m_bFirstStart)
-      return true;
-    m_bFirstStart = false;
-  }
+  if (CSettings::Get().GetInt("pvrplayback.startlast") == START_LAST_CHANNEL_OFF)
+    return false;
 
-  bool bReturn(false);
   CFileItemPtr channel = m_channelGroups->GetLastPlayedChannel();
   if (channel && channel->HasPVRChannelInfoTag())
   {
     CLog::Log(LOGNOTICE, "PVRManager - %s - continue playback on channel '%s'", __FUNCTION__, channel->GetPVRChannelInfoTag()->ChannelName().c_str());
-    bReturn = StartPlayback(channel->GetPVRChannelInfoTag(), (CSettings::Get().GetInt("pvrplayback.startlast") == START_LAST_CHANNEL_MIN));
+    return StartPlayback(channel->GetPVRChannelInfoTag(), (CSettings::Get().GetInt("pvrplayback.startlast") == START_LAST_CHANNEL_MIN));
   }
 
-  return bReturn;
+  return false;
 }
 
 void CPVRManager::ResetDatabase(bool bResetEPGOnly /* = false */)
@@ -973,6 +988,8 @@ bool CPVRManager::OpenLiveStream(const CFileItem &channel)
       CDateTime::GetCurrentDateTime().GetAsTime(tNow);
       playingChannel->SetLastWatched(tNow);
       bPersistChannel = true;
+
+      m_channelGroups->SetLastPlayedGroup(GetPlayingGroup(playingChannel->IsRadio()));
     }
   }
 
@@ -986,9 +1003,6 @@ bool CPVRManager::OpenRecordedStream(const CPVRRecording &tag)
 {
   bool bReturn = false;
   CSingleLock lock(m_critSection);
-
-  CLog::Log(LOGDEBUG,"PVRManager - %s - opening recorded stream '%s'",
-      __FUNCTION__, tag.m_strFile.c_str());
 
   if ((bReturn = m_addons->OpenStream(tag)) != false)
   {
@@ -1014,6 +1028,8 @@ void CPVRManager::CloseStream(void)
       CDateTime::GetCurrentDateTime().GetAsTime(tNow);
       channel->SetLastWatched(tNow);
       bPersistChannel = true;
+
+      m_channelGroups->SetLastPlayedGroup(GetPlayingGroup(channel->IsRadio()));
     }
 
     m_addons->CloseStream();
@@ -1216,6 +1232,8 @@ bool CPVRManager::PerformChannelSwitch(const CPVRChannel &channel, bool bPreview
     time_t tNow;
     CDateTime::GetCurrentDateTime().GetAsTime(tNow);
     currentChannel->SetLastWatched(tNow);
+
+    m_channelGroups->SetLastPlayedGroup(GetPlayingGroup(currentChannel->IsRadio()));
   }
 
   // store channel settings
@@ -1315,10 +1333,8 @@ bool CPVRManager::IsIdle(void) const
     const CDateTime next = m_timers->GetNextEventTime();
     const CDateTimeSpan delta = next - now;
 
-    if (delta < idle)
-    {
+    if (delta <= idle)
       return false;
-    }
   }
 
   return true;

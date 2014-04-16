@@ -384,7 +384,7 @@ namespace PVR
      */
     CDateTime GetLastEPGDate(void) const;
 
-    bool UpdateChannel(const CFileItem &channel, bool bHidden, bool bVirtual, bool bEPGEnabled, bool bParentalLocked, int iEPGSource, int iChannelNumber, const CStdString &strChannelName, const CStdString &strIconPath, const CStdString &strStreamURL);
+    bool UpdateChannel(const CFileItem &channel, bool bHidden, bool bVirtual, bool bEPGEnabled, bool bParentalLocked, int iEPGSource, int iChannelNumber, const CStdString &strChannelName, const CStdString &strIconPath, const CStdString &strStreamURL, bool bUserSetIcon = false);
 
     bool ToggleChannelLocked(const CFileItem &channel);
 
@@ -397,6 +397,13 @@ namespace PVR
      * @return The channel or NULL if it wasn't found.
      */
     CPVRChannelPtr GetByClient(int iUniqueChannelId, int iClientID) const;
+
+    /*!
+     * @brief Get a channel given it's unique ID.
+     * @param iUniqueID The unique ID.
+     * @return The channel or NULL if it wasn't found.
+     */
+    CPVRChannelPtr GetByUniqueID(int iUniqueID) const;
 
     void SetSelectedGroup(bool bSetTo);
     bool IsSelectedGroup(void) const;
@@ -486,13 +493,6 @@ namespace PVR
     CFileItemPtr GetByChannelUpDown(const CFileItem &channel, bool bChannelUp) const;
 
     void ResetChannelNumbers(void);
-
-    /*!
-     * @brief Get a channel given it's unique ID.
-     * @param iUniqueID The unique ID.
-     * @return The channel or NULL if it wasn't found.
-     */
-    CPVRChannelPtr GetByUniqueID(int iUniqueID) const;
 
     /*!
      * @brief Get a channel given it's channel ID.

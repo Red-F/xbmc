@@ -32,6 +32,7 @@
 class CJNISurface;
 class CJNISurfaceTexture;
 class CJNIMediaCodec;
+class CJNIMediaFormat;
 class CDVDMediaCodecOnFrameAvailable;
 class CJNIByteBuffer;
 class CBitstreamConverter;
@@ -104,9 +105,9 @@ public:
 
 protected:
   void            FlushInternal(void);
-  void            ConfigureMediaCodec(void);
+  bool            ConfigureMediaCodec(void);
   int             GetOutputPicture(void);
-  void            OutputFormatChanged(void);
+  void            ConfigureOutputFormat(CJNIMediaFormat* mediaformat);
 
   // surface handling functions
   static void     CallbackInitSurfaceTexture(void*);
@@ -116,6 +117,7 @@ protected:
   CDVDStreamInfo  m_hints;
   std::string     m_mime;
   std::string     m_codecname;
+  int             m_colorFormat;
   const char     *m_formatname;
   bool            m_opened;
   bool            m_drop;

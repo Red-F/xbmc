@@ -198,16 +198,7 @@ void CGUIWindowPVRCommon::OnWindowUnload(void)
 
 bool CGUIWindowPVRCommon::OnAction(const CAction &action)
 {
-  bool bReturn = false;
-
-  if (action.GetID() == ACTION_NAV_BACK ||
-      action.GetID() == ACTION_PREVIOUS_MENU)
-  {
-    g_windowManager.PreviousWindow();
-    bReturn = true;
-  }
-
-  return bReturn;
+  return false; // CGUIWindowPVR will handle any default actions
 }
 
 bool CGUIWindowPVRCommon::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
@@ -665,7 +656,7 @@ bool CGUIWindowPVRCommon::PlayRecording(CFileItem *item, bool bPlayMinimized /* 
   }
   else
   {
-    CLog::Log(LOGERROR, "PVRManager - %s - can't open recording: no valid filename", __FUNCTION__);
+    CLog::Log(LOGERROR, "CGUIWindowPVRCommon - %s - can't open recording: no valid filename", __FUNCTION__);
     CGUIDialogOK::ShowAndGetInput(19033,0,19036,0);
     return false;
   }

@@ -21,11 +21,11 @@
 #define INITGUID
 
 #include "AESinkDirectSound.h"
-#include "utils/Log.h"
+#include "utils/log.h"
 #include <initguid.h>
-#include <Mmreg.h>
 #include <list>
 #include "threads/SingleLock.h"
+#include "threads/SystemClock.h"
 #include "utils/SystemInfo.h"
 #include "utils/TimeUtils.h"
 #include "utils/CharsetConverter.h"
@@ -232,10 +232,10 @@ bool CAESinkDirectSound::Initialize(AEAudioFormat &format, std::string &device)
 
   m_AvgBytesPerSec = wfxex.Format.nAvgBytesPerSec;
 
-  unsigned int uiFrameCount = (int)(format.m_sampleRate * 0.01); //default to 10ms chunks
+  unsigned int uiFrameCount = (int)(format.m_sampleRate * 0.015); //default to 15ms chunks
   m_dwFrameSize = wfxex.Format.nBlockAlign;
   m_dwChunkSize = m_dwFrameSize * uiFrameCount;
-  m_dwBufferLen = m_dwChunkSize * 12; //120ms total buffer
+  m_dwBufferLen = m_dwChunkSize * 12; //180ms total buffer
 
   // fill in the secondary sound buffer descriptor
   DSBUFFERDESC dsbdesc;
@@ -332,47 +332,6 @@ void CAESinkDirectSound::Deinitialize()
   m_CacheLen = 0;
   m_dwChunkSize = 0;
   m_dwBufferLen = 0;
-}
-
-bool CAESinkDirectSound::IsCompatible(const AEAudioFormat &format, const std::string &device)
-{
-  if (!m_initialized || m_isDirtyDS)
-    return false;
-
-  u_int notCompatible         = 0;
-  const u_int numTests        = 6;
-  std::string strDiffBecause ("");
-  static const char* compatibleParams[numTests] = {":Devices",
-                                                   ":Channels",
-                                                   ":Sample Rates",
-                                                   ":Data Formats",
-                                                   ":Bluray Formats",
-                                                   ":Passthrough Formats"};
-
-  notCompatible = (notCompatible  +!((AE_IS_RAW(format.m_dataFormat)  == AE_IS_RAW(m_encodedFormat))        ||
-                                     (!AE_IS_RAW(format.m_dataFormat) == !AE_IS_RAW(m_encodedFormat))))     << 1;
-  notCompatible = (notCompatible  + ((format.m_dataFormat             == AE_FMT_EAC3)                       ||
-                                     (format.m_dataFormat             == AE_FMT_DTSHD                       ||
-                                     (format.m_dataFormat             == AE_FMT_TRUEHD))))                  << 1;
-  notCompatible = (notCompatible  + !(format.m_dataFormat             == m_format.m_dataFormat))            << 1;
-  notCompatible = (notCompatible  + !(format.m_sampleRate             == m_format.m_sampleRate))            << 1;
-  notCompatible = (notCompatible  + !(format.m_channelLayout.Count()  == m_format.m_channelLayout.Count())) << 1;
-  notCompatible = (notCompatible  + !(m_device                        == device));
-
-  if (!notCompatible)
-  {
-    CLog::Log(LOGDEBUG, __FUNCTION__": Formats compatible - reusing existing sink");
-    return true;
-  }
-
-  for (int i = 0; i < numTests ; i++)
-  {
-    strDiffBecause += (notCompatible & 0x01) ? (std::string) compatibleParams[i] : "";
-    notCompatible    = notCompatible >> 1;
-  }
-
-  CLog::Log(LOGDEBUG, __FUNCTION__": Formats Incompatible due to different %s", strDiffBecause.c_str());
-  return false;
 }
 
 unsigned int CAESinkDirectSound::AddPackets(uint8_t *data, unsigned int frames, bool hasAudio, bool blocking)
@@ -475,19 +434,6 @@ double CAESinkDirectSound::GetDelay()
   /* Make sure we know how much data is in the cache */
   if (!UpdateCacheStatus())
     m_isDirtyDS = true;
-
-  /** returns current cached data duration in seconds */
-  double delay = (double)m_CacheLen / (double)m_AvgBytesPerSec;
-  return delay;
-}
-
-double CAESinkDirectSound::GetCacheTime()
-{
-  if (!m_initialized)
-    return 0.0;
-
-  /* Make sure we know how much data is in the cache */
-  UpdateCacheStatus();
 
   /** returns current cached data duration in seconds */
   double delay = (double)m_CacheLen / (double)m_AvgBytesPerSec;
@@ -602,7 +548,12 @@ void CAESinkDirectSound::EnumerateDevicesEx(AEDeviceInfoList &deviceInfoList, bo
       WAVEFORMATEX* smpwfxex = (WAVEFORMATEX*)varName.blob.pBlobData;
       deviceInfo.m_channels = layoutsByChCount[std::max(std::min(smpwfxex->nChannels, (WORD) DS_SPEAKER_COUNT), (WORD) 2)];
       deviceInfo.m_dataFormats.push_back(AEDataFormat(AE_FMT_FLOAT));
-      deviceInfo.m_dataFormats.push_back(AEDataFormat(AE_FMT_AC3));
+      if (aeDeviceType != AE_DEVTYPE_PCM)
+      {
+        deviceInfo.m_dataFormats.push_back(AEDataFormat(AE_FMT_AC3));
+        // DTS is played with the same infrastructure as AC3
+        deviceInfo.m_dataFormats.push_back(AEDataFormat(AE_FMT_DTS));
+      }
       deviceInfo.m_sampleRates.push_back(std::min(smpwfxex->nSamplesPerSec, (DWORD) 192000));
     }
     else
@@ -616,7 +567,7 @@ void CAESinkDirectSound::EnumerateDevicesEx(AEDeviceInfoList &deviceInfoList, bo
 
     deviceInfo.m_deviceName       = strDevName;
     deviceInfo.m_displayName      = strWinDevType.append(strFriendlyName);
-    deviceInfo.m_displayNameExtra = std::string("DirectSound: ").append(strFriendlyName);
+    deviceInfo.m_displayNameExtra = std::string("DIRECTSOUND: ").append(strFriendlyName);
     deviceInfo.m_deviceType       = aeDeviceType;
 
     deviceInfoList.push_back(deviceInfo);

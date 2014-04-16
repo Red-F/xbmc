@@ -42,7 +42,6 @@
 #include "VideoShaders/YUV2RGBShader.h"
 #include "VideoShaders/VideoFilterShader.h"
 #include "windowing/WindowingFactory.h"
-#include "dialogs/GUIDialogKaiToast.h"
 #include "guilib/Texture.h"
 #include "lib/DllSwScale.h"
 #include "../dvdplayer/DVDCodecs/Video/OpenMaxVideo.h"
@@ -588,6 +587,7 @@ unsigned int CLinuxRendererGLES::PreInit()
   m_iYV12RenderBuffer = 0;
   m_NumYV12Buffers = 2;
 
+  m_formats.clear();
   m_formats.push_back(RENDER_FMT_YUV420P);
   m_formats.push_back(RENDER_FMT_NV12);
   m_formats.push_back(RENDER_FMT_BYPASS);
@@ -663,7 +663,6 @@ void CLinuxRendererGLES::UpdateVideoFilter()
     break;
   }
 
-  CGUIDialogKaiToast::QueueNotification("Video Renderering", "Failed to init video filters/scalers, falling back to bilinear scaling");
   CLog::Log(LOGERROR, "GL: Falling back to bilinear due to failure to init scaler");
   if (m_pVideoFilterShader)
   {
@@ -1417,10 +1416,10 @@ void CLinuxRendererGLES::RenderEglImage(int index, int field)
   }
 
   // Set texture coordinates (is flipped in y)
-  tex[0][0] = tex[3][0] = 0;
-  tex[0][1] = tex[1][1] = 1;
-  tex[1][0] = tex[2][0] = 1;
-  tex[2][1] = tex[3][1] = 0;
+  tex[0][0] = tex[3][0] = plane.rect.x1;
+  tex[0][1] = tex[1][1] = plane.rect.y2;
+  tex[1][0] = tex[2][0] = plane.rect.x2;
+  tex[2][1] = tex[3][1] = plane.rect.y1;
 
   glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, idx);
 
@@ -1482,10 +1481,10 @@ void CLinuxRendererGLES::RenderSurfaceTexture(int index, int field)
   }
 
   // Set texture coordinates (MediaCodec is flipped in y)
-  tex[0][0] = tex[3][0] = 0.0f;
-  tex[0][1] = tex[1][1] = 1.0f;
-  tex[1][0] = tex[2][0] = 1.0f;
-  tex[2][1] = tex[3][1] = 0.0f;
+  tex[0][0] = tex[3][0] = plane.rect.x1;
+  tex[0][1] = tex[1][1] = plane.rect.y2;
+  tex[1][0] = tex[2][0] = plane.rect.x2;
+  tex[2][1] = tex[3][1] = plane.rect.y1;
 
   for(int i = 0; i < 4; i++)
   {
@@ -1558,10 +1557,10 @@ void CLinuxRendererGLES::RenderCoreVideoRef(int index, int field)
   }
 
   // Set texture coordinates (corevideo is flipped in y)
-  tex[0][0] = tex[3][0] = 0;
-  tex[0][1] = tex[1][1] = 1;
-  tex[1][0] = tex[2][0] = 1;
-  tex[2][1] = tex[3][1] = 0;
+  tex[0][0] = tex[3][0] = plane.rect.x1;
+  tex[0][1] = tex[1][1] = plane.rect.y2;
+  tex[1][0] = tex[2][0] = plane.rect.x2;
+  tex[2][1] = tex[3][1] = plane.rect.y1;
 
   glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, idx);
 
@@ -2454,6 +2453,27 @@ void CLinuxRendererGLES::DeleteSurfaceTexture(int index)
 }
 bool CLinuxRendererGLES::CreateSurfaceTexture(int index)
 {
+  YV12Image &im     = m_buffers[index].image;
+  YUVFIELDS &fields = m_buffers[index].fields;
+  YUVPLANE  &plane  = fields[0][0];
+
+  memset(&im    , 0, sizeof(im));
+  memset(&fields, 0, sizeof(fields));
+
+  im.height = m_sourceHeight;
+  im.width  = m_sourceWidth;
+
+  plane.texwidth  = im.width;
+  plane.texheight = im.height;
+  plane.pixpertex_x = 1;
+  plane.pixpertex_y = 1;
+
+  if(m_renderMethod & RENDER_POT)
+  {
+    plane.texwidth  = NP2(plane.texwidth);
+    plane.texheight = NP2(plane.texheight);
+  }
+
   return true;
 }
 

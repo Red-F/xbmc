@@ -395,29 +395,80 @@ bool URIUtils::GetParentPath(const CStdString& strPath, CStdString& strParent)
   return true;
 }
 
+std::string URLEncodePath(const std::string& strPath)
+{
+  vector<string> segments = StringUtils::Split(strPath, "/");
+  for (vector<string>::iterator i = segments.begin(); i != segments.end(); ++i)
+    *i = CURL::Encode(*i);
+
+  return StringUtils::Join(segments, "/");
+}
+
+std::string URLDecodePath(const std::string& strPath)
+{
+  vector<string> segments = StringUtils::Split(strPath, "/");
+  for (vector<string>::iterator i = segments.begin(); i != segments.end(); ++i)
+    *i = CURL::Decode(*i);
+
+  return StringUtils::Join(segments, "/");
+}
+
+std::string URIUtils::ChangeBasePath(const std::string &fromPath, const std::string &fromFile, const std::string &toPath)
+{
+  std::string toFile = fromFile;
+
+  // Convert back slashes to forward slashes, if required
+  if (IsDOSPath(fromPath) && !IsDOSPath(toPath))
+    StringUtils::Replace(toFile, "\\", "/");
+
+  // Handle difference in URL encoded vs. not encoded
+  if ( ProtocolHasEncodedFilename(CURL(fromPath).GetProtocol() )
+   && !ProtocolHasEncodedFilename(CURL(toPath).GetProtocol() ) )
+  {
+    toFile = URLDecodePath(toFile); // Decode path
+  }
+  else if (!ProtocolHasEncodedFilename(CURL(fromPath).GetProtocol() )
+         && ProtocolHasEncodedFilename(CURL(toPath).GetProtocol() ) )
+  {
+    toFile = URLEncodePath(toFile); // Encode path
+  }
+
+  // Convert forward slashes to back slashes, if required
+  if (!IsDOSPath(fromPath) && IsDOSPath(toPath))
+    StringUtils::Replace(toFile, "/", "\\");
+
+  return AddFileToFolder(toPath, toFile);
+}
+
 CStdString URIUtils::SubstitutePath(const CStdString& strPath, bool reverse /* = false */)
 {
   for (CAdvancedSettings::StringMapping::iterator i = g_advancedSettings.m_pathSubstitutions.begin();
       i != g_advancedSettings.m_pathSubstitutions.end(); i++)
   {
+    CStdString fromPath;
+    CStdString toPath;
+
     if (!reverse)
     {
-      if (strncmp(strPath.c_str(), i->first.c_str(), HasSlashAtEnd(i->first.c_str()) ? i->first.size()-1 : i->first.size()) == 0)
-      {
-        if (strPath.size() > i->first.size())
-          return URIUtils::AddFileToFolder(i->second, strPath.substr(i->first.size()));
-        else
-          return i->second;
-      }
+      fromPath = i->first;  // Fake path
+      toPath = i->second;   // Real path
     }
     else
     {
-      if (strncmp(strPath.c_str(), i->second.c_str(), HasSlashAtEnd(i->second.c_str()) ? i->second.size()-1 : i->second.size()) == 0)
+      fromPath = i->second; // Real path
+      toPath = i->first;    // Fake path
+    }
+
+    if (strncmp(strPath.c_str(), fromPath.c_str(), HasSlashAtEnd(fromPath) ? fromPath.size() - 1 : fromPath.size()) == 0)
+    {
+      if (strPath.size() > fromPath.size())
       {
-        if (strPath.size() > i->second.size())
-          return URIUtils::AddFileToFolder(i->first, strPath.substr(i->second.size()));
-        else
-          return i->first;
+        CStdString strSubPathAndFileName = strPath.substr(fromPath.size());
+        return ChangeBasePath(fromPath, strSubPathAndFileName, toPath); // Fix encoding + slash direction
+      }
+      else
+      {
+        return toPath;
       }
     }
   }
@@ -429,11 +480,11 @@ bool URIUtils::IsRemote(const CStdString& strFile)
   if (IsCDDA(strFile) || IsISO9660(strFile))
     return false;
 
+  if (IsStack(strFile))
+    return IsRemote(CStackDirectory::GetFirstStackedFile(strFile));
+
   if (IsSpecial(strFile))
     return IsRemote(CSpecialProtocol::TranslatePath(strFile));
-
-  if(IsStack(strFile))
-    return IsRemote(CStackDirectory::GetFirstStackedFile(strFile));
 
   if(IsMultiPath(strFile))
   { // virtual paths need to be checked separately
@@ -569,11 +620,11 @@ bool URIUtils::IsHD(const CStdString& strFileName)
 {
   CURL url(strFileName);
 
+  if (IsStack(strFileName))
+    return IsHD(CStackDirectory::GetFirstStackedFile(strFileName));
+
   if (IsSpecial(strFileName))
     return IsHD(CSpecialProtocol::TranslatePath(strFileName));
-
-  if(IsStack(strFileName))
-    return IsHD(CStackDirectory::GetFirstStackedFile(strFileName));
 
   if (ProtocolHasParentInHostname(url.GetProtocol()))
     return IsHD(url.GetHostName());
@@ -895,6 +946,14 @@ bool URIUtils::IsLibraryFolder(const CStdString& strFile)
   return url.GetProtocol().Equals("library");
 }
 
+bool URIUtils::IsLibraryContent(const std::string &strFile)
+{
+  return (StringUtils::StartsWith(strFile, "library://") ||
+          StringUtils::StartsWith(strFile, "videodb://") ||
+          StringUtils::StartsWith(strFile, "musicdb://") ||
+          StringUtils::EndsWith(strFile, ".xsp"));
+}
+
 bool URIUtils::IsDOSPath(const CStdString &path)
 {
   if (path.size() > 1 && path[1] == ':' && isalpha(path[0]))
@@ -1008,6 +1067,39 @@ std::string URIUtils::FixSlashesAndDups(const std::string& path, const char slas
 }
 
 
+std::string URIUtils::CanonicalizePath(const std::string& path, const char slashCharacter /*= '\\'*/)
+{
+  assert(slashCharacter == '\\' || slashCharacter == '/');
+
+  if (path.empty())
+    return path;
+
+  const std::string slashStr(1, slashCharacter);
+  vector<std::string> pathVec, resultVec;
+  StringUtils::Tokenize(path, pathVec, slashStr);
+
+  for (vector<std::string>::const_iterator it = pathVec.begin(); it != pathVec.end(); ++it)
+  {
+    if (*it == ".")
+    { /* skip - do nothing */ }
+    else if (*it == ".." && !resultVec.empty() && resultVec.back() != "..")
+      resultVec.pop_back();
+    else
+      resultVec.push_back(*it);
+  }
+
+  std::string result;
+  if (path[0] == slashCharacter)
+    result.push_back(slashCharacter); // add slash at the begin
+
+  result += StringUtils::Join(resultVec, slashStr);
+
+  if (path[path.length() - 1] == slashCharacter  && !result.empty() && result[result.length() - 1] != slashCharacter)
+    result.push_back(slashCharacter); // add slash at the end if result isn't empty and result isn't "/"
+
+  return result;
+}
+
 CStdString URIUtils::AddFileToFolder(const CStdString& strFolder, 
                                 const CStdString& strFile)
 {
@@ -1062,24 +1154,17 @@ void URIUtils::CreateArchivePath(CStdString& strUrlPath,
                                  const CStdString& strFilePathInArchive,
                                  const CStdString& strPwd)
 {
-  CStdString strBuffer;
-
   strUrlPath = strType+"://";
 
   if( !strPwd.empty() )
   {
-    strBuffer = strPwd;
-    CURL::Encode(strBuffer);
-    strUrlPath += strBuffer;
+    strUrlPath += CURL::Encode(strPwd);
     strUrlPath += "@";
   }
 
-  strBuffer = strArchivePath;
-  CURL::Encode(strBuffer);
+  strUrlPath += CURL::Encode(strArchivePath);
 
-  strUrlPath += strBuffer;
-
-  strBuffer = strFilePathInArchive;
+  CStdString strBuffer(strFilePathInArchive);
   StringUtils::Replace(strBuffer, '\\', '/');
   StringUtils::TrimLeft(strBuffer, "/");
 
@@ -1088,7 +1173,7 @@ void URIUtils::CreateArchivePath(CStdString& strUrlPath,
 
 #if 0 // options are not used
   strBuffer = strCachePath;
-  CURL::Encode(strBuffer);
+  strBuffer = CURL::Encode(strBuffer);
 
   strUrlPath += "?cache=";
   strUrlPath += strBuffer;
@@ -1139,12 +1224,13 @@ std::string URIUtils::resolvePath(const std::string &path)
   }
 
   CStdString realPath;
-  int i = 0;
   // re-add any / or \ at the beginning
-  while (path.at(i) == delim.at(0))
+  for (std::string::const_iterator itPath = path.begin(); itPath != path.end(); ++itPath)
   {
+    if (*itPath != delim.at(0))
+      break;
+
     realPath += delim;
-    i++;
   }
   // put together the path
   realPath += StringUtils::Join(realParts, delim);

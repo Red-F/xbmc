@@ -181,8 +181,6 @@ class CAdvancedSettings : public ISettingCallback, public ISettingsHandler
     float m_videoNonLinStretchRatio;
     bool  m_videoEnableHighQualityHwScalers;
     float m_videoAutoScaleMaxFps;
-    bool  m_videoAllowMpeg4VDPAU;
-    bool  m_videoAllowMpeg4VAAPI;
     std::vector<RefreshOverride> m_videoAdjustRefreshOverrides;
     std::vector<RefreshVideoLatency> m_videoRefreshLatency;
     float m_videoDefaultLatency;
@@ -358,7 +356,6 @@ class CAdvancedSettings : public ISettingCallback, public ISettingsHandler
     /* PVR/TV related advanced settings */
     int m_iPVRTimeCorrection;     /*!< @brief correct all times (epg tags, timer tags, recording tags) by this amount of minutes. defaults to 0. */
     int m_iPVRInfoToggleInterval; /*!< @brief if there are more than 1 pvr gui info item available (e.g. multiple recordings active at the same time), use this toggle delay in milliseconds. defaults to 3000. */
-    bool m_bPVRShowEpgInfoOnEpgItemSelect; /*!< @brief when selecting an EPG fileitem, show the EPG info dialog if this setting is true. start playback on the selected channel if false AND fileitem has started */
     int m_iPVRMinVideoCacheLevel;      /*!< @brief cache up to this level in the video buffer buffer before resuming playback if the buffers run dry */
     int m_iPVRMinAudioCacheLevel;      /*!< @brief cache up to this level in the audio buffer before resuming playback if the buffers run dry */
     bool m_bPVRCacheInDvdPlayer; /*!< @brief true to use "CACHESTATE_PVR" in CDVDPlayer (default) */
@@ -403,8 +400,9 @@ class CAdvancedSettings : public ISettingCallback, public ISettingsHandler
     CStdString m_discStubExtensions;
     CStdString m_subtitlesExtensions;
 
-    CStdString m_stereoscopicflags_sbs;
-    CStdString m_stereoscopicflags_tab;
+    CStdString m_stereoscopicregex_3d;
+    CStdString m_stereoscopicregex_sbs;
+    CStdString m_stereoscopicregex_tab;
 
     CStdString m_logFolder;
 

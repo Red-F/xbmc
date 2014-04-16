@@ -2162,7 +2162,6 @@ INFO::InfoPtr CGUIInfoManager::Register(const CStdString &expression, int contex
 {
   CStdString condition(CGUIInfoLabel::ReplaceLocalize(expression));
   StringUtils::Trim(condition);
-  StringUtils::ToLower(condition);
 
   if (condition.empty())
     return INFO::InfoPtr();
@@ -2972,9 +2971,9 @@ bool CGUIInfoManager::GetMultiInfoBool(const GUIInfo &info, int contextWindow, c
         }
       case VIDEOPLAYER_CONTENT:
         {
-          CStdString strContent="movies";
-          if (!m_currentFile->HasVideoInfoTag() || m_currentFile->GetVideoInfoTag()->IsEmpty())
-            strContent = "files";
+          CStdString strContent="files";
+          if (m_currentFile->HasVideoInfoTag() && m_currentFile->GetVideoInfoTag()->m_type == "movie")
+            strContent = "movies";
           if (m_currentFile->HasVideoInfoTag() && m_currentFile->GetVideoInfoTag()->m_iSeason > -1) // episode
             strContent = "episodes";
           if (m_currentFile->HasVideoInfoTag() && !m_currentFile->GetVideoInfoTag()->m_artist.empty())
@@ -4467,7 +4466,8 @@ CStdString CGUIInfoManager::GetItemLabel(const CFileItem *item, int info, CStdSt
       CStdString track;
       if (item->HasMusicInfoTag())
         track = StringUtils::Format("%i", item->GetMusicInfoTag()->GetTrackNumber());
-
+      if (item->HasVideoInfoTag() && item->GetVideoInfoTag()->m_iTrack > -1 )
+        track = StringUtils::Format("%i", item->GetVideoInfoTag()->m_iTrack);
       return track;
     }
   case LISTITEM_DISC_NUMBER:
@@ -4747,7 +4747,6 @@ CStdString CGUIInfoManager::GetItemLabel(const CFileItem *item, int info, CStdSt
         URIUtils::RemoveSlashAtEnd(path);
         path=URIUtils::GetFileName(path);
       }
-      CURL::Decode(path);
       return path;
     }
   case LISTITEM_FILENAME_AND_PATH:
@@ -4760,7 +4759,6 @@ CStdString CGUIInfoManager::GetItemLabel(const CFileItem *item, int info, CStdSt
       else
         path = item->GetPath();
       path = CURL(path).GetWithoutUserDetails();
-      CURL::Decode(path);
       return path;
     }
   case LISTITEM_PICTURE_PATH:

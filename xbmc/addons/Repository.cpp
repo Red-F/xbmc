@@ -107,6 +107,9 @@ CRepository::~CRepository()
 
 string CRepository::Checksum() const
 {
+  /* This code is duplicated in CRepositoryUpdateJob::GrabAddons().
+   * If you make changes here, they may be applicable there, too.
+   */
   string result;
   for (DirList::const_iterator it  = m_dirs.begin(); it != m_dirs.end(); ++it)
   {
@@ -145,7 +148,7 @@ string CRepository::GetAddonHash(const AddonPtr& addon) const
   string checksum;
   DirList::const_iterator it;
   for (it = m_dirs.begin();it != m_dirs.end(); ++it)
-    if (it->datadir == addon->Path())
+    if (URIUtils::IsInPath(addon->Path(), it->datadir))
       break;
   if (it != m_dirs.end() && it->hashes)
   {
@@ -212,14 +215,31 @@ CRepositoryUpdateJob::CRepositoryUpdateJob(const VECADDONS &repos)
 {
 }
 
+void MergeAddons(map<string, AddonPtr> &addons, const VECADDONS &new_addons)
+{
+  for (VECADDONS::const_iterator it = new_addons.begin(); it != new_addons.end(); ++it)
+  {
+    map<string, AddonPtr>::iterator existing = addons.find((*it)->ID());
+    if (existing != addons.end())
+    { // already got it - replace if we have a newer version
+      if (existing->second->Version() < (*it)->Version())
+        existing->second = *it;
+    }
+    else
+      addons.insert(make_pair((*it)->ID(), *it));
+  }
+}
+
 bool CRepositoryUpdateJob::DoWork()
 {
-  VECADDONS addons;
+  map<string, AddonPtr> addons;
   for (VECADDONS::const_iterator i = m_repos.begin(); i != m_repos.end(); ++i)
   {
+    if (ShouldCancel(0, 0))
+      return false;
     RepositoryPtr repo = boost::dynamic_pointer_cast<CRepository>(*i);
     VECADDONS newAddons = GrabAddons(repo);
-    addons.insert(addons.end(), newAddons.begin(), newAddons.end());
+    MergeAddons(addons, newAddons);
   }
   if (addons.empty())
     return false;
@@ -227,65 +247,86 @@ bool CRepositoryUpdateJob::DoWork()
   // check for updates
   CAddonDatabase database;
   database.Open();
-  
+  database.BeginMultipleExecute();
+
   CTextureDatabase textureDB;
   textureDB.Open();
-  for (unsigned int i=0;i<addons.size();++i)
+  textureDB.BeginMultipleExecute();
+  VECADDONS notifications;
+  for (map<string, AddonPtr>::const_iterator i = addons.begin(); i != addons.end(); ++i)
   {
     // manager told us to feck off
     if (ShouldCancel(0,0))
       break;
 
-    bool deps_met = CAddonInstaller::Get().CheckDependencies(addons[i]);
-    if (!deps_met && addons[i]->Props().broken.empty())
-      addons[i]->Props().broken = "DEPSNOTMET";
+    AddonPtr newAddon = i->second;
+    bool deps_met = CAddonInstaller::Get().CheckDependencies(newAddon, &database);
+    if (!deps_met && newAddon->Props().broken.empty())
+      newAddon->Props().broken = "DEPSNOTMET";
 
     // invalidate the art associated with this item
-    if (!addons[i]->Props().fanart.empty())
-      textureDB.InvalidateCachedTexture(addons[i]->Props().fanart);
-    if (!addons[i]->Props().icon.empty())
-      textureDB.InvalidateCachedTexture(addons[i]->Props().icon);
+    if (!newAddon->Props().fanart.empty())
+      textureDB.InvalidateCachedTexture(newAddon->Props().fanart);
+    if (!newAddon->Props().icon.empty())
+      textureDB.InvalidateCachedTexture(newAddon->Props().icon);
 
     AddonPtr addon;
-    CAddonMgr::Get().GetAddon(addons[i]->ID(),addon);
-    if (addon && addons[i]->Version() > addon->Version() &&
-        !database.IsAddonBlacklisted(addons[i]->ID(),addons[i]->Version().c_str()) &&
+    CAddonMgr::Get().GetAddon(newAddon->ID(),addon);
+    if (addon && newAddon->Version() > addon->Version() &&
+        !database.IsAddonBlacklisted(newAddon->ID(),newAddon->Version().c_str()) &&
         deps_met)
     {
       if (CSettings::Get().GetBool("general.addonautoupdate") || addon->Type() >= ADDON_VIZ_LIBRARY)
       {
         string referer;
-        if (URIUtils::IsInternetStream(addons[i]->Path()))
+        if (URIUtils::IsInternetStream(newAddon->Path()))
           referer = StringUtils::Format("Referer=%s-%s.zip",addon->ID().c_str(),addon->Version().c_str());
 
-        if (addons[i]->Type() == ADDON_PVRDLL &&
-            !PVR::CPVRManager::Get().InstallAddonAllowed(addons[i]->ID()))
+        if (newAddon->Type() == ADDON_PVRDLL &&
+            !PVR::CPVRManager::Get().InstallAddonAllowed(newAddon->ID()))
           PVR::CPVRManager::Get().MarkAsOutdated(addon->ID(), referer);
         else
           CAddonInstaller::Get().Install(addon->ID(), true, referer);
       }
-      else if (CSettings::Get().GetBool("general.addonnotifications"))
-      {
-        CGUIDialogKaiToast::QueueNotification(addon->Icon(),
-                                              g_localizeStrings.Get(24061),
-                                              addon->Name(),TOAST_DISPLAY_TIME,false,TOAST_DISPLAY_TIME);
-      }
+      else
+        notifications.push_back(addon);
     }
-    if (!addons[i]->Props().broken.empty())
+
+    // Check if we should mark the add-on as broken.  We may have a newer version
+    // of this add-on in the database or installed - if so, we keep it unbroken.
+    bool haveNewer = (addon && addon->Version() > newAddon->Version()) ||
+                     database.GetAddonVersion(newAddon->ID()) > newAddon->Version();
+    if (!haveNewer)
     {
-      if (database.IsAddonBroken(addons[i]->ID()).empty())
+      if (!newAddon->Props().broken.empty())
       {
-        std::string line = g_localizeStrings.Get(24096);
-        if (addons[i]->Props().broken == "DEPSNOTMET")
-          line = g_localizeStrings.Get(24104);
-        if (addon && CGUIDialogYesNo::ShowAndGetInput(addons[i]->Name(),
-                                             line,
-                                             g_localizeStrings.Get(24097),
-                                             ""))
-          CAddonMgr::Get().DisableAddon(addons[i]->ID());
+        if (database.IsAddonBroken(newAddon->ID()).empty())
+        {
+          std::string line = g_localizeStrings.Get(24096);
+          if (newAddon->Props().broken == "DEPSNOTMET")
+            line = g_localizeStrings.Get(24104);
+          if (addon && CGUIDialogYesNo::ShowAndGetInput(newAddon->Name(),
+                                               line,
+                                               g_localizeStrings.Get(24097),
+                                               ""))
+            CAddonMgr::Get().DisableAddon(newAddon->ID());
+        }
       }
+      database.BreakAddon(newAddon->ID(), newAddon->Props().broken);
     }
-    database.BreakAddon(addons[i]->ID(), addons[i]->Props().broken);
+  }
+  database.CommitMultipleExecute();
+  textureDB.CommitMultipleExecute();
+  if (!notifications.empty() && CSettings::Get().GetBool("general.addonnotifications"))
+  {
+    if (notifications.size() == 1)
+      CGUIDialogKaiToast::QueueNotification(notifications[0]->Icon(),
+                                            g_localizeStrings.Get(24061),
+                                            notifications[0]->Name(),TOAST_DISPLAY_TIME,false,TOAST_DISPLAY_TIME);
+    else
+      CGUIDialogKaiToast::QueueNotification("",
+                                            g_localizeStrings.Get(24001),
+                                            g_localizeStrings.Get(24061),TOAST_DISPLAY_TIME,false,TOAST_DISPLAY_TIME);
   }
 
   return true;
@@ -294,28 +335,32 @@ bool CRepositoryUpdateJob::DoWork()
 VECADDONS CRepositoryUpdateJob::GrabAddons(RepositoryPtr& repo)
 {
   CAddonDatabase database;
+  VECADDONS addons;
   database.Open();
   string checksum;
   database.GetRepoChecksum(repo->ID(),checksum);
-  string reposum = repo->Checksum();
-  VECADDONS addons;
+  string reposum;
+
+  /* This for loop is duplicated in CRepository::Checksum().
+   * If you make changes here, they may be applicable there, too.
+   */
+  for (CRepository::DirList::const_iterator it  = repo->m_dirs.begin(); it != repo->m_dirs.end(); ++it)
+  {
+    if (ShouldCancel(0, 0))
+      return addons;
+    if (!it->checksum.empty())
+      reposum += CRepository::FetchChecksum(it->checksum);
+  }
+
   if (checksum != reposum || checksum.empty())
   {
     map<string, AddonPtr> uniqueAddons;
     for (CRepository::DirList::const_iterator it = repo->m_dirs.begin(); it != repo->m_dirs.end(); ++it)
     {
+      if (ShouldCancel(0, 0))
+        return addons;
       VECADDONS addons2 = CRepository::Parse(*it);
-      for (VECADDONS::const_iterator it2 = addons2.begin(); it2 != addons2.end(); ++it2)
-      {
-        map<string, AddonPtr>::iterator existing = uniqueAddons.find((*it2)->ID());
-        if (existing != uniqueAddons.end())
-        { // already got it - replace if we have a newer version
-          if (existing->second->Version() < (*it2)->Version())
-            existing->second = *it2;
-        }
-        else
-          uniqueAddons.insert(make_pair((*it2)->ID(), *it2));
-      }
+      MergeAddons(uniqueAddons, addons2);
     }
 
     if (uniqueAddons.empty())

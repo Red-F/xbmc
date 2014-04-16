@@ -24,10 +24,11 @@
 
 #include "ActiveAESink.h"
 #include "ActiveAEResample.h"
-#include "Interfaces/AEStream.h"
-#include "Interfaces/AESound.h"
-#include "AEFactory.h"
+#include "cores/AudioEngine/Interfaces/AEStream.h"
+#include "cores/AudioEngine/Interfaces/AESound.h"
+#include "cores/AudioEngine/AEFactory.h"
 #include "guilib/DispResource.h"
+#include <queue>
 
 // ffmpeg
 #include "DllAvFormat.h"
@@ -50,6 +51,7 @@ struct AudioSettings
   std::string passthoughdevice;
   int channels;
   bool ac3passthrough;
+  bool ac3transcode;
   bool eac3passthrough;
   bool dtspassthrough;
   bool truehdpassthrough;
@@ -72,6 +74,7 @@ public:
     INIT = 0,
     RECONFIGURE,
     SUSPEND,
+    DEVICECHANGE,
     MUTE,
     VOLUME,
     PAUSESTREAM,
@@ -86,6 +89,7 @@ public:
     GETSTATE,
     DISPLAYLOST,
     DISPLAYRESET,
+    APPFOCUSED,
     KEEPCONFIG,
     TIMEOUT,
   };
@@ -163,11 +167,13 @@ public:
   float GetWaterLevel();
   void SetSuspended(bool state);
   void SetSinkCacheTotal(float time) { m_sinkCacheTotal = time; }
+  void SetSinkLatency(float time) { m_sinkLatency = time; }
   bool IsSuspended();
   CCriticalSection *GetLock() { return &m_lock; }
 protected:
   float m_sinkDelay;
   float m_sinkCacheTotal;
+  float m_sinkLatency;
   int m_bufferedSamples;
   unsigned int m_sinkSampleRate;
   unsigned int m_sinkUpdate;
@@ -175,7 +181,7 @@ protected:
   CCriticalSection m_lock;
 };
 
-#if defined(HAS_GLX) || defined(TARGET_DARWIN_OSX)
+#if defined(HAS_GLX) || defined(TARGET_DARWIN)
 class CActiveAE : public IAE, public IDispResource, private CThread
 #else
 class CActiveAE : public IAE, private CThread
@@ -216,17 +222,19 @@ public:
 
   virtual void EnumerateOutputDevices(AEDeviceList &devices, bool passthrough);
   virtual std::string GetDefaultDevice(bool passthrough);
-  virtual bool SupportsRaw(AEDataFormat format);
+  virtual bool SupportsRaw(AEDataFormat format, int samplerate);
   virtual bool SupportsSilenceTimeout();
   virtual bool SupportsQualityLevel(enum AEQuality level);
   virtual bool IsSettingVisible(const std::string &settingId);
   virtual void KeepConfiguration(unsigned int millis);
+  virtual void DeviceChange();
 
   virtual void RegisterAudioCallback(IAudioCallback* pCallback);
   virtual void UnregisterAudioCallback();
 
   virtual void OnLostDevice();
   virtual void OnResetDevice();
+  virtual void OnAppFocusChange(bool focus);
 
 protected:
   void PlaySound(CActiveAESound *sound);
@@ -250,7 +258,6 @@ protected:
   bool InitSink();
   void DrainSink();
   void UnconfigureSink();
-  bool IsSinkCompatible(const AEAudioFormat &format, const std::string &device);
   void Start();
   void Dispose();
   void LoadSettings();
@@ -290,6 +297,7 @@ protected:
   XbmcThreads::EndTime m_extDrainTimer;
   unsigned int m_extKeepConfig;
   bool m_extDeferData;
+  std::queue<time_t> m_extLastDeviceChange;
 
   enum
   {
@@ -307,6 +315,7 @@ protected:
   AudioSettings m_settings;
   CEngineStats m_stats;
   IAEEncoder *m_encoder;
+  std::string m_currDevice;
 
   // buffers
   CActiveAEBufferPoolResample *m_sinkBuffers;
@@ -328,7 +337,8 @@ protected:
   std::list<SoundState> m_sounds_playing;
   std::vector<CActiveAESound*> m_sounds;
 
-  float m_volume;
+  float m_volume; // volume on a 0..1 scale corresponding to a proportion along the dB scale
+  float m_volumeScaled; // multiplier to scale samples in order to achieve the volume specified in m_volume
   bool m_muted;
   bool m_sinkHasVolume;
 

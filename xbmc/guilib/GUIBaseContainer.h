@@ -89,6 +89,10 @@ public:
    */
   void SetRenderOffset(const CPoint &offset);
 
+  void SetAutoScrolling(const TiXmlNode *node);
+  void ResetAutoScrolling();
+  void UpdateAutoScrolling(unsigned int currentTime);
+
 #ifdef _DEBUG
   virtual void DumpTextureUse();
 #endif
@@ -118,7 +122,7 @@ protected:
   virtual int GetCurrentPage() const;
   bool InsideLayout(const CGUIListItemLayout *layout, const CPoint &point) const;
   virtual void OnFocus();
-  void UpdateListProvider(bool refreshItems = false);
+  void UpdateListProvider(bool forceRefresh = false);
 
   int ScrollCorrectionRange() const;
   inline float Size() const;
@@ -193,6 +197,14 @@ protected:
    \sa GetOffset
   */
   inline int GetItemOffset() const { return CorrectOffset(GetOffset(), 0); }
+
+  // autoscrolling
+  INFO::InfoPtr m_autoScrollCondition;
+  int           m_autoScrollMoveTime;   // time between to moves
+  unsigned int  m_autoScrollDelayTime;  // current offset into the delay
+  bool          m_autoScrollIsReversed; // scroll backwards
+
+  unsigned int m_lastRenderTime;
 
 private:
   int m_cursor;

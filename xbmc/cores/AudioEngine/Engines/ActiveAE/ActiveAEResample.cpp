@@ -25,6 +25,9 @@ using namespace ActiveAE;
 CActiveAEResample::CActiveAEResample()
 {
   m_pContext = NULL;
+  m_loaded = false;
+  if (m_dllAvUtil.Load() && m_dllSwResample.Load())
+    m_loaded = true;
 }
 
 CActiveAEResample::~CActiveAEResample()
@@ -38,7 +41,7 @@ CActiveAEResample::~CActiveAEResample()
 
 bool CActiveAEResample::Init(uint64_t dst_chan_layout, int dst_channels, int dst_rate, AVSampleFormat dst_fmt, int dst_bits, uint64_t src_chan_layout, int src_channels, int src_rate, AVSampleFormat src_fmt, int src_bits, bool upmix, bool normalize, CAEChannelInfo *remapLayout, AEQuality quality)
 {
-  if (!m_dllAvUtil.Load() || !m_dllSwResample.Load())
+  if (!m_loaded)
     return false;
 
   m_dst_chan_layout = dst_chan_layout;
@@ -60,6 +63,13 @@ bool CActiveAEResample::Init(uint64_t dst_chan_layout, int dst_channels, int dst
   m_pContext = m_dllSwResample.swr_alloc_set_opts(NULL, m_dst_chan_layout, m_dst_fmt, m_dst_rate,
                                                         m_src_chan_layout, m_src_fmt, m_src_rate,
                                                         0, NULL);
+
+  if(!m_pContext)
+  {
+    CLog::Log(LOGERROR, "CActiveAEResample::Init - create context failed");
+    return false;
+  }
+
   if(quality == AE_QUALITY_HIGH)
   {
     m_dllAvUtil.av_opt_set_double(m_pContext, "cutoff", 1.0, 0);
@@ -91,11 +101,6 @@ bool CActiveAEResample::Init(uint64_t dst_chan_layout, int dst_channels, int dst
      m_dllAvUtil.av_opt_set_double(m_pContext, "rematrix_maxval", 1.0, 0);
   }
 
-  if(!m_pContext)
-  {
-    CLog::Log(LOGERROR, "CActiveAEResample::Init - create context failed");
-    return false;
-  }
   if (remapLayout)
   {
     // one-to-one mapping of channels

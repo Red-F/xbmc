@@ -225,7 +225,7 @@ NPT_String CUPnPServer::BuildSafeResourceUri(const NPT_HttpUrl &rooturi,
     else
       filename = URIUtils::GetFileName(file_path);
 
-    CURL::Encode(filename);
+    filename = CURL::Encode(filename);
     md5state.append(file_path);
     md5state.getDigest(md5);
     md5 += "/" + filename;
@@ -297,12 +297,12 @@ CUPnPServer::Build(CFileItemPtr                  item,
                     }
                     else if (params.GetAlbumId() >= 0 ) {
                         CAlbum album;
-                        if (db.GetAlbumInfo(params.GetAlbumId(), album, NULL))
+                        if (db.GetAlbum(params.GetAlbumId(), album, false))
                             item->GetMusicInfoTag()->SetAlbum(album);
                     }
                     else if (params.GetArtistId() >= 0 ) {
                         CArtist artist;
-                        if (db.GetArtistInfo(params.GetArtistId(), artist, false))
+                        if (db.GetArtist(params.GetArtistId(), artist, false))
                             item->GetMusicInfoTag()->SetArtist(artist);
                     }
                 }
@@ -988,7 +988,7 @@ CUPnPServer::OnUpdateObject(PLT_ActionReference&             action,
                             NPT_Map<NPT_String,NPT_String>&  new_vals,
                             const PLT_HttpRequestContext&    context)
 {
-    CStdString path = CURL::Decode(object_id);
+    CStdString path(CURL::Decode(object_id));
     CFileItem updated;
     updated.SetPath(path);
     CLog::Log(LOGINFO, "UPnP: OnUpdateObject: %s from %s", path.c_str(),

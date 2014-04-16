@@ -29,6 +29,7 @@
 #include "addons/AddonManager.h"
 #include "addons/Skin.h"
 #include "cores/AudioEngine/AEFactory.h"
+#include "cores/dvdplayer/DVDCodecs/Video/DVDVideoCodec.h"
 #if defined(HAVE_LIBCRYSTALHD)
 #include "cores/dvdplayer/DVDCodecs/Video/CrystalHD.h"
 #endif // defined(HAVE_LIBCRYSTALHD)
@@ -54,7 +55,6 @@
 #include "network/WakeOnAccess.h"
 #if defined(TARGET_DARWIN_OSX)
 #include "osx/XBMCHelper.h"
-#include "cores/AudioEngine/Engines/CoreAudio/CoreAudioHardware.h"
 #endif // defined(TARGET_DARWIN_OSX)
 #if defined(TARGET_DARWIN)
 #include "osx/DarwinUtils.h"
@@ -468,6 +468,9 @@ void CSettings::Uninitialize()
   m_settingsManager->UnregisterSettingsHandler(&CWakeOnAccess::Get());
   m_settingsManager->UnregisterSettingsHandler(&CRssManager::Get());
   m_settingsManager->UnregisterSettingsHandler(&g_application);
+#if defined(TARGET_LINUX) && !defined(TARGET_ANDROID) && !defined(__UCLIBC__)
+  m_settingsManager->UnregisterSettingsHandler(&g_timezone);
+#endif
 
   m_initialized = false;
 }
@@ -794,14 +797,7 @@ void CSettings::InitializeDefaults()
   #endif
 #endif
 
-#if defined(TARGET_DARWIN)
-  #if !defined(TARGET_DARWIN_IOS)
-  CStdString defaultAudioDeviceName;
-  CCoreAudioHardware::GetOutputDeviceName(defaultAudioDeviceName);
-  ((CSettingString*)m_settingsManager->GetSetting("audiooutput.audiodevice"))->SetDefault(defaultAudioDeviceName);
-  ((CSettingString*)m_settingsManager->GetSetting("audiooutput.passthroughdevice"))->SetDefault(defaultAudioDeviceName);
-  #endif
-#elif !defined(TARGET_WINDOWS)
+#if !defined(TARGET_WINDOWS)
   ((CSettingString*)m_settingsManager->GetSetting("audiooutput.audiodevice"))->SetDefault(CAEFactory::GetDefaultDevice(false));
   ((CSettingString*)m_settingsManager->GetSetting("audiooutput.passthroughdevice"))->SetDefault(CAEFactory::GetDefaultDevice(true));
 #endif
@@ -857,6 +853,9 @@ void CSettings::InitializeConditions()
 {
   // add basic conditions
   m_settingsManager->AddCondition("true");
+#ifdef HAS_UPNP
+  m_settingsManager->AddCondition("has_upnp");
+#endif
 #ifdef HAS_AIRPLAY
   m_settingsManager->AddCondition("has_airplay");
 #endif
@@ -960,6 +959,7 @@ void CSettings::InitializeConditions()
   m_settingsManager->AddCondition("profilehasvideoslocked", ProfileHasVideosLocked);
   m_settingsManager->AddCondition("profilelockmode", ProfileLockMode);
   m_settingsManager->AddCondition("aesettingvisible", CAEFactory::IsSettingVisible);
+  m_settingsManager->AddCondition("codecoptionvisible", CDVDVideoCodec::IsSettingVisible);
 }
 
 void CSettings::InitializeISettingsHandlers()
@@ -976,6 +976,9 @@ void CSettings::InitializeISettingsHandlers()
   m_settingsManager->RegisterSettingsHandler(&CWakeOnAccess::Get());
   m_settingsManager->RegisterSettingsHandler(&CRssManager::Get());
   m_settingsManager->RegisterSettingsHandler(&g_application);
+#if defined(TARGET_LINUX) && !defined(TARGET_ANDROID) && !defined(__UCLIBC__)
+  m_settingsManager->RegisterSettingsHandler(&g_timezone);
+#endif
 }
 
 void CSettings::InitializeISubSettings()
@@ -1017,6 +1020,7 @@ void CSettings::InitializeISettingCallbacks()
   settingSet.insert("videoscreen.screen");
   settingSet.insert("videoscreen.resolution");
   settingSet.insert("videoscreen.screenmode");
+  settingSet.insert("videoscreen.vsync");
   m_settingsManager->RegisterCallback(&CDisplaySettings::Get(), settingSet);
 
   settingSet.clear();
@@ -1032,6 +1036,7 @@ void CSettings::InitializeISettingCallbacks()
   settingSet.insert("audiooutput.guisoundmode");
   settingSet.insert("audiooutput.stereoupmix");
   settingSet.insert("audiooutput.ac3passthrough");
+  settingSet.insert("audiooutput.ac3transcode");
   settingSet.insert("audiooutput.eac3passthrough");
   settingSet.insert("audiooutput.dtspassthrough");
   settingSet.insert("audiooutput.truehdpassthrough");

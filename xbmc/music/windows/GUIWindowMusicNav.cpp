@@ -309,8 +309,25 @@ bool CGUIWindowMusicNav::GetDirectory(const CStdString &strDirectory, CFileItemL
   {
     CVideoDatabaseDirectory dir;
     VIDEODATABASEDIRECTORY::NODE_TYPE node = dir.GetDirectoryChildType(strDirectory);
-    if (node == VIDEODATABASEDIRECTORY::NODE_TYPE_TITLE_MUSICVIDEOS)
+    if (node == VIDEODATABASEDIRECTORY::NODE_TYPE_TITLE_MUSICVIDEOS ||
+        node == VIDEODATABASEDIRECTORY::NODE_TYPE_RECENTLY_ADDED_MUSICVIDEOS)
       items.SetContent("musicvideos");
+    else if (node == VIDEODATABASEDIRECTORY::NODE_TYPE_GENRE)
+      items.SetContent("genres");
+    else if (node == VIDEODATABASEDIRECTORY::NODE_TYPE_COUNTRY)
+      items.SetContent("countries");
+    else if (node == VIDEODATABASEDIRECTORY::NODE_TYPE_ACTOR)
+      items.SetContent("artists");
+    else if (node == VIDEODATABASEDIRECTORY::NODE_TYPE_DIRECTOR)
+      items.SetContent("directors");
+    else if (node == VIDEODATABASEDIRECTORY::NODE_TYPE_STUDIO)
+      items.SetContent("studios");
+    else if (node == VIDEODATABASEDIRECTORY::NODE_TYPE_YEAR)
+      items.SetContent("years");
+    else if (node == VIDEODATABASEDIRECTORY::NODE_TYPE_MUSICVIDEOS_ALBUM)
+      items.SetContent("albums");
+    else if (node == VIDEODATABASEDIRECTORY::NODE_TYPE_TAGS)
+      items.SetContent("tags");
   }
   else if (StringUtils::StartsWithNoCase(strDirectory, "musicdb://"))
   {
@@ -327,7 +344,12 @@ bool CGUIWindowMusicNav::GetDirectory(const CStdString &strDirectory, CFileItemL
       items.SetContent("artists");
     else if (node == NODE_TYPE_SONG ||
              node == NODE_TYPE_SONG_TOP100 ||
-             node == NODE_TYPE_SINGLES)
+             node == NODE_TYPE_SINGLES ||
+             node == NODE_TYPE_ALBUM_RECENTLY_ADDED_SONGS ||
+             node == NODE_TYPE_ALBUM_RECENTLY_PLAYED_SONGS ||
+             node == NODE_TYPE_ALBUM_COMPILATIONS_SONGS ||
+             node == NODE_TYPE_ALBUM_TOP100_SONGS ||
+             node == NODE_TYPE_YEAR_SONG)
       items.SetContent("songs");
     else if (node == NODE_TYPE_GENRE)
       items.SetContent("genres");
@@ -571,7 +593,7 @@ bool CGUIWindowMusicNav::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
           return false;
         CStdString path = StringUtils::Format("musicdb://artists/%ld/", idArtist);
         CArtist artist;
-        m_musicdatabase.GetArtistInfo(idArtist,artist,false);
+        m_musicdatabase.GetArtist(idArtist, artist, false);
         *item = CFileItem(artist);
         item->SetPath(path);
         CGUIWindowMusicBase::OnContextButton(itemNumber,button);
@@ -588,7 +610,7 @@ bool CGUIWindowMusicNav::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
           return false;
         CStdString path = StringUtils::Format("musicdb://albums/%ld/", idAlbum);
         CAlbum album;
-        m_musicdatabase.GetAlbumInfo(idAlbum,album,NULL);
+        m_musicdatabase.GetAlbum(idAlbum, album, false);
         *item = CFileItem(path,album);
         item->SetPath(path);
         CGUIWindowMusicBase::OnContextButton(itemNumber,button);
@@ -766,8 +788,7 @@ void CGUIWindowMusicNav::DisplayEmptyDatabaseMessage(bool bDisplay)
 
 void CGUIWindowMusicNav::OnSearchUpdate()
 {
-  CStdString search(GetProperty("search").asString());
-  CURL::Encode(search);
+  CStdString search(CURL::Encode(GetProperty("search").asString()));
   if (!search.empty())
   {
     CStdString path = "musicsearch://" + search + "/";

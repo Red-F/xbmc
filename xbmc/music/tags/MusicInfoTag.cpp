@@ -55,6 +55,20 @@ bool EmbeddedArtInfo::matches(const EmbeddedArtInfo &right) const
           mime == right.mime);
 }
 
+void EmbeddedArtInfo::Archive(CArchive &ar)
+{
+  if (ar.IsStoring())
+  {
+    ar << size;
+    ar << mime;
+  }
+  else
+  {
+    ar >> size;
+    ar >> mime;
+  }
+}
+
 EmbeddedArt::EmbeddedArt(const uint8_t *dat, size_t siz, const std::string &mim)
 {
   set(dat, siz, mim);
@@ -543,6 +557,7 @@ void CMusicInfoTag::SetSong(const CSong& song)
   SetComment(song.strComment);
   SetPlayCount(song.iTimesPlayed);
   SetLastPlayed(song.lastPlayed);
+  SetCoverArtInfo(song.embeddedArt.size, song.embeddedArt.mime);
   m_rating = song.rating;
   m_strURL = song.strFileName;
   SYSTEMTIME stTime;
@@ -592,7 +607,14 @@ void CMusicInfoTag::ToSortable(SortItem& sortable, Field field) const
 {
   switch (field)
   {
-  case FieldTitle:       sortable[FieldTitle] = m_strTitle; break;
+  case FieldTitle:
+  {
+    // make sure not to overwrite an existing path with an empty one
+    std::string title = m_strTitle;
+    if (!title.empty() || sortable.find(FieldTitle) == sortable.end())
+      sortable[FieldTitle] = title;
+    break;
+  }
   case FieldArtist:      sortable[FieldArtist] = m_artist; break;
   case FieldAlbum:       sortable[FieldAlbum] = m_strAlbum; break;
   case FieldAlbumArtist: sortable[FieldAlbumArtist] = m_albumArtist; break;
@@ -639,6 +661,7 @@ void CMusicInfoTag::Archive(CArchive& ar)
     ar << m_strLyrics;
     ar << m_bCompilation;
     ar << m_listeners;
+    ar << m_coverArt;
   }
   else
   {
@@ -667,6 +690,7 @@ void CMusicInfoTag::Archive(CArchive& ar)
     ar >> m_strLyrics;
     ar >> m_bCompilation;
     ar >> m_listeners;
+    ar >> m_coverArt;
   }
 }
 

@@ -101,18 +101,14 @@ void CAEChannelInfo::ResolveChannels(const CAEChannelInfo& rhs)
       newInfo += m_channels[i];
   }
 
-  // we let the sink do the mapping later on
-  if (m_channelCount == 8 && m_channelCount == rhs.Count())
-    return;
-
   /* we need to ensure we end up with rear or side channels for downmix to work */
-  if (srcHasSL && !dstHasSL && dstHasRL)
+  if (srcHasSL && !dstHasSL && dstHasRL && !newInfo.HasChannel(AE_CH_BL))
     newInfo += AE_CH_BL;
-  if (srcHasSR && !dstHasSR && dstHasRR)
+  if (srcHasSR && !dstHasSR && dstHasRR && !newInfo.HasChannel(AE_CH_BR))
     newInfo += AE_CH_BR;
-  if (srcHasRL && !dstHasRL && dstHasSL)
+  if (srcHasRL && !dstHasRL && dstHasSL && !newInfo.HasChannel(AE_CH_SL))
     newInfo += AE_CH_SL;
-  if (srcHasRR && !dstHasRR && dstHasSR)
+  if (srcHasRR && !dstHasRR && dstHasSR && !newInfo.HasChannel(AE_CH_SR))
     newInfo += AE_CH_SR;
 
   // mix back center if not available in destination layout
@@ -192,7 +188,7 @@ CAEChannelInfo& CAEChannelInfo::operator=(const enum AEStdChLayout rhs)
   return *this;
 }
 
-bool CAEChannelInfo::operator==(const CAEChannelInfo& rhs)
+bool CAEChannelInfo::operator==(const CAEChannelInfo& rhs) const
 {
   /* if the channel count doesnt match, no need to check further */
   if (m_channelCount != rhs.m_channelCount)

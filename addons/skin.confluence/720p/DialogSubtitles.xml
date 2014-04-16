@@ -8,20 +8,21 @@
 	<controls>
 		<control type="group" id="250">
 			<animation effect="slide" start="0,0" end="900,0" time="500" tween="quadratic" easing="out">WindowClose</animation> 
-			<animation type="Conditional" condition="Control.HasFocus(150)" reversible="true">
+			<animation type="Conditional" condition="Control.HasFocus(150) | Control.HasFocus(160)" reversible="true">
 				<effect type="slide" end="-250,0" time="400"/>
 			</animation>
 			<control type="button" id="8999">
 				<description>Fake button for mouse control</description>
 				<left>880</left>
 				<top>0</top>
-				<width>20</width>
+				<width>80</width>
 				<height>720</height>
 				<label>-</label>
 				<font>-</font>
 				<texturenofocus>-</texturenofocus>
 				<texturefocus>-</texturefocus>
 				<visible>true</visible>
+				<onfocus>SetFocus(150)</onfocus>
 			</control>
 			<control type="image">
 				<description>media info background image</description>
@@ -283,27 +284,25 @@
 				</control>
 				<control type="group" id="130">
 					<control type="grouplist">
-						<left>20</left>
-						<top>660</top>
-						<width>305</width>
-						<height>40</height>
-						<align>right</align>
+						<left>50</left>
+						<top>659</top>
+						<width>605</width>
+						<height>30</height>
 						<orientation>horizontal</orientation>
 						<itemgap>5</itemgap>
 						<control type="image">
-							<width>40</width>
-							<height>40</height>
+							<width>30</width>
+							<height>30</height>
 							<texture>DefaultIconInfo.png</texture>
 						</control>
 						<control type="label">
 							<description>notification</description>
-							<width min="10" max="260">auto</width>
-							<height>40</height>
+							<width min="10" max="560">auto</width>
+							<height>30</height>
 							<font>font13</font>
 							<textcolor>white</textcolor>
-							<label>31413</label>
+							<label>$LOCALIZE[31413]</label>
 							<aligny>center</aligny>
-							<wrapmultiline>true</wrapmultiline>
 						</control>
 					</control>
 				</control>
@@ -350,11 +349,11 @@
 					<left>900</left>
 					<top>206</top>
 					<width>250</width>
-					<height>434</height>
+					<height>399</height>
 					<onleft>120</onleft>
 					<onright>120</onright>
-					<onup>150</onup>
-					<ondown>150</ondown>
+					<onup>160</onup>
+					<ondown>160</ondown>
 					<viewtype label="535">list</viewtype>
 					<scrolltime>200</scrolltime>
 					<itemlayout width="400" height="36">
@@ -407,6 +406,22 @@
 							<info>ListItem.Label</info>
 						</control>
 					</focusedlayout>
+				</control>
+				<control type="button" id="160">
+					<description>Manual search button</description>
+					<left>925</left>
+					<top>640</top>
+					<width>200</width>
+					<height>40</height>
+					<onleft>120</onleft>
+					<onright>120</onright>
+					<onup>150</onup>
+					<ondown>150</ondown>
+					<label>$LOCALIZE[24120]</label>
+					<font>font12_title</font>
+					<textcolor>white</textcolor>
+					<focusedcolor>white</focusedcolor>
+					<align>center</align>
 				</control>
 			</control>
 		</control>

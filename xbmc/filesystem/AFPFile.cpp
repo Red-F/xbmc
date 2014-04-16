@@ -38,13 +38,6 @@ using namespace XFILE;
 
 #define AFP_MAX_READ_SIZE 131072
 
-CStdString URLEncode(const CStdString value)
-{
-  CStdString encoded(value);
-  CURL::Encode(encoded);
-  return encoded;
-}
-
 void AfpConnectionLog(void *priv, enum loglevels loglevel, int logtype, const char *message)
 {
   if (!message) return;
@@ -221,7 +214,7 @@ CAfpConnection::afpConnnectError CAfpConnection::Connect(const CURL& url)
     CLog::Log(LOGDEBUG, "AFP: Could not parse url: %s!\n", nonConstUrl.Get().c_str());
     return AfpFailed;
   }
-  else // parsed successfull
+  else // parsed successfully
   {
     // this is our current url object whe are connected to (at least we try)
     *m_pAfpUrl = tmpurl;
@@ -466,7 +459,7 @@ bool CAFPFile::Open(const CURL& url)
 
   if (gAfpConnection.GetImpl()->afp_wrap_open(m_pAfpVol, strPath.c_str(), O_RDONLY, &m_pFp))
   {
-    if (gAfpConnection.GetImpl()->afp_wrap_open(m_pAfpVol, URLEncode(strPath.c_str()).c_str(), O_RDONLY, &m_pFp))
+    if (gAfpConnection.GetImpl()->afp_wrap_open(m_pAfpVol, CURL::Encode(strPath.c_str()).c_str(), O_RDONLY, &m_pFp))
     {
       // write error to logfile
       CLog::Log(LOGINFO, "CAFPFile::Open: Unable to open file : '%s'\nunix_err:'%x' error : '%s'", strPath.c_str(), errno, strerror(errno));

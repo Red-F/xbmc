@@ -361,9 +361,6 @@ bool COMXVideo::Open(CDVDStreamInfo &hints, OMXClock *clock, EDEINTERLACEMODE de
   m_submitted_eos = false;
   m_failed_eos    = false;
 
-  if(!m_decoded_width || !m_decoded_height)
-    return false;
-
   if(hints.extrasize > 0 && hints.extradata != NULL)
   {
     m_extrasize = hints.extrasize;
@@ -594,7 +591,7 @@ bool COMXVideo::Open(CDVDStreamInfo &hints, OMXClock *clock, EDEINTERLACEMODE de
   // broadcom omx entension:
   // When enabled, the timestamp fifo mode will change the way incoming timestamps are associated with output images.
   // In this mode the incoming timestamps get used without re-ordering on output images.
-  if(hints.ptsinvalid)
+  // recent firmware will actually automatically choose the timestamp stream with the least variance, so always enable
   {
     OMX_CONFIG_BOOLEANTYPE timeStampMode;
     OMX_INIT_STRUCTURE(timeStampMode);
@@ -756,7 +753,7 @@ int COMXVideo::Decode(uint8_t *pData, int iSize, double pts)
         CLog::Log(LOGDEBUG, "OMXVideo::Decode VDec : setStartTime %f\n", (pts == DVD_NOPTS_VALUE ? 0.0 : pts) / DVD_TIME_BASE);
         m_setStartTime = false;
       }
-      else if(pts == DVD_NOPTS_VALUE)
+      if(pts == DVD_NOPTS_VALUE)
         omx_buffer->nFlags |= OMX_BUFFERFLAG_TIME_UNKNOWN;
 
       omx_buffer->nTimeStamp = ToOMXTime((uint64_t)(pts == DVD_NOPTS_VALUE) ? 0 : pts);
@@ -838,9 +835,6 @@ void COMXVideo::SetVideoRect(const CRect& SrcRect, const CRect& DestRect)
 
   OMX_INIT_STRUCTURE(configDisplay);
   configDisplay.nPortIndex = m_omx_render.GetInputPort();
-  configDisplay.fullscreen = OMX_FALSE;
-  configDisplay.noaspect   = OMX_TRUE;
-
   configDisplay.set                 = (OMX_DISPLAYSETTYPE)(OMX_DISPLAY_SET_DEST_RECT|OMX_DISPLAY_SET_SRC_RECT|OMX_DISPLAY_SET_FULLSCREEN|OMX_DISPLAY_SET_NOASPECT);
   configDisplay.dest_rect.x_offset  = (int)(DestRect.x1+0.5f);
   configDisplay.dest_rect.y_offset  = (int)(DestRect.y1+0.5f);
@@ -851,6 +845,11 @@ void COMXVideo::SetVideoRect(const CRect& SrcRect, const CRect& DestRect)
   configDisplay.src_rect.y_offset   = (int)(SrcRect.y1+0.5f);
   configDisplay.src_rect.width      = (int)(SrcRect.Width()+0.5f);
   configDisplay.src_rect.height     = (int)(SrcRect.Height()+0.5f);
+
+  if (configDisplay.dest_rect.width == 0 || configDisplay.dest_rect.height == 0)
+    configDisplay.fullscreen = OMX_TRUE;
+  else
+    configDisplay.noaspect = OMX_TRUE;
 
   m_omx_render.SetConfig(OMX_IndexConfigDisplayRegion, &configDisplay);
 

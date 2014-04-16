@@ -285,12 +285,18 @@ bool CGUIWindowVideoNav::GetDirectory(const CStdString &strDirectory, CFileItemL
       VIDEODATABASEDIRECTORY::NODE_TYPE node = dir.GetDirectoryChildType(items.GetPath());
 
       // perform the flattening logic for tvshows with a single (unwatched) season (+ optional special season)
-      if (node == NODE_TYPE_SEASONS)
+      if (node == NODE_TYPE_SEASONS && !items.IsEmpty())
       {
+        int itemsSize = items.GetObjectCount();
+        int firstIndex = items.Size() - itemsSize;
+        // check if the last item is the "All seasons" item which should be ignored for flattening
+        if (!items[items.Size() - 1]->HasVideoInfoTag() || items[items.Size() - 1]->GetVideoInfoTag()->m_iSeason < 0)
+          itemsSize -= 1;
+
         int iFlatten = CSettings::Get().GetInt("videolibrary.flattentvshows");
-        bool bFlatten = (items.GetObjectCount() == 1 && iFlatten == 1) || iFlatten == 2 ||                              // flatten if one one season or if always flatten is enabled
-                        (items.GetObjectCount() == 2 && iFlatten == 1 &&                                                // flatten if one season + specials
-                         (items[0]->GetVideoInfoTag()->m_iSeason == 0 || items[1]->GetVideoInfoTag()->m_iSeason == 0));
+        bool bFlatten = (itemsSize == 1 && iFlatten == 1) || iFlatten == 2 ||                              // flatten if one one season or if always flatten is enabled
+                        (itemsSize == 2 && iFlatten == 1 &&                                                // flatten if one season + specials
+                         (items[firstIndex]->GetVideoInfoTag()->m_iSeason == 0 || items[firstIndex + 1]->GetVideoInfoTag()->m_iSeason == 0));
 
         if (iFlatten > 0 && !bFlatten && (WatchedMode)CMediaSettings::Get().GetWatchedMode("tvshows") == WatchedModeUnwatched)
         {
@@ -298,7 +304,7 @@ bool CGUIWindowVideoNav::GetDirectory(const CStdString &strDirectory, CFileItemL
           for(int i = 0; i < items.Size(); i++)
           {
             const CFileItemPtr item = items.Get(i);
-            if (item->GetProperty("unwatchedepisodes").asInteger() != 0 && item->GetVideoInfoTag()->m_iSeason != 0)
+            if (item->GetProperty("unwatchedepisodes").asInteger() != 0 && item->GetVideoInfoTag()->m_iSeason > 0)
               count++;
           }
           bFlatten = (count < 2); // flatten if there is only 1 unwatched season (not counting specials)
@@ -594,7 +600,6 @@ void CGUIWindowVideoNav::DoSearch(const CStdString& strSearch, CFileItemList& it
   CStdString strGenre = g_localizeStrings.Get(515); // Genre
   CStdString strActor = g_localizeStrings.Get(20337); // Actor
   CStdString strDirector = g_localizeStrings.Get(20339); // Director
-  CStdString strMovie = g_localizeStrings.Get(20338); // Movie
 
   //get matching names
   m_database.GetMoviesByName(strSearch, tempItems);
@@ -647,7 +652,7 @@ void CGUIWindowVideoNav::DoSearch(const CStdString& strSearch, CFileItemList& it
   AppendAndClearSearchItems(tempItems, "[" + g_localizeStrings.Get(20365) + "] ", items);
 
   m_database.GetMoviesByPlot(strSearch, tempItems);
-  AppendAndClearSearchItems(tempItems, "[" + strMovie + " " + g_localizeStrings.Get(207) + "] ", items);
+  AppendAndClearSearchItems(tempItems, "[" + g_localizeStrings.Get(20323) + "] ", items);
 }
 
 void CGUIWindowVideoNav::PlayItem(int iItem)

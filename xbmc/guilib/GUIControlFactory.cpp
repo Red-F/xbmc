@@ -806,7 +806,7 @@ CGUIControl* CGUIControlFactory::Create(int parentID, const CRect &rect, TiXmlEl
           (labelInfo.align & XBFONT_RIGHT))
         posX -= width;
     }
-    if (!width)
+    if (!width) // no width specified, so compute from parent
       width = max(rect.Width() - posX, 0.0f);
   }
   if (!GetDimensions(pControlNode, "top", "bottom", "centertop", "centerbottom", "height", rect.Height(), posY, height, minHeight))
@@ -1328,6 +1328,7 @@ CGUIControl* CGUIControlFactory::Create(int parentID, const CRect &rect, TiXmlEl
     ((CGUIListContainer *)control)->SetType(viewType, viewLabel);
     ((CGUIListContainer *)control)->SetPageControl(pageControl);
     ((CGUIListContainer *)control)->SetRenderOffset(offset);
+    ((CGUIListContainer *)control)->SetAutoScrolling(pControlNode);
   }
   else if (type == CGUIControl::GUICONTAINER_WRAPLIST)
   {
@@ -1340,6 +1341,7 @@ CGUIControl* CGUIControlFactory::Create(int parentID, const CRect &rect, TiXmlEl
     ((CGUIWrappingListContainer *)control)->SetType(viewType, viewLabel);
     ((CGUIWrappingListContainer *)control)->SetPageControl(pageControl);
     ((CGUIWrappingListContainer *)control)->SetRenderOffset(offset);
+    ((CGUIWrappingListContainer *)control)->SetAutoScrolling(pControlNode);
   }
   else if (type == CGUIControl::GUICONTAINER_EPGGRID)
   {
@@ -1359,6 +1361,7 @@ CGUIControl* CGUIControlFactory::Create(int parentID, const CRect &rect, TiXmlEl
     ((CGUIFixedListContainer *)control)->SetType(viewType, viewLabel);
     ((CGUIFixedListContainer *)control)->SetPageControl(pageControl);
     ((CGUIFixedListContainer *)control)->SetRenderOffset(offset);
+    ((CGUIFixedListContainer *)control)->SetAutoScrolling(pControlNode);
   }
   else if (type == CGUIControl::GUICONTAINER_PANEL)
   {
@@ -1371,6 +1374,7 @@ CGUIControl* CGUIControlFactory::Create(int parentID, const CRect &rect, TiXmlEl
     ((CGUIPanelContainer *)control)->SetType(viewType, viewLabel);
     ((CGUIPanelContainer *)control)->SetPageControl(pageControl);
     ((CGUIPanelContainer *)control)->SetRenderOffset(offset);
+    ((CGUIPanelContainer *)control)->SetAutoScrolling(pControlNode);
   }
   else if (type == CGUIControl::GUICONTROL_TEXTBOX)
   {
@@ -1382,6 +1386,7 @@ CGUIControl* CGUIControlFactory::Create(int parentID, const CRect &rect, TiXmlEl
     if (infoLabels.size())
       ((CGUITextBox *)control)->SetInfo(infoLabels[0]);
     ((CGUITextBox *)control)->SetAutoScrolling(pControlNode);
+    ((CGUITextBox *)control)->SetMinHeight(minHeight);
   }
   else if (type == CGUIControl::GUICONTROL_SELECTBUTTON)
   {

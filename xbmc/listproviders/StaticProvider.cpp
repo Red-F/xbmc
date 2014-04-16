@@ -64,9 +64,9 @@ CStaticListProvider::~CStaticListProvider()
 {
 }
 
-bool CStaticListProvider::Update(bool refresh)
+bool CStaticListProvider::Update(bool forceRefresh)
 {
-  bool changed = refresh;
+  bool changed = forceRefresh;
   if (!m_updateTime)
     m_updateTime = CTimeUtils::GetFrameTime();
   else if (CTimeUtils::GetFrameTime() - m_updateTime > 1000)
@@ -100,10 +100,15 @@ int CStaticListProvider::GetDefaultItem() const
 {
   if (m_defaultItem >= 0)
   {
+    unsigned int offset = 0;
     for (vector<CGUIStaticItemPtr>::const_iterator i = m_items.begin(); i != m_items.end(); ++i)
     {
-      if ((*i)->m_iprogramCount == m_defaultItem && (*i)->IsVisible())
-        return i - m_items.begin();
+      if ((*i)->IsVisible())
+      {
+        if ((*i)->m_iprogramCount == m_defaultItem && (*i)->IsVisible())
+          return offset;
+        offset++;
+      }
     }
   }
   return -1;
