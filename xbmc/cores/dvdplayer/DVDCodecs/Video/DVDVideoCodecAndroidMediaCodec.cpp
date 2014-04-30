@@ -162,6 +162,7 @@ CDVDMediaCodecInfo::CDVDMediaCodecInfo(
 )
 : m_refs(1)
 , m_valid(true)
+, m_isReleased(true)
 , m_index(index)
 , m_texture(texture)
 , m_timestamp(0)
@@ -185,6 +186,7 @@ CDVDMediaCodecInfo::~CDVDMediaCodecInfo()
 CDVDMediaCodecInfo* CDVDMediaCodecInfo::Retain()
 {
   AtomicIncrement(&m_refs);
+  m_isReleased = false;
 
   return this;
 }
@@ -192,11 +194,10 @@ CDVDMediaCodecInfo* CDVDMediaCodecInfo::Retain()
 long CDVDMediaCodecInfo::Release()
 {
   long count = AtomicDecrement(&m_refs);
-  if (count == 0)
-  {
+  if (count == 1)
     ReleaseOutputBuffer(false);
+  if (count == 0)
     delete this;
-  }
 
   return count;
 }
@@ -212,7 +213,7 @@ void CDVDMediaCodecInfo::ReleaseOutputBuffer(bool render)
 {
   CSingleLock lock(m_section);
 
-  if (!m_valid)
+  if (!m_valid || m_isReleased)
     return;
 
   // release OutputBuffer and render if indicated
@@ -222,6 +223,7 @@ void CDVDMediaCodecInfo::ReleaseOutputBuffer(bool render)
     m_frameready->Reset();
 
   m_codec->releaseOutputBuffer(m_index, render);
+  m_isReleased = true;
 
   if (xbmc_jnienv()->ExceptionOccurred())
   {
@@ -273,8 +275,8 @@ void CDVDMediaCodecInfo::UpdateTexImage()
   // wait, then video playback gets jerky. To optomize this,
   // we hook the SurfaceTexture OnFrameAvailable callback
   // using CJNISurfaceTextureOnFrameAvailableListener and wait
-  // on a CEvent to fire. 20ms seems to be a good max fallback.
-  m_frameready->WaitMSec(20);
+  // on a CEvent to fire. 50ms seems to be a good max fallback.
+  m_frameready->WaitMSec(50);
 
   m_surfacetexture->updateTexImage();
   if (xbmc_jnienv()->ExceptionOccurred())
@@ -909,15 +911,34 @@ int CDVDVideoCodecAndroidMediaCodec::GetOutputPicture(void)
 
 void CDVDVideoCodecAndroidMediaCodec::ConfigureOutputFormat(CJNIMediaFormat* mediaformat)
 {
-  int width       = mediaformat->getInteger("width");
-  int height      = mediaformat->getInteger("height");
-  int stride      = mediaformat->getInteger("stride");
-  int slice_height= mediaformat->getInteger("slice-height");
-  int color_format= mediaformat->getInteger("color-format");
-  int crop_left   = mediaformat->getInteger("crop-left");
-  int crop_top    = mediaformat->getInteger("crop-top");
-  int crop_right  = mediaformat->getInteger("crop-right");
-  int crop_bottom = mediaformat->getInteger("crop-bottom");
+  int width       = 0;
+  int height      = 0;
+  int stride      = 0;
+  int slice_height= 0;
+  int color_format= 0;
+  int crop_left   = 0;
+  int crop_top    = 0;
+  int crop_right  = 0;
+  int crop_bottom = 0;
+
+  if (mediaformat->containsKey("width"))
+    width       = mediaformat->getInteger("width");
+  if (mediaformat->containsKey("height"))
+    height      = mediaformat->getInteger("height");
+  if (mediaformat->containsKey("stride"))
+    stride      = mediaformat->getInteger("stride");
+  if (mediaformat->containsKey("slice-height"))
+    slice_height= mediaformat->getInteger("slice-height");
+  if (mediaformat->containsKey("color-format"))
+    color_format= mediaformat->getInteger("color-format");
+  if (mediaformat->containsKey("crop-left"))
+    crop_left   = mediaformat->getInteger("crop-left");
+  if (mediaformat->containsKey("crop-top"))
+    crop_top    = mediaformat->getInteger("crop-top");
+  if (mediaformat->containsKey("crop-right"))
+    crop_right  = mediaformat->getInteger("crop-right");
+  if (mediaformat->containsKey("crop-bottom"))
+    crop_bottom = mediaformat->getInteger("crop-bottom");
 
   CLog::Log(LOGDEBUG, "CDVDVideoCodecAndroidMediaCodec:: "
     "width(%d), height(%d), stride(%d), slice-height(%d), color-format(%d)",
