@@ -59,7 +59,7 @@ bool CPVRChannelGroups::GetGroupsFromClients(void)
   return g_PVRClients->GetChannelGroups(this) == PVR_ERROR_NO_ERROR;
 }
 
-bool CPVRChannelGroups::Update(const CPVRChannelGroup &group, bool bSaveInDb)
+bool CPVRChannelGroups::Update(const CPVRChannelGroup &group, bool bUpdateFromClient /* = false */)
 {
   if (group.GroupName().empty() && group.GroupID() <= 0)
     return true;
@@ -78,34 +78,36 @@ bool CPVRChannelGroups::Update(const CPVRChannelGroup &group, bool bSaveInDb)
     if (!updateGroup)
     {
       // create a new group if none was found
-      updateGroup = CPVRChannelGroupPtr(new CPVRChannelGroup(m_bRadio, group.GroupID(), group.GroupName()));
-      updateGroup->SetGroupType(group.GroupType());
+      updateGroup = CPVRChannelGroupPtr(new CPVRChannelGroup());
       m_groups.push_back(updateGroup);
     }
-    else
+
+    updateGroup->SetGroupID(group.GroupID());
+    updateGroup->SetGroupName(group.GroupName());
+    updateGroup->SetGroupType(group.GroupType());
+
+    // don't override properties we only store locally in our PVR database
+    if (!bUpdateFromClient)
     {
-      // update existing group
-      updateGroup->SetGroupID(group.GroupID());
-      updateGroup->SetGroupName(group.GroupName());
-      updateGroup->SetGroupType(group.GroupType());
+      updateGroup->SetLastWatched(group.LastWatched());
     }
   }
 
   // persist changes
-  if (bSaveInDb && updateGroup)
+  if (bUpdateFromClient)
     return updateGroup->Persist();
 
   return true;
 }
 
-CFileItemPtr CPVRChannelGroups::GetByPath(const CStdString &strPath) const
+CFileItemPtr CPVRChannelGroups::GetByPath(const std::string &strPath) const
 {
   // get the filename from curl
   CURL url(strPath);
-  CStdString strFileName = url.GetFileName();
+  std::string strFileName = url.GetFileName();
   URIUtils::RemoveSlashAtEnd(strFileName);
 
-  CStdString strCheckPath;
+  std::string strCheckPath;
   for (std::vector<CPVRChannelGroupPtr>::const_iterator it = m_groups.begin(); it != m_groups.end(); it++)
   {
     // check if the path matches
@@ -135,12 +137,12 @@ CPVRChannelGroupPtr CPVRChannelGroups::GetById(int iGroupId) const
   return empty;
 }
 
-CPVRChannelGroupPtr CPVRChannelGroups::GetByName(const CStdString &strName) const
+CPVRChannelGroupPtr CPVRChannelGroups::GetByName(const std::string &strName) const
 {
   CSingleLock lock(m_critSection);
   for (std::vector<CPVRChannelGroupPtr>::const_iterator it = m_groups.begin(); it != m_groups.end(); it++)
   {
-    if ((*it)->GroupName().Equals(strName))
+    if ((*it)->GroupName() == strName)
       return *it;
   }
 
@@ -215,25 +217,16 @@ bool CPVRChannelGroups::UpdateGroupsEntries(const CPVRChannelGroups &groups)
 
 bool CPVRChannelGroups::LoadUserDefinedChannelGroups(void)
 {
-  CPVRDatabase *database = GetPVRDatabase();
-  if (!database)
-    return false;
-
   bool bSyncWithBackends = CSettings::Get().GetBool("pvrmanager.syncchannelgroups");
 
   CSingleLock lock(m_critSection);
 
-  // load the other groups from the database
-  int iSize = m_groups.size();
-  database->Get(*this);
-  CLog::Log(LOGDEBUG, "PVR - %s - %d user defined %s channel groups fetched from the database", __FUNCTION__, (int) (m_groups.size() - iSize), m_bRadio ? "radio" : "TV");
-
   // load groups from the backends if the option is enabled
-  iSize = m_groups.size();
+  int iSize = m_groups.size();
   if (bSyncWithBackends)
   {
     GetGroupsFromClients();
-    CLog::Log(LOGDEBUG, "PVR - %s - %d new user defined %s channel groups fetched from clients", __FUNCTION__, (int) (m_groups.size() - iSize), m_bRadio ? "radio" : "TV");
+    CLog::Log(LOGDEBUG, "PVR - %s - %" PRIuS" new user defined %s channel groups fetched from clients", __FUNCTION__, (m_groups.size() - iSize), m_bRadio ? "radio" : "TV");
   }
   else
     CLog::Log(LOGDEBUG, "PVR - %s - 'synchannelgroups' is disabled; skipping groups from clients", __FUNCTION__);
@@ -270,6 +263,10 @@ bool CPVRChannelGroups::LoadUserDefinedChannelGroups(void)
 
 bool CPVRChannelGroups::Load(void)
 {
+  CPVRDatabase *database = GetPVRDatabase();
+  if (!database)
+    return false;
+
   CSingleLock lock(m_critSection);
 
   // remove previous contents
@@ -277,10 +274,16 @@ bool CPVRChannelGroups::Load(void)
 
   CLog::Log(LOGDEBUG, "PVR - %s - loading all %s channel groups", __FUNCTION__, m_bRadio ? "radio" : "TV");
 
-  // create and load the internal channel group
-  CPVRChannelGroupPtr internalChannels = CPVRChannelGroupPtr(new CPVRChannelGroupInternal(m_bRadio));
-  m_groups.push_back(internalChannels);
-  if (!internalChannels->Load())
+  // create the internal channel group
+  CPVRChannelGroupPtr internalGroup = CPVRChannelGroupPtr(new CPVRChannelGroupInternal(m_bRadio));
+  m_groups.push_back(internalGroup);
+
+  // load groups from the database
+  database->Get(*this);
+  CLog::Log(LOGDEBUG, "PVR - %s - %" PRIuS" %s groups fetched from the database", __FUNCTION__, m_groups.size(), m_bRadio ? "radio" : "TV");
+
+  // load channels of internal group
+  if (!internalGroup->Load())
   {
     CLog::Log(LOGERROR, "PVR - %s - failed to load channels", __FUNCTION__);
     return false;
@@ -293,10 +296,11 @@ bool CPVRChannelGroups::Load(void)
     return false;
   }
 
-  // set the internal group as selected at startup
-  SetSelectedGroup(internalChannels);
+  // set the last played group as selected group at startup
+  CPVRChannelGroupPtr lastPlayedGroup = GetLastPlayedGroup();
+  SetSelectedGroup(lastPlayedGroup ? lastPlayedGroup : internalGroup);
 
-  CLog::Log(LOGDEBUG, "PVR - %s - %d %s channel groups loaded", __FUNCTION__, (int) m_groups.size(), m_bRadio ? "radio" : "TV");
+  CLog::Log(LOGDEBUG, "PVR - %s - %" PRIuS" %s channel groups loaded", __FUNCTION__, m_groups.size(), m_bRadio ? "radio" : "TV");
 
   // need at least 1 group
   return m_groups.size() > 0;
@@ -334,6 +338,21 @@ CPVRChannelGroupPtr CPVRChannelGroups::GetLastGroup(void) const
   return empty;
 }
 
+CPVRChannelGroupPtr CPVRChannelGroups::GetLastPlayedGroup(int iChannelID /* = -1 */) const
+{
+  CSingleLock lock(m_critSection);
+
+  CPVRChannelGroupPtr group;
+  for (std::vector<CPVRChannelGroupPtr>::const_iterator it = m_groups.begin(); it != m_groups.end(); it++)
+  {
+    if ((*it)->LastWatched() > 0 && (!group || (*it)->LastWatched() > group->LastWatched()) &&
+        (iChannelID == -1 || (iChannelID >= 0 && (*it)->IsGroupMember(iChannelID))))
+      group = (*it);
+  }
+
+  return group;
+}
+
 std::vector<CPVRChannelGroupPtr> CPVRChannelGroups::GetMembers() const
 {
   CSingleLock lock(m_critSection);
@@ -346,7 +365,7 @@ int CPVRChannelGroups::GetGroupList(CFileItemList* results) const
   int iReturn(0);
   CSingleLock lock(m_critSection);
 
-  CStdString strPath;
+  std::string strPath;
   for (std::vector<CPVRChannelGroupPtr>::const_iterator it = m_groups.begin(); it != m_groups.end(); it++)
   {
     strPath = StringUtils::Format("channels/%s/%i", m_bRadio ? "radio" : "tv", (*it)->GroupID());
@@ -425,7 +444,7 @@ void CPVRChannelGroups::SetSelectedGroup(CPVRChannelGroupPtr group)
   group->Renumber();
 }
 
-bool CPVRChannelGroups::AddGroup(const CStdString &strName)
+bool CPVRChannelGroups::AddGroup(const std::string &strName)
 {
   bool bPersist(false);
   CPVRChannelGroupPtr group;
@@ -491,7 +510,7 @@ void CPVRChannelGroups::FillGroupsGUI(int iWindowId, int iControlId) const
   int iListGroupPtr(0);
   int iSelectedGroupPtr(0);
   CPVRChannelGroupPtr selectedGroup = g_PVRManager.GetPlayingGroup(false);
-  std::vector<CGUIMessage> messages;
+  std::vector< std::pair<std::string, int> > labels;
 
   // fetch all groups
   {
@@ -505,18 +524,13 @@ void CPVRChannelGroups::FillGroupsGUI(int iWindowId, int iControlId) const
       if ((*it)->GroupID() == selectedGroup->GroupID())
         iSelectedGroupPtr = iListGroupPtr;
 
-      CGUIMessage msg(GUI_MSG_LABEL_ADD, iWindowId, iControlId, iListGroupPtr++);
-      msg.SetLabel((*it)->GroupName());
-      messages.push_back(msg);
+      labels.push_back(make_pair((*it)->GroupName(), iListGroupPtr++));
     }
   }
 
-  // send updates
-  for (std::vector<CGUIMessage>::iterator it = messages.begin(); it != messages.end(); it++)
-    g_windowManager.SendMessage(*it);
-
   // selected group
-  CGUIMessage msgSel(GUI_MSG_ITEM_SELECT, iWindowId, iControlId, iSelectedGroupPtr);
+  CGUIMessage msgSel(GUI_MSG_SET_LABELS, iWindowId, iControlId, iSelectedGroupPtr);
+  msgSel.SetPointer(&labels);
   g_windowManager.SendMessage(msgSel);
 }
 

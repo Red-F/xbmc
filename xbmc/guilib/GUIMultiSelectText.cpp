@@ -214,9 +214,10 @@ void CGUIMultiSelectTextControl::OnRight()
 // movement functions (callable from lists)
 bool CGUIMultiSelectTextControl::MoveLeft()
 {
+  CGUIAction action = GetNavigateAction(ACTION_MOVE_LEFT);
   if (m_selectedItem > 0)
     ScrollToItem(m_selectedItem - 1);
-  else if (GetNumSelectable() && m_actionLeft.GetNavigation() && m_actionLeft.GetNavigation() == m_controlID)
+  else if (GetNumSelectable() && action.GetNavigation() && action.GetNavigation() == m_controlID)
     ScrollToItem(GetNumSelectable() - 1);
   else
     return false;
@@ -225,9 +226,10 @@ bool CGUIMultiSelectTextControl::MoveLeft()
 
 bool CGUIMultiSelectTextControl::MoveRight()
 {
+  CGUIAction action = GetNavigateAction(ACTION_MOVE_RIGHT);
   if (GetNumSelectable() && m_selectedItem < GetNumSelectable() - 1)
     ScrollToItem(m_selectedItem + 1);
-  else if (m_actionRight.GetNavigation() && m_actionRight.GetNavigation() == m_controlID)
+  else if (action.GetNavigation() && action.GetNavigation() == m_controlID)
     ScrollToItem(0);
   else
     return false;
@@ -366,11 +368,11 @@ void CGUIMultiSelectTextControl::PositionButtons()
     m_totalWidth += m_label.offsetX;
 }
 
-CStdString CGUIMultiSelectTextControl::GetDescription() const
+std::string CGUIMultiSelectTextControl::GetDescription() const
 {
   // We currently just return the entire string - should we bother returning the
   // particular subitems of this?
-  CStdString strLabel(m_info.GetLabel(m_parentID));
+  std::string strLabel(m_info.GetLabel(m_parentID));
   return strLabel;
 }
 

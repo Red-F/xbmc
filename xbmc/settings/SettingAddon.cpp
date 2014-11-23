@@ -24,11 +24,17 @@
 #include "utils/log.h"
 #include "utils/XBMCTinyXML.h"
 #include "utils/XMLUtils.h"
+#include "utils/StdString.h"
 
 #define XML_ELM_DEFAULT     "default"
 
 CSettingAddon::CSettingAddon(const std::string &id, CSettingsManager *settingsManager /* = NULL */)
   : CSettingString(id, settingsManager),
+    m_addonType(ADDON::ADDON_UNKNOWN)
+{ }
+
+CSettingAddon::CSettingAddon(const std::string &id, int label, const std::string &value, CSettingsManager *settingsManager /* = NULL */)
+  : CSettingString(id, label, value, settingsManager),
     m_addonType(ADDON::ADDON_UNKNOWN)
 { }
   

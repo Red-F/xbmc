@@ -29,6 +29,7 @@
 #include "ApplicationMessenger.h"
 #include <X11/Xlib.h>
 #include "X11/WinSystemX11GL.h"
+#include "X11/WinSystemX11GLES.h"
 #include "X11/keysymdef.h"
 #include "X11/XF86keysym.h"
 #include "utils/log.h"
@@ -177,11 +178,8 @@ CWinEventsX11Imp::CWinEventsX11Imp()
 
 CWinEventsX11Imp::~CWinEventsX11Imp()
 {
-  if (m_keybuf);
-  {
-    free(m_keybuf);
-    m_keybuf = 0;
-  }
+  free(m_keybuf);
+  m_keybuf = 0;
 
   if (m_xic)
   {
@@ -218,7 +216,6 @@ bool CWinEventsX11Imp::Init(Display *dpy, Window win)
   char *old_locale = NULL, *old_modifiers = NULL;
   char res_name[8];
   const char *p;
-  size_t n;
 
   // set resource name to xbmc, not used
   strcpy(res_name, "xbmc");
@@ -414,7 +411,7 @@ bool CWinEventsX11Imp::MessagePump()
 
       case ClientMessage:
       {
-        if (xevent.xclient.data.l[0] == WinEvents->m_wmDeleteMessage)
+        if ((unsigned int)xevent.xclient.data.l[0] == WinEvents->m_wmDeleteMessage)
           if (!g_application.m_bStop) CApplicationMessenger::Get().Quit();
         break;
       }
@@ -616,6 +613,8 @@ bool CWinEventsX11Imp::MessagePump()
       case SDL_JOYAXISMOTION:
       case SDL_JOYBALLMOTION:
       case SDL_JOYHATMOTION:
+      case SDL_JOYDEVICEADDED:
+      case SDL_JOYDEVICEREMOVED:
         g_Joystick.Update(event);
         ret = true;
         break;

@@ -41,7 +41,6 @@
 #include "settings/DisplaySettings.h"
 #include "settings/MediaSettings.h"
 #include "settings/Settings.h"
-#include "guilib/GUISelectButtonControl.h"
 #include "FileItem.h"
 #include "video/VideoReferenceClock.h"
 #include "settings/AdvancedSettings.h"
@@ -142,12 +141,14 @@ bool CGUIWindowFullScreen::OnAction(const CAction &action)
     ToggleOSD();
     return true;
 
+  case ACTION_TRIGGER_OSD:
+    TriggerOSD();
+    return true;
+
   case ACTION_SHOW_GUI:
     {
       // switch back to the menu
-      OutputDebugString("Switching to GUI\n");
       g_windowManager.PreviousWindow();
-      OutputDebugString("Now in GUI\n");
       return true;
     }
     break;
@@ -358,7 +359,7 @@ void CGUIWindowFullScreen::OnWindowLoaded()
   // override the clear colour - we must never clear fullscreen
   m_clearBackground = 0;
 
-  CGUIProgressControl* pProgress = (CGUIProgressControl*)GetControl(CONTROL_PROGRESS);
+  CGUIProgressControl* pProgress = dynamic_cast<CGUIProgressControl*>(GetControl(CONTROL_PROGRESS));
   if(pProgress)
   {
     if( pProgress->GetInfo() == 0 || !pProgress->HasVisibleCondition())
@@ -369,14 +370,14 @@ void CGUIWindowFullScreen::OnWindowLoaded()
     }
   }
 
-  CGUILabelControl* pLabel = (CGUILabelControl*)GetControl(LABEL_BUFFERING);
+  CGUILabelControl* pLabel = dynamic_cast<CGUILabelControl*>(GetControl(LABEL_BUFFERING));
   if(pLabel && !pLabel->HasVisibleCondition())
   {
     pLabel->SetVisibleCondition("player.caching");
     pLabel->SetVisible(true);
   }
 
-  pLabel = (CGUILabelControl*)GetControl(LABEL_CURRENT_TIME);
+  pLabel = dynamic_cast<CGUILabelControl*>(GetControl(LABEL_CURRENT_TIME));
   if(pLabel && !pLabel->HasVisibleCondition())
   {
     pLabel->SetVisibleCondition("player.displayafterseek");
@@ -538,17 +539,6 @@ EVENT_RESULT CGUIWindowFullScreen::OnMouseEvent(const CPoint &point, const CMous
   }
   if (event.m_id >= ACTION_GESTURE_NOTIFY && event.m_id <= ACTION_GESTURE_END) // gestures
     return EVENT_RESULT_UNHANDLED;
-  if (event.m_id != ACTION_MOUSE_MOVE || event.m_offsetX || event.m_offsetY)
-  { // some other mouse action has occurred - bring up the OSD
-    // if it is not already running
-    CGUIDialogVideoOSD *pOSD = (CGUIDialogVideoOSD *)g_windowManager.GetWindow(WINDOW_DIALOG_VIDEO_OSD);
-    if (pOSD && !pOSD->IsDialogRunning())
-    {
-      pOSD->SetAutoClose(3000);
-      pOSD->DoModal();
-    }
-    return EVENT_RESULT_HANDLED;
-  }
   return EVENT_RESULT_UNHANDLED;
 }
 
@@ -598,18 +588,18 @@ void CGUIWindowFullScreen::FrameMove()
       CStdString strCores = g_cpuInfo.GetCoresUsageString();
 #endif
       int    missedvblanks;
-      int    refreshrate;
+      double refreshrate;
       double clockspeed;
       CStdString strClock;
 
       if (g_VideoReferenceClock.GetClockInfo(missedvblanks, clockspeed, refreshrate))
-        strClock = StringUtils::Format("S( refresh:%i missed:%i speed:%+.3f%% %s )"
+        strClock = StringUtils::Format("S( refresh:%.3f missed:%i speed:%+.3f%% %s )"
                                        , refreshrate
                                        , missedvblanks
                                        , clockspeed - 100.0
                                        , g_renderManager.GetVSyncState().c_str());
 
-      strGeneralFPS = StringUtils::Format("%s\nW( fps:%02.2f %s ) %s"
+      strGeneralFPS = StringUtils::Format("%s\nW( fps:%02.2f %s )\n%s"
                                           , strGeneral.c_str()
                                           , g_infoManager.GetFPS()
                                           , strCores.c_str(), strClock.c_str() );
@@ -647,7 +637,7 @@ void CGUIWindowFullScreen::FrameMove()
       float xscale = (float)res.iScreenWidth  / (float)res.iWidth;
       float yscale = (float)res.iScreenHeight / (float)res.iHeight;
 
-      CStdString strSizing = StringUtils::Format(g_localizeStrings.Get(245),
+      CStdString strSizing = StringUtils::Format(g_localizeStrings.Get(245).c_str(),
                                                  (int)info.SrcRect.Width(),
                                                  (int)info.SrcRect.Height(),
                                                  (int)(info.DestRect.Width() * xscale),
@@ -828,7 +818,7 @@ void CGUIWindowFullScreen::ChangetheTVGroup(bool next)
   if (!g_PVRManager.IsStarted())
     return;
 
-  CGUISelectButtonControl* pButton = (CGUISelectButtonControl*)GetControl(CONTROL_GROUP_CHOOSER);
+  CGUIControl* pButton = GetControl(CONTROL_GROUP_CHOOSER);
   if (!pButton)
     return;
 
@@ -860,5 +850,15 @@ void CGUIWindowFullScreen::ToggleOSD()
       pOSD->Close();
     else
       pOSD->DoModal();
+  }
+}
+
+void CGUIWindowFullScreen::TriggerOSD()
+{
+  CGUIDialogVideoOSD *pOSD = (CGUIDialogVideoOSD *)g_windowManager.GetWindow(WINDOW_DIALOG_VIDEO_OSD);
+  if (pOSD && !pOSD->IsDialogRunning())
+  {
+    pOSD->SetAutoClose(3000);
+    pOSD->DoModal();
   }
 }

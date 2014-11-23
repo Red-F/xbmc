@@ -1,14 +1,14 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: Confluence
 # Addon id: skin.confluence
-# Addon Provider: Jezz_X, Team XBMC
+# Addon Provider: Jezz_X, Team Kodi
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Main\n"
 "Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Tamil (India) (http://www.transifex.com/projects/p/xbmc-main/language/ta_IN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -461,16 +461,16 @@ msgid "[B]CONFIGURE SYSTEM SETTINGS[/B][CR][CR]Setup and calibrate displays · C
 msgstr "[B]கணினி அமைப்புகள் கட்டமைப்பு[/B][CR][CR]காட்சிகளை அமைப்பது மற்றும் அளவீடு · ஆடியோ வெளியீடு கட்டமைக்க · ரிமோட் கண்ட்ரோல்கள் அமைப்பதற்கு[CR]மின் ஆற்றல் சேமிப்பு விருப்பங்கள் அமைக்க · பிழைத்திருத்தம் செயல்படுத்த · மாஸ்டர் பூட்டு அமைப்பு"
 
 msgctxt "#31408"
-msgid "[B]CONFIGURE ADD-ONS[/B][CR][CR]Manage your installed Add-ons · Browse for and install Add-ons from xbmc.org[CR]Modify Add-on settings"
-msgstr "[B]துணை-பயன் அமைப்புகள் கட்டமைப்பு[/B][CR][CR]நிறுவிய துணை-பயன்களை மேலாண்மை · xbmc.org உலாவி மற்றும் துணை-பயன்களை நிறுவ[CR]துணை-பயன் அமைப்புகளை மாற்ற"
+msgid "[B]CONFIGURE ADD-ONS[/B][CR][CR]Manage your installed Add-ons · Browse for and install Add-ons from kodi.tv[CR]Modify Add-on settings"
+msgstr "[B]துணை-பயன் அமைப்புகள் கட்டமைப்பு[/B][CR][CR]நிறுவிய துணை-பயன்களை மேலாண்மை · kodi.tv உலாவி மற்றும் துணை-பயன்களை நிறுவ[CR]துணை-பயன் அமைப்புகளை மாற்ற"
 
 msgctxt "#31409"
 msgid "[B]CONFIGURE TV SETTINGS[/B][CR][CR]Change full screen info · Manage EPG data settings"
 msgstr "[B]தொலைக்காட்சி அமைப்புகள் கட்டமைப்பு[/B][CR][CR]முழுத்திரை தகவல் மாற்று · EPG தரவு அமைப்புகள் மேலாண்மை"
 
 msgctxt "#31410"
-msgid "[B]CONFIGURE SERVICE SETTINGS[/B][CR][CR]Setup control of XBMC via UPnP and HTTP · Configure file sharing[CR]Enable Zeroconf · Configure AirPlay"
-msgstr "[B]சேவை அமைப்புகள் கட்டமைப்பு[/B][CR][CR]UPnP மற்றும் HTTP வழியாக XBMCஅமைப்பு கட்டுப்பாடு  · கோப்பு பகிர்வு கட்டமைப்பு[CR]Zeroconf செயல்படுத்த · AirPlay கட்டமைப்பு"
+msgid "[B]CONFIGURE SERVICE SETTINGS[/B][CR][CR]Setup control of Kodi via UPnP and HTTP · Configure file sharing[CR]Enable Zeroconf · Configure AirPlay"
+msgstr "[B]சேவை அமைப்புகள் கட்டமைப்பு[/B][CR][CR]UPnP மற்றும் HTTP வழியாக Kodiஅமைப்பு கட்டுப்பாடு  · கோப்பு பகிர்வு கட்டமைப்பு[CR]Zeroconf செயல்படுத்த · AirPlay கட்டமைப்பு"
 
 msgctxt "#31411"
 msgid "First run help...."
@@ -489,8 +489,8 @@ msgid "Login"
 msgstr "உள்நுழை"
 
 msgctxt "#31421"
-msgid "Select your XBMC user Profile[CR]to login and continue"
-msgstr "உங்கள் XBMC பயனர் விவரங்களை தேர்வுசெய்து[CR]உள்நுழைய தொடரச்செய்யவும்"
+msgid "Select your Kodi user Profile[CR]to login and continue"
+msgstr "உங்கள் Kodi பயனர் விவரங்களை தேர்வுசெய்து[CR]உள்நுழைய தொடரச்செய்யவும்"
 
 msgctxt "#31422"
 msgid "Show or hide the login screen at startup."
@@ -548,10 +548,6 @@ msgctxt "#31903"
 msgid "Weekend Forecast"
 msgstr "வாராந்திர முன் அறிவிப்பு"
 
-msgctxt "#31904"
-msgid "10 Day Forecast"
-msgstr "10 நாட்கள் முன் அறிவிப்பு"
-
 msgctxt "#31905"
 msgid "Forecast"
 msgstr "முன் அறிவிப்பு"
@@ -565,8 +561,8 @@ msgid "Fetching forecast info..."
 msgstr "முன் அறிவிப்பு தகவல்களை சேகரித்தல்..."
 
 msgctxt "#31910"
-msgid "Map & Alerts"
-msgstr "நிலப்படம் மற்றும் விழிப்பூட்டல்"
+msgid "Maps"
+msgstr "வரைபடங்கள்"
 
 msgctxt "#31950"
 msgid "WEATHER"
@@ -577,8 +573,8 @@ msgid "PICTURES"
 msgstr "படங்கள்"
 
 msgctxt "#31952"
-msgid "LIVE TV"
-msgstr "நேரடி தொலைக்காட்சி"
+msgid "TV"
+msgstr "தொலைக்காட்சி"
 
 msgctxt "#31953"
 msgid "VIDEOS"

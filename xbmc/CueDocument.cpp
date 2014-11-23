@@ -107,7 +107,7 @@ bool CCueDocument::Parse(const CStdString &strFile)
     {
       if (bCurrentFileChanged)
       {
-        OutputDebugString("Track split over multiple files, unsupported ('" + strFile + "')\n");
+        CLog::Log(LOGERROR, "Track split over multiple files, unsupported ('%s')", strFile.c_str());
         return false;
       }
 
@@ -115,7 +115,7 @@ bool CCueDocument::Parse(const CStdString &strFile)
       time = ExtractTimeFromIndex(strLine);
       if (time == -1)
       { // Error!
-        OutputDebugString("Mangled Time in INDEX 0x tag in CUE file!\n");
+        CLog::Log(LOGERROR, "Mangled Time in INDEX 0x tag in CUE file!");
         return false;
       }
       if (m_iTotalTracks > 0)  // Set the end time of the last track
@@ -198,7 +198,7 @@ bool CCueDocument::Parse(const CStdString &strFile)
   if (m_iTotalTracks >= 0)
     m_Track[m_iTotalTracks].iEndTime = 0;
   else
-    OutputDebugString("No INDEX 01 tags in CUE file!\n");
+    CLog::Log(LOGERROR, "No INDEX 01 tags in CUE file!");
   m_file.Close();
   if (m_iTotalTracks >= 0)
   {
@@ -317,14 +317,13 @@ int CCueDocument::ExtractTimeFromIndex(const CStdString &index)
   StringUtils::TrimLeft(numberTime);
   while (!numberTime.empty())
   {
-    if (!isdigit(numberTime[0]))
+    if (!StringUtils::isasciidigit(numberTime[0]))
       break;
     numberTime.erase(0, 1);
   }
   StringUtils::TrimLeft(numberTime);
   // split the resulting string
-  CStdStringArray time;
-  StringUtils::SplitString(numberTime, ":", time);
+  vector<string> time = StringUtils::Split(numberTime, ":");
   if (time.size() != 3)
     return -1;
 
@@ -343,7 +342,7 @@ int CCueDocument::ExtractNumericInfo(const CStdString &info)
 {
   CStdString number(info);
   StringUtils::TrimLeft(number);
-  if (number.empty() || !isdigit(number[0]))
+  if (number.empty() || !StringUtils::isasciidigit(number[0]))
     return -1;
   return atoi(number.c_str());
 }
@@ -367,7 +366,7 @@ bool CCueDocument::ResolvePath(CStdString &strPath, const CStdString &strBase)
     CDirectory::GetDirectory(strDirectory,items);
     for (int i=0;i<items.Size();++i)
     {
-      if (items[i]->GetPath().Equals(strPath))
+      if (items[i]->IsPath(strPath))
       {
         strPath = items[i]->GetPath();
         return true;

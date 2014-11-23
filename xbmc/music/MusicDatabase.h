@@ -97,7 +97,7 @@ public:
   virtual bool CommitTransaction();
   void EmptyCache();
   void Clean();
-  int  Cleanup(CGUIDialogProgress *pDlgProgress=NULL);
+  int  Cleanup(bool bShowProgress=true);
   bool LookupCDDBInfo(bool bRequery=false);
   void DeleteCDDBInfo();
 
@@ -179,7 +179,6 @@ public:
                  int iTimesPlayed, int iStartOffset, int iEndOffset,
                  const CDateTime& dtLastPlayed,
                  char rating, int iKaraokeNumber);
-  // bool DeleteSong(int idSong);
 
   //// Misc Song
   bool GetSongByFileName(const CStdString& strFileName, CSong& song, int startOffset = 0);
@@ -223,7 +222,6 @@ public:
                    const CStdString& strImage, const CStdString& strLabel,
                    const CStdString& strType,
                    int iRating, int iYear, bool bCompilation);
-  bool DeleteAlbum(int idAlbum);
   bool ClearAlbumLastScrapedTime(int idAlbum);
   bool HasAlbumBeenScraped(int idAlbum);
   int  AddAlbumInfoSong(int idAlbum, const CSong& song);
@@ -255,7 +253,6 @@ public:
                     const CStdString& strBiography, const CStdString& strDied,
                     const CStdString& strDisbanded, const CStdString& strYearsActive,
                     const CStdString& strImage, const CStdString& strFanart);
-  bool DeleteArtist(int idArtist);
   bool HasArtistBeenScraped(int idArtist);
   bool ClearArtistLastScrapedTime(int idArtist);
   int  AddArtistDiscography(int idArtist, const CStdString& strAlbum, const CStdString& strYear);
@@ -272,8 +269,8 @@ public:
   bool GetPaths(std::set<std::string> &paths);
   bool SetPathHash(const CStdString &path, const CStdString &hash);
   bool GetPathHash(const CStdString &path, CStdString &hash);
-  bool GetAlbumPath(int idAlbum, CStdString &path);
-  bool GetArtistPath(int idArtist, CStdString &path);
+  bool GetAlbumPath(int idAlbum, std::string &path);
+  bool GetArtistPath(int idArtist, std::string &path);
 
   /////////////////////////////////////////////////
   // Genres
@@ -371,7 +368,7 @@ public:
   /////////////////////////////////////////////////
   // Karaoke
   /////////////////////////////////////////////////
-  void AddKaraokeData(int idSong, int iKaraokeNumber, DWORD crc);
+  void AddKaraokeData(int idSong, int iKaraokeNumber);
   bool GetSongByKaraokeNumber( int number, CSong& song );
   bool SetKaraokeSongDelay( int idSong, int delay );
   int GetKaraokeSongsCount();
@@ -481,7 +478,6 @@ private:
    */
   virtual void CreateViews();
 
-  void SplitString(const CStdString &multiString, std::vector<std::string> &vecStrings, CStdString &extraStrings);
   CSong GetSongFromDataset();
   CSong GetSongFromDataset(const dbiplus::sql_record* const record, int offset = 0);
   CArtist GetArtistFromDataset(dbiplus::Dataset* pDS, int offset = 0, bool needThumb = true);
@@ -515,7 +511,6 @@ private:
     song_iTrack,
     song_iDuration,
     song_iYear,
-    song_dwFileNameCRC,
     song_strFileName,
     song_strMusicBrainzTrackID,
     song_iTimesPlayed,

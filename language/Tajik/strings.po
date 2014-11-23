@@ -1,11 +1,11 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Main\n"
 "Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Tajik (http://www.transifex.com/projects/p/xbmc-main/language/tg/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -38,8 +38,8 @@ msgid "Settings"
 msgstr "Танзимот"
 
 msgctxt "#6"
-msgid "XBMC SVN"
-msgstr "XBMC SVN"
+msgid "Kodi SVN"
+msgstr "Kodi SVN"
 
 msgctxt "#7"
 msgid "File manager"
@@ -50,8 +50,8 @@ msgid "Weather"
 msgstr "Обу ҳаво"
 
 msgctxt "#9"
-msgid "xbmc media center"
-msgstr "Маркази мултимедиаи xbmc"
+msgid "Kodi media center"
+msgstr "Маркази мултимедиаи Kodi"
 
 msgctxt "#11"
 msgid "Monday"
@@ -388,10 +388,6 @@ msgstr "Тасдиқи нусхабардории файл"
 msgctxt "#121"
 msgid "Confirm file move"
 msgstr "Тасдиқи интиқолдиҳии файл"
-
-msgctxt "#122"
-msgid "Confirm file delete?"
-msgstr "Несткунии файлро тасдиқ мекунед?"
 
 msgctxt "#123"
 msgid "Copy these files?"
@@ -914,8 +910,8 @@ msgid "Scripts output"
 msgstr "Барориши скриптҳо"
 
 msgctxt "#263"
-msgid "Allow control of XBMC via HTTP"
-msgstr "Иҷозати идоракунии XBMC тавассути HTTP"
+msgid "Allow control of Kodi via HTTP"
+msgstr "Иҷозати идоракунии Kodi тавассути HTTP"
 
 msgctxt "#264"
 msgid "Record"
@@ -1224,10 +1220,6 @@ msgstr "Ҳунарпеша"
 msgctxt "#345"
 msgid "Year"
 msgstr "Сол"
-
-msgctxt "#346"
-msgid "Normalize levels on downmix"
-msgstr "Дараҷаҳои ҳамворкунӣ барои омезиш"
 
 msgctxt "#347"
 msgid "DTS-HD capable receiver"
@@ -1750,8 +1742,8 @@ msgid "Audio options"
 msgstr "Имконоти аудио"
 
 msgctxt "#482"
-msgid "About XBMC"
-msgstr "Дар бораи XBMC"
+msgid "About Kodi"
+msgstr "Дар бораи Kodi"
 
 msgctxt "#485"
 msgid "Delete album"
@@ -2401,13 +2393,33 @@ msgctxt "#665"
 msgid "Compression level"
 msgstr "Сатҳи фишурдасозӣ"
 
-msgctxt "#666"
-msgid "Verbose logging..."
-msgstr "Сабти рӯйдодҳои ботафсил..."
-
 msgctxt "#667"
 msgid "Enable Dolby Digital transcoding"
 msgstr "Фаъол кардани рамзгузории Dolby Digital"
+
+msgctxt "#669"
+msgid "Verbose logging for SMB library"
+msgstr "Воридшавии ботафсил барои китобхонаи SMB"
+
+msgctxt "#670"
+msgid "Verbose logging for CURL library (http, dav)"
+msgstr "Воридшавии ботафсил барои китобхонаи CURL (http, dav)"
+
+msgctxt "#671"
+msgid "Verbose logging for CMYTH library"
+msgstr "Воридшавии ботафсил барои китобхонаи CMYTH"
+
+msgctxt "#672"
+msgid "Verbose logging for FFMPEG libraries"
+msgstr "Воридшавии ботафсил барои китобхонаҳои FFMPEG"
+
+msgctxt "#673"
+msgid "Verbose logging for RTMP library"
+msgstr "Воридшавии ботафсил барои китобхонаи RTMP"
+
+msgctxt "#674"
+msgid "Verbose logging for DBUS calls"
+msgstr "Воридшавии ботафсил барои дархостҳои DBUS"
 
 msgctxt "#700"
 msgid "Cleaning up library"
@@ -2714,8 +2726,8 @@ msgid "Remote control"
 msgstr "Идоракунии дурдаст"
 
 msgctxt "#791"
-msgid "Allow programs on this system to control XBMC"
-msgstr "Иҷозат диҳед, ки барномаҳои ин система тавонанд XBMC-ро идора кунанд"
+msgid "Allow programs on this system to control Kodi"
+msgstr "Иҷозат диҳед, ки барномаҳои ин система тавонанд Kodi-ро идора кунанд"
 
 msgctxt "#792"
 msgid "Port"
@@ -2726,8 +2738,8 @@ msgid "Port range"
 msgstr "Ҳудуди портҳо"
 
 msgctxt "#794"
-msgid "Allow programs on other systems to control XBMC"
-msgstr "Иҷозат диҳед, ки барномаҳои системаҳои дигар тавонанд XBMC-ро идора кунанд"
+msgid "Allow programs on other systems to control Kodi"
+msgstr "Иҷозат диҳед, ки барномаҳои системаҳои дигар тавонанд Kodi-ро идора кунанд"
 
 msgctxt "#795"
 msgid "Initial repeat delay (ms)"
@@ -2790,8 +2802,8 @@ msgid "Unable to connect"
 msgstr "Пайваст имконпазир нест"
 
 msgctxt "#1002"
-msgid "XBMC was unable to connect to the network location."
-msgstr "XBMC ба суроғаи шабакавӣ пайваст карда нашуд."
+msgid "Kodi was unable to connect to the network location."
+msgstr "Kodi ба суроғаи шабакавӣ пайваст карда нашуд."
 
 msgctxt "#1003"
 msgid "This could be due to the network not being connected."
@@ -3142,8 +3154,8 @@ msgid "Allow volume control"
 msgstr "Иҷозат додани идоракунии баландии садо"
 
 msgctxt "#1270"
-msgid "Allow XBMC to receive AirPlay content"
-msgstr "Иҷозат диҳед, ки XBMC тавонад мӯҳтавои AirPlay-ро қабул кунад"
+msgid "Allow Kodi to receive AirPlay content"
+msgstr "Иҷозат диҳед, ки Kodi тавонад мӯҳтавои AirPlay-ро қабул кунад"
 
 msgctxt "#1271"
 msgid "Device name"
@@ -3172,6 +3184,26 @@ msgstr "Дастгоҳи аудиоии дигар"
 msgctxt "#1301"
 msgid "Custom passthrough device"
 msgstr "Дастгоҳи барориши бевоситаи аудиоии дигар"
+
+msgctxt "#1381"
+msgid "Extreme"
+msgstr "Ниҳоят"
+
+msgctxt "#1382"
+msgid "Whirls"
+msgstr "Тӯфон"
+
+msgctxt "#1384"
+msgid "Broken"
+msgstr "Вайроншуда"
+
+msgctxt "#1389"
+msgid "Windy"
+msgstr "Шамолдор"
+
+msgctxt "#1390"
+msgid "Settings"
+msgstr "Танзимот"
 
 msgctxt "#1396"
 msgid "Drifting"
@@ -4278,8 +4310,8 @@ msgid "Active connections detected!"
 msgstr "Пайвастҳои фаъол муайян карда шудаанд!"
 
 msgctxt "#13141"
-msgid "If you proceed, you might not be able to control XBMC"
-msgstr "Агар шумо идома диҳед, эҳтимол XBMC дигар идора карда намешавад"
+msgid "If you proceed, you might not be able to control Kodi"
+msgstr "Агар шумо идома диҳед, эҳтимол Kodi дигар идора карда намешавад"
 
 msgctxt "#13142"
 msgid "any longer. Are you sure you want to stop the Event server?"
@@ -4294,8 +4326,8 @@ msgid "If you are currently using the Apple Remote to control"
 msgstr "Агар шумо пулти Apple-ро истифода баред барои"
 
 msgctxt "#13146"
-msgid "XBMC, changing this setting might affect your ability"
-msgstr "XBMC, тағйирдиҳии ин танзимот метавонад имкони"
+msgid "Kodi, changing this setting might affect your ability"
+msgstr "Kodi, тағйирдиҳии ин танзимот метавонад имкони"
 
 msgctxt "#13147"
 msgid "to continue controlling it. Do you want to proceed?"
@@ -4522,8 +4554,8 @@ msgid "Do you wish to reboot your system"
 msgstr "Шумо мехоҳед, ки системаро бозоғозӣ кунед"
 
 msgctxt "#13309"
-msgid "instead of just XBMC?"
-msgstr "ва на танҳо XBMC?"
+msgid "instead of just Kodi?"
+msgstr "ва на танҳо Kodi?"
 
 msgctxt "#13310"
 msgid "Zoom effect"
@@ -4981,26 +5013,6 @@ msgctxt "#13439"
 msgid "Allow hardware acceleration (MediaCodec)"
 msgstr "Фаъол кардани шитоби сахтафзор (MediaCodec)"
 
-msgctxt "#13440"
-msgid "Allow multi threaded software decoding"
-msgstr "Иҷозат додани рамзкушоии нармафзор бо якҷанд ҷараён"
-
-msgctxt "#13441"
-msgid "Use Mpeg-2 VDPAU"
-msgstr "Истифодаи Mpeg-2 VDPAU"
-
-msgctxt "#13442"
-msgid "Enable this option to use hardware acceleration for Mpeg-(1/2) codecs. If disabled the CPU will be used instead. Older Radeon Cards tend to segfault with this enabled."
-msgstr "Ин имконро фаъол кунед, агар хоҳед ки шитобдиҳандаи сахтафзориро барои кодеки Mpeg-(1/2) истифода баред. Агар ғайрифаъол кунед, ба ҷояш CPU истифода мешавад. Кортҳои кӯҳнаи Radeon бо ин имкони фаъолшуда кор намекунанд."
-
-msgctxt "#13443"
-msgid "Use Mpeg-4 VDPAU"
-msgstr "Истифодаи Mpeg-4 VDPAU"
-
-msgctxt "#13444"
-msgid "Enable this option to use hardware acceleration for the Mpeg-4 codec. If disabled the CPU will be used instead. Some ION Hardware has problems with this being enabled by default."
-msgstr "Ин имконро фаъол кунед, агар хоҳед ки шитобдиҳандаи сахтафзориро барои кодеки Mpeg-4 истифода баред. Агар ғайрифаъол кунед, ба ҷояш CPU истифода мешавад. Баъзе сахтафзори ION ҳангоми истифодаи ин имкон кор намекунанд."
-
 msgctxt "#13445"
 msgid "Use VC-1 VDPAU"
 msgstr "Истифодаи VC-1 VDPAU"
@@ -5008,22 +5020,6 @@ msgstr "Истифодаи VC-1 VDPAU"
 msgctxt "#13446"
 msgid "Enable this option to use hardware acceleration for VC-1 based codecs. If disabled the CPU will be used instead. AMD Hardware with VDPAU cannot decode VC-1 Simple."
 msgstr "Ин имконро фаъол кунед, агар хоҳед ки шитобдиҳандаи сахтафзориро барои кодекҳои VC-1 истифода баред. Агар ғайрифаъол кунед, ба ҷояш CPU истифода мешавад. Сахтафзори AMD бо имкони VDPAU нметавонад VC-1-ро рамзкушоӣ кунад."
-
-msgctxt "#13447"
-msgid "Use Mpeg-2 VAAPI"
-msgstr "Истифодаи Mpeg-2 VAAPI"
-
-msgctxt "#13448"
-msgid "Enable this option to use hardware acceleration for Mpeg-(1/2) codecs. If disabled the CPU will be used instead. Some Mpeg-2 Videos might have green artifacts."
-msgstr "Ин имконро фаъол кунед, агар хоҳед ки шитобдиҳандаи сахтафзориро барои кодекҳои Mpeg-(1/2) истифода баред. Агар ғайрифаъол кунед, ба ҷояш CPU истифода мешавад. Баъзе видеоҳои Mpeg-2 метавонанд хатҳои сабзро дар бар гиранд."
-
-msgctxt "#13449"
-msgid "Use Mpeg-4 VAAPI"
-msgstr "Истифодаи Mpeg-4 VAAPI"
-
-msgctxt "#13450"
-msgid "Enable this option to use hardware acceleration for the Mpeg-4 codec. If disabled the CPU will be used instead."
-msgstr "Ин имконро фаъол кунед, агар хоҳед ки шитобдиҳандаи сахтафзориро барои кодекҳои Mpeg-4 истифода баред. Агар ғайрифаъол кунед, ба ҷояш CPU истифода мешавад."
 
 msgctxt "#13451"
 msgid "Use VC-1 VAAPI"
@@ -5142,8 +5138,8 @@ msgid "Apple remote"
 msgstr "Пулти Apple"
 
 msgctxt "#13602"
-msgid "Allow start of XBMC using the remote"
-msgstr "Иҷозати оғоз кардани XBMC ба воситаи пулт"
+msgid "Allow start of Kodi using the remote"
+msgstr "Иҷозати оғоз кардани Kodi ба воситаи пулт"
 
 msgctxt "#13603"
 msgid "Sequence delay time"
@@ -5314,8 +5310,8 @@ msgid "Network settings changed"
 msgstr "Танзимоти шабака тағйир ёфт."
 
 msgctxt "#14039"
-msgid "XBMC requires to restart to change your"
-msgstr "Барои тағйир додани танзимоти шабака, системаи XBMC"
+msgid "Kodi requires to restart to change your"
+msgstr "Барои тағйир додани танзимоти шабака, системаи Kodi"
 
 msgctxt "#14040"
 msgid "network setup.  Would you like to restart now?"
@@ -5484,10 +5480,6 @@ msgstr "Илова кардани роҳчаҳо ҳангоми интихоб"
 msgctxt "#14086"
 msgid "Playback"
 msgstr "Пахш"
-
-msgctxt "#14087"
-msgid "DVDs"
-msgstr "Дискҳои DVD"
 
 msgctxt "#14088"
 msgid "Play DVDs automatically"
@@ -6017,10 +6009,6 @@ msgctxt "#19002"
 msgid "or use phrases to find an exact match, like \"The wizard of Oz\"."
 msgstr "ё барои ёфтани мувофиқати дақиқ ибораҳоро истифода баред, масалан \"сурудҳои Шабнами Сурайё\"."
 
-msgctxt "#19003"
-msgid "Find similar programs"
-msgstr "Ёфтани барномаҳои монанд"
-
 msgctxt "#19004"
 msgid "Importing EPG from clients"
 msgstr "Воридоти иттилооти EPG аз муштариён"
@@ -6074,8 +6062,8 @@ msgid "PVR Backend %i - %s"
 msgstr "Сервери PVR %i - %s"
 
 msgctxt "#19017"
-msgid "TV recordings"
-msgstr "Сабтҳои ТВ"
+msgid "Recordings"
+msgstr "Сабтҳо"
 
 msgctxt "#19018"
 msgid "Folder with channel icons"
@@ -6264,10 +6252,6 @@ msgstr "Гузариш ба аввал"
 msgctxt "#19064"
 msgid "Go to end"
 msgstr "Гузариш ба поён"
-
-msgctxt "#19065"
-msgid "Default EPG window"
-msgstr "Равзанаи EPG-и пешфарз"
 
 msgctxt "#19066"
 msgid "Channel icons"
@@ -6685,10 +6669,6 @@ msgctxt "#19178"
 msgid "Show channel information when switching channels"
 msgstr "Намоиш додани иттилооти шабака ҳангоми гузариш ба шабакаҳои дигар"
 
-msgctxt "#19179"
-msgid "Automatically hide channel information"
-msgstr "Пинҳон кардани иттилооти шабака ба таври худкор"
-
 msgctxt "#19180"
 msgid "TV"
 msgstr "ТВ"
@@ -6701,9 +6681,9 @@ msgctxt "#19182"
 msgid "Days to display in the EPG"
 msgstr "Ҳисоби рӯзҳо барои намоиш дар EPG"
 
-msgctxt "#19184"
-msgid "Channel information duration"
-msgstr "Давомнокии намоиши иттилооти шабака"
+msgctxt "#19183"
+msgid "Radio"
+msgstr "Радио"
 
 msgctxt "#19185"
 msgid "Reset the PVR database"
@@ -6726,8 +6706,8 @@ msgid "Continue last channel on startup"
 msgstr "Намоиш додани шабакаи охирин дар оғози кор"
 
 msgctxt "#19190"
-msgid "Minimised"
-msgstr "Дар равзана"
+msgid "Background"
+msgstr "Пасзамина"
 
 msgctxt "#19191"
 msgid "PVR service"
@@ -6802,8 +6782,8 @@ msgid "Enter the name of the new channel"
 msgstr "Номи шабакаи навро ворид кунед"
 
 msgctxt "#19209"
-msgid "XBMC virtual backend"
-msgstr "Сервери виртуалии XBMC"
+msgid "Kodi virtual backend"
+msgstr "Сервери виртуалии Kodi"
 
 msgctxt "#19210"
 msgid "Client"
@@ -7041,10 +7021,6 @@ msgctxt "#19269"
 msgid "Do not show 'connection lost' warnings"
 msgstr "Намоиш надодани огоҳиҳо бо маълумоти \"Пайвастшавӣ гум шудааст\""
 
-msgctxt "#19270"
-msgid "* All recordings"
-msgstr "* Ҳамаи сабтҳо"
-
 msgctxt "#19271"
 msgid "No PVR Add-ons could be found"
 msgstr "Ягон барномаи иловагии PVR ёфт нашуд"
@@ -7058,8 +7034,8 @@ msgid "Add-on for the backend to be able to use PVR."
 msgstr "Барномаи иловагӣ барои сервер, то ки тавонад PVR-ро истифода барад."
 
 msgctxt "#19274"
-msgid "Please visit xbmc.org/pvr to learn more."
-msgstr "Лутфан, барои маълумоти муфассал ба вебсайти \"xbmc.org/pvr\" гузаред."
+msgid "Please visit kodi.tv/pvr to learn more."
+msgstr "Лутфан, барои маълумоти муфассал ба вебсайти \"kodi.tv/pvr\" гузаред."
 
 msgctxt "#19275"
 msgid "Conflict warning"
@@ -7494,8 +7470,8 @@ msgid "Screenshots"
 msgstr "Суратҳои экран"
 
 msgctxt "#20009"
-msgid "Use XBMC"
-msgstr "Истифодаи XBMC"
+msgid "Use Kodi"
+msgstr "Истифодаи Kodi"
 
 msgctxt "#20011"
 msgid "Music playlists"
@@ -8406,8 +8382,8 @@ msgid "Do you want to remove all items within"
 msgstr "Оё шумо мехоҳед, ки ҳамаи объектҳоро дар ҳудуди"
 
 msgctxt "#20341"
-msgid "this path from the XBMC library?"
-msgstr "ин масир аз китобхонаи XBMC тоза намоед?"
+msgid "this path from the Kodi library?"
+msgstr "ин масир аз китобхонаи Kodi тоза намоед?"
 
 msgctxt "#20342"
 msgid "Movies"
@@ -9610,8 +9586,8 @@ msgid "Reference service"
 msgstr "Маркази маълумот"
 
 msgctxt "#21881"
-msgid "Allow control of XBMC via UPnP"
-msgstr "Иҷозати идоракунии XBMC тавассути UPnP"
+msgid "Allow control of Kodi via UPnP"
+msgstr "Иҷозати идоракунии Kodi тавассути UPnP"
 
 msgctxt "#21882"
 msgid "Attempt to skip introduction before DVD menu"
@@ -10109,6 +10085,10 @@ msgctxt "#24054"
 msgid "Changelog"
 msgstr "Сабти тағйирот"
 
+msgctxt "#24055"
+msgid "Check for updates"
+msgstr "Санҷидани навсозиҳо"
+
 msgctxt "#24059"
 msgid "Would you like to enable this Add-on?"
 msgstr "Шумо мехоҳед, ки ин барномаи иловагиро фаъол кунед?"
@@ -10328,10 +10308,6 @@ msgstr "Пинҳон кардан дар забонҳои хориҷӣ"
 msgctxt "#25002"
 msgid "Select from all titles ..."
 msgstr "Интихоб кардан аз ҳамаи унвонҳо..."
-
-msgctxt "#25003"
-msgid "Show Blu-ray menus"
-msgstr "Намоиш додани менюи Blu-ray"
 
 msgctxt "#25004"
 msgid "Play main title: %d"
@@ -10618,12 +10594,12 @@ msgid "This version of %s requires an"
 msgstr "Барои иҷро кардани ин версияи %s,"
 
 msgctxt "#33075"
-msgid "XBMC revision of %s or greater to run."
-msgstr "версия XBMC %s ё навтар лозим аст."
+msgid "Kodi revision of %s or greater to run."
+msgstr "версия Kodi %s ё навтар лозим аст."
 
 msgctxt "#33076"
-msgid "Please update XBMC."
-msgstr "Лутфан, XBMC-ро навсозӣ кунед."
+msgid "Please update Kodi."
+msgstr "Лутфан, Kodi-ро навсозӣ кунед."
 
 msgctxt "#33077"
 msgid "No data found!"
@@ -10905,10 +10881,6 @@ msgctxt "#35102"
 msgid "Disable joystick when this device is present"
 msgstr "Ғайрифаъол кардани ҷойстик ҳангоми фаъол будани ин дастгоҳ"
 
-msgctxt "#35103"
-msgid "Enable system keys in fullscreen"
-msgstr "Фаъол кардани тугмаҳои системавӣ дар экрани пурра"
-
 msgctxt "#35500"
 msgid "Location"
 msgstr "Ҷойгиршавӣ"
@@ -10958,12 +10930,12 @@ msgid "Could not open the adaptor"
 msgstr "Адаптер кушода нашуд"
 
 msgctxt "#36007"
-msgid "Devices to power on when starting XBMC"
-msgstr "Фаъол кардани дастгоҳҳои зерин ҳангоми оғози кори XBMC"
+msgid "Devices to power on when starting Kodi"
+msgstr "Фаъол кардани дастгоҳҳои зерин ҳангоми оғози кори Kodi"
 
 msgctxt "#36008"
-msgid "Devices to power off when stopping XBMC"
-msgstr "Хомӯш кардани дастгоҳҳои зерин ҳангоми анҷоми кори XBMC"
+msgid "Devices to power off when stopping Kodi"
+msgstr "Хомӯш кардани дастгоҳҳои зерин ҳангоми анҷоми кори Kodi"
 
 msgctxt "#36009"
 msgid "Put devices in standby mode when activating screensaver"
@@ -11002,8 +10974,8 @@ msgid "Connected to HDMI device"
 msgstr "Ба дастгоҳи HDMI пайваст шудааст"
 
 msgctxt "#36020"
-msgid "Make XBMC the active source when starting"
-msgstr "Истифодаи XBMC ҳамчун манбаи фаъол ҳангоми оғози кор"
+msgid "Make Kodi the active source when starting"
+msgstr "Истифодаи Kodi ҳамчун манбаи фаъол ҳангоми оғози кор"
 
 msgctxt "#36021"
 msgid "Physical address (overrules HDMI port)"
@@ -11022,8 +10994,8 @@ msgid "Failed to set the new configuration. Please check your settings."
 msgstr "Танзимоти нав татбиқ карда нашуд. Лутфан, танзимоти худро санҷед."
 
 msgctxt "#36025"
-msgid "Send 'inactive source' command when stopping XBMC"
-msgstr "Фиристодани фармони \"манбаи ғайрифаъол\" ҳангоми хуруҷ аз XBMC"
+msgid "Send 'inactive source' command when stopping Kodi"
+msgstr "Фиристодани фармони \"манбаи ғайрифаъол\" ҳангоми хуруҷ аз Kodi"
 
 msgctxt "#36026"
 msgid "Put devices in standby mode when putting the PC in standby"
@@ -11078,8 +11050,8 @@ msgid "TV and AVR device (explicit)"
 msgstr "Дастгоҳи TV ва AVR (самим)"
 
 msgctxt "#36040"
-msgid "Unsupported libCEC interface version. %x is lower than the version XBMC supports (%x)"
-msgstr "Ин версияи интерфейси libCEC дастгирӣ намешавад. %x қабл аз версияие, ки XBMC дастгирӣ мекунад (%x), мебошад"
+msgid "Unsupported libCEC interface version. %x is lower than the version Kodi supports (%x)"
+msgstr "Ин версияи интерфейси libCEC дастгирӣ намешавад. %x қабл аз версияие, ки Kodi дастгирӣ мекунад (%x), мебошад"
 
 msgctxt "#36041"
 msgid "* Item folder"
@@ -11106,8 +11078,8 @@ msgid "Change the colours of your selected skin."
 msgstr "Тағйир додани рангҳои пӯсти интихобшуда."
 
 msgctxt "#36109"
-msgid "Select the media window that XBMC displays on startup."
-msgstr "Интихоби равзанаи мултимедиавӣ барои намоиш ҳангоми оғози кори XBMC."
+msgid "Select the media window that Kodi displays on startup."
+msgstr "Интихоби равзанаи мултимедиавӣ барои намоиш ҳангоми оғози кори Kodi."
 
 msgctxt "#36111"
 msgid "Turn this off to remove the scrolling RSS news ticker."
@@ -11174,8 +11146,8 @@ msgid "Set the amount of idle time required before displaying the screensaver."
 msgstr "Танзим кардани вақти бефаъолиятӣ пеш аз фаъол кардани пардаи экран."
 
 msgctxt "#36130"
-msgid "Select the screensaver. XBMC will force the 'Dim' screensaver when fullscreen video playback is paused or a dialogue box is active."
-msgstr "Интихоб кардани пардаи экран. Вақте ки пахши видео дар экрани пурра таваққуф карда мешавад ё диалог намоиш дода мешавад, XBMC пардаи экрани \"камнурро\" намоиш медиҳад."
+msgid "Select the screensaver. Kodi will force the 'Dim' screensaver when fullscreen video playback is paused or a dialogue box is active."
+msgstr "Интихоб кардани пардаи экран. Вақте ки пахши видео дар экрани пурра таваққуф карда мешавад ё диалог намоиш дода мешавад, Kodi пардаи экрани \"камнурро\" намоиш медиҳад."
 
 msgctxt "#36131"
 msgid "Change specific screensaver settings. The available options are dependent on the screensaver used."
@@ -11186,8 +11158,8 @@ msgid "Preview the selected screensaver."
 msgstr "Пешнамоиши пардаи экрани интихобшуда."
 
 msgctxt "#36133"
-msgid "If music is being played, XBMC will start the selected visualisation instead of displaying the screensaver."
-msgstr "Агар файли мусиқӣ пахш карда шавад, XBMC ба ивази пардаи экран таҷассуми интихобшударо оғоз мекунад."
+msgid "If music is being played, Kodi will start the selected visualisation instead of displaying the screensaver."
+msgstr "Агар файли мусиқӣ пахш карда шавад, Kodi ба ивази пардаи экран таҷассуми интихобшударо оғоз мекунад."
 
 msgctxt "#36134"
 msgid "Dim the display when media is paused. Not valid for the 'Dim' screensaver mode."
@@ -11222,8 +11194,8 @@ msgid "Group movies into 'Movie sets' when browsing the movie library."
 msgstr "Гурӯҳбандӣ кардани филмҳо ба 'Коллексияи филмҳо' ҳангоми тамошо кардани китобхонаи видеоӣ."
 
 msgctxt "#36146"
-msgid "Check for new media files on XBMC startup."
-msgstr "Санҷиши файлҳои мултимедиавии нав ҳангоми оғози кори XBMC."
+msgid "Check for new media files on Kodi startup."
+msgstr "Санҷиши файлҳои мултимедиавии нав ҳангоми оғози кори Kodi."
 
 msgctxt "#36147"
 msgid "Hide the library scanning progress bar during scans."
@@ -11274,8 +11246,8 @@ msgid "Select the zoom level that 4:3 videos are shown on widescreen displays."
 msgstr "Интихоби танзими андозаи видео бо таносуби 4:3 барои намоиш дар дисплейҳои васеъэкран."
 
 msgctxt "#36172"
-msgid "VDPAU studio level conversion provides a way for advanced applications like XBMC to influence the colour space conversion."
-msgstr "Студияи табдилдиҳии сатҳи рангҳои VDPAU ба барномаҳои монанди XBMC иҷозат медиҳад, ки тавонанд ба табдилдиҳии рангҳои фазо таъсир расонанд."
+msgid "VDPAU studio level conversion provides a way for advanced applications like Kodi to influence the colour space conversion."
+msgstr "Студияи табдилдиҳии сатҳи рангҳои VDPAU ба барномаҳои монанди Kodi иҷозат медиҳад, ки тавонанд ба табдилдиҳии рангҳои фазо таъсир расонанд."
 
 msgctxt "#36173"
 msgid "Enable upscaling using VDPAU."
@@ -11386,16 +11358,16 @@ msgid "Category for general settings for PVR/Live TV features."
 msgstr "Категория дорои танзимоти умумӣ барои хусустяҳои PVR/Live TV."
 
 msgctxt "#36203"
-msgid "Enable the Personal Video Recorder (PVR) features in XBMC. This requires that at least one PVR Add-on is installed."
-msgstr "Фаъол кардани хусусиятҳои Сабткунандаи видеоии шахсӣ (PVR) дар системаи XBMC. Шумо бояд ақаллан ак барномаи иловагии PVR-ро насб кунед."
+msgid "Enable the Personal Video Recorder (PVR) features in Kodi. This requires that at least one PVR Add-on is installed."
+msgstr "Фаъол кардани хусусиятҳои Сабткунандаи видеоии шахсӣ (PVR) дар системаи Kodi. Шумо бояд ақаллан ак барномаи иловагии PVR-ро насб кунед."
 
 msgctxt "#36204"
 msgid "Import channel groups from the PVR backend (if supported). Will delete user created groups if they're not found on the backend."
 msgstr "Ворид кардани гурӯҳҳои шабакавӣ аз сервери PVR (агар дастгирӣ кунад). Гурӯҳҳои бо корбар эҷодшударо нест мекунад, агар онҳоро дар сервер ёфт накунад."
 
 msgctxt "#36206"
-msgid "Use numbering from the backend, instead of configuring them manually over XBMC."
-msgstr "Истифодаи рақамгузории шабакаҳо аз рӯи тартиб дар сервери мултимедиавӣ ба ивази танзим дастӣ дар системаи XBMC."
+msgid "Use numbering from the backend, instead of configuring them manually over Kodi."
+msgstr "Истифодаи рақамгузории шабакаҳо аз рӯи тартиб дар сервери мултимедиавӣ ба ивази танзим дастӣ дар системаи Kodi."
 
 msgctxt "#36207"
 msgid "Open the channel manager, which allows modifying the channel order, channel name, icon, etc."
@@ -11414,8 +11386,8 @@ msgid "Do not import EPG data while playing TV to minimise CPU usage."
 msgstr "Ворид накардани иттилооти EPG ҳангоми пахши ТВ барои истиснои сарбории CPU."
 
 msgctxt "#36223"
-msgid "By default, EPG data is stored in a local database to speed up importing when XBMC is restarted."
-msgstr "Иттилооти EPG дар пойгоҳи иттилоотии маҳаллӣ ба таври пешфарз нигоҳ дошта мешаванд, то ки суръати воридот ҳангоми бозоғозии XBMC тезтар шавад."
+msgid "By default, EPG data is stored in a local database to speed up importing when Kodi is restarted."
+msgstr "Иттилооти EPG дар пойгоҳи иттилоотии маҳаллӣ ба таври пешфарз нигоҳ дошта мешаванд, то ки суръати воридот ҳангоми бозоғозии Kodi тезтар шавад."
 
 msgctxt "#36224"
 msgid "Hide \"no information available\" labels when no EPG data can be retrieved for a channel."
@@ -11438,8 +11410,8 @@ msgid "Display a notification when timers are added, finished or removed by the 
 msgstr "Намоиш додани огоҳиҳо ҳангоми иловакунӣ, несткунӣ ё анҷомдиҳии вақтсанҷҳои сервери мултимедиавӣ."
 
 msgctxt "#36241"
-msgid "Execute the \"wakeup command\" below when XBMC exits or is going into hibernation mode. The timestamp of the next scheduled recording is passed as parameter."
-msgstr "Иҷро кардани \"фармони бедоршавии\" мазкур ҳангоми хориҷ шудан аз XBMC ё гузариш ба ҳолати хоб. Вақти сабти замонбандии навбатӣ ҳамчун параметр истифода мешавад."
+msgid "Execute the \"wakeup command\" below when Kodi exits or is going into hibernation mode. The timestamp of the next scheduled recording is passed as parameter."
+msgstr "Иҷро кардани \"фармони бедоршавии\" мазкур ҳангоми хориҷ шудан аз Kodi ё гузариш ба ҳолати хоб. Вақти сабти замонбандии навбатӣ ҳамчун параметр истифода мешавад."
 
 msgctxt "#36245"
 msgid "Execute the wakeup command every day at the given time."
@@ -11470,8 +11442,8 @@ msgid "Select the default artist information source. See the Add-ons Manager for
 msgstr "Интихоб кардани манбаи пешфарз барои иттилооти ҳунарманд. Барои интихоби имконот ба Мудири барномаи иловагӣ гузаред."
 
 msgctxt "#36259"
-msgid "Check for new and removed media files on XBMC startup."
-msgstr "Санҷиши файлҳои мултимедиаи нав ва тозашуда ҳангоми оғози кори XBMC."
+msgid "Check for new and removed media files on Kodi startup."
+msgstr "Санҷиши файлҳои мултимедиаи нав ва тозашуда ҳангоми оғози кори Kodi."
 
 msgctxt "#36260"
 msgid "No info available yet."
@@ -11486,12 +11458,12 @@ msgid "Import a XML file into the Music Library database."
 msgstr "Ворид кардани файли XML ба пойгоҳи иттилоотии китобхонаи мусиқӣ"
 
 msgctxt "#36265"
-msgid "XBMC automatically plays the next item in the current folder. For example, in Files View: After a track has been played, XBMC would automatically play the next track in the same folder."
-msgstr "Системаи XBMC файли навбатиро дар ҷузвдони ҷорӣ ба таври худкор пахш мекунад. Барои мисол, дар ҳолати намоиши файлҳо, баъд аз пахш кардани файл, системаи XBMC дар ҳамон ҷузвдоне, ки файлро пахш кард, файли навбатиро ба таври худкор пахш мекунад."
+msgid "Kodi automatically plays the next item in the current folder. For example, in Files View: After a track has been played, Kodi would automatically play the next track in the same folder."
+msgstr "Системаи Kodi файли навбатиро дар ҷузвдони ҷорӣ ба таври худкор пахш мекунад. Барои мисол, дар ҳолати намоиши файлҳо, баъд аз пахш кардани файл, системаи Kodi дар ҳамон ҷузвдоне, ки файлро пахш кард, файли навбатиро ба таври худкор пахш мекунад."
 
 msgctxt "#36267"
-msgid "XBMC will read the ReplayGain information encoded in your audio files by a program such as MP3Gain and normalise the sound levels accordingly."
-msgstr "Системаи XBMC иттилооти рамзгузоришудаи \"ReplayGain\"-ро (масалан, рамзгузоришуда тавассути барномаи MP3Gain) аз файлҳои аудиоӣ намоиш медиҳад ва сатҳи садоро ба таври мувофиқ ҳамвор мекунад."
+msgid "Kodi will read the ReplayGain information encoded in your audio files by a program such as MP3Gain and normalise the sound levels accordingly."
+msgstr "Системаи Kodi иттилооти рамзгузоришудаи \"ReplayGain\"-ро (масалан, рамзгузоришуда тавассути барномаи MP3Gain) аз файлҳои аудиоӣ намоиш медиҳад ва сатҳи садоро ба таври мувофиқ ҳамвор мекунад."
 
 msgctxt "#36268"
 msgid "Default is 89dB per standard. Change with caution."
@@ -11514,8 +11486,8 @@ msgid "Read the tag information from song files. For large directories this can 
 msgstr "Намоиш додани иттилооти барчаспҳо аз файлҳои мусиқӣ. Барои сканкунии директорияҳои ҳаҷмӣ, махсусан тавассути шабака, ин метавонад вақти зиёдро гирад."
 
 msgctxt "#36281"
-msgid "XBMC will search for thumbs on remote shares and optical media. This can often slow down the listing of network folders."
-msgstr "Системаи XBMC эскизҳоро дар ҷузвдонҳои шабакавӣ ё дискҳои оптикӣ ҷустуҷӯ мекунад. Ин метавонад ҳангоми ҷустуҷӯ дар ҷузвдонҳои шабакавӣ вақти зиёдро гирад."
+msgid "Kodi will search for thumbs on remote shares and optical media. This can often slow down the listing of network folders."
+msgstr "Системаи Kodi эскизҳоро дар ҷузвдонҳои шабакавӣ ё дискҳои оптикӣ ҷустуҷӯ мекунад. Ин метавонад ҳангоми ҷустуҷӯ дар ҷузвдонҳои шабакавӣ вақти зиёдро гирад."
 
 msgctxt "#36283"
 msgid "Autorun CDs when inserted in drive."
@@ -11546,8 +11518,8 @@ msgid "Auto eject disc after rip is complete."
 msgstr "Барориши худкор баъд аз анҷоми нусхабардории диск."
 
 msgctxt "#36293"
-msgid "When playing any music file, XBMC will look for a matching .cdg file and display its graphics."
-msgstr "Ҳангоми пахш кардани ягон файли мусиқӣ, системаи XBMC файлҳоро бо пасвандҳои .cdg ҷустуҷӯ мекунад ва тасвирҳои мусиқиро намоиш медиҳад."
+msgid "When playing any music file, Kodi will look for a matching .cdg file and display its graphics."
+msgstr "Ҳангоми пахш кардани ягон файли мусиқӣ, системаи Kodi файлҳоро бо пасвандҳои .cdg ҷустуҷӯ мекунад ва тасвирҳои мусиқиро намоиш медиҳад."
 
 msgctxt "#36301"
 msgid "No info available yet."
@@ -11602,8 +11574,8 @@ msgid "Category containing settings used for all services."
 msgstr "Категория дорои танзимот барои ҳамаи хидматҳо."
 
 msgctxt "#36321"
-msgid "Display name of the XBMC installation when using various network services."
-msgstr "Номи намоишии насби ҷории XBMC барои истифода дар хидматҳои шабакавии гуногун."
+msgid "Display name of the Kodi installation when using various network services."
+msgstr "Номи намоишии насби ҷории Kodi барои истифода дар хидматҳои шабакавии гуногун."
 
 msgctxt "#36322"
 msgid "Category containing settings for how the UPnP service is handled."
@@ -11618,20 +11590,12 @@ msgid "Category containing settings for how the webserver service is handled."
 msgstr "Категория дорои танзимот барои тарзи коркарди хидмати сервери веб."
 
 msgctxt "#36328"
-msgid "Enable remote users to control XBMC through the built-in webserver."
-msgstr "Иҷозати идоракунии XBMC аз тарафи корбарони дурдаст тавассути интерфейси веби дарунсохт."
+msgid "Enable remote users to control Kodi through the built-in webserver."
+msgstr "Иҷозати идоракунии Kodi аз тарафи корбарони дурдаст тавассути интерфейси веби дарунсохт."
 
 msgctxt "#36329"
 msgid "Define the webserver port."
 msgstr "Порти сервери вебро ворид кунед."
-
-msgctxt "#36330"
-msgid "Define the webserver username."
-msgstr "Номи корбари сервери вебро ворид кунед."
-
-msgctxt "#36331"
-msgid "Define the webserver password."
-msgstr "Таъин кардани парол барои сервери веб."
 
 msgctxt "#36332"
 msgid "Select between web interfaces installed via the Add-on Manager."
@@ -11642,8 +11606,8 @@ msgid "Category containing settings for how the remote control service is handle
 msgstr "Категория дорои танзимот барои тарзи коркарди хидмати идоракунии дурдаст."
 
 msgctxt "#36334"
-msgid "Allow programs on this computer to control XBMC via the Web Interface or the JSON-RPC interface protocol."
-msgstr "Иҷозати идоракунии XBMC аз тарафи барномаҳои ин компютер тавассути интерфейси веб ё протоколи интерфейси JSON-RPC."
+msgid "Allow programs on this computer to control Kodi via the Web Interface or the JSON-RPC interface protocol."
+msgstr "Иҷозати идоракунии Kodi аз тарафи барномаҳои ин компютер тавассути интерфейси веб ё протоколи интерфейси JSON-RPC."
 
 msgctxt "#36335"
 msgid "Define the remote control port."
@@ -11654,8 +11618,8 @@ msgid "Define the remote control port range."
 msgstr "Таъин кардани диапазон барои порти идоракунии дурдаст."
 
 msgctxt "#36338"
-msgid "Allow programs on the network to control XBMC."
-msgstr "Иҷозати идоракунии XBMC ба воситаи барномаҳо аз шабакаи пайвастшуда."
+msgid "Allow programs on the network to control Kodi."
+msgstr "Иҷозати идоракунии Kodi ба воситаи барномаҳо аз шабакаи пайвастшуда."
 
 msgctxt "#36339"
 msgid "Initial repeat delay (ms)."
@@ -11678,8 +11642,8 @@ msgid "Automatically send 'Wake-On-Lan' to server(s) right before trying to acce
 msgstr "Фиристодани фармони \"Wake-On-Lan\" ба серверҳо ба таври худкор, пеш аз пайдо кардани дастрасӣ ба файлҳои муштарак ё хидматҳо."
 
 msgctxt "#36355"
-msgid "In a multi-screen configuration, the screens where XBMC is not displayed are blacked out."
-msgstr "Дар конфигуратсия бо якчанд экран, ҳамаи экранҳоро ба ғайр аз экран бо XBMC хомӯш кунед."
+msgid "In a multi-screen configuration, the screens where Kodi is not displayed are blacked out."
+msgstr "Дар конфигуратсия бо якчанд экран, ҳамаи экранҳоро ба ғайр аз экран бо Kodi хомӯш кунед."
 
 msgctxt "#36356"
 msgid "Eliminate vertical tearing."
@@ -11738,12 +11702,12 @@ msgid "When activated, your keyboard arrows will move the selection on the virtu
 msgstr "Агар фаъол кунед, тугмаҳои тирчадори клавиатура интихобро дар клавиатураи виртуалӣ интиқол медиҳанд. Агар ғайрифаъол кунед, онҳо курсорро аз матни шумо интиқол медиҳанд."
 
 msgctxt "#36377"
-msgid "Use a mouse or touch screen device to control XBMC. Note: disabling will cause you to lose control over XBMC when no keyboard or remote is present."
-msgstr "Истифода бурдани муш ё экрани ламсӣ барои идоракунии системаи XBMC. Тавзеҳ: агар хомӯш кунед, метавонед ҳангоми истифода накардани клавиатура ё пулт идоракунии системаи XBMC-ро ум кунед."
+msgid "Use a mouse or touch screen device to control Kodi. Note: disabling will cause you to lose control over Kodi when no keyboard or remote is present."
+msgstr "Истифода бурдани муш ё экрани ламсӣ барои идоракунии системаи Kodi. Тавзеҳ: агар хомӯш кунед, метавонед ҳангоми истифода накардани клавиатура ё пулт идоракунии системаи Kodi-ро ум кунед."
 
 msgctxt "#36378"
-msgid "Use a joystick to control XBMC."
-msgstr "Идора кардани XBMC ба воситаи ҷойстик."
+msgid "Use a joystick to control Kodi."
+msgstr "Идора кардани Kodi ба воситаи ҷойстик."
 
 msgctxt "#36380"
 msgid "If your internet connection uses a proxy, configure it here."
@@ -11770,36 +11734,32 @@ msgid "Configure the proxy server password."
 msgstr "Пароли сервери проксиро ворид кунед."
 
 msgctxt "#36386"
-msgid "If you have limited bandwidth available, XBMC will try to keep within these limits."
-msgstr "Агар паҳноии канали шабака маҳдуд бошад, XBMC дар ҳудуди муайяншуда иҷро карда шавад."
+msgid "If you have limited bandwidth available, Kodi will try to keep within these limits."
+msgstr "Агар паҳноии канали шабака маҳдуд бошад, Kodi дар ҳудуди муайяншуда иҷро карда шавад."
 
 msgctxt "#36389"
-msgid "Define how long XBMC should idle before shutting down."
-msgstr "Интихоб кардани фосилаи вақти бефаъолият баъд аз оне, ки XBMC хомӯш карда мешавад."
+msgid "Define how long Kodi should idle before shutting down."
+msgstr "Интихоб кардани фосилаи вақти бефаъолият баъд аз оне, ки Kodi хомӯш карда мешавад."
 
 msgctxt "#36390"
-msgid "Define what action XBMC should do when it has been idle for a long period of time."
-msgstr "Амалеро, ки XBMC баъд аз мурури фосилаи вақти бефаъолият иҷро мекунад, интихоб намоед."
+msgid "Define what action Kodi should do when it has been idle for a long period of time."
+msgstr "Амалеро, ки Kodi баъд аз мурури фосилаи вақти бефаъолият иҷро мекунад, интихоб намоед."
 
 msgctxt "#36392"
 msgid "Turn debug logging on or off. Useful for troubleshooting."
 msgstr "Фаъол ва хомӯш кардани қайди ислоҳи хатоҳо. Барои ҷустуҷӯи нуқсонҳо муфид аст."
 
 msgctxt "#36393"
-msgid "Folder used to save screenshots taken within XBMC."
-msgstr "Ҷузвдон барои захира кардани суратҳои экрани гирифташуда ҳангоми истифодаи XBMC."
-
-msgctxt "#36394"
-msgid "Specify additional libraries to be included in the debug log."
-msgstr "Китобхонаҳои иловагиеро. ки мехоҳед ба коркарди ислоҳи хтоҳо илова кунед, интихоб намоед."
+msgid "Folder used to save screenshots taken within Kodi."
+msgstr "Ҷузвдон барои захира кардани суратҳои экрани гирифташуда ҳангоми истифодаи Kodi."
 
 msgctxt "#36396"
 msgid "Define the PIN code used for the master lock."
 msgstr "Ворид кардани рамзи PIN барои қулфи мудири амният."
 
 msgctxt "#36398"
-msgid "Define the maximum number of retries before XBMC is closed down."
-msgstr "Интихоби меъёри иҷрои кӯшишҳо пеш аз XBMC пӯшида мешавад."
+msgid "Define the maximum number of retries before Kodi is closed down."
+msgstr "Интихоби меъёри иҷрои кӯшишҳо пеш аз Kodi пӯшида мешавад."
 
 msgctxt "#36410"
 msgid "No info available yet."
@@ -11849,17 +11809,9 @@ msgctxt "#36428"
 msgid "Record"
 msgstr "Сабт"
 
-msgctxt "#36500"
-msgid "Stereoscopic mode (current)"
-msgstr "Ҳолати стереоскопӣ (ҷорӣ)"
-
-msgctxt "#36501"
-msgid "Stereoscopic mode"
-msgstr "Ҳолати стереоскопӣ "
-
 msgctxt "#36502"
-msgid "None"
-msgstr "Ҳеҷ"
+msgid "Disabled"
+msgstr "Ғайрифаъол"
 
 msgctxt "#36503"
 msgid "Over/Under"
@@ -11885,17 +11837,9 @@ msgctxt "#36508"
 msgid "Hardware Based"
 msgstr "Дар асоси сахтафзор"
 
-msgctxt "#36509"
-msgid "Monoscopic - 2D"
-msgstr "Моноскопӣ - 2D"
-
 msgctxt "#36521"
 msgid "Ask me"
 msgstr "Маро пурсед"
-
-msgctxt "#36522"
-msgid "Use preferred mode"
-msgstr "Истифодаи ҳолати дӯстдошта"
 
 msgctxt "#36524"
 msgid "Preferred mode"
@@ -11905,26 +11849,6 @@ msgctxt "#36525"
 msgid "Same as movie (autodetect)"
 msgstr "Монанди филм (худмуайянкунӣ)"
 
-msgctxt "#36526"
-msgid "Disable stereoscopic mode when playback is stopped"
-msgstr "Ғайрифаъол кардани ҳолати стереоскопӣ баъд аз таваққуфи пахш"
-
-msgctxt "#36527"
-msgid "This video is stereoscopic. Select playback mode"
-msgstr "Ин видео стереоскопӣ мебошад. ҳолати пахшро интихоб намоед."
-
-msgctxt "#36528"
-msgid "Select stereoscopic mode"
-msgstr "Ҳолати стереоскопиро интихоб намоед"
-
-msgctxt "#36529"
-msgid "Mono (2D)"
-msgstr "Моно (2D)"
-
-msgctxt "#36530"
-msgid "Preferred mode"
-msgstr "Ҳолати дӯстдошта"
-
 msgctxt "#36531"
 msgid "Select alternate mode..."
 msgstr "Интихоби ҳолати иловагӣ..."
@@ -11932,18 +11856,6 @@ msgstr "Интихоби ҳолати иловагӣ..."
 msgctxt "#36532"
 msgid "Same as movie"
 msgstr "Монанди филм"
-
-msgctxt "#36533"
-msgid "Select how audio is downmixed, for example from 5.1 to 2.0: [Enabled] maintains the dynamic range of the original audio source when downmixed however volume will be lower [Disabled] maintains volume level of the original audio source however the dynamic range is compressed. Note - Dynamic range is the difference between the quietest and loudest sounds in a audio source."
-msgstr "Интихоб кунед, ки чӣ тавр аудио омезиш меёбад, масалан аз 5.1 то 2.0: [Фаъолшуда] диапазони динамикии манбаи аудиои аслиро ҳангоми омезиш истифода мекунад, вале баландии садо паст мешавад [Ғайрифаъол] сатҳи баландии садои манбаи аудиоии аслиро истифода мекунад, вале диапазони динамиқӣ фишурдашуда аст. Тавзеҳ - Диапазони динамикӣ ин тафовут байни садои пасттарин ва баландтарин дар манбаи аудиоӣ мебошад."
-
-msgctxt "#36535"
-msgid "Stereoscopic mode of video"
-msgstr "Ҳолати видеои стереоскопӣ"
-
-msgctxt "#36536"
-msgid "Stereoscopic mode inverted"
-msgstr "Ҳолати стереоскопии аксшуда"
 
 msgctxt "#36541"
 msgid "Allows volume control from AirPlay clients."
@@ -11961,17 +11873,53 @@ msgctxt "#36544"
 msgid "Enable hardware decoding of video files."
 msgstr "Фаъол кардани рамзкушоии сахтафзорӣ барои файлҳои видеоӣ."
 
-msgctxt "#36545"
-msgid "Subtitle stereoscopic depth"
-msgstr "Қаъри стереоскопии зерунвонҳо"
-
 msgctxt "#36547"
 msgid "Use higher quality textures for covers and fanart (uses more memory)"
 msgstr "Истифодаи текстураи баландсифат барои муқова ва тасвирҳои (ҳофизаи зиёдро истифода мебарад)"
 
-msgctxt "#36548"
-msgid "Limits resolution of GUI to save memory. Does not affect video playback. Use 1080 for unlimited. Requires restart."
-msgstr "Возеҳии интерфейси графикиро барои кам истифодаи ҳофиза маҳдуд мекунад. Ба сифати пахши видео таъсир намерасонад. Қимати 1080 барои номаҳдуд. Бояд бозоғозӣ карда шавад."
+msgctxt "#36902"
+msgid "TV show"
+msgstr "Барномаи телевизион"
+
+msgctxt "#36903"
+msgid "TV shows"
+msgstr "Барномаҳои ТВ"
+
+msgctxt "#36906"
+msgid "episode"
+msgstr "эпизод"
+
+msgctxt "#36907"
+msgid "episodes"
+msgstr "эпизод"
+
+msgctxt "#36910"
+msgid "set"
+msgstr "Насб кардан"
+
+msgctxt "#36911"
+msgid "sets"
+msgstr "Мавсимҳои синамо"
+
+msgctxt "#36912"
+msgid "video"
+msgstr "Видео"
+
+msgctxt "#36913"
+msgid "videos"
+msgstr "Видеоҳо"
+
+msgctxt "#36918"
+msgid "album"
+msgstr "Албом"
+
+msgctxt "#36920"
+msgid "song"
+msgstr "Суруд"
+
+msgctxt "#36921"
+msgid "songs"
+msgstr "Сурудҳо"
 
 msgctxt "#37000"
 msgid "(Visually Impaired)"
@@ -12036,3 +11984,7 @@ msgstr "Шумо мехоҳед, ки пахшро дар дастгоҳи ду�
 msgctxt "#37024"
 msgid "Select this if the audio out connection only supports multichannel audio as Dolby Digital 5.1, this allows multichannel audio such as AAC5.1 or FLAC5.1 to be listened to in 5.1 surround sound. Note - Not recommended on Pi as this requires a lot of CPU."
 msgstr "Ин имконро интихоб кунед, агар хуруҷи аудио танҳо аудиоро бо якчанд шабака, монанди Dolby Digital 5.1 дастгирӣ кунад. Ин имкон иҷозат медиҳад, то ки аудиои бо якчанд шабака, монанди AAC5.1 ё FLAC5.1 дар садои гирду атрофи 5.1 пахш карда шавад. Тавзеҳ - Барои истифода дар Pi тавсия дода намешавад, зеро ки метавонад CPU-и барзиёдро истифода барад."
+
+msgctxt "#37026"
+msgid "Auto"
+msgstr "Худкор"

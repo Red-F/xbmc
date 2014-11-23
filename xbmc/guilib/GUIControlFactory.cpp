@@ -55,6 +55,8 @@
 #include "GUIListLabel.h"
 #include "GUIListGroup.h"
 #include "GUIInfoManager.h"
+#include "Key.h"
+#include "addons/Skin.h"
 #include "utils/CharsetConverter.h"
 #include "utils/log.h"
 #include "utils/XMLUtils.h"
@@ -64,6 +66,7 @@
 #include "utils/StringUtils.h"
 #include "GUIAction.h"
 #include "utils/RssReader.h"
+#include "Util.h"
 
 using namespace std;
 using namespace EPG;
@@ -114,7 +117,7 @@ static const ControlMapping controls[] =
 
 CGUIControl::GUICONTROLTYPES CGUIControlFactory::TranslateControlType(const CStdString &type)
 {
-  for (unsigned int i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i)
+  for (unsigned int i = 0; i < ARRAY_SIZE(controls); ++i)
     if (StringUtils::EqualsNoCase(type, controls[i].name))
       return controls[i].type;
   return CGUIControl::GUICONTROL_UNKNOWN;
@@ -122,7 +125,7 @@ CGUIControl::GUICONTROLTYPES CGUIControlFactory::TranslateControlType(const CStd
 
 CStdString CGUIControlFactory::TranslateControlType(CGUIControl::GUICONTROLTYPES type)
 {
-  for (unsigned int i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i)
+  for (unsigned int i = 0; i < ARRAY_SIZE(controls); ++i)
     if (type == controls[i].type)
       return controls[i].name;
   return "";
@@ -356,8 +359,8 @@ bool CGUIControlFactory::GetTexture(const TiXmlNode* pRootNode, const char* strT
   if (flipX && strcmpi(flipX, "true") == 0) image.orientation = 1;
   const char *flipY = pNode->Attribute("flipy");
   if (flipY && strcmpi(flipY, "true") == 0) image.orientation = 3 - image.orientation;  // either 3 or 2
-  image.diffuse = pNode->Attribute("diffuse");
-  image.diffuseColor.Parse(pNode->Attribute("colordiffuse"), 0);
+  image.diffuse = XMLUtils::GetAttribute(pNode, "diffuse");
+  image.diffuseColor.Parse(XMLUtils::GetAttribute(pNode, "colordiffuse"), 0);
   const char *background = pNode->Attribute("background");
   if (background && strnicmp(background, "true", 4) == 0)
     image.useLarge = true;
@@ -368,8 +371,7 @@ bool CGUIControlFactory::GetTexture(const TiXmlNode* pRootNode, const char* strT
 void CGUIControlFactory::GetRectFromString(const CStdString &string, CRect &rect)
 {
   // format is rect="left[,top,right,bottom]"
-  CStdStringArray strRect;
-  StringUtils::SplitString(string, ",", strRect);
+  std::vector<std::string> strRect = StringUtils::Split(string, ',');
   if (strRect.size() == 1)
   {
     rect.x1 = (float)atof(strRect[0].c_str());
@@ -418,11 +420,11 @@ bool CGUIControlFactory::GetAlignmentY(const TiXmlNode* pRootNode, const char* s
   return true;
 }
 
-bool CGUIControlFactory::GetConditionalVisibility(const TiXmlNode* control, CStdString &condition, CStdString &allowHiddenFocus)
+bool CGUIControlFactory::GetConditionalVisibility(const TiXmlNode* control, std::string &condition, std::string &allowHiddenFocus)
 {
   const TiXmlElement* node = control->FirstChildElement("visible");
   if (!node) return false;
-  vector<CStdString> conditions;
+  vector<std::string> conditions;
   while (node)
   {
     const char *hidden = node->Attribute("allowhiddenfocus");
@@ -447,7 +449,7 @@ bool CGUIControlFactory::GetConditionalVisibility(const TiXmlNode* control, CStd
   return true;
 }
 
-bool CGUIControlFactory::GetConditionalVisibility(const TiXmlNode *control, CStdString &condition)
+bool CGUIControlFactory::GetConditionalVisibility(const TiXmlNode *control, std::string &condition)
 {
   CStdString allowHiddenFocus;
   return GetConditionalVisibility(control, condition, allowHiddenFocus);
@@ -502,7 +504,7 @@ bool CGUIControlFactory::GetActions(const TiXmlNode* pRootNode, const char* strT
     if (pElement->FirstChild())
     {
       CGUIAction::cond_action_pair pair;
-      pair.condition = pElement->Attribute("condition");
+      pair.condition = XMLUtils::GetAttribute(pElement, "condition");
       pair.action = pElement->FirstChild()->Value();
       action.m_actions.push_back(pair);
     }
@@ -558,7 +560,7 @@ bool CGUIControlFactory::GetInfoColor(const TiXmlNode *control, const char *strT
   const TiXmlElement* node = control->FirstChildElement(strTag);
   if (node && node->FirstChild())
   {
-    value.Parse(node->FirstChild()->Value(), parentID);
+    value.Parse(node->FirstChild()->ValueStr(), parentID);
     return true;
   }
   return false;
@@ -581,7 +583,7 @@ bool CGUIControlFactory::GetInfoLabelFromElement(const TiXmlElement *element, CG
   if (label.empty() || label == "-")
     return false;
 
-  CStdString fallback = element->Attribute("fallback");
+  CStdString fallback = XMLUtils::GetAttribute(element, "fallback");
   if (StringUtils::IsNaturalNumber(label))
     label = g_localizeStrings.Get(atoi(label));
   if (StringUtils::IsNaturalNumber(fallback))
@@ -657,11 +659,8 @@ bool CGUIControlFactory::GetString(const TiXmlNode* pRootNode, const char *strTa
 
 CStdString CGUIControlFactory::GetType(const TiXmlElement *pControlNode)
 {
-  CStdString type;
-  const char *szType = pControlNode->Attribute("type");
-  if (szType)
-    type = szType;
-  else  // backward compatibility - not desired
+  CStdString type = XMLUtils::GetAttribute(pControlNode, "type");
+  if (type.empty())  // backward compatibility - not desired
     XMLUtils::GetString(pControlNode, "type", type);
   return type;
 }
@@ -677,7 +676,7 @@ CGUIControl* CGUIControlFactory::Create(int parentID, const CRect &rect, TiXmlEl
   float width = 0, height = 0;
   float minHeight = 0, minWidth = 0;
 
-  CGUIAction leftActions, rightActions, upActions, downActions, backActions, nextActions, prevActions;
+  CGUIControl::ActionMap actions;
 
   int pageControl = 0;
   CGUIInfoColor colorDiffuse(0xFFFFFFFF);
@@ -735,10 +734,11 @@ CGUIControl* CGUIControlFactory::Create(int parentID, const CRect &rect, TiXmlEl
   float buttonGap = 5;
   int iMovementRange = 0;
   CAspectRatio aspect;
-#ifdef PRE_SKIN_VERSION_9_10_COMPATIBILITY
-  if (insideContainer)  // default for inside containers is keep
-    aspect.ratio = CAspectRatio::AR_KEEP;
-#endif
+  if (g_SkinInfo && g_SkinInfo->APIVersion() < ADDON::AddonVersion("5.1.0"))
+  {
+    if (insideContainer)  // default for inside containers is keep
+      aspect.ratio = CAspectRatio::AR_KEEP;
+  }
 
   CStdString allowHiddenFocus;
   CStdString enableCondition;
@@ -822,13 +822,13 @@ CGUIControl* CGUIControlFactory::Create(int parentID, const CRect &rect, TiXmlEl
   hitRect.SetRect(posX, posY, posX + width, posY + height);
   GetHitRect(pControlNode, hitRect);
 
-  GetActions(pControlNode, "onup",    upActions);
-  GetActions(pControlNode, "ondown",  downActions);
-  GetActions(pControlNode, "onleft",  leftActions);
-  GetActions(pControlNode, "onright", rightActions);
-  GetActions(pControlNode, "onnext",  nextActions);
-  GetActions(pControlNode, "onprev",  prevActions);
-  GetActions(pControlNode, "onback",  backActions);
+  GetActions(pControlNode, "onup",    actions[ACTION_MOVE_UP]);
+  GetActions(pControlNode, "ondown",  actions[ACTION_MOVE_DOWN]);
+  GetActions(pControlNode, "onleft",  actions[ACTION_MOVE_LEFT]);
+  GetActions(pControlNode, "onright", actions[ACTION_MOVE_RIGHT]);
+  GetActions(pControlNode, "onnext",  actions[ACTION_NEXT_CONTROL]);
+  GetActions(pControlNode, "onprev",  actions[ACTION_PREV_CONTROL]);
+  GetActions(pControlNode, "onback",  actions[ACTION_NAV_BACK]);
 
   if (XMLUtils::GetInt(pControlNode, "defaultcontrol", defaultControl))
   {
@@ -966,10 +966,11 @@ CGUIControl* CGUIControlFactory::Create(int parentID, const CRect &rect, TiXmlEl
 
   // the <texture> tag can be overridden by the <info> tag
   GetInfoTexture(pControlNode, "texture", texture, textureFile, parentID);
-#ifdef PRE_SKIN_VERSION_9_10_COMPATIBILITY
-  if (type == CGUIControl::GUICONTROL_IMAGE && insideContainer && textureFile.IsConstant())
-    aspect.ratio = CAspectRatio::AR_STRETCH;
-#endif
+  if (g_SkinInfo && g_SkinInfo->APIVersion() < ADDON::AddonVersion("5.1.0"))
+  {
+    if (type == CGUIControl::GUICONTROL_IMAGE && insideContainer && textureFile.IsConstant())
+      aspect.ratio = CAspectRatio::AR_STRETCH;
+  }
 
   GetTexture(pControlNode, "bordertexture", borderTexture);
 
@@ -1438,7 +1439,7 @@ CGUIControl* CGUIControlFactory::Create(int parentID, const CRect &rect, TiXmlEl
     control->SetEnableCondition(enableCondition);
     control->SetAnimations(animations);
     control->SetColorDiffuse(colorDiffuse);
-    control->SetNavigationActions(upActions, downActions, leftActions, rightActions, backActions);
+    control->SetNavigationActions(actions);
     control->SetPulseOnSelect(bPulse);
     if (hasCamera)
       control->SetCamera(camera);

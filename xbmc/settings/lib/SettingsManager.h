@@ -29,7 +29,9 @@
 #include "ISettingCreator.h"
 #include "ISettingsHandler.h"
 #include "ISubSettings.h"
+#include "Setting.h"
 #include "SettingConditions.h"
+#include "SettingDefinitions.h"
 #include "SettingDependency.h"
 #include "threads/SharedSection.h"
 
@@ -38,9 +40,6 @@ class CSettingUpdate;
 
 class TiXmlElement;
 class TiXmlNode;
-
-typedef void (*IntegerSettingOptionsFiller)(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current);
-typedef void (*StringSettingOptionsFiller)(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current);
 
 /*!
  \ingroup settings
@@ -105,14 +104,25 @@ public:
   void Clear();
 
   /*!
+  \brief Loads the setting being represented by the given XML node with the
+  given identifier.
+
+  \param node XML node representing the setting to load
+  \param settingId Setting identifier
+  \return True if the setting was successfully loaded from the given XML node, false otherwise
+  */
+  bool LoadSetting(const TiXmlNode *node, const std::string &settingId);
+
+  /*!
    \brief Loads the setting being represented by the given XML node with the
    given identifier.
 
    \param node XML node representing the setting to load
    \param settingId Setting identifier
+   \param updated Set to true if the setting's value was updated
    \return True if the setting was successfully loaded from the given XML node, false otherwise
    */
-  bool LoadSetting(const TiXmlNode *node, const std::string &settingId);
+  bool LoadSetting(const TiXmlNode *node, const std::string &settingId, bool &updated);
 
   /*!
    \brief Tells the settings system that the initialization is complete.
@@ -129,6 +139,8 @@ public:
    being executed.
    */
   void SetLoaded() { m_loaded = true; }
+
+  void AddSection(CSettingSection *section);
 
   /*!
    \brief Registers the given ISettingCallback implementation to be triggered
@@ -402,12 +414,12 @@ private:
   virtual bool Load(const TiXmlNode *settings);
 
   bool Serialize(TiXmlNode *parent) const;
-  bool Deserialize(const TiXmlNode *node, std::map<std::string, CSetting*> *loadedSettings = NULL);
+  bool Deserialize(const TiXmlNode *node, bool &updated, std::map<std::string, CSetting*> *loadedSettings = NULL);
 
-  static bool LoadSetting(const TiXmlNode *node, CSetting *setting);
-  bool UpdateSettings(const TiXmlNode *root);
+  bool LoadSetting(const TiXmlNode *node, CSetting *setting, bool &updated);
   bool UpdateSetting(const TiXmlNode *node, CSetting *setting, const CSettingUpdate& update);
   void UpdateSettingByDependency(const std::string &settingId, const CSettingDependency &dependency);
+  void UpdateSettingByDependency(const std::string &settingId, SettingDependencyType dependencyType);
 
   typedef enum {
     SettingOptionsFillerTypeNone = 0,
@@ -421,6 +433,7 @@ private:
   typedef struct {
     CSetting *setting;
     SettingDependencyMap dependencies;
+    std::set<std::string> children;
     CallbackSet callbacks;
   } Setting;
 

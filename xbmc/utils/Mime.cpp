@@ -240,6 +240,7 @@ map<string, string> fillMimeTypes()
   mimeTypes.insert(pair<string, string>("mjpg",      "video/x-motion-jpeg"));
   mimeTypes.insert(pair<string, string>("mka",       "audio/x-matroska"));
   mimeTypes.insert(pair<string, string>("mkv",       "video/x-matroska"));
+  mimeTypes.insert(pair<string, string>("mk3d",      "video/x-matroska-3d"));
   mimeTypes.insert(pair<string, string>("mm",        "application/x-meme"));
   mimeTypes.insert(pair<string, string>("mme",       "application/base64"));
   mimeTypes.insert(pair<string, string>("mod",       "audio/mod"));
@@ -544,7 +545,7 @@ string CMime::GetMimeType(const CURL &url, bool lookup)
   
   std::string strMimeType;
 
-  if( url.GetProtocol() == "shout" || url.GetProtocol() == "http" || url.GetProtocol() == "https")
+  if( url.IsProtocol("shout") || url.IsProtocol("http") || url.IsProtocol("https"))
   {
     // If lookup is false, bail out early to leave mime type empty
     if (!lookup)

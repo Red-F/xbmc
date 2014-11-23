@@ -32,6 +32,7 @@
 #include "Util.h"
 #include "StringUtils.h"
 #include "URL.h"
+#include "settings/Settings.h"
 
 using namespace XFILE;
 using namespace std;
@@ -86,7 +87,7 @@ bool CFileUtils::RenameFile(const CStdString &strFile)
     CLog::Log(LOGINFO,"FileUtils: rename %s->%s\n", strFileAndPath.c_str(), strPath.c_str());
     if (URIUtils::IsMultiPath(strFileAndPath))
     { // special case for multipath renames - rename all the paths.
-      vector<CStdString> paths;
+      vector<std::string> paths;
       CMultiPathDirectory::GetPaths(strFileAndPath, paths);
       bool success = false;
       for (unsigned int i = 0; i < paths.size(); ++i)
@@ -142,6 +143,13 @@ bool CFileUtils::RemoteAccessAllowed(const CStdString &strPath)
     return true;
   else if (StringUtils::StartsWithNoCase(realPath, "plugin://"))
     return true;
+  else
+  {
+    std::string strPlaylistsPath = CSettings::Get().GetString("system.playlistspath");
+    URIUtils::RemoveSlashAtEnd(strPlaylistsPath);
+    if (StringUtils::StartsWithNoCase(realPath, strPlaylistsPath)) 
+      return true;
+  }
   bool isSource;
   for (unsigned int index = 0; index < SourcesSize; index++)
   {
@@ -151,16 +159,4 @@ bool CFileUtils::RemoteAccessAllowed(const CStdString &strPath)
       return true;
   }
   return false;
-}
-
-
-unsigned int CFileUtils::LoadFile(const std::string &filename, void* &outputBuffer)
-{
-  XFILE::auto_buffer buffer;
-  XFILE::CFile file;
-
-  const unsigned int total_read = file.LoadFile(filename, buffer);
-  outputBuffer = buffer.detach();
-
-  return total_read;
 }

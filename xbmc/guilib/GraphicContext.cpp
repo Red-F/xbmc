@@ -363,7 +363,23 @@ bool CGraphicContext::IsValidResolution(RESOLUTION res)
   return false;
 }
 
+// call SetVideoResolutionInternal and ensure its done from mainthread
 void CGraphicContext::SetVideoResolution(RESOLUTION res, bool forceUpdate)
+{
+  if (g_application.IsCurrentThread())
+  {
+    SetVideoResolutionInternal(res, forceUpdate);
+  }
+  else
+  {
+    ThreadMessage msg = {TMSG_SETVIDEORESOLUTION};
+    msg.param1 = res;
+    msg.param2 = forceUpdate ? 1 : 0;
+    CApplicationMessenger::Get().SendMessage(msg, true);
+  }
+}
+
+void CGraphicContext::SetVideoResolutionInternal(RESOLUTION res, bool forceUpdate)
 {
   RESOLUTION lastRes = m_Resolution;
 
@@ -438,9 +454,6 @@ void CGraphicContext::SetVideoResolution(RESOLUTION res, bool forceUpdate)
   m_scissors.SetRect(0, 0, (float)m_iScreenWidth, (float)m_iScreenHeight);
   m_Resolution    = res;
 
-  //tell the videoreferenceclock that we're about to change the refreshrate
-  g_VideoReferenceClock.RefreshChanged();
-
   if (g_advancedSettings.m_fullScreen)
   {
 #if defined (TARGET_DARWIN) || defined (TARGET_WINDOWS)
@@ -454,6 +467,9 @@ void CGraphicContext::SetVideoResolution(RESOLUTION res, bool forceUpdate)
     g_Windowing.SetFullScreen(false, info_org, false);
   else
     g_Windowing.ResizeWindow(info_org.iWidth, info_org.iHeight, -1, -1);
+
+  //tell the videoreferenceclock that we changed the refreshrate
+  g_VideoReferenceClock.RefreshChanged();
 
   // make sure all stereo stuff are correctly setup
   SetStereoView(RENDER_STEREO_VIEW_OFF);

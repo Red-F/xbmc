@@ -48,7 +48,6 @@ public:
 
   static int ManageVideoItem(const CFileItemPtr &item);
   static bool UpdateVideoItemTitle(const CFileItemPtr &pItem);
-  static bool MarkWatched(const CFileItemPtr &item, bool bMark);
   static bool CanDeleteVideoItem(const CFileItemPtr &item);
   static bool DeleteVideoItemFromDatabase(const CFileItemPtr &item, bool unavailable = false);
   static bool DeleteVideoItem(const CFileItemPtr &item, bool unavailable = false);
@@ -62,7 +61,7 @@ public:
   static bool AddItemsToTag(const CFileItemPtr &tagItem);
   static bool RemoveItemsFromTag(const CFileItemPtr &tagItem);
 
-  static bool ManageVideoItemArtwork(const CFileItemPtr &item, const std::string &type);
+  static bool ManageVideoItemArtwork(const CFileItemPtr &item, const MediaType &type);
 
   static std::string GetLocalizedVideoType(const std::string &strType);
 protected:

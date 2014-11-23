@@ -1,17 +1,44 @@
+ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 -include ../../Makefile.include
 
 ifeq ($(NATIVEPREFIX),)
-  PREFIX = .
+  PREFIX = $(ROOT_DIR)
 else
-  PREFIX = $(NATIVEPREFIX)/bin
+  PREFIX = $(NATIVEPREFIX)
 endif
 
-all: $(PREFIX)/JsonSchemaBuilder
+ifeq ($(NATIVEPLATFORM),)
+  PLATFORM = native
+else
+  PLATFORM = $(NATIVEPLATFORM)
+endif
 
-$(PREFIX)/JsonSchemaBuilder:
-	make -C src
-	cp src/JsonSchemaBuilder $(PREFIX)
+SOURCE=$(ROOT_DIR)/src
+
+CONFIGURE=./configure --prefix=$(PREFIX)
+APP=$(SOURCE)/JsonSchemaBuilder
+APPBIN=$(PREFIX)/bin/JsonSchemaBuilder
+
+all: .installed-$(PLATFORM)
+
+$(PLATFORM):
+	-rm -rf $(PLATFORM)/*; mkdir -p $(PLATFORM)
+	cd $(PLATFORM); cp -a $(SOURCE)/* .
+	cd $(PLATFORM); ./autogen.sh
+	cd $(PLATFORM); $(CONFIGURE)
+
+
+$(APP): $(PLATFORM)
+	$(MAKE) -C $(PLATFORM)
+
+
+.installed-$(PLATFORM): $(APP)
+	$(MAKE) -C $(PLATFORM) install
+	touch $@
 
 clean:
-	@rm -f JsonSchemaBuilder
-	make -C src clean
+	$(MAKE) -C $(PLATFORM) clean
+
+distclean::
+	rm -rf $(PLATFORM) .installed-$(PLATFORM)
+	-rm -rf bin

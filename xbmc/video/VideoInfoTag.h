@@ -128,7 +128,6 @@ public:
   CStdString m_strAlbum;
   CDateTime m_lastPlayed;
   std::vector<std::string> m_showLink;
-  CStdString m_strShowPath;
   int m_playCount;
   int m_iTop250;
   int m_iYear;
@@ -149,7 +148,7 @@ public:
   CStreamDetails m_streamDetails;
   CBookmark m_resumePoint;
   CDateTime m_dateAdded;
-  CStdString m_type;
+  MediaType m_type;
   int m_duration; ///< duration in seconds
 
 private:

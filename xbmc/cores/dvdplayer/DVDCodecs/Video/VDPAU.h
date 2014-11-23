@@ -64,9 +64,6 @@ extern "C" {
 #include "libavcodec/vdpau.h"
 }
 
-using namespace Actor;
-
-
 #define FULLHD_WIDTH                       1920
 #define MAX_PIC_Q_LENGTH                   20 //for non-interop_yuv this controls the max length of the decoded pic to render completion Q
 
@@ -202,6 +199,7 @@ struct CVdpauProcessedPicture
   DVDVideoPicture DVDPic;
   VdpVideoSurface videoSurface;
   VdpOutputSurface outputSurface;
+  bool crop;
 };
 
 /**
@@ -239,7 +237,7 @@ private:
 // Mixer
 //-----------------------------------------------------------------------------
 
-class CMixerControlProtocol : public Protocol
+class CMixerControlProtocol : public Actor::Protocol
 {
 public:
   CMixerControlProtocol(std::string name, CEvent* inEvent, CEvent *outEvent) : Protocol(name, inEvent, outEvent) {};
@@ -256,7 +254,7 @@ public:
   };
 };
 
-class CMixerDataProtocol : public Protocol
+class CMixerDataProtocol : public Actor::Protocol
 {
 public:
   CMixerDataProtocol(std::string name, CEvent* inEvent, CEvent *outEvent) : Protocol(name, inEvent, outEvent) {};
@@ -290,7 +288,7 @@ protected:
   void OnStartup();
   void OnExit();
   void Process();
-  void StateMachine(int signal, Protocol *port, Message *msg);
+  void StateMachine(int signal, Actor::Protocol *port, Actor::Message *msg);
   void Init();
   void Uninit();
   void Flush();
@@ -376,10 +374,10 @@ struct VdpauBufferPool
   CCriticalSection renderPicSec;
 };
 
-class COutputControlProtocol : public Protocol
+class COutputControlProtocol : public Actor::Protocol
 {
 public:
-  COutputControlProtocol(std::string name, CEvent* inEvent, CEvent *outEvent) : Protocol(name, inEvent, outEvent) {};
+  COutputControlProtocol(std::string name, CEvent* inEvent, CEvent *outEvent) : Actor::Protocol(name, inEvent, outEvent) {};
   enum OutSignal
   {
     INIT,
@@ -395,10 +393,10 @@ public:
   };
 };
 
-class COutputDataProtocol : public Protocol
+class COutputDataProtocol : public Actor::Protocol
 {
 public:
-  COutputDataProtocol(std::string name, CEvent* inEvent, CEvent *outEvent) : Protocol(name, inEvent, outEvent) {};
+  COutputDataProtocol(std::string name, CEvent* inEvent, CEvent *outEvent) : Actor::Protocol(name, inEvent, outEvent) {};
   enum OutSignal
   {
     NEWFRAME = 0,
@@ -429,7 +427,7 @@ protected:
   void OnStartup();
   void OnExit();
   void Process();
-  void StateMachine(int signal, Protocol *port, Message *msg);
+  void StateMachine(int signal, Actor::Protocol *port, Actor::Message *msg);
   bool HasWork();
   CVdpauRenderPicture *ProcessMixerPicture();
   void QueueReturnPicture(CVdpauRenderPicture *pic);
@@ -494,7 +492,6 @@ public:
   void ClearRender(VdpVideoSurface surf);
   bool IsValid(VdpVideoSurface surf);
   VdpVideoSurface GetFree(VdpVideoSurface surf);
-  VdpVideoSurface GetAtIndex(int idx);
   VdpVideoSurface RemoveNext(bool skiprender = false);
   void Reset();
   int Size();
@@ -608,6 +605,7 @@ protected:
   } m_DisplayState;
   CCriticalSection m_DecoderSection;
   CEvent         m_DisplayEvent;
+  int m_ErrorCount;
 
   ThreadIdentifier m_decoderThread;
   bool          m_vdpauConfigured;

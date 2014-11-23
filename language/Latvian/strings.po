@@ -1,11 +1,11 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Main\n"
 "Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Latvian (http://www.transifex.com/projects/p/xbmc-main/language/lv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,15 +31,15 @@ msgstr "Video"
 
 msgctxt "#4"
 msgid "TV-Guide"
-msgstr "TV programma"
+msgstr "TV-gids"
 
 msgctxt "#5"
 msgid "Settings"
 msgstr "Iestatījumi"
 
 msgctxt "#6"
-msgid "XBMC SVN"
-msgstr "XBMC SVN"
+msgid "Kodi SVN"
+msgstr "Kodi SVN"
 
 msgctxt "#7"
 msgid "File manager"
@@ -47,163 +47,163 @@ msgstr "Failu pārvaldnieks"
 
 msgctxt "#8"
 msgid "Weather"
-msgstr "Laika apstākļi"
+msgstr "Laikapstākļi"
 
 msgctxt "#9"
-msgid "xbmc media center"
-msgstr "XBMC mediju centrs"
+msgid "Kodi media center"
+msgstr "Kodi mediju centrs"
 
 msgctxt "#11"
 msgid "Monday"
-msgstr "Pirmdiena"
+msgstr "pirmdiena"
 
 msgctxt "#12"
 msgid "Tuesday"
-msgstr "Otrdiena"
+msgstr "otrdiena"
 
 msgctxt "#13"
 msgid "Wednesday"
-msgstr "Trešdiena"
+msgstr "trešdiena"
 
 msgctxt "#14"
 msgid "Thursday"
-msgstr "Ceturtdiena"
+msgstr "ceturtdiena"
 
 msgctxt "#15"
 msgid "Friday"
-msgstr "Piektdiena"
+msgstr "piektdiena"
 
 msgctxt "#16"
 msgid "Saturday"
-msgstr "Sestdiena"
+msgstr "sestdiena"
 
 msgctxt "#17"
 msgid "Sunday"
-msgstr "Svētdiena"
+msgstr "svētdiena"
 
 msgctxt "#21"
 msgid "January"
-msgstr "Janvāris"
+msgstr "janvāris"
 
 msgctxt "#22"
 msgid "February"
-msgstr "Februāris"
+msgstr "februāris"
 
 msgctxt "#23"
 msgid "March"
-msgstr "Marts"
+msgstr "marts"
 
 msgctxt "#24"
 msgid "April"
-msgstr "Aprīlis"
+msgstr "aprīlis"
 
 msgctxt "#25"
 msgid "May"
-msgstr "Maijs"
+msgstr "maijs"
 
 msgctxt "#26"
 msgid "June"
-msgstr "Jūnijs"
+msgstr "jūnijs"
 
 msgctxt "#27"
 msgid "July"
-msgstr "Jūlijs"
+msgstr "jūlijs"
 
 msgctxt "#28"
 msgid "August"
-msgstr "Augusts"
+msgstr "augusts"
 
 msgctxt "#29"
 msgid "September"
-msgstr "Septembris"
+msgstr "septembris"
 
 msgctxt "#30"
 msgid "October"
-msgstr "Oktobris"
+msgstr "oktobris"
 
 msgctxt "#31"
 msgid "November"
-msgstr "Novembris"
+msgstr "novembris"
 
 msgctxt "#32"
 msgid "December"
-msgstr "Decembris"
+msgstr "decembris"
 
 msgctxt "#41"
 msgid "Mon"
-msgstr "Pirm"
+msgstr "pir"
 
 msgctxt "#42"
 msgid "Tue"
-msgstr "Otr"
+msgstr "otr"
 
 msgctxt "#43"
 msgid "Wed"
-msgstr "Treš"
+msgstr "tre"
 
 msgctxt "#44"
 msgid "Thu"
-msgstr "Cet"
+msgstr "cet"
 
 msgctxt "#45"
 msgid "Fri"
-msgstr "Piekt"
+msgstr "pie"
 
 msgctxt "#46"
 msgid "Sat"
-msgstr "Sest"
+msgstr "ses"
 
 msgctxt "#47"
 msgid "Sun"
-msgstr "Svēt"
+msgstr "svē"
 
 msgctxt "#51"
 msgid "Jan"
-msgstr "Jan"
+msgstr "jan"
 
 msgctxt "#52"
 msgid "Feb"
-msgstr "Feb"
+msgstr "feb"
 
 msgctxt "#53"
 msgid "Mar"
-msgstr "Mar"
+msgstr "mar"
 
 msgctxt "#54"
 msgid "Apr"
-msgstr "Apr"
+msgstr "apr"
 
 msgctxt "#55"
 msgid "May"
-msgstr "Mai"
+msgstr "mai"
 
 msgctxt "#56"
 msgid "Jun"
-msgstr "Jūn"
+msgstr "jūn"
 
 msgctxt "#57"
 msgid "Jul"
-msgstr "Jūl"
+msgstr "jūl"
 
 msgctxt "#58"
 msgid "Aug"
-msgstr "Aug"
+msgstr "aug"
 
 msgctxt "#59"
 msgid "Sep"
-msgstr "Sep"
+msgstr "sep"
 
 msgctxt "#60"
 msgid "Oct"
-msgstr "Okt"
+msgstr "okt"
 
 msgctxt "#61"
 msgid "Nov"
-msgstr "Nov"
+msgstr "nov"
 
 msgctxt "#62"
 msgid "Dec"
-msgstr "Dec"
+msgstr "dec"
 
 msgctxt "#71"
 msgid "N"
@@ -295,35 +295,35 @@ msgstr "Mainīgais"
 
 msgctxt "#98"
 msgid "View: Auto"
-msgstr "Skats: Auto"
+msgstr "Skats: auto"
 
 msgctxt "#99"
 msgid "View: Auto big"
-msgstr "Skats: Auto liels"
+msgstr "Skats: auto liels"
 
 msgctxt "#100"
 msgid "View: Icons"
-msgstr "Skats: Ikonas"
+msgstr "Skats: ikonas"
 
 msgctxt "#101"
 msgid "View: List"
-msgstr "Skats: Saraksts"
+msgstr "Skats: saraksts"
 
 msgctxt "#102"
 msgid "Scan"
-msgstr "Skanēt"
+msgstr "Skenēt"
 
 msgctxt "#103"
 msgid "Sort by: Name"
-msgstr "Kārtot pēc: Nosaukuma"
+msgstr "Kārtot pēc: vārda"
 
 msgctxt "#104"
 msgid "Sort by: Date"
-msgstr "Kārtot pēc: Datuma"
+msgstr "Kārtot pēc: datuma"
 
 msgctxt "#105"
 msgid "Sort by: Size"
-msgstr "Kārtot pēc: Izmēra"
+msgstr "Kārtot pēc: izmēra"
 
 msgctxt "#106"
 msgid "No"
@@ -335,7 +335,7 @@ msgstr "Jā"
 
 msgctxt "#108"
 msgid "Slideshow"
-msgstr "Slīdrāde"
+msgstr "Slīdīte"
 
 msgctxt "#109"
 msgid "Create thumbs"
@@ -390,8 +390,8 @@ msgid "Confirm file move"
 msgstr "Apstiprini faila pārvietošanu"
 
 msgctxt "#122"
-msgid "Confirm file delete?"
-msgstr "Apstiprini faila dzēšanu?"
+msgid "Confirm delete"
+msgstr "Apstiprināt faila dzēšanu"
 
 msgctxt "#123"
 msgid "Copy these files?"
@@ -403,7 +403,7 @@ msgstr "Pārvietot šos failus?"
 
 msgctxt "#125"
 msgid "Delete these files? - Deleting files cannot be undone!"
-msgstr "Dzēst šos failus? - Izdzēstus failus neatgriezīsi!"
+msgstr "Dzēst šos failus? - Izdzēstus failus neatgūsi!"
 
 msgctxt "#126"
 msgid "Status"
@@ -419,11 +419,11 @@ msgstr "Vispārīgi"
 
 msgctxt "#129"
 msgid "Slideshow"
-msgstr "Slīdrāde"
+msgstr "Slīdīte"
 
 msgctxt "#130"
 msgid "System info"
-msgstr "Sistēmas informācija"
+msgstr "Sistēmas info"
 
 msgctxt "#131"
 msgid "Display"
@@ -435,7 +435,7 @@ msgstr "Albūmi"
 
 msgctxt "#133"
 msgid "Artists"
-msgstr "Mākslinieki"
+msgstr "Izpildītāji"
 
 msgctxt "#134"
 msgid "Songs"
@@ -447,7 +447,7 @@ msgstr "Žanri"
 
 msgctxt "#136"
 msgid "Playlists"
-msgstr "Atskaņošanas saraksti"
+msgstr "Spēļsaraksti"
 
 msgctxt "#137"
 msgid "Search"
@@ -455,7 +455,7 @@ msgstr "Meklēšana"
 
 msgctxt "#138"
 msgid "System Information"
-msgstr "Sistēmas informācija"
+msgstr "Sistēmas info"
 
 msgctxt "#139"
 msgid "Temperatures:"
@@ -463,11 +463,11 @@ msgstr "Temperatūras:"
 
 msgctxt "#140"
 msgid "CPU:"
-msgstr "Procesors:"
+msgstr "CPU:"
 
 msgctxt "#141"
 msgid "GPU:"
-msgstr "Grafika:"
+msgstr "GPU:"
 
 msgctxt "#142"
 msgid "Time:"
@@ -475,7 +475,7 @@ msgstr "Laiks:"
 
 msgctxt "#143"
 msgid "Current:"
-msgstr "Pašlaik:"
+msgstr "Pašreiz:"
 
 msgctxt "#144"
 msgid "Build:"
@@ -487,7 +487,7 @@ msgstr "Tīkls:"
 
 msgctxt "#146"
 msgid "Type:"
-msgstr "Tips:"
+msgstr "Veids:"
 
 msgctxt "#147"
 msgid "Static"
@@ -507,23 +507,23 @@ msgstr "IP adrese"
 
 msgctxt "#151"
 msgid "Link:"
-msgstr "Links:"
+msgstr "Saite:"
 
 msgctxt "#152"
 msgid "Half duplex"
-msgstr "Half duplex"
+msgstr "Puse duplekss"
 
 msgctxt "#153"
 msgid "Full duplex"
-msgstr "Full duplex"
+msgstr "Pilns duplekss"
 
 msgctxt "#154"
 msgid "Storage"
-msgstr "Glabātuve"
+msgstr "Krātuve"
 
 msgctxt "#155"
 msgid "Drive"
-msgstr "Disks"
+msgstr "Dzinis"
 
 msgctxt "#156"
 msgid "Free"
@@ -539,7 +539,7 @@ msgstr "Brīvā atmiņa"
 
 msgctxt "#159"
 msgid "No link"
-msgstr "Nav linka"
+msgstr "Nav saites"
 
 msgctxt "#160"
 msgid "Free"
@@ -567,7 +567,7 @@ msgstr "Disks pieejams"
 
 msgctxt "#166"
 msgid "Skin"
-msgstr "Āda"
+msgstr "Apvalks"
 
 msgctxt "#167"
 msgid "Cancel file operations"
@@ -583,7 +583,7 @@ msgstr "Izšķirtspēja"
 
 msgctxt "#170"
 msgid "Adjust display refresh rate to match video"
-msgstr "Pielāgot displeja atsvaidzes intensitāti, lai pieskaņotos videoklipam"
+msgstr "Pielāgot pārzīmēšanās biežumu, samērojot ar video"
 
 msgctxt "#171"
 msgid "Sort title"
@@ -615,11 +615,11 @@ msgstr "Ilgums"
 
 msgctxt "#181"
 msgid "Select album"
-msgstr "Izvēlēties albumu"
+msgstr "Atlasīt albumu"
 
 msgctxt "#182"
 msgid "Tracks"
-msgstr "Dziesmas"
+msgstr "Celiņi"
 
 msgctxt "#183"
 msgid "Review"
@@ -635,7 +635,7 @@ msgstr "Meklē albumu"
 
 msgctxt "#186"
 msgid "OK"
-msgstr "Labi"
+msgstr "Skaidrs"
 
 msgctxt "#187"
 msgid "No albums found!"
@@ -643,11 +643,11 @@ msgstr "Nav atrasts neviens albums!"
 
 msgctxt "#188"
 msgid "Select all"
-msgstr "Izvēlēties visu"
+msgstr "Atlasīt visu"
 
 msgctxt "#189"
 msgid "Scanning media info"
-msgstr "Skenē satura informāciju"
+msgstr "Skenē medija info"
 
 msgctxt "#190"
 msgid "Save"
@@ -659,11 +659,11 @@ msgstr "Sajaukt"
 
 msgctxt "#192"
 msgid "Clear"
-msgstr "Skaidrs"
+msgstr "Notīrīt"
 
 msgctxt "#193"
 msgid "Scan"
-msgstr "Skanēt"
+msgstr "Skenēt"
 
 msgctxt "#194"
 msgid "Searching..."
@@ -671,23 +671,27 @@ msgstr "Meklē..."
 
 msgctxt "#195"
 msgid "No info found!"
-msgstr "Nav informācijas!"
+msgstr "Info nav atrasta!"
 
 msgctxt "#196"
 msgid "Select movie:"
-msgstr "Izvēlēties filmu:"
+msgstr "Atlasīt filmu:"
 
 msgctxt "#197"
 msgid "Querying %s info"
-msgstr "Sarindo informāciju: %s "
+msgstr "%s informācijas vaicāšana"
 
 msgctxt "#198"
 msgid "Loading movie details"
-msgstr "Ielādē filmas informāciju"
+msgstr "Ielādē filmas detaļas"
 
 msgctxt "#199"
 msgid "Web interface"
-msgstr "Pārlūka saskarne"
+msgstr "Tīmekļa saskarne"
+
+msgctxt "#200"
+msgid "Audio encoders"
+msgstr "Audio kodētājs"
 
 msgctxt "#202"
 msgid "Tagline"
@@ -703,7 +707,7 @@ msgstr "Balsis"
 
 msgctxt "#206"
 msgid "Cast"
-msgstr "Aktoru saraksts"
+msgstr "Lomās"
 
 msgctxt "#207"
 msgid "Plot"
@@ -727,7 +731,7 @@ msgstr "Kalibrēt lietotāja saskarni..."
 
 msgctxt "#214"
 msgid "Video calibration..."
-msgstr "Video kalibrācija"
+msgstr "Kalibrēt video..."
 
 msgctxt "#215"
 msgid "Soften"
@@ -747,11 +751,11 @@ msgstr "DVD lasītājs"
 
 msgctxt "#219"
 msgid "Please insert disc"
-msgstr "Lūdzu ievieto disku"
+msgstr "Lūdzu, ievieto disku"
 
 msgctxt "#220"
 msgid "Remote share"
-msgstr "Attālinātā dalīšanās"
+msgstr "Attālināts koplietojums"
 
 msgctxt "#221"
 msgid "Network is not connected"
@@ -771,15 +775,15 @@ msgstr "Vertikālā nobīde"
 
 msgctxt "#226"
 msgid "Test patterns..."
-msgstr "Testa šablons..."
+msgstr "Testa musturi..."
 
 msgctxt "#227"
 msgid "Lookup audio CD track names from freedb.org"
-msgstr "Meklēt Audio CD dziesmu nosaukumus no freedb.org"
+msgstr "Sameklēt audio CD celiņu nosaukumus freedb.org"
 
 msgctxt "#228"
 msgid "Shuffle playlist on load"
-msgstr "Jaukt atskaņošanas sarakstu pēc ielādes"
+msgstr "Jaukt spēļsarakstu pie ielādes"
 
 msgctxt "#229"
 msgid "HDD spindown time"
@@ -839,7 +843,7 @@ msgstr "Logs"
 
 msgctxt "#243"
 msgid "Refresh Rate"
-msgstr "Atsvaidzes Intensitāte"
+msgstr "Pārzīmēšanās biežums"
 
 msgctxt "#244"
 msgid "Full screen"
@@ -848,6 +852,10 @@ msgstr "Pilnekrāns"
 msgctxt "#245"
 msgid "Sizing: (%i,%i)->(%i,%i) (Zoom x%2.2f) AR:%2.2f:1 (Pixels: %2.2f:1) (VShift: %2.2f)"
 msgstr "Mērogošana: (%i,%i)->(%i,%i) (Palielinājums x%2.2f) AR:%2.2f:1 (Pikseļi: %2.2f:1) (VShift: %2.2f)"
+
+msgctxt "#246"
+msgid "Monitor"
+msgstr "Monitors"
 
 msgctxt "#247"
 msgid "Scripts"
@@ -907,15 +915,15 @@ msgstr "Shoutcast"
 
 msgctxt "#261"
 msgid "Waiting for start..."
-msgstr "Gaida sākumu..."
+msgstr "Gaidu ieslēgšanu..."
 
 msgctxt "#262"
 msgid "Scripts output"
 msgstr "Skriptu izvade"
 
 msgctxt "#263"
-msgid "Allow control of XBMC via HTTP"
-msgstr "Atļaut XBMC kontroli no HTTP"
+msgid "Allow control of Kodi via HTTP"
+msgstr "Atļaut Kodi kontroli no HTTP"
 
 msgctxt "#264"
 msgid "Record"
@@ -923,27 +931,27 @@ msgstr "Ierakstīt"
 
 msgctxt "#265"
 msgid "Stop Rec."
-msgstr "Apturēt ierakst."
+msgstr "Apturēt ierakstu"
 
 msgctxt "#266"
 msgid "Sort by: Track"
-msgstr "Kārtot pēc: Dziesmas"
+msgstr "Kārtot pēc: celiņa"
 
 msgctxt "#267"
 msgid "Sort by: Time"
-msgstr "Kārtot pēc: Laika"
+msgstr "Kārtot pēc: laika"
 
 msgctxt "#268"
 msgid "Sort by: Title"
-msgstr "Kārtot pēc: Nosaukuma"
+msgstr "Kārtot pēc: nosaukuma"
 
 msgctxt "#269"
 msgid "Sort by: Artist"
-msgstr "Kārtot pēc: Izpildītāja"
+msgstr "Kārtot pēc: izpildītāja"
 
 msgctxt "#270"
 msgid "Sort by: Album"
-msgstr "Kārtot pēc: Albuma"
+msgstr "Kārtot pēc: albuma"
 
 msgctxt "#271"
 msgid "Top 100"
@@ -987,7 +995,7 @@ msgstr "Izmanto noklusētos iestatījumus"
 
 msgctxt "#281"
 msgid "Please check the XML files"
-msgstr "Lūdzu pārbaudi XML failus"
+msgstr "Lūdzu, pārbaudi XML failus"
 
 msgctxt "#282"
 msgid "Found %i items"
@@ -1089,6 +1097,10 @@ msgctxt "#309"
 msgid "User interface language"
 msgstr "Lietotāja saskarnes valoda"
 
+msgctxt "#310"
+msgid "Keyboard layouts"
+msgstr "Tastatūras izkārtojumi"
+
 msgctxt "#312"
 msgid "(0=auto)"
 msgstr "(0=auto)"
@@ -1099,7 +1111,7 @@ msgstr "Tīra datubāzi"
 
 msgctxt "#314"
 msgid "Preparing..."
-msgstr "Sagatavo..."
+msgstr "Gatavojos..."
 
 msgctxt "#315"
 msgid "Database error"
@@ -1107,7 +1119,7 @@ msgstr "Datubāzes kļūda"
 
 msgctxt "#316"
 msgid "Searching songs..."
-msgstr "Meklē dziesmas..."
+msgstr "Meklēju dziesmas..."
 
 msgctxt "#317"
 msgid "Cleaned database successfully"
@@ -1135,7 +1147,7 @@ msgstr "Tīra žanrus..."
 
 msgctxt "#323"
 msgid "Error cleaning genres"
-msgstr "Kļūda, tīrot žanrus"
+msgstr "Kļūda tīrot žanrus"
 
 msgctxt "#324"
 msgid "Cleaning paths..."
@@ -1143,7 +1155,7 @@ msgstr "Tīra ceļus..."
 
 msgctxt "#325"
 msgid "Error cleaning paths"
-msgstr "Kļūda, tīrot ceļus"
+msgstr "Kļūda tīrot ceļus"
 
 msgctxt "#326"
 msgid "Cleaning albums..."
@@ -1155,7 +1167,7 @@ msgstr "Kļūda tīrot albumus"
 
 msgctxt "#328"
 msgid "Writing changes..."
-msgstr "Raksta izmaiņas..."
+msgstr "Rakstu izmaiņas..."
 
 msgctxt "#329"
 msgid "Error writing changes"
@@ -1163,11 +1175,11 @@ msgstr "Kļūda rakstot izmaiņas"
 
 msgctxt "#330"
 msgid "This may take some time..."
-msgstr "Šis var aizņemt kādu laiku..."
+msgstr "Tas var aizņemt kādu laiku..."
 
 msgctxt "#331"
 msgid "Compressing database..."
-msgstr "Saspiež datubāzi..."
+msgstr "Saspiežu datubāzi..."
 
 msgctxt "#332"
 msgid "Error compressing database"
@@ -1225,17 +1237,13 @@ msgctxt "#345"
 msgid "Year"
 msgstr "Gads"
 
-msgctxt "#346"
-msgid "Normalize levels on downmix"
-msgstr "Normalizēt līmeņus samiksēšanā"
-
 msgctxt "#347"
 msgid "DTS-HD capable receiver"
 msgstr "DTS-HD spējīgs atskaņotājs"
 
 msgctxt "#348"
 msgid "Enable passthrough"
-msgstr "Ieslēgt tranzītu"
+msgstr "Ieslēgt nepārkodēšanu"
 
 msgctxt "#349"
 msgid "TrueHD capable receiver"
@@ -1267,7 +1275,7 @@ msgstr "Ekrānsaudzētāja laiks"
 
 msgctxt "#356"
 msgid "Screensaver mode"
-msgstr "Ekrānsaudzētāja veids"
+msgstr "Ekrānsaudzētāja režīms"
 
 msgctxt "#357"
 msgid "Shutdown function timer"
@@ -1295,7 +1303,7 @@ msgstr "Ekrānsaudzētāja aptumsuma līmenis"
 
 msgctxt "#363"
 msgid "Sort by: File"
-msgstr "Kārtot pēc: Faila"
+msgstr "Kārtot pēc: faila"
 
 msgctxt "#364"
 msgid "Dolby Digital (AC3) capable receiver"
@@ -1303,15 +1311,15 @@ msgstr "Dolby Digital (AC3) spējīgs atskaņotājs"
 
 msgctxt "#365"
 msgid "Sort by: Name"
-msgstr "Kārtot pēc: Vārda"
+msgstr "Kārtot pēc: vārda"
 
 msgctxt "#366"
 msgid "Sort by: Year"
-msgstr "Kārtot pēc: Gada"
+msgstr "Kārtot pēc: gada"
 
 msgctxt "#367"
 msgid "Sort by: Rating"
-msgstr "Kārtot pēc: Novērtējuma"
+msgstr "Kārtot pēc: vērtējuma"
 
 msgctxt "#368"
 msgid "IMDb"
@@ -1427,7 +1435,7 @@ msgstr "Dūmaka"
 
 msgctxt "#396"
 msgid "Select location"
-msgstr "Izvēlēties atrašanās vietu"
+msgstr "Atlasīt atrašanās vietu"
 
 msgctxt "#397"
 msgid "Refresh time"
@@ -1443,7 +1451,7 @@ msgstr "Ātruma vienības"
 
 msgctxt "#400"
 msgid "Weather"
-msgstr "Laika apstākļi"
+msgstr "Laikapstākļi"
 
 msgctxt "#401"
 msgid "Temp"
@@ -1451,7 +1459,7 @@ msgstr "Temperatūra"
 
 msgctxt "#402"
 msgid "Feels like"
-msgstr "Liekas kā"
+msgstr "Sajūta kā"
 
 msgctxt "#403"
 msgid "UV index"
@@ -1463,15 +1471,15 @@ msgstr "Vējš"
 
 msgctxt "#405"
 msgid "Dew point"
-msgstr "Kušanas temperatūra"
+msgstr "Rasas punkts"
 
 msgctxt "#406"
 msgid "Humidity"
-msgstr "Mirtums"
+msgstr "Mitrums"
 
 msgctxt "#409"
 msgid "Defaults"
-msgstr "Noklusējums"
+msgstr "Noklusējumi"
 
 msgctxt "#410"
 msgid "Accessing weather service"
@@ -1531,7 +1539,7 @@ msgstr "Dzēst CD informāciju"
 
 msgctxt "#424"
 msgid "Select"
-msgstr "Izvēlēties"
+msgstr "Atlasīt"
 
 msgctxt "#425"
 msgid "No album information found"
@@ -1659,7 +1667,7 @@ msgstr "Rindas"
 
 msgctxt "#456"
 msgid "Mode"
-msgstr "Veids"
+msgstr "Režīms"
 
 msgctxt "#457"
 msgid "Switch view"
@@ -1675,7 +1683,7 @@ msgstr "Subi"
 
 msgctxt "#460"
 msgid "Audio stream"
-msgstr "Audio straume"
+msgstr "Audio celiņš"
 
 msgctxt "#461"
 msgid "[active]"
@@ -1703,7 +1711,7 @@ msgstr "Gamma"
 
 msgctxt "#467"
 msgid "Type"
-msgstr "Tips"
+msgstr "Veids"
 
 msgctxt "#468"
 msgid "Move the bar to change the OSD position"
@@ -1750,8 +1758,8 @@ msgid "Audio options"
 msgstr "Audio opcijas"
 
 msgctxt "#482"
-msgid "About XBMC"
-msgstr "Par XBMC"
+msgid "About Kodi"
+msgstr "Par Kodi"
 
 msgctxt "#485"
 msgid "Delete album"
@@ -1807,7 +1815,7 @@ msgstr "Kārtot pēc: veida"
 
 msgctxt "#499"
 msgid "Unable to connect to online lookup service"
-msgstr "Nevar savienoties ar tiešaistes uzmeklēšanas pakalpojumu"
+msgstr "Nevar pieslēgties tiešaistes sameklēšanas pakalpojumam"
 
 msgctxt "#500"
 msgid "Downloading album information failed"
@@ -1815,7 +1823,7 @@ msgstr "Albuma informācijas lejupielāde neizdevās"
 
 msgctxt "#501"
 msgid "Looking for album names..."
-msgstr "Uzmeklēju albuma nosaukumus..."
+msgstr "Sameklēju albumu nosaukumus..."
 
 msgctxt "#502"
 msgid "Open"
@@ -1985,6 +1993,10 @@ msgctxt "#548"
 msgid "Downmix multichannel audio to stereo"
 msgstr "Samiksēt daudzkanālu audio uz stereo"
 
+msgctxt "#549"
+msgid "Number"
+msgstr "Numurs"
+
 msgctxt "#550"
 msgid "Sort by: %s"
 msgstr "Kārtot pēc: %s"
@@ -2043,7 +2055,7 @@ msgstr "Vērtējums"
 
 msgctxt "#564"
 msgid "Type"
-msgstr "Tips"
+msgstr "Veids"
 
 msgctxt "#565"
 msgid "Usage"
@@ -2071,7 +2083,7 @@ msgstr "Pievienošanas datums"
 
 msgctxt "#571"
 msgid "Default"
-msgstr "Noklusētais"
+msgstr "Noklusējums"
 
 msgctxt "#572"
 msgid "Studio"
@@ -2375,11 +2387,11 @@ msgstr "Dziesmas informācija"
 
 msgctxt "#659"
 msgid "Non-linear stretch"
-msgstr "Nelineāra izstiepšana"
+msgstr "Nelineārā izstiepšana"
 
 msgctxt "#660"
 msgid "Volume amplification"
-msgstr "Skaļuma pastiprināšana"
+msgstr "Paskaļināšana"
 
 msgctxt "#661"
 msgid "Choose export folder"
@@ -2402,12 +2414,60 @@ msgid "Compression level"
 msgstr "Saspiešanas līmenis"
 
 msgctxt "#666"
-msgid "Verbose logging..."
-msgstr "Izvērsta reģistrēšana..."
+msgid "Enable component-specific logging"
+msgstr "Ieslēgt komponentēm specifisku reģistrēšanu"
 
 msgctxt "#667"
 msgid "Enable Dolby Digital transcoding"
 msgstr "Ieslēgt Dolby Digital pārkodēšanu"
+
+msgctxt "#668"
+msgid "Specify component-specific logging..."
+msgstr "Norādīt komponentēm specifisku reģistrēšanu..."
+
+msgctxt "#669"
+msgid "Verbose logging for SMB library"
+msgstr "Izvērstie ierakstījumi žurnalā SMB bibliotēkai"
+
+msgctxt "#670"
+msgid "Verbose logging for CURL library (http, dav)"
+msgstr "Izvērstie ierakstījumi žurnalā CURL bibliotēkai (http, dav)"
+
+msgctxt "#671"
+msgid "Verbose logging for CMYTH library"
+msgstr "Izvērstie ierakstījumi žurnalā CMYTH bibliotēkai"
+
+msgctxt "#672"
+msgid "Verbose logging for FFMPEG libraries"
+msgstr "Izvērstie ierakstījumi žurnalā FFMPEG bibliotēkai"
+
+msgctxt "#673"
+msgid "Verbose logging for RTMP library"
+msgstr "Izvērstie ierakstījumi žurnalā RTMP bibliotēkai"
+
+msgctxt "#674"
+msgid "Verbose logging for DBUS calls"
+msgstr "Izvērstie ierakstījumi žurnalā DBUS izsaukumiem"
+
+msgctxt "#675"
+msgid "Verbose logging for JSON-RPC requests"
+msgstr "Izvērstie ierakstījumi žurnalā JSON-RPC pieprasījumiem"
+
+msgctxt "#676"
+msgid "Verbose logging for AUDIO component"
+msgstr "Izvērstie ierakstījumi žurnalā AUDIO komponentam"
+
+msgctxt "#677"
+msgid "Verbose logging for AirTunes library"
+msgstr "Izvērstie ierakstījumi žurnalā AirTunes bibliotēkai"
+
+msgctxt "#678"
+msgid "Verbose logging for UPnP components"
+msgstr "Izvērstie ierakstījumi žurnalā UPnP bibliotēkai"
+
+msgctxt "#679"
+msgid "Verbose logging for CEC library"
+msgstr "Izvērstie ierakstījumi žurnalā CEC bibliotēkai"
 
 msgctxt "#700"
 msgid "Cleaning up library"
@@ -2443,7 +2503,7 @@ msgstr "Norādīts nederīgs ports. Vērtībai jābūt no 1 līdz 65535."
 
 msgctxt "#713"
 msgid "HTTP proxy"
-msgstr "HTTP proxy"
+msgstr "HTTP starpniekserveris"
 
 msgctxt "#715"
 msgid "Assignment"
@@ -2655,7 +2715,7 @@ msgstr "Tīkla saskarne"
 
 msgctxt "#776"
 msgid "Wireless network name (ESSID)"
-msgstr "Bezvadu tīkla nosaukums (ESSID)"
+msgstr "Bezvadu tīkla vārds (ESSID)"
 
 msgctxt "#777"
 msgid "Wireless password"
@@ -2707,15 +2767,15 @@ msgstr "Tīkla saskarne veiksmīgi izslēgta."
 
 msgctxt "#789"
 msgid "Wireless network name (ESSID)"
-msgstr "Bezvadu tīkla nosaukums (ESSID)"
+msgstr "Bezvadu tīkla vārds (ESSID)"
 
 msgctxt "#790"
 msgid "Remote control"
 msgstr "Tālvadības pults"
 
 msgctxt "#791"
-msgid "Allow programs on this system to control XBMC"
-msgstr "Atļaut citām šīs sistēmas programmām kontrolēt XBMC"
+msgid "Allow programs on this system to control Kodi"
+msgstr "Atļaut citām šīs sistēmas programmām kontrolēt Kodi"
 
 msgctxt "#792"
 msgid "Port"
@@ -2726,8 +2786,8 @@ msgid "Port range"
 msgstr "Porta apgabals"
 
 msgctxt "#794"
-msgid "Allow programs on other systems to control XBMC"
-msgstr "Atļaut citu sistēmu programmām kontrolēt XBMC"
+msgid "Allow programs on other systems to control Kodi"
+msgstr "Atļaut citu sistēmu programmām kontrolēt Kodi"
 
 msgctxt "#795"
 msgid "Initial repeat delay (ms)"
@@ -2757,6 +2817,10 @@ msgctxt "#801"
 msgid "Would you like to scan now?"
 msgstr "Vai vēlaties skenēt tagad?"
 
+msgctxt "#802"
+msgid "%s of %s available"
+msgstr "pieejams %s no %s"
+
 msgctxt "#850"
 msgid "Invalid port number entered"
 msgstr "Ievadīts nederīgs porta numurs"
@@ -2775,7 +2839,7 @@ msgstr "Pievieno attēlus..."
 
 msgctxt "#998"
 msgid "Add Music..."
-msgstr "Pievieno mūziku..."
+msgstr "Pievienot mūziku..."
 
 msgctxt "#999"
 msgid "Add Videos..."
@@ -2787,11 +2851,11 @@ msgstr "Priekšskatīt"
 
 msgctxt "#1001"
 msgid "Unable to connect"
-msgstr "Nevar savienoties"
+msgstr "Nevar pieslēgties"
 
 msgctxt "#1002"
-msgid "XBMC was unable to connect to the network location."
-msgstr "XBMC nevarēja savienoties ar tīkla vietu."
+msgid "Kodi was unable to connect to the network location."
+msgstr "Kodi nevarēja pieslēgties tīkla vietai."
 
 msgctxt "#1003"
 msgid "This could be due to the network not being connected."
@@ -2811,7 +2875,7 @@ msgstr "Pievienot tīkla vietu"
 
 msgctxt "#1008"
 msgid "Protocol"
-msgstr "Protocols"
+msgstr "Protokols"
 
 msgctxt "#1009"
 msgid "Server address"
@@ -2819,7 +2883,7 @@ msgstr "Servera adrese"
 
 msgctxt "#1010"
 msgid "Server name"
-msgstr "Servera nosaukums"
+msgstr "Servera vārds"
 
 msgctxt "#1011"
 msgid "Remote path"
@@ -2859,7 +2923,7 @@ msgstr "Ievadīt lietotājvārdu"
 
 msgctxt "#1020"
 msgid "Add %s source"
-msgstr "Pievienot %s avotu"
+msgstr "Pievienot avotu - %s"
 
 msgctxt "#1021"
 msgid "Enter the paths or browse for the media locations."
@@ -2867,7 +2931,7 @@ msgstr "Ievadiet ceļus vai pārlūkojiet mediju vietas."
 
 msgctxt "#1022"
 msgid "Enter a name for this media Source."
-msgstr "Ievadiet nosaukumu šim mediju avotam."
+msgstr "Ievadīt nosaukumu šim mediju avotam."
 
 msgctxt "#1023"
 msgid "Browse for new share"
@@ -2883,7 +2947,7 @@ msgstr "Nevarēja izgūt direktorijas informāciju."
 
 msgctxt "#1026"
 msgid "Add source"
-msgstr "Pievienotu avotu"
+msgstr "Pievienot avotu"
 
 msgctxt "#1027"
 msgid "Edit source"
@@ -2891,7 +2955,7 @@ msgstr "Labot avotu"
 
 msgctxt "#1028"
 msgid "Edit %s source"
-msgstr "Labot %s avotu"
+msgstr "Labot avotu - %s"
 
 msgctxt "#1029"
 msgid "Enter the new label"
@@ -2987,7 +3051,7 @@ msgstr "Ievadiet tīmekļa adresi"
 
 msgctxt "#1180"
 msgid "Proxy type"
-msgstr "Proxy tips"
+msgstr "Starpniekservera veids"
 
 msgctxt "#1181"
 msgid "HTTP"
@@ -3137,17 +3201,21 @@ msgctxt "#1260"
 msgid "Announce these services to other systems via Zeroconf"
 msgstr "Paziņot šos pakalpojumus citām sistēmām, izmantojot Zeroconf"
 
+msgctxt "#1268"
+msgid "iOS 8 compatibility mode"
+msgstr "iOS 8 savietojamības režīms"
+
 msgctxt "#1269"
 msgid "Allow volume control"
 msgstr "Atļaut skaļuma kontroli"
 
 msgctxt "#1270"
-msgid "Allow XBMC to receive AirPlay content"
-msgstr "Atļaut XBMC saņemt AirPlay saturu"
+msgid "Allow Kodi to receive AirPlay content"
+msgstr "Atļaut Kodi saņemt AirPlay saturu"
 
 msgctxt "#1271"
 msgid "Device name"
-msgstr "Ierīces nosaukums"
+msgstr "Ierīces vārds"
 
 msgctxt "#1272"
 msgid "Use password protection"
@@ -3172,6 +3240,26 @@ msgstr "Pielāgota audio ierīce"
 msgctxt "#1301"
 msgid "Custom passthrough device"
 msgstr "Pielāgota tranzīta ierīce"
+
+msgctxt "#1381"
+msgid "Extreme"
+msgstr "Ekstrēms"
+
+msgctxt "#1382"
+msgid "Whirls"
+msgstr "virpuļi"
+
+msgctxt "#1384"
+msgid "Broken"
+msgstr "Bojāts"
+
+msgctxt "#1389"
+msgid "Windy"
+msgstr "vējains"
+
+msgctxt "#1390"
+msgid "Settings"
+msgstr "Iestatījumi"
 
 msgctxt "#1396"
 msgid "Drifting"
@@ -3203,7 +3291,7 @@ msgstr "pērkons"
 
 msgctxt "#1403"
 msgid "Sun"
-msgstr "Svēt"
+msgstr "Saule"
 
 msgctxt "#1404"
 msgid "Heavy"
@@ -3447,51 +3535,51 @@ msgstr "Sistēmas informācija"
 
 msgctxt "#10008"
 msgid "Settings - General"
-msgstr "Iestatījumi - pamata"
+msgstr "Iestatījumi - Vispārīgi"
 
 msgctxt "#10009"
 msgid "Settings - Screen"
-msgstr "Iestatījumi - ekrāna"
+msgstr "Iestatījumi - Ekrāns"
 
 msgctxt "#10010"
 msgid "Settings - Appearance - GUI Calibration"
-msgstr "Iestatījumi - izskata - GUI kalibrēšana"
+msgstr "Iestatījumi - Izskats - GUI kalibrēšana"
 
 msgctxt "#10011"
 msgid "Settings - Videos - Screen Calibration"
-msgstr "Iestatījumi - video - ekrāna kalibrēšana"
+msgstr "Iestatījumi - Video - ekrāna kalibrēšana"
 
 msgctxt "#10012"
 msgid "Settings - Pictures"
-msgstr "Iestatījumi - attēli"
+msgstr "Iestatījumi - Attēli"
 
 msgctxt "#10013"
 msgid "Settings - Programs"
-msgstr "Iestatījumi - programmas"
+msgstr "Iestatījumi - Programmas"
 
 msgctxt "#10014"
 msgid "Settings - Weather"
-msgstr "Iestatījumi - laikapstākļi"
+msgstr "Iestatījumi - Laikapstākļi"
 
 msgctxt "#10015"
 msgid "Settings - Music"
-msgstr "Iestatījumi - mūzika"
+msgstr "Iestatījumi - Mūzika"
 
 msgctxt "#10016"
 msgid "Settings - System"
-msgstr "Iestatījumi - sistēma"
+msgstr "Iestatījumi - Sistēma"
 
 msgctxt "#10017"
 msgid "Settings - Videos"
-msgstr "Iestatījumi - video"
+msgstr "Iestatījumi - Video"
 
 msgctxt "#10018"
 msgid "Settings - Network"
-msgstr "Iestatījumi - tīkls"
+msgstr "Iestatījumi - Tīkls"
 
 msgctxt "#10019"
 msgid "Settings - Appearance"
-msgstr "Iestatījumi - izskats"
+msgstr "Iestatījumi - Izskats"
 
 msgctxt "#10020"
 msgid "Scripts"
@@ -3683,7 +3771,7 @@ msgstr "Konfigurācija"
 
 msgctxt "#10508"
 msgid "Weather forecast"
-msgstr "Laika prognoze"
+msgstr "Laikaprognoze"
 
 msgctxt "#10509"
 msgid "Network gaming"
@@ -3695,7 +3783,7 @@ msgstr "Paplašinājumi"
 
 msgctxt "#10511"
 msgid "System info"
-msgstr "Sistēmas informācija"
+msgstr "Sistēmas info"
 
 msgctxt "#10516"
 msgid "Music - Library"
@@ -3703,11 +3791,11 @@ msgstr "Mūzika - Bibliotēka"
 
 msgctxt "#10517"
 msgid "Now Playing - Music"
-msgstr "Pašlaik atskaņo - Mūzika"
+msgstr "Pašreiz atskaņo - Mūzika"
 
 msgctxt "#10522"
 msgid "Now Playing - Videos"
-msgstr "Pašlaik atskaņo - Video"
+msgstr "Pašreiz atskaņo - Video"
 
 msgctxt "#10523"
 msgid "Album info"
@@ -3815,7 +3903,7 @@ msgstr "c"
 
 msgctxt "#12321"
 msgid "Ok"
-msgstr "Labi"
+msgstr "Skaidrs"
 
 msgctxt "#12322"
 msgid "*"
@@ -3847,7 +3935,7 @@ msgstr "Ievadiet spēļvadnes kombinēto pogu un"
 
 msgctxt "#12331"
 msgid "press OK, or Back to cancel"
-msgstr "nospiediet OK vai Atpakaļ, lai atceltu"
+msgstr "spiediet OK vai Atpakaļ, lai atceltu"
 
 msgctxt "#12332"
 msgid "Set lock"
@@ -3971,7 +4059,7 @@ msgstr "Iestatījumi & failu pārvaldnieks"
 
 msgctxt "#12376"
 msgid "Set as default for all videos"
-msgstr "Iestatīt par noklusējumu visiem video"
+msgstr "Iestatīt kā noklusējumu visos video"
 
 msgctxt "#12377"
 msgid "This will reset any previously saved values"
@@ -4025,9 +4113,21 @@ msgctxt "#12395"
 msgid "Battery level"
 msgstr "Baterijas līmenis"
 
+msgctxt "#12396"
+msgid "Auto updates: On"
+msgstr "Auto atjaunināšana: Atļauta"
+
+msgctxt "#12397"
+msgid "Auto updates: Notify"
+msgstr "Auto atjaunināšana: Pazīņojums"
+
+msgctxt "#12398"
+msgid "Auto updates: Never"
+msgstr "Auto atjaunināšana: Nekad"
+
 msgctxt "#12600"
 msgid "Weather"
-msgstr "Laika apstākļi"
+msgstr "Laikapstākļi"
 
 msgctxt "#12900"
 msgid "Screensaver"
@@ -4278,12 +4378,12 @@ msgid "Active connections detected!"
 msgstr "Atklāti aktīvi savienojumi!"
 
 msgctxt "#13141"
-msgid "If you proceed, you might not be able to control XBMC"
+msgid "If you proceed, you might not be able to control Kodi"
 msgstr "Ja turpināsit, iespējams, vairs nevarēsit kontrolēt"
 
 msgctxt "#13142"
 msgid "any longer. Are you sure you want to stop the Event server?"
-msgstr "XBMC. Vai tiešām apturēt notikumu serveri?"
+msgstr "Kodi. Vai tiešām apturēt notikumu serveri?"
 
 msgctxt "#13144"
 msgid "Change Apple Remote mode?"
@@ -4294,8 +4394,8 @@ msgid "If you are currently using the Apple Remote to control"
 msgstr "Ja pašlaik lietojat Apple tālvadību, lai kontrolētu"
 
 msgctxt "#13146"
-msgid "XBMC, changing this setting might affect your ability"
-msgstr "XBMC, šī iestatījuma izmaiņa var ietekmēt spēju"
+msgid "Kodi, changing this setting might affect your ability"
+msgstr "Kodi, šī iestatījuma izmaiņa var ietekmēt spēju"
 
 msgctxt "#13147"
 msgid "to continue controlling it. Do you want to proceed?"
@@ -4427,11 +4527,11 @@ msgstr "DVD-ROM"
 
 msgctxt "#13277"
 msgid "Storage"
-msgstr "Glabātuve"
+msgstr "Krātuve"
 
 msgctxt "#13278"
 msgid "Default"
-msgstr "Noklusētais"
+msgstr "Noklusējums"
 
 msgctxt "#13279"
 msgid "Network"
@@ -4522,8 +4622,8 @@ msgid "Do you wish to reboot your system"
 msgstr "Vai vēlies pārstartēt datorsistēmu"
 
 msgctxt "#13309"
-msgid "instead of just XBMC?"
-msgstr "nevis tikai XBMC?"
+msgid "instead of just Kodi?"
+msgstr "nevis tikai Kodi?"
 
 msgctxt "#13310"
 msgid "Zoom effect"
@@ -4675,7 +4775,7 @@ msgstr "Meklē jaunu saturu"
 
 msgctxt "#13350"
 msgid "Current playlist"
-msgstr "Pašreizējais atskaņošanas saraksts"
+msgstr "Pašreizējais spēļsaraksts"
 
 msgctxt "#13351"
 msgid "Album information"
@@ -4981,25 +5081,13 @@ msgctxt "#13439"
 msgid "Allow hardware acceleration (MediaCodec)"
 msgstr "Atļaut paātrinājumu ar aparatūru (MediaCodec)"
 
-msgctxt "#13440"
-msgid "Allow multi threaded software decoding"
-msgstr "Atļaut vairākpavedienu programmatūras atkodēšanu"
-
 msgctxt "#13441"
-msgid "Use Mpeg-2 VDPAU"
-msgstr "Izmantot Mpeg-2 VDPAU"
-
-msgctxt "#13442"
-msgid "Enable this option to use hardware acceleration for Mpeg-(1/2) codecs. If disabled the CPU will be used instead. Older Radeon Cards tend to segfault with this enabled."
-msgstr "Ieslēgt šo opciju, lai izmantotu aparatūras paātrinājumu Mpeg-(1/2) kodekiem. Ja izslēgts, tiks izmantots CPU. Vecām Radeon kartēm rodas segmentācijas kļūme, ja šī opcija ieslēgta."
+msgid "Use MPEG-2 VDPAU"
+msgstr "Izmantot MPEG-2 VDPAU"
 
 msgctxt "#13443"
-msgid "Use Mpeg-4 VDPAU"
-msgstr "Izmantot Mpeg-4 VDPAU"
-
-msgctxt "#13444"
-msgid "Enable this option to use hardware acceleration for the Mpeg-4 codec. If disabled the CPU will be used instead. Some ION Hardware has problems with this being enabled by default."
-msgstr "Ieslēgt šo opciju, lai izmantotu aparatūras paātrinājumu Mpeg-4 kodekam. Ja izslēgts, tiks izmantots CPU. Dažai ION aparatūrai ir problēmas, ja šī opcija ir ieslēgta pēc noklusējuma."
+msgid "Use MPEG-4 VDPAU"
+msgstr "Izmantot MPEG-4 VDPAU"
 
 msgctxt "#13445"
 msgid "Use VC-1 VDPAU"
@@ -5010,20 +5098,12 @@ msgid "Enable this option to use hardware acceleration for VC-1 based codecs. If
 msgstr "Ieslēgt šo opciju, lai izmantotu aparatūras paātrinājumu kodekiem, kuru pamatā ir VC-1. Ja izslēgts, tiks izmantots CPU. AMD aparatūra ar VDPAU nespēj atkodēt VC-1 Simple."
 
 msgctxt "#13447"
-msgid "Use Mpeg-2 VAAPI"
-msgstr "Izmantot Mpeg-2 VAAPI"
-
-msgctxt "#13448"
-msgid "Enable this option to use hardware acceleration for Mpeg-(1/2) codecs. If disabled the CPU will be used instead. Some Mpeg-2 Videos might have green artifacts."
-msgstr "Ieslēgt šo opciju, lai izmantotu aparatūras paātrinājumu Mpeg-(1/2) kodekiem. Ja izslēgts, tiks izmantots CPU. Dažiem Mpeg-2 video, var būt redzami zaļi artefakti."
+msgid "Use MPEG-2 VAAPI"
+msgstr "Izmantot MPEG-2 VAAPI"
 
 msgctxt "#13449"
-msgid "Use Mpeg-4 VAAPI"
-msgstr "Izmantot Mpeg-4 VAAPI"
-
-msgctxt "#13450"
-msgid "Enable this option to use hardware acceleration for the Mpeg-4 codec. If disabled the CPU will be used instead."
-msgstr "Ieslēgt šo opciju, lai izmantotu aparatūras paātrinājumu Mpeg-4 kodekam. Ja izslēgts, tiks izmantots CPU."
+msgid "Use MPEG-4 VAAPI"
+msgstr "Izmantot MPEG-4 VAAPI"
 
 msgctxt "#13451"
 msgid "Use VC-1 VAAPI"
@@ -5044,6 +5124,18 @@ msgstr "Programmatūra"
 msgctxt "#13456"
 msgid "Hardware accelerated"
 msgstr "Aparatūras paātrināts"
+
+msgctxt "#13457"
+msgid "Prefer VAAPI render method"
+msgstr "Izmantot VAAPI apstrādes metodi pēc noklusējuma"
+
+msgctxt "#13458"
+msgid "Allow hardware acceleration (OMXPlayer)"
+msgstr "Atļaut aparatūras paātrinājumu (OMXPlayer)"
+
+msgctxt "#13459"
+msgid "Use OMXPlayer for decoding of video files."
+msgstr "Izmantot OMXPlayer video failu atkodēšanai."
 
 msgctxt "#13500"
 msgid "A/V sync method"
@@ -5142,8 +5234,8 @@ msgid "Apple remote"
 msgstr "Apple tālvadība"
 
 msgctxt "#13602"
-msgid "Allow start of XBMC using the remote"
-msgstr "Atļaut ieslēgt XBMC ar tālvadību"
+msgid "Allow start of Kodi using the remote"
+msgstr "Atļaut ieslēgt Kodi ar tālvadību"
 
 msgctxt "#13603"
 msgid "Sequence delay time"
@@ -5314,8 +5406,8 @@ msgid "Network settings changed"
 msgstr "īkla iestatījumi mainījušies"
 
 msgctxt "#14039"
-msgid "XBMC requires to restart to change your"
-msgstr "XBMC pieprasa pārstartēt, lai izmainītu"
+msgid "Kodi requires to restart to change your"
+msgstr "Kodi pieprasa pārstartēt, lai izmainītu"
 
 msgctxt "#14040"
 msgid "network setup.  Would you like to restart now?"
@@ -5368,6 +5460,10 @@ msgstr "Datuma formāts"
 msgctxt "#14053"
 msgid "GUI filters"
 msgstr "GUI filtri"
+
+msgctxt "#14054"
+msgid "%2.1f dB"
+msgstr "%2.1f dB"
 
 msgctxt "#14055"
 msgid "Use background scanning"
@@ -5486,8 +5582,8 @@ msgid "Playback"
 msgstr "Atskaņošana"
 
 msgctxt "#14087"
-msgid "DVDs"
-msgstr "DVD diski"
+msgid "Discs"
+msgstr "Diski"
 
 msgctxt "#14088"
 msgid "Play DVDs automatically"
@@ -5544,6 +5640,18 @@ msgstr "Apturēt izvilkšanu no CD"
 msgctxt "#14101"
 msgid "Acceleration"
 msgstr "Paātrinājums"
+
+msgctxt "#14102"
+msgid "Blu-ray playback mode"
+msgstr "Blu-ray atskaņošanas režīms"
+
+msgctxt "#14103"
+msgid "Play main movie"
+msgstr "Atskaņot galveno filmu"
+
+msgctxt "#14104"
+msgid "Show simplified menu"
+msgstr "Rādīt vienkāršotu izvēlni"
 
 msgctxt "#15012"
 msgid "Unavailable source"
@@ -5607,7 +5715,11 @@ msgstr "Navigācijas skaņas"
 
 msgctxt "#15109"
 msgid "Skin default"
-msgstr "Ādiņas noklusētie iestatījumi"
+msgstr "Apvalka noklusējums"
+
+msgctxt "#15110"
+msgid "Larger font size"
+msgstr "Lielāks fonta izmērs"
 
 msgctxt "#15111"
 msgid "Theme"
@@ -5651,7 +5763,7 @@ msgstr "Ceļš nav atrasts vai ir nederīgs"
 
 msgctxt "#15301"
 msgid "Could not connect to network server"
-msgstr "Nevar savienoties ar tīkla serveri"
+msgstr "Nevar pieslēgties tīkla serverim"
 
 msgctxt "#15302"
 msgid "No servers found"
@@ -5675,7 +5787,7 @@ msgstr "Vispārīgi"
 
 msgctxt "#16002"
 msgid "Internet lookup"
-msgstr "Uzmeklēšana internetā"
+msgstr "Sameklēšana internetā"
 
 msgctxt "#16003"
 msgid "Player"
@@ -5731,7 +5843,7 @@ msgstr "Nav"
 
 msgctxt "#16019"
 msgid "Auto select"
-msgstr "Automātiski atlasīt"
+msgstr "Automātiska atlase"
 
 msgctxt "#16020"
 msgid "De-interlace"
@@ -5799,11 +5911,11 @@ msgstr "Rind-nepārlece (daļēja)"
 
 msgctxt "#16037"
 msgid "Deinterlace video"
-msgstr "Rindnepārlekt video"
+msgstr "Video rindpārlece"
 
 msgctxt "#16038"
 msgid "Deinterlace method"
-msgstr "Rindnepārleces metode"
+msgstr "Rindpārleces novēršana"
 
 msgctxt "#16039"
 msgid "Off"
@@ -5879,7 +5991,7 @@ msgstr "Neizdevās dzēst vismaz vienu failu"
 
 msgctxt "#16300"
 msgid "Video scaling method"
-msgstr "Video mērogošanas metode"
+msgstr "Video mērogošana"
 
 msgctxt "#16301"
 msgid "Nearest neighbour"
@@ -5985,6 +6097,10 @@ msgctxt "#16326"
 msgid "DXVA-HD"
 msgstr "DXVA-HD"
 
+msgctxt "#16327"
+msgid "VAAPI Bob"
+msgstr "VAAPI Bob"
+
 msgctxt "#16400"
 msgid "Post-processing"
 msgstr "Pēcapstrāde"
@@ -6018,7 +6134,7 @@ msgid "or use phrases to find an exact match, like \"The wizard of Oz\"."
 msgstr "vai izmantojiet frāzes, lai atrastu precīzu atbilstību, piemēram, \"The wizard of Oz\"."
 
 msgctxt "#19003"
-msgid "Find similar programs"
+msgid "Find similar"
 msgstr "Atrast līdzīgas programmas"
 
 msgctxt "#19004"
@@ -6074,8 +6190,8 @@ msgid "PVR Backend %i - %s"
 msgstr "PVR aizmugursistēma %i - %s"
 
 msgctxt "#19017"
-msgid "TV recordings"
-msgstr "TV ieraksti"
+msgid "Recordings"
+msgstr "Ieraksti"
 
 msgctxt "#19018"
 msgid "Folder with channel icons"
@@ -6111,7 +6227,7 @@ msgstr "Gaidāmie ieraksti"
 
 msgctxt "#19026"
 msgid "Add timer..."
-msgstr "Pievieno taimeri..."
+msgstr "Uzliek taimeri..."
 
 msgctxt "#19027"
 msgid "No search results"
@@ -6127,7 +6243,7 @@ msgstr "Kanāls"
 
 msgctxt "#19030"
 msgid "Now"
-msgstr "Pašlaik"
+msgstr "Pašreiz"
 
 msgctxt "#19031"
 msgid "Next"
@@ -6179,7 +6295,7 @@ msgstr "Vai tiešām pārdēvēt šo taimeri?"
 
 msgctxt "#19043"
 msgid "Recording"
-msgstr "Ierakstu"
+msgstr "Ierakstīšana"
 
 msgctxt "#19044"
 msgid "Please check your configuration or check the log for details."
@@ -6219,7 +6335,7 @@ msgstr "Pārvietot kanālu uz:"
 
 msgctxt "#19053"
 msgid "Recording information"
-msgstr "Ierakstu informācija"
+msgstr "Ieraksta informācija"
 
 msgctxt "#19054"
 msgid "Hide channel"
@@ -6243,7 +6359,7 @@ msgstr "Taimeris palaists"
 
 msgctxt "#19059"
 msgid "Stop recording"
-msgstr "Apturēt ierakstīšanu"
+msgstr "Apturēt ierakstu"
 
 msgctxt "#19060"
 msgid "Delete timer"
@@ -6251,7 +6367,7 @@ msgstr "Dzēst taimeri"
 
 msgctxt "#19061"
 msgid "Add timer"
-msgstr "Uzstādīt taimeri"
+msgstr "Uzlikt taimeri"
 
 msgctxt "#19062"
 msgid "Sort by: Channel"
@@ -6265,17 +6381,13 @@ msgctxt "#19064"
 msgid "Go to end"
 msgstr "Uz beigām"
 
-msgctxt "#19065"
-msgid "Default EPG window"
-msgstr "Noklusētais EPG logs"
-
 msgctxt "#19066"
 msgid "Channel icons"
 msgstr "Kanālu ikonas"
 
 msgctxt "#19067"
 msgid "This event is already being recorded."
-msgstr "Šis pasākumu jau ieraksta."
+msgstr "Šo pasākumu jau ieraksta."
 
 msgctxt "#19068"
 msgid "This recording could not be deleted. Check the log for details."
@@ -6417,9 +6529,17 @@ msgctxt "#19102"
 msgid "Please switch to another channel."
 msgstr "Lūdzu, pārslēdziet citu kanālu."
 
+msgctxt "#19103"
+msgid "Go to channel"
+msgstr "Iet uz kanālu"
+
 msgctxt "#19104"
 msgid "Enter the name of the folder for the recording"
 msgstr "Ievadiet ierakstu mapes nosaukumu"
+
+msgctxt "#19105"
+msgid "Please select a channel"
+msgstr "Lūdzu izvelēties kanālu"
 
 msgctxt "#19106"
 msgid "Next timer on"
@@ -6440,6 +6560,14 @@ msgstr "Radās negaidīta kļūda. Mēģiniet vēlāk vēlreiz vai skatiet deta�
 msgctxt "#19111"
 msgid "PVR backend error. Check the log for details."
 msgstr "PVR aizmugursistēmas kļūda. Detaļas redzamas žurnālā."
+
+msgctxt "#19112"
+msgid "Delete this recording?"
+msgstr "Vai dzēst šo ierakstu? "
+
+msgctxt "#19113"
+msgid "Delete all recordings in this folder?"
+msgstr "Vai dzēst visus ierakstus šajā mapē?"
 
 msgctxt "#19114"
 msgid "Version"
@@ -6475,7 +6603,7 @@ msgstr "Izvairīties no atkārtošanās"
 
 msgctxt "#19122"
 msgid "This timer is still recording. Are you sure you want to delete this timer?"
-msgstr "Šim taimerim Joprojām notiek ieraksts. Vai tiešām vēlaties dzēst šo taimeri?"
+msgstr "Joprojām notiek ieraksts pēc šī taimera. Vai tiešām dzēst taimeri?"
 
 msgctxt "#19123"
 msgid "Free to air channels only"
@@ -6545,13 +6673,17 @@ msgctxt "#19139"
 msgid "Name of the new group"
 msgstr "Jaunās grupas nosaukums"
 
+msgctxt "#19140"
+msgid "Search..."
+msgstr "Meklē..."
+
 msgctxt "#19141"
 msgid "Group"
 msgstr "Grupa"
 
 msgctxt "#19142"
 msgid "Search guide"
-msgstr "Meklēšanas ceļvedis"
+msgstr "Meklēšanas gids"
 
 msgctxt "#19143"
 msgid "Group management"
@@ -6615,7 +6747,7 @@ msgstr "Nākamais ieraksts"
 
 msgctxt "#19158"
 msgid "Currently recording"
-msgstr "Pašreiz notiek ieraksts"
+msgstr "Notiek ieraksts"
 
 msgctxt "#19159"
 msgid "from"
@@ -6639,7 +6771,7 @@ msgstr "Nevar sākt ierakstu. Detaļas redzamas žurnālā."
 
 msgctxt "#19165"
 msgid "Switch"
-msgstr "Slēdzis"
+msgstr "Pārslēgt"
 
 msgctxt "#19166"
 msgid "PVR information"
@@ -6689,10 +6821,6 @@ msgctxt "#19178"
 msgid "Show channel information when switching channels"
 msgstr "Rādīt kanāla informāciju pārslēdzot kanālus"
 
-msgctxt "#19179"
-msgid "Automatically hide channel information"
-msgstr "Automātiski paslēpt kanāla informāciju"
-
 msgctxt "#19180"
 msgid "TV"
 msgstr "TV"
@@ -6705,9 +6833,9 @@ msgctxt "#19182"
 msgid "Days to display in the EPG"
 msgstr "Redzamais dienu skaits EPG"
 
-msgctxt "#19184"
-msgid "Channel information duration"
-msgstr "Kanāla informācijas ilgums"
+msgctxt "#19183"
+msgid "Radio"
+msgstr "Radio"
 
 msgctxt "#19185"
 msgid "Reset the PVR database"
@@ -6730,8 +6858,8 @@ msgid "Continue last channel on startup"
 msgstr "Uzsākot, turpināt pēdējo skatīto kanālu"
 
 msgctxt "#19190"
-msgid "Minimised"
-msgstr "Minimizēts"
+msgid "Background"
+msgstr "Fons"
 
 msgctxt "#19191"
 msgid "PVR service"
@@ -6759,11 +6887,11 @@ msgstr "PVR klienta specifiskās darbības"
 
 msgctxt "#19197"
 msgid "Recording started on: %s"
-msgstr "Ierakstīšana sākta no: %s"
+msgstr "Ieraksts sākts: %s"
 
 msgctxt "#19198"
 msgid "Recording finished on: %s"
-msgstr "Pabeigts ieraksts no: %s"
+msgstr "Ieraksts pabeigts: %s"
 
 msgctxt "#19199"
 msgid "Channel manager"
@@ -6806,8 +6934,8 @@ msgid "Enter the name of the new channel"
 msgstr "Ievadiet jaunā kanāla nosaukumu"
 
 msgctxt "#19209"
-msgid "XBMC virtual backend"
-msgstr "XBMC virtuālā aizmugursistēma"
+msgid "Kodi virtual backend"
+msgstr "Kodi virtuālā aizmugursistēma"
 
 msgctxt "#19210"
 msgid "Client"
@@ -6867,19 +6995,19 @@ msgstr "Nav ieslēdzamu PVR pielikumu. Pārbaudiet iestatījumus vai skatiet žu
 
 msgctxt "#19224"
 msgid "Recording aborted"
-msgstr "Ierakstīšana atsaukta"
+msgstr "Ieraksts atsaukts"
 
 msgctxt "#19225"
 msgid "Recording scheduled"
-msgstr "Ierakstīšana ieplānota"
+msgstr "Ieraksts ieplānots"
 
 msgctxt "#19226"
 msgid "Recording started"
-msgstr "Ierakstīšana sākta"
+msgstr "Sākas ieraksts"
 
 msgctxt "#19227"
 msgid "Recording completed"
-msgstr "Ierakstīšana pabeigta"
+msgstr "Beidzas ieraksts"
 
 msgctxt "#19228"
 msgid "Recording deleted"
@@ -6951,7 +7079,7 @@ msgstr "Aizmugursistēmas gaidīšanas laiks"
 
 msgctxt "#19245"
 msgid "Set wakeup command (cmd [timestamp])"
-msgstr "Iestatīt atmodināšanas komandu (cmd [timestamp])"
+msgstr "Iestatīt pamodināšanas komandu (cmd [timestamp])"
 
 msgctxt "#19246"
 msgid "Wakeup before recording"
@@ -6991,11 +7119,11 @@ msgstr "EPG atjaunināšana kanālam neizdevās"
 
 msgctxt "#19255"
 msgid "Start recording"
-msgstr "Sākt ierakstīšanu"
+msgstr "Sākt ierakstu"
 
 msgctxt "#19256"
 msgid "Stop recording"
-msgstr "Apturēt ierakstīšanu"
+msgstr "Apturēt ierakstu"
 
 msgctxt "#19257"
 msgid "Lock channel"
@@ -7050,8 +7178,8 @@ msgid "Do not show 'connection lost' warnings"
 msgstr "Nerādīt brīdinājumus par zaudētu savienojumu"
 
 msgctxt "#19270"
-msgid "* All recordings"
-msgstr "* Visi ieraksti"
+msgid "Group Items"
+msgstr "Sagrupēt vienumus"
 
 msgctxt "#19271"
 msgid "No PVR Add-ons could be found"
@@ -7066,8 +7194,8 @@ msgid "Add-on for the backend to be able to use PVR."
 msgstr "Aizmugursistēmas pielikums, lai varētu lietot PVR."
 
 msgctxt "#19274"
-msgid "Please visit xbmc.org/pvr to learn more."
-msgstr "Lūdzu, apmeklējiet xbmc.org/pvr, lai uzzinātu vairāk."
+msgid "Please visit kodi.tv/pvr to learn more."
+msgstr "Lūdzu, apmeklējiet kodi.tv/pvr, lai uzzinātu vairāk."
 
 msgctxt "#19275"
 msgid "Conflict warning"
@@ -7112,6 +7240,10 @@ msgstr "Izvēlēties ikonu"
 msgctxt "#19285"
 msgid "Browse for icon"
 msgstr "Pārlūkot ikonu"
+
+msgctxt "#19287"
+msgid "All channels"
+msgstr "Visi kanāli"
 
 msgctxt "#19499"
 msgid "Other/Unknown"
@@ -7159,7 +7291,7 @@ msgstr "Ziņas/pašreizējie notikumi"
 
 msgctxt "#19517"
 msgid "News/Weather Report"
-msgstr "Ziņas/laika prognoze"
+msgstr "Ziņas/Laikaprognoze"
 
 msgctxt "#19518"
 msgid "News Magazine"
@@ -7502,8 +7634,8 @@ msgid "Screenshots"
 msgstr "Ekrānattēli"
 
 msgctxt "#20009"
-msgid "Use XBMC"
-msgstr "Izmanto XBMC"
+msgid "Use Kodi"
+msgstr "Izmanto Kodi"
 
 msgctxt "#20011"
 msgid "Music playlists"
@@ -7643,7 +7775,7 @@ msgstr "Pievieno profilu..."
 
 msgctxt "#20059"
 msgid "Query info for all albums"
-msgstr "Vaicāt info par visiem albumiem"
+msgstr "Vaicā info par visiem albumiem"
 
 msgctxt "#20060"
 msgid "Media info"
@@ -7779,7 +7911,7 @@ msgstr "Ielādēt profilu"
 
 msgctxt "#20093"
 msgid "Profile name"
-msgstr "Profila nosaukums"
+msgstr "Profila vārds"
 
 msgctxt "#20094"
 msgid "Media sources"
@@ -8351,11 +8483,11 @@ msgstr "Atskaņo daļu..."
 
 msgctxt "#20325"
 msgid "Calibration reset"
-msgstr "Kalibrācijas atiestatīšana"
+msgstr "Atiestatīt kalibrēšanu"
 
 msgctxt "#20326"
 msgid "This will reset the calibration values for %s"
-msgstr "Šī darbība atiestatīs kalibrācijas vērtības %s"
+msgstr "Šī darbība atiestatīs kalibrētās vērtības %s"
 
 msgctxt "#20327"
 msgid "to its default values."
@@ -8371,7 +8503,7 @@ msgstr "Filmas ir atsevišķās mapēs, kas atbilst filmas nosaukumam"
 
 msgctxt "#20330"
 msgid "Use folder names for lookups"
-msgstr "Uzmeklēšanā izmantot mapju nosaukumus"
+msgstr "Sameklēšanā izmantot mapju nosaukumus"
 
 msgctxt "#20331"
 msgid "File"
@@ -8379,7 +8511,7 @@ msgstr "Fails"
 
 msgctxt "#20332"
 msgid "Use file or folder names in lookups?"
-msgstr "Vai izmantot uzmeklēšanā failu / mapju nosaukumus?"
+msgstr "Vai izmantot failu / mapju nosaukumus sameklēšanā?"
 
 msgctxt "#20333"
 msgid "Set content"
@@ -8411,10 +8543,10 @@ msgstr "Režisors"
 
 msgctxt "#20340"
 msgid "Do you want to remove all items within"
-msgstr "Vai vēlaties noņemt no XBMC bibliotēkas visus ierakstus,"
+msgstr "Vai vēlaties noņemt no Kodi bibliotēkas visus ierakstus,"
 
 msgctxt "#20341"
-msgid "this path from the XBMC library?"
+msgid "this path from the Kodi library?"
 msgstr " kas atrodas šajā ceļā?"
 
 msgctxt "#20342"
@@ -8431,7 +8563,7 @@ msgstr "Šī derektorija satur"
 
 msgctxt "#20345"
 msgid "Run automated scan"
-msgstr "Palaist automātisko skenēšanu"
+msgstr "Darbināt automātisko skenēšanu"
 
 msgctxt "#20346"
 msgid "Scan recursively"
@@ -8951,7 +9083,7 @@ msgstr "Vai tiešām sākt plūsmu?"
 
 msgctxt "#21336"
 msgid "Connecting to: %s"
-msgstr "Savienojas ar: %s"
+msgstr "Pieslēdzas: %s"
 
 msgctxt "#21337"
 msgid "TuxBox device"
@@ -9323,7 +9455,7 @@ msgstr "Labot"
 
 msgctxt "#21451"
 msgid "Internet connection required."
-msgstr "Nepieciešams interneta pieslēgums."
+msgstr "Nepieciešams interneta savienojums."
 
 msgctxt "#21452"
 msgid "Get More..."
@@ -9343,7 +9475,7 @@ msgstr "Kešatmiņa piepildījās pirms sasniedza apjomu gludam atskaņojumam"
 
 msgctxt "#21456"
 msgid "External storage"
-msgstr "Ārējā atmiņa"
+msgstr "Ārējā krātuve"
 
 msgctxt "#21457"
 msgid "Watched episode count"
@@ -9392,6 +9524,10 @@ msgstr "%d līdz %d"
 msgctxt "#21469"
 msgid "%s to %s"
 msgstr "%s līdz %s"
+
+msgctxt "#21470"
+msgid "%s [%d]"
+msgstr "%s [%d]"
 
 msgctxt "#21602"
 msgid "(External)"
@@ -9491,7 +9627,7 @@ msgstr "Zibspuldze izmantota"
 
 msgctxt "#21834"
 msgid "White-balance"
-msgstr "Baltās krāsas balanss"
+msgstr "Baltā-balanss"
 
 msgctxt "#21835"
 msgid "Light source"
@@ -9626,8 +9762,8 @@ msgid "Reference service"
 msgstr "Atsauces pakalpojums"
 
 msgctxt "#21881"
-msgid "Allow control of XBMC via UPnP"
-msgstr "Atļaut XBMC kontroli no UPnP"
+msgid "Allow control of Kodi via UPnP"
+msgstr "Atļaut Kodi kontroli no UPnP"
 
 msgctxt "#21882"
 msgid "Attempt to skip introduction before DVD menu"
@@ -9967,7 +10103,7 @@ msgstr "Subtitri"
 
 msgctxt "#24013"
 msgid "Lyrics"
-msgstr "Lirika"
+msgstr "Vārdi"
 
 msgctxt "#24014"
 msgid "TV information"
@@ -10015,7 +10151,7 @@ msgstr "Pielikums izslēgts"
 
 msgctxt "#24027"
 msgid "Weather"
-msgstr "Laika apstākļi"
+msgstr "Laikapstākļi"
 
 msgctxt "#24028"
 msgid "Weather.com (standard)"
@@ -10125,6 +10261,14 @@ msgctxt "#24054"
 msgid "Changelog"
 msgstr "Izmaiņu žurnāls"
 
+msgctxt "#24055"
+msgid "Check for updates"
+msgstr "Pārbaudīt atjauninājumus"
+
+msgctxt "#24056"
+msgid "Last updated %s"
+msgstr "Pēdējais atjauninājums %s"
+
 msgctxt "#24059"
 msgid "Would you like to enable this Add-on?"
 msgstr "Vai vēlaties ieslēgt šo pielikumu?"
@@ -10159,7 +10303,7 @@ msgstr "Vai atcelt pielikuma lejupielādi?"
 
 msgctxt "#24067"
 msgid "Currently downloading Add-ons"
-msgstr "Pašlaik lejupielādējas pielikumi"
+msgstr "Pašreiz lejupielādējas pielikumi"
 
 msgctxt "#24068"
 msgid "Update available"
@@ -10200,6 +10344,22 @@ msgstr "Nepieciešams pielikums"
 msgctxt "#24080"
 msgid "Try to reconnect?"
 msgstr "Vai mēģināt vēlreiz veidot savienojumu?"
+
+msgctxt "#24081"
+msgid "Helper Add-ons"
+msgstr "Palīgas pielikumi"
+
+msgctxt "#24082"
+msgid "Add-on libraries"
+msgstr "Pielikumu bibliotēkas"
+
+msgctxt "#24083"
+msgid "Information libraries"
+msgstr "Informācijas bibliotēkas"
+
+msgctxt "#24084"
+msgid "Visualisation libraries"
+msgstr "Vizualizācijas bibliotēkas"
 
 msgctxt "#24089"
 msgid "Add-on restarts"
@@ -10299,7 +10459,7 @@ msgstr "Subtitru pakalpojumi nav instalēti"
 
 msgctxt "#24115"
 msgid "Subtitle storage location"
-msgstr "Subtitru glabāšanas vieta"
+msgstr "Subtitru krātuves vieta"
 
 msgctxt "#24116"
 msgid "Default TV Service"
@@ -10341,6 +10501,14 @@ msgctxt "#24125"
 msgid "Custom location"
 msgstr "Pielāgota atrašanās vieta"
 
+msgctxt "#24126"
+msgid "Auto download first subtitle"
+msgstr "Automatiski lejupielādēt pirmos subtitrus"
+
+msgctxt "#24128"
+msgid "Configuration has been moved"
+msgstr "Konfigurācija tika pārvietota"
+
 msgctxt "#25000"
 msgid "Notifications"
 msgstr "Paziņojumi"
@@ -10354,7 +10522,7 @@ msgid "Select from all titles ..."
 msgstr "Atlasīt no visiem nosaukumiem ..."
 
 msgctxt "#25003"
-msgid "Show Blu-ray menus"
+msgid "Show Blu-ray menu"
 msgstr "Rādīt Blu-ray izvēlnes"
 
 msgctxt "#25004"
@@ -10545,6 +10713,14 @@ msgctxt "#33038"
 msgid "%s day"
 msgstr "%s dienas"
 
+msgctxt "#33039"
+msgid "%s Streams"
+msgstr "%s Plūsmas"
+
+msgctxt "#33040"
+msgid "%s Devices"
+msgstr "%s Ierīces"
+
 msgctxt "#33049"
 msgid "Alert"
 msgstr "Brīdinājums"
@@ -10603,7 +10779,7 @@ msgstr "Atskaņot"
 
 msgctxt "#33063"
 msgid "Options"
-msgstr "Iespējas"
+msgstr "Opcijas"
 
 msgctxt "#33065"
 msgid "Editor"
@@ -10646,12 +10822,12 @@ msgid "This version of %s requires an"
 msgstr "Šī %s versija pieprasa"
 
 msgctxt "#33075"
-msgid "XBMC revision of %s or greater to run."
-msgstr "%s XBMC revīziju vai jaunāku, lai strādātu."
+msgid "Kodi revision of %s or greater to run."
+msgstr "%s Kodi revīziju vai jaunāku, lai strādātu."
 
 msgctxt "#33076"
-msgid "Please update XBMC."
-msgstr "Lūdzu, atjauniniet XBMC."
+msgid "Please update Kodi."
+msgstr "Lūdzu, atjauniniet Kodi."
 
 msgctxt "#33077"
 msgid "No data found!"
@@ -10671,7 +10847,7 @@ msgstr "Riebjas"
 
 msgctxt "#33081"
 msgid "This file is stacked, select the part you want to play from."
-msgstr "Šis fails ir ielādēts, izvēlieties daļu, kuru vēlaties lai atskaņotu no."
+msgstr "Šis fails ir ielādēts, atlasiet daļu, no kuras vēlaties atskaņot."
 
 msgctxt "#33082"
 msgid "Path to script"
@@ -10703,7 +10879,7 @@ msgstr "Attālinātais saziņas serveris"
 
 msgctxt "#33200"
 msgid "Detected New Connection"
-msgstr "Konstatēts jauns pieslēgums"
+msgstr "Konstatēts jauns savienojums"
 
 msgctxt "#34000"
 msgid "Lame"
@@ -10783,7 +10959,7 @@ msgstr "7.1"
 
 msgctxt "#34111"
 msgid "Select the behaviour when no sound is required for either playback or GUI sounds. [Always] - continuous inaudible signal is output, this keeps the receiving audio device alive for any new sounds, however this might also block sound from other applications. [1- 10 Minutes] - same as Always except that after the selected period of time audio enters a suspended state [Off] - audio output enters a suspended state. Note - sounds can be missed if audio enters suspended state."
-msgstr "Atlasīt rīcību, kad skaņa nav nepieciešama atskaņošanai vai saskarnei. [Vienmēr] - izvada nepārtrauktu, bet nedzirdamu signālu, lai uzturētu audio ierīci gatavībā jaunām skaņām, taču tas var arī nobloķēt skaņu no citām lietotnēm. [1- 10 minūtes] - līdzīgs Vienmēr, taču pēc izvēlētā laika audio ieiet gatavības režīmā. [Izslēgts] - audio izvade ieiet apturētā stāvoklī. Piezīme - varat palaist garām skaņas, ja audio iegājis apturētā stāvoklī."
+msgstr "Atlasīt rīcību, kad skaņa nav nepieciešama atskaņošanai vai saskarnei. [Vienmēr] - izvada nepārtrauktu, bet nedzirdamu signālu, lai uzturētu audio ierīci gatavībā jaunām skaņām, taču tas var arī nobloķēt skaņu no citām lietotnēm. [1- 10 minūtes] - līdzīgs Vienmēr, taču pēc atlasītā laika audio ieiet gatavības režīmā. [Izslēgts] - audio izvade ieiet apturētā stāvoklī. Piezīme - varat palaist garām skaņas, ja audio iegājis apturētā stāvoklī."
 
 msgctxt "#34120"
 msgid "Play GUI sounds"
@@ -10835,7 +11011,7 @@ msgstr "Neizdevās sākt Zeroconf"
 
 msgctxt "#34301"
 msgid "Is Apple's Bonjour Service installed? See log for more info."
-msgstr "Vai ir instalēts Apple Bonjour pakalpojums? Skatiet žurnālā vairāk info."
+msgstr "Vai Apple Bonjour pakalpojums ir instalēts? Skatiet žurnālā vairāk info."
 
 msgctxt "#34302"
 msgid "AirPlay requires Zeroconf to be enabled."
@@ -10933,13 +11109,9 @@ msgctxt "#35102"
 msgid "Disable joystick when this device is present"
 msgstr "Izslēgt kursorsviru, kad šī ierīce ir pieslēgta"
 
-msgctxt "#35103"
-msgid "Enable system keys in fullscreen"
-msgstr "Ieslēgt sistēmas taustiņus, kad pilnekrānā"
-
 msgctxt "#35500"
 msgid "Location"
-msgstr "Lokācija"
+msgstr "Atrašanās vieta"
 
 msgctxt "#35501"
 msgid "Class"
@@ -10986,12 +11158,12 @@ msgid "Could not open the adaptor"
 msgstr "Nevar atvērt adapteri"
 
 msgctxt "#36007"
-msgid "Devices to power on when starting XBMC"
-msgstr "Ierīces, kuras ieslēgt, uzsākot XBMC"
+msgid "Devices to power on when starting Kodi"
+msgstr "Ierīces, kuras ieslēgt, uzsākot Kodi"
 
 msgctxt "#36008"
-msgid "Devices to power off when stopping XBMC"
-msgstr "Ierīces, kuras izslēgt, kad aptur XBMC"
+msgid "Devices to power off when stopping Kodi"
+msgstr "Ierīces, kuras izslēgt, kad aptur Kodi"
 
 msgctxt "#36009"
 msgid "Put devices in standby mode when activating screensaver"
@@ -11030,8 +11202,8 @@ msgid "Connected to HDMI device"
 msgstr "Pieslēgts HDMI ierīcei"
 
 msgctxt "#36020"
-msgid "Make XBMC the active source when starting"
-msgstr "Uzsākot, padarīt XBMC par aktīvo avotu"
+msgid "Make Kodi the active source when starting"
+msgstr "Uzsākot, padarīt Kodi par aktīvo avotu"
 
 msgctxt "#36021"
 msgid "Physical address (overrules HDMI port)"
@@ -11050,8 +11222,8 @@ msgid "Failed to set the new configuration. Please check your settings."
 msgstr "Neizdevās iestatīt jauno konfigurāciju. Lūdzu, pārbaudiet iestatījumus."
 
 msgctxt "#36025"
-msgid "Send 'inactive source' command when stopping XBMC"
-msgstr "Nosūtīt komandu 'neaktīvs avots', apturot XBMC"
+msgid "Send 'inactive source' command when stopping Kodi"
+msgstr "Nosūtīt komandu 'neaktīvs avots', apturot Kodi"
 
 msgctxt "#36026"
 msgid "Put devices in standby mode when putting the PC in standby"
@@ -11106,8 +11278,8 @@ msgid "TV and AVR device (explicit)"
 msgstr "TV un AVR ierīce (precīzi)"
 
 msgctxt "#36040"
-msgid "Unsupported libCEC interface version. %x is lower than the version XBMC supports (%x)"
-msgstr "Neatbalstīta libCEC saskarnes versija. %x ir vecāks nekā XBMC atbalsta (%x)"
+msgid "Unsupported libCEC interface version. %x is lower than the version Kodi supports (%x)"
+msgstr "Neatbalstīta libCEC saskarnes versija. %x ir vecāks nekā Kodi atbalsta (%x)"
 
 msgctxt "#36041"
 msgid "* Item folder"
@@ -11119,15 +11291,15 @@ msgstr "Lietot ierobežotu krāsu spektru (16-235)"
 
 msgctxt "#36101"
 msgid "Change the look and feel of the user interface."
-msgstr "Mainīt lietotāja saskanes izskatu un darbību."
+msgstr "Mainīt lietotāja saskarnes izskatu un darbību."
 
 msgctxt "#36102"
 msgid "Category containing all Skin related settings."
 msgstr "Kategorija, kas satur visus ar apvalku saistītos iestatījumus."
 
 msgctxt "#36103"
-msgid "Select the skin for the user interface. This will define the look and feel of XBMC."
-msgstr "Atlasīt apvalku lietotāja saskarnei. Tas noteiks, kā izskatīsies un darbosies XBMC."
+msgid "Select the skin for the user interface. This will define the look and feel of Kodi."
+msgstr "Atlasīt apvalku lietotāja saskarnei. Tas noteiks, kā izskatīsies un darbosies Kodi."
 
 msgctxt "#36104"
 msgid "Change specific skin settings. The available options are dependent on the skin used."
@@ -11150,8 +11322,8 @@ msgid "Resize the view of the user interface."
 msgstr "Mainīt lietotāja saskarnes skata izmēru."
 
 msgctxt "#36109"
-msgid "Select the media window that XBMC displays on startup."
-msgstr "Atlasīt mediju logu, ko parāda XBMC uzsākot."
+msgid "Select the media window that Kodi displays on startup."
+msgstr "Atlasīt mediju logu, ko parāda Kodi uzsākot."
 
 msgctxt "#36110"
 msgid "Select or disable the sound scheme used in the user interface."
@@ -11209,6 +11381,10 @@ msgctxt "#36123"
 msgid "Show file extensions on media files. For example, 'You Enjoy Myself.mp3' would be simply be shown as 'You Enjoy Myself'."
 msgstr "Rādīt failu paplašinājumus mediju failiem. Piemēram, 'Tu Baudi Mani.mp3' tiek parādīts vienkārši kā 'Tu Baudi Mani'."
 
+msgctxt "#36124"
+msgid "Ignore certain tokens during sort operations. For example, 'The Simpsons' would be sorted as 'Simpsons'."
+msgstr "Ignorēt noteiktas pazīmes kārtrošanas operāciju laikā. Piemēram, 'The Simpsons' tiks kārtots bez artikula kā 'Simpsons'."
+
 msgctxt "#36125"
 msgid "Allow files to be deleted and renamed through the user interface, via the contextual menu (press C on a keyboard, for example, to bring up this menu)."
 msgstr "Atļaut failus dzēst un pārsaukt no lietotāja saskarnes, izmantojot konteksta izvēlni (piemēram, nospiest C uz tastatūras, lai atvērtu šo izvēlni)."
@@ -11230,8 +11406,8 @@ msgid "Set the amount of idle time required before displaying the screensaver."
 msgstr "Iestatīt gaidīšanas laiku, pēc kura ieslēgt ekrānsaudzētāju."
 
 msgctxt "#36130"
-msgid "Select the screensaver. XBMC will force the 'Dim' screensaver when fullscreen video playback is paused or a dialogue box is active."
-msgstr "Atlasīt ekrānsaudzētāju. XBMC uzspiedīs ekrānsaudzētāju \"Aptumsums\", ja pilnekrāna video būs pauzē vai būs aktivizēts dialoga logs."
+msgid "Select the screensaver. Kodi will force the 'Dim' screensaver when fullscreen video playback is paused or a dialogue box is active."
+msgstr "Atlasīt ekrānsaudzētāju. Kodi uzspiedīs ekrānsaudzētāju \"Aptumsums\", ja pilnekrāna video būs pauzē vai būs aktivizēts dialoga logs."
 
 msgctxt "#36131"
 msgid "Change specific screensaver settings. The available options are dependent on the screensaver used."
@@ -11242,8 +11418,8 @@ msgid "Preview the selected screensaver."
 msgstr "Atlasītā ekrānsaudzētāja priekšapskate."
 
 msgctxt "#36133"
-msgid "If music is being played, XBMC will start the selected visualisation instead of displaying the screensaver."
-msgstr "Ja atskaņo mūziku, XBMC sāk izvēlēto vizualizāciju nevis attēlo ekrānsaudzētāju."
+msgid "If music is being played, Kodi will start the selected visualisation instead of displaying the screensaver."
+msgstr "Ja atskaņo mūziku, Kodi sāk atlasīto vizualizāciju nevis attēlo ekrānsaudzētāju."
 
 msgctxt "#36134"
 msgid "Dim the display when media is paused. Not valid for the 'Dim' screensaver mode."
@@ -11290,8 +11466,8 @@ msgid "Group movies into 'Movie sets' when browsing the movie library."
 msgstr "Grupēt filmas 'filmu kopumos', kad pārlūko filmu bibliotēku."
 
 msgctxt "#36146"
-msgid "Check for new media files on XBMC startup."
-msgstr "Uzsākot XBMC, pārbaudīt jaunus mediju failus."
+msgid "Check for new media files on Kodi startup."
+msgstr "Uzsākot Kodi, pārbaudīt jaunus mediju failus."
 
 msgctxt "#36147"
 msgid "Hide the library scanning progress bar during scans."
@@ -11299,7 +11475,7 @@ msgstr "Slēpt bibliotēkas skenēšanas norises joslu skenēšanas laikā."
 
 msgctxt "#36148"
 msgid "Remove items from your library that can't be found (either renamed, deleted, or on removable storage that is currently unplugged)."
-msgstr "Noņemt ierakstus no bibliotēkas, kurus nevar atrast (vai nu pārsaukti, dzēsti vai arī uz ārējās glabātuves, kas pašreiz ir atvienota)."
+msgstr "Noņemt ierakstus no bibliotēkas, kurus nevar atrast (vai nu pārsaukti, dzēsti vai arī uz ārējās krātuves, kas pašreiz ir atvienota)."
 
 msgctxt "#36149"
 msgid "Export the Video Library database to XML files. This will optionally overwrite your current XML files."
@@ -11324,6 +11500,10 @@ msgstr "Pielāgot video apstrādes un attēlošanas metodi."
 msgctxt "#36154"
 msgid "Use high quality scalers when upscaling a video by at least this percentage."
 msgstr "Izmantot augstas kvalitātes mērogotājus, palielinot video par vismaz šādu procentu daudzumu."
+
+msgctxt "#36155"
+msgid "Enable VDPAU hardware decoding of video files, mainly used for NVIDIA graphics and in some circumstances AMD graphics."
+msgstr "Ieslēgt VDPAU aparatūras video failu atkodēšanu, galvenokārt izmanto NVIDIA grafikai un dažos apstākļos arī AMD grafikai."
 
 msgctxt "#36156"
 msgid "Enable VAAPI hardware decoding of video files, mainly used for Intel graphics and in some circumstances AMD graphics."
@@ -11386,8 +11566,8 @@ msgid "Select the zoom level that 4:3 videos are shown on widescreen displays."
 msgstr "Atlasīt palielinājuma apjomu, kad 4:3 video rāda uz platekrāna."
 
 msgctxt "#36172"
-msgid "VDPAU studio level conversion provides a way for advanced applications like XBMC to influence the colour space conversion."
-msgstr "VDPAU studijas līmeņa konvertācija ļauj papildus lietotnēm kā XBMC iespaidot krāsu lauka konvertāciju."
+msgid "VDPAU studio level conversion provides a way for advanced applications like Kodi to influence the colour space conversion."
+msgstr "VDPAU studijas līmeņa konvertācija ļauj papildus lietotnēm kā Kodi iespaidot krāsu lauka konvertāciju."
 
 msgctxt "#36173"
 msgid "Enable upscaling using VDPAU."
@@ -11475,7 +11655,7 @@ msgstr "Kategorija, kas satur iestatījumus DVD darbībai."
 
 msgctxt "#36194"
 msgid "Autorun DVD video when inserted in drive."
-msgstr "Automātiski palaist DVD, kad tas ielikts dzinī."
+msgstr "Pašspēlēt DVD video, kad tas ielikts dzinī."
 
 msgctxt "#36195"
 msgid "Force a region for DVD playback."
@@ -11501,21 +11681,29 @@ msgctxt "#36200"
 msgid "Default scraper used for adding music videos to your library."
 msgstr "Noklusētais skrāpis mūzikas video pievienošanai bibliotēkā."
 
+msgctxt "#36201"
+msgid "Settings for PVR/Live TV features."
+msgstr "Iestatījumi PVR/tiešraides TV iespējām."
+
+msgctxt "#36202"
+msgid "Category for general settings for PVR/Live TV features."
+msgstr "Kategorija PVR/tiešraides TV iespēju vispārīgajiem iestatījumiem."
+
 msgctxt "#36203"
-msgid "Enable the Personal Video Recorder (PVR) features in XBMC. This requires that at least one PVR Add-on is installed."
-msgstr "Ieslēgt Personal Video Recorder (PVR) iespējas XBMC. Tam nepieciešams vismaz viens uzstādīts PVR pielikums."
+msgid "Enable the Personal Video Recorder (PVR) features in Kodi. This requires that at least one PVR Add-on is installed."
+msgstr "Ieslēgt Personal Video Recorder (PVR) iespējas Kodi. Tam nepieciešams vismaz viens uzstādīts PVR pielikums."
 
 msgctxt "#36204"
 msgid "Import channel groups from the PVR backend (if supported). Will delete user created groups if they're not found on the backend."
 msgstr "Importē kanālu grupas no PVR aizmugursistēmas (ja atbalstīts). Izdzēsīs lietotāja izveidotās grupas, ja tās nebūs atrodamas aizmugursistēmā."
 
 msgctxt "#36205"
-msgid "Sort the channels by channel number on the backend, but use XBMC's own numbering for channels."
-msgstr "Aizmugursistēmā kārto kanālus pēc kanāla numura, bet pašā XBMC kanāliem izmanto savu numerāciju."
+msgid "Sort the channels by channel number on the backend, but use Kodi's own numbering for channels."
+msgstr "Aizmugursistēmā kārto kanālus pēc kanāla numura, bet pašā Kodi kanāliem izmanto savu numerāciju."
 
 msgctxt "#36206"
-msgid "Use numbering from the backend, instead of configuring them manually over XBMC."
-msgstr "Izmanto numurus no aizmugursistēmas, tā vietā lai konfigurētu tos pašrocīgi ar XBMC."
+msgid "Use numbering from the backend, instead of configuring them manually over Kodi."
+msgstr "Izmanto numurus no aizmugursistēmas, tā vietā lai konfigurētu tos pašrocīgi ar Kodi."
 
 msgctxt "#36207"
 msgid "Open the channel manager, which allows modifying the channel order, channel name, icon, etc."
@@ -11529,6 +11717,22 @@ msgctxt "#36209"
 msgid "Delete channel/EPG database and reimport the data from the backend afterwards."
 msgstr "Dzēst kanālu/EPG datubāzi un pārimportēt datus pēc tam no aizmugursistēmas."
 
+msgctxt "#36210"
+msgid "Prevent the 'connection lost' notification window from displaying when Kodi is unable to talk to the PVR backend server."
+msgstr "Nepieļaut 'savienojums zaudēts' paziņojuma loga attēlošanu, ja Kodi nevar sazināties ar PVR aizmugursistēmas serveri."
+
+msgctxt "#36211"
+msgid "Category for PVR menus and on-screen display settings, as well as channel info windows."
+msgstr "Kategorija PVR izvēlnēm un uz ekrāna attēlojamiem iestatījumiem, kā arī kanāla info logiem."
+
+msgctxt "#36212"
+msgid "Display programming information when changing channels, such as the current TV show."
+msgstr "Attēlot programmas informāciju, kamēr maina kanālus, piemēram, par pašreizējo TV pārraidi. "
+
+msgctxt "#36214"
+msgid "Close the on screen display controls after switching channels."
+msgstr "Aizvērt OSD kontroles pēc kanālu pārslēgšanas"
+
 msgctxt "#36216"
 msgid "Folder where channel icons are stored."
 msgstr "Mape, kur glabājas kanālu ikonas."
@@ -11536,6 +11740,10 @@ msgstr "Mape, kur glabājas kanālu ikonas."
 msgctxt "#36217"
 msgid "Scan for missing channel icons."
 msgstr "Skenēt trūkstošās kanālu ikonas."
+
+msgctxt "#36218"
+msgid "Category for electronic programming guide settings."
+msgstr "Kategorija elektroniskā programmu gida iestatījumiem."
 
 msgctxt "#36220"
 msgid "Number of days of EPG data to import from backends."
@@ -11550,12 +11758,20 @@ msgid "Do not import EPG data while playing TV to minimise CPU usage."
 msgstr "Neimportēt EPG datus, kamēr atskaņo TV, lai samazinātu CPU lietošanu."
 
 msgctxt "#36223"
-msgid "By default, EPG data is stored in a local database to speed up importing when XBMC is restarted."
-msgstr "Pēc noklusējuma EPG dati glabājas lokālā datubāzē, lai paātrinātu importu pie XBMC pārstartēšanas."
+msgid "By default, EPG data is stored in a local database to speed up importing when Kodi is restarted."
+msgstr "Pēc noklusējuma EPG dati glabājas lokālā datubāzē, lai paātrinātu importu pie Kodi pārstartēšanas."
 
 msgctxt "#36224"
 msgid "Hide \"no information available\" labels when no EPG data can be retrieved for a channel."
 msgstr "Slēpt \"informācija nav pieejama\" etiķetes, kad kanālam nevar izgūt EPG datus."
+
+msgctxt "#36225"
+msgid "Delete the EPG database in Kodi and reimport the data afterwards from the backend."
+msgstr "Dzēst EPG datubāzi no Kodi un pārimportēt datus pēc tam no aizmugursistēmas."
+
+msgctxt "#36226"
+msgid "Category for PVR playback and channel switching settings."
+msgstr "Kategorija PVR atskaņošanai un kanālu pārslēgšanas iestatījumiem."
 
 msgctxt "#36227"
 msgid "Display stream of selected channel in a small box instead of fullscreen."
@@ -11569,9 +11785,21 @@ msgctxt "#36229"
 msgid "Display signal quality information in the codec information window (if supported by the Add-on and backend)."
 msgstr "Attēlot signāla kvalitātes informāciju kodeka informācijas logā (ja atbalsta pielikums un aizmugursistēma)."
 
+msgctxt "#36230"
+msgid "How long Kodi will wait to change the channel if the channel isn't being received. Useful for over-the-air channels that occasionally lose signal strength."
+msgstr "Cik ilgi Kodi gaidīs, lai pārslēgtu kanālu, ja kanālu nevar uztvert. Noder pa gaisu uztveramiem kanāliem, kas reizēm zaudē signāla stiprumu."
+
 msgctxt "#36231"
 msgid "Pressing a number button in full screen mode will automatically switch to the channel number that was entered after 1 second."
 msgstr "Nospiežot numura pogu pilnekrāna režīmā, automātiski pārslēgsies uz to kanāla numuru, kas tika ievadīts pēc 1 sekundes."
+
+msgctxt "#36232"
+msgid "When pressing channel up or down, the actual channel switch is delayed, allowing the user to flip to a channel number without waiting for each channel switch."
+msgstr "Kad spiež kanālu uz augšu vai leju, īsto kanāla pārslēgšanu aizkavē, lai ļautu lietotājam tikt līdz kanāla numuram, negaidot katra kanāla pārslēgšanu."
+
+msgctxt "#36233"
+msgid "Category for default recording duration settings."
+msgstr "Kategorija noklusējuma ierakstīšanas ilguma iestatījumiem."
 
 msgctxt "#36234"
 msgid "Duration of instant recordings when pressing the record button."
@@ -11595,11 +11823,15 @@ msgstr "Beigt ierakstus pēc aktuālā laika. Neatbalsta visi pielikumi un aizmu
 
 msgctxt "#36239"
 msgid "Display a notification when timers are added, finished or removed by the backend."
-msgstr "Rādīt paziņojumu, kad taimeri ir pievienoti, pabeigti vai noņemti aizmugursistēmā."
+msgstr "Rādīt paziņojumu, kad taimerus uzliek, pabeidz vai noņem aizmugursistēmā."
+
+msgctxt "#36240"
+msgid "Category for PVR power management settings, such as when to wake the PVR backend server."
+msgstr "Kategorija PVR barošanas pārvaldības iestatījumiem, piemēram, kad pamodināt PVR aizmugursistēmas serveri."
 
 msgctxt "#36241"
-msgid "Execute the \"wakeup command\" below when XBMC exits or is going into hibernation mode. The timestamp of the next scheduled recording is passed as parameter."
-msgstr "Izpildīt \"pamodināšanas komandu\", izejot no XBMC vai nonākot miega režīmā. Nākamā ieplānotā ieraksta laika zīmogu padod kā parametru."
+msgid "Execute the \"wakeup command\" below when Kodi exits or is going into hibernation mode. The timestamp of the next scheduled recording is passed as parameter."
+msgstr "Izpildīt \"pamodināšanas komandu\", izejot no Kodi vai nonākot miega režīmā. Nākamā ieplānotā ieraksta laika zīmogu padod kā parametru."
 
 msgctxt "#36242"
 msgid "The command will not be executed when a recording will be started within this timeout."
@@ -11609,6 +11841,10 @@ msgctxt "#36243"
 msgid "The command to execute."
 msgstr "Izpildāmā komanda."
 
+msgctxt "#36244"
+msgid "Time to subtract from the start time of the next scheduled recording."
+msgstr "Laiks, ko atņemt no nākamā plānotā ieraksta sākuma laika."
+
 msgctxt "#36245"
 msgid "Execute the wakeup command every day at the given time."
 msgstr "Izpildīt pamodināšanas komandu katru dienu noteiktā laikā."
@@ -11616,6 +11852,10 @@ msgstr "Izpildīt pamodināšanas komandu katru dienu noteiktā laikā."
 msgctxt "#36246"
 msgid "When to execute the daily wakeup command."
 msgstr "Kad izpildīt ikdienas pamodināšanas komandu."
+
+msgctxt "#36247"
+msgid "Category for parental control settings if the PVR backend server supports parental controls."
+msgstr "Kategorija vecāku kontroles iestatījumiem, ja PVR aizmugursistēmas serveris atbalsta vecāku kontroli."
 
 msgctxt "#36248"
 msgid "Asks for a pin code to access parental locked channels. Channels can be marked as locked in the channels editor on the general tab. Parental locked channels can not be played or recorded without entering a pin code, and the EPG information is hidden for those channels."
@@ -11628,6 +11868,14 @@ msgstr "Ievadiet jaunu pin kodu, lai atslēgtu vecāku sēgtos kanālus."
 msgctxt "#36250"
 msgid "Ask for the pin code again when trying to access a parental locked channel and the code hasn't been asked for this duration."
 msgstr "Atkārtoti prasīt pin kodu, piekļūstot vecāku slēgtajiem kanāliem, ja kods nav bijis prasīts šo laika sprīdi."
+
+msgctxt "#36251"
+msgid "Category for any specific settings for your PVR backend, if the PVR backend supports changing those settings in Kodi."
+msgstr "Kategorija visiem PVR aizmugursistēmas specifiskajiem iestatījumiem, ja PVR aizmugursistēma atbalsta šo iestatījumu mainīšanu ar Kodi."
+
+msgctxt "#36252"
+msgid "This option will bring you to any specific settings for your PVR backend, if the PVR backend supports changing those settings in Kodi."
+msgstr "Šī opcija atvērs visus PVR aizmugursistēmas specifiskos iestatījumus, ja PVR aizmugursistēma atbalsta šo iestatījumu mainīšanu ar Kodi."
 
 msgctxt "#36253"
 msgid "Section that contains settings related to music files and how they are handled."
@@ -11654,8 +11902,8 @@ msgid "Select the default artist information source. See the Add-ons Manager for
 msgstr "Atlasīt noklusēto izpildītāja informācijas avotu. Opcijām skatīt pielikumu pārvaldnieku."
 
 msgctxt "#36259"
-msgid "Check for new and removed media files on XBMC startup."
-msgstr "Uzsākot XBMC, pārbaudīt jaunus vai noņemtus mediju failus."
+msgid "Check for new and removed media files on Kodi startup."
+msgstr "Uzsākot Kodi, pārbaudīt jaunus vai noņemtus mediju failus."
 
 msgctxt "#36260"
 msgid "No info available yet."
@@ -11674,16 +11922,16 @@ msgid "Category containing settings for how music playback is handled."
 msgstr "Kategorija, kas satur iestatījumus mūzikas atskaņošanas darbībai."
 
 msgctxt "#36265"
-msgid "XBMC automatically plays the next item in the current folder. For example, in Files View: After a track has been played, XBMC would automatically play the next track in the same folder."
-msgstr "XBMC automātiski atskaņo ņakamo ierakstu pašreizējā mapē. Piemēram, failu skatā: pēc tam, kad celiņš nospēlēts, XBMC automātiski atskaņos nākamo celiņu tajā pašā mapē."
+msgid "Kodi automatically plays the next item in the current folder. For example, in Files View: After a track has been played, Kodi would automatically play the next track in the same folder."
+msgstr "Kodi automātiski atskaņo ņakamo ierakstu pašreizējā mapē. Piemēram, failu skatā: pēc tam, kad celiņš nospēlēts, Kodi automātiski atskaņos nākamo celiņu tajā pašā mapē."
 
 msgctxt "#36266"
 msgid "When songs are selected they are queued instead of playback starting immediately."
 msgstr "Kad dziesmas tiek atlasītas, tās ierindo sarakstā nevis sāk nekavējoties atskaņot."
 
 msgctxt "#36267"
-msgid "XBMC will read the ReplayGain information encoded in your audio files by a program such as MP3Gain and normalise the sound levels accordingly."
-msgstr "XBMC lasīs atskaņojuma-pastiprinājuma info, kas iekodēta audio failos ar programmu, piem., MP3Gain, un atbilstoši normalizēs skaņas līmeņus."
+msgid "Kodi will read the ReplayGain information encoded in your audio files by a program such as MP3Gain and normalise the sound levels accordingly."
+msgstr "Kodi lasīs atskaņojuma-pastiprinājuma info, kas iekodēta audio failos ar programmu, piemēram, MP3Gain, un atbilstoši normalizēs skaņas līmeņus."
 
 msgctxt "#36268"
 msgid "Default is 89dB per standard. Change with caution."
@@ -11701,6 +11949,10 @@ msgctxt "#36271"
 msgid "Smoothly fade from one audio track to the next. You can set the amount of overlap from 1-15 seconds."
 msgstr "Gludi izgaist no viena audio celiņa uz nākamo. Var iestatīt pārklāšanās apjomu no 1-15 sekundēm."
 
+msgctxt "#36272"
+msgid "Allow crossfading to occur when both tracks are from the same album."
+msgstr "Atļaut pārklāšanos, ja abi celiņi ir no viena tā paša albuma."
+
 msgctxt "#36273"
 msgid "Select the visualisation that will be displayed while listening to music."
 msgstr "Atlasīt vizualizāciju, kuru attēlot, kamēr klausās mūziku."
@@ -11717,9 +11969,25 @@ msgctxt "#36276"
 msgid "Used for formatting the second column in file lists."
 msgstr "Lieto, lai formatētu otro aili failu sarakstos."
 
+msgctxt "#36277"
+msgid "Control the way that the names of songs are displayed in the now playing list."
+msgstr "Kontrolēt, kā dziesmu nosaukumi tiek attēloti pašreizējās atskaņošanas sarakstā. "
+
+msgctxt "#36278"
+msgid "Used for formatting the second column in the now playing list."
+msgstr "Lieto, lai formatētu otro aili pašreizējās atskaņošanas sarakstā."
+
+msgctxt "#36279"
+msgid "Control the way that the names of songs are displayed in library lists."
+msgstr "Kontrolēt, kā dziesmu nosaukumi tiek attēloti bibliotēkas sarakstos. "
+
+msgctxt "#36280"
+msgid "Used for formatting the second column in library lists."
+msgstr "Lieto, lai formatētu otro aili bibliotēkas sarakstos."
+
 msgctxt "#36281"
-msgid "XBMC will search for thumbs on remote shares and optical media. This can often slow down the listing of network folders."
-msgstr "XBMC meklēs sīktēlus attālinātajos koplietojumos un optiskā medijā. Tas bieži var salēnināt tīkla mapju saraksta parādīšanu."
+msgid "Kodi will search for thumbs on remote shares and optical media. This can often slow down the listing of network folders."
+msgstr "Kodi meklēs sīktēlus attālinātajos koplietojumos un optiskā medijā. Tas bieži var salēnināt tīkla mapju saraksta parādīšanu."
 
 msgctxt "#36282"
 msgid "Category containing settings for how CDs are handled."
@@ -11727,7 +11995,7 @@ msgstr "Kategorija, kas satur iestatījumus CD darbībai."
 
 msgctxt "#36283"
 msgid "Autorun CDs when inserted in drive."
-msgstr "Automātiski palaist CD, kad tas ielikts dzinī."
+msgstr "Pašspēlēt CD, kad tas ielikts dzinī."
 
 msgctxt "#36284"
 msgid "Read the information belonging to an audio CD from an internet database."
@@ -11736,6 +12004,10 @@ msgstr "Lasīt informāciju, kas atbilst audio CD, no interneta datubāzes."
 msgctxt "#36285"
 msgid "Select the location on your hard drive where ripped tracks will be saved to."
 msgstr "Atlasīt atrašanās vietu cietajā diskā, kur tiks saglabāti izvilktie celiņi."
+
+msgctxt "#36286"
+msgid "Control how saved music is named from the tags. Tags: [B]%N[/B]: TrackNumber, [B]%S[/B]: DiscNumber, [B]%A[/B]: Artist, [B]%T[/B]: Title, [B]%B[/B]: Album, [B]%G[/B]: Genre, [B]%Y[/B]: Year, [B]%F[/B]: FileName, [B]%D[/B]: Duration, [B]%J[/B]: Date, [B]%R[/B]: Rating, [B]%I[/B]: FileSize."
+msgstr "Kontrolēt, kā saglabāto mūziku nosauc pēc iezīmēm. Iezīmes: [B]%N[/B]: CeliņaNumurs, [B]%S[/B]: DiskaNumurs, [B]%A[/B]: Izpildītājs, [B]%T[/B]: Nosaukums, [B]%B[/B]: Albums, [B]%G[/B]: Žanrs, [B]%Y[/B]: Gads, [B]%F[/B]: FailaNosaukums, [B]%D[/B]: Ilgums, [B]%J[/B]: Datums, [B]%R[/B]: Vērtējums, [B]%I[/B]: FailaIzmērs."
 
 msgctxt "#36287"
 msgid "Select which audio encoder to use when ripping."
@@ -11762,8 +12034,28 @@ msgid "Category containing the settings for how karaoke is handled."
 msgstr "Kategorija, kas satur iestatījumus karaoke darbībai."
 
 msgctxt "#36293"
-msgid "When playing any music file, XBMC will look for a matching .cdg file and display its graphics."
-msgstr "Kad atskaņo jebkuru mūzikas failu, XBMC meklēs atbilstošu .cdg failu un attēlos tā grafikas."
+msgid "When playing any music file, Kodi will look for a matching .cdg file and display its graphics."
+msgstr "Kad atskaņo jebkuru mūzikas failu, Kodi meklēs atbilstošu .cdg failu un attēlos tā grafikas."
+
+msgctxt "#36294"
+msgid "Show song selection dialog once the last song in the queue has been played."
+msgstr "Rādīt dziesmas atlasīšanas dialogu, kad pēdējā dziesma rindā ir nospēlēta."
+
+msgctxt "#36295"
+msgid "Select the font type used during karaoke."
+msgstr "Atlasiet fonta veidu, ko lieto karaokes laikā."
+
+msgctxt "#36296"
+msgid "Select the size of the font used during karaoke."
+msgstr "Atlasiet fonta izmēru, ko lieto karaokes laikā."
+
+msgctxt "#36297"
+msgid "Select the font colour used during karaoke."
+msgstr "Atlasiet fonta krāsu, ko lieto karaokes laikā."
+
+msgctxt "#36298"
+msgid "Select the character set used during karaoke."
+msgstr "Atlasiet rakstzīmju kopu, ko lieto karaokes laikā."
 
 msgctxt "#36299"
 msgid "Export the karaoke numbered songs to HTML or CSV files."
@@ -11784,6 +12076,10 @@ msgstr "Info vēl nav pieejama."
 msgctxt "#36303"
 msgid "No info available yet."
 msgstr "Info vēl nav pieejama."
+
+msgctxt "#36304"
+msgid "Section that contains settings related to pictures and how they are handled."
+msgstr "Sekcija, kas satur ar attēliem un to apstrādi saistītus iestatījumus."
 
 msgctxt "#36305"
 msgid "Category containing settings for how picture file lists are handled."
@@ -11841,41 +12137,49 @@ msgctxt "#36318"
 msgid "Specify the default weather information source. See the Add-ons Manager for options."
 msgstr "Norādīt noklusēto laikapstākļu informācijas avotu. Opcijām skatīt pielikumu pārvaldnieku."
 
+msgctxt "#36319"
+msgid "Section containing settings for how network services are handled."
+msgstr "Sekcija, kas satur iestatījumus tīkla servisu darbībai."
+
 msgctxt "#36320"
 msgid "Category containing settings used for all services."
 msgstr "Kategorija, kas satur iestatījumus visiem servisiem."
 
 msgctxt "#36321"
-msgid "Display name of the XBMC installation when using various network services."
-msgstr "Attēlot XBMC instalācijas nosaukumu, kad izmanto dažādus tīkla pakalpojumus."
+msgid "Display name of the Kodi installation when using various network services."
+msgstr "Attēlot Kodi instalācijas nosaukumu, kad izmanto dažādus tīkla pakalpojumus."
 
 msgctxt "#36322"
 msgid "Category containing settings for how the UPnP service is handled."
 msgstr "Kategorija, kas satur iestatījumus UPnP servisa darbībai."
 
+msgctxt "#36323"
+msgid "Enable the UPnP server. This allows you to stream media to a UPnP client."
+msgstr "Ieslēgt UPnP serveri. Tas atļaus straumēt mediju uz UPnP klientu."
+
 msgctxt "#36324"
 msgid "When a manual or automatical library update occurs, notify UPnP clients."
 msgstr "Brīdināt UPnP klientus, kad notiek pašrocīga vai automātiska bibliotēkas atjaunināšana."
+
+msgctxt "#36325"
+msgid "Enable the UPnP client. This allows you to stream media from any UPnP server with a control point and control playback from that server."
+msgstr "Ieslēgt UPnP klientu. Tas atļaus straumēt mediju no jebkura UPnP servera ar kontroles punktu un kontrolēt atskaņošanu no tā servera."
+
+msgctxt "#36326"
+msgid "Enable the UPnP control point. This allows you to stream media to any UPnP client and control playback from Kodi."
+msgstr "Ieslēgt UPnP kontroles punktu. Tas atļaus straumēt mediju uz jebkuru UPnP klientu un kontrolēt atskaņošanu no Kodi."
 
 msgctxt "#36327"
 msgid "Category containing settings for how the webserver service is handled."
 msgstr "Kategorija, kas satur iestatījumus tīmekļa servera servisa darbībai."
 
 msgctxt "#36328"
-msgid "Enable remote users to control XBMC through the built-in webserver."
-msgstr "Ieslēgt attālināto lietotāju kontroli pār XBMC no iebūvētā tīmekļa servera."
+msgid "Enable remote users to control Kodi through the built-in webserver."
+msgstr "Ieslēgt attālināto lietotāju kontroli pār Kodi no iebūvētā tīmekļa servera."
 
 msgctxt "#36329"
 msgid "Define the webserver port."
 msgstr "Noteikt tīmekļa servera portu."
-
-msgctxt "#36330"
-msgid "Define the webserver username."
-msgstr "Noteikt tīmekļa servera lietotājvārdu."
-
-msgctxt "#36331"
-msgid "Define the webserver password."
-msgstr "Noteikt tīmekļa servera paroli."
 
 msgctxt "#36332"
 msgid "Select between web interfaces installed via the Add-on Manager."
@@ -11886,8 +12190,8 @@ msgid "Category containing settings for how the remote control service is handle
 msgstr "Kategorija, kas satur iestatījumus tālvadības pults servisa darbībai."
 
 msgctxt "#36334"
-msgid "Allow programs on this computer to control XBMC via the Web Interface or the JSON-RPC interface protocol."
-msgstr "Atļaut programmām šajā sistēmā kontrolēt XBMC no tīmekļa saskarnes vai  JSON-RPC saskarnes protokola."
+msgid "Allow programs on this computer to control Kodi via the Web Interface or the JSON-RPC interface protocol."
+msgstr "Atļaut programmām šajā sistēmā kontrolēt Kodi no tīmekļa saskarnes vai  JSON-RPC saskarnes protokola."
 
 msgctxt "#36335"
 msgid "Define the remote control port."
@@ -11902,8 +12206,8 @@ msgid "Define the maximum number of clients that can connect."
 msgstr "Noteikt maksimālo klientu skaitu, kas var pieslēgties."
 
 msgctxt "#36338"
-msgid "Allow programs on the network to control XBMC."
-msgstr "Atļaut programmām no tīkla kontrolēt XBMC."
+msgid "Allow programs on the network to control Kodi."
+msgstr "Atļaut programmām no tīkla kontrolēt Kodi."
 
 msgctxt "#36339"
 msgid "Initial repeat delay (ms)."
@@ -11916,6 +12220,14 @@ msgstr "Tālākā atkārtošanas aizkave (ms)."
 msgctxt "#36341"
 msgid "Category containing settings for how the zeroconf network discovery service is handled, required for AirPlay."
 msgstr "Kategorija, kas satur iestatījumus zeroconf tīkla atklāšanas servisa darbībai, nepieciešams pie AirPlay."
+
+msgctxt "#36342"
+msgid "Allows applications on the network to discover Kodi's running services."
+msgstr "Ļauj lietotnēm tīklā atklāt Kodi darbinātos pakalpojumus."
+
+msgctxt "#36343"
+msgid "Allows Kodi to receive content from other AirPlay devices or applications."
+msgstr "Atļauj Kodi saņemt saturu no citām AirPlay ierīcēm vai lietotnēm."
 
 msgctxt "#36344"
 msgid "Enable AirPlay password protection."
@@ -11937,21 +12249,49 @@ msgctxt "#36348"
 msgid "If a WINS server is running on the network, enter its workgroup name here. Otherwise, leave blank."
 msgstr "Ja tīklā darbojas WINS serveris, ievadiet tā darbagrupas nosaukumu šeit. Citos gadījumos atstājiet tukšu."
 
+msgctxt "#36349"
+msgid "Section that contains the System related settings for the device Kodi is installed on."
+msgstr "Sekcija, kas satur ar sistēmu saistītus iestatījumus ierīcei, kur uzstādīts Kodi."
+
 msgctxt "#36350"
 msgid "Automatically send 'Wake-On-Lan' to server(s) right before trying to access shared files or services."
 msgstr "Automātiski sūtīt 'Wake-On-Lan' uz serveri(em) tieši pims mēģinājuma piekļūt koplietotiem failem vai pakalpojumiem."
 
+msgctxt "#36351"
+msgid "Display Kodi in a window, or fullscreen on the selected screen."
+msgstr "Attēlot Kodi logā vai pilnekrānā izvēlētajā ekrānā."
+
+msgctxt "#36352"
+msgid "Changes the resolution that the user interface is displayed in."
+msgstr "Maina izšķirtspēju, kurā attēlota lietotāja saskarne."
+
+msgctxt "#36353"
+msgid "Changes the refresh rate that the user interface is displayed in."
+msgstr "Maina pārzīmēšanas biežumu, kurā attēlota lietotāja saskarne."
+
+msgctxt "#36354"
+msgid "Display Kodi in a fullscreen window. The main benefit is for multi-screen configurations, so that Kodi can be used without minimising other applications. This uses more resources so playback may be less smooth."
+msgstr "Attēlo Kodi pilnekrāna logā. Galvenais ieguvums no daudzekrānu konfigurācijām ir, ka Kodi var izmantot bez citu lietotņu minimizēšanas. Tas izmanto mazliet vairāk resursus, tāpēc atskaņošana var būt mazāk gluda."
+
 msgctxt "#36355"
-msgid "In a multi-screen configuration, the screens where XBMC is not displayed are blacked out."
-msgstr "Daudzekrānu konfigurācijā, ekrāni, kuros XBMC nav redzams, paliek melni."
+msgid "In a multi-screen configuration, the screens where Kodi is not displayed are blacked out."
+msgstr "Daudzekrānu konfigurācijā, ekrāni, kuros Kodi nav redzams, paliek melni."
 
 msgctxt "#36356"
 msgid "Eliminate vertical tearing."
 msgstr "Novērst vertikālo pārraušanu."
 
+msgctxt "#36357"
+msgid "Calibrate the user interface by adjusting the overscan. Use this tool if the image being displayed is too large or small for your display."
+msgstr "Kalibrēt lietotāja saskarni, pielāgojot pārskenēšanu. Lieto šo rīku, ja attēlojums ir pārāk liels vai pārāk mazs tavam ekrānam."
+
 msgctxt "#36358"
 msgid "Test patterns for display hardware calibration."
 msgstr "Testē musturus ekrāna aparatūras kalibrēšanai."
+
+msgctxt "#36359"
+msgid "Use limited colour range (16-235) instead of full colour range (0-255). Limited range should be used if your display is a regular HDMI TV and doesn't have a PC or other mode to display full range colour, however if your display is a PC monitor then leave this disabled to get proper blacks."
+msgstr "Izmantot ierobežotu krāsu skalu (16-235) pilnas krāsu skalas vietā (0-255). Ierobežotu skalu jāizmanto, ja jūsu ekrāns ir parasts HDMI TV bez datora vai cita režīma, kas spēj attēlot pilnu krāsu skalu, bet, ja jūsu ekrāns ir datora monitors, atstājiet šo izslēgtu, lai redzētu pareizu melno krāsu."
 
 msgctxt "#36360"
 msgid "Category containing settings for how audio output is handled."
@@ -11963,11 +12303,15 @@ msgstr "Atlasīt, kā iestatīti audio izvades rekvizīti: [Fiksēts] - izvades 
 
 msgctxt "#36362"
 msgid "Select the number of channels supported by the audio connection, or the number of speakers if connected by analog connections. This setting does not apply to passthrough audio. Note - SPDIF supports 2.0 channels only but can still output multichannel audio using a format supported by passthrough."
-msgstr "Atlasiet, cik kanālus atbalsta audio savienojums vai cik skaļruņu ir pieslēgti ar analogajiem savienojumiem. Šo iestatījumu nepiemēro tranzīta audio. Piezīme - SPDIF atbalsta tikai 2.0 kanālus, taču tik un tā spēj izvadīt daudzkanālu audio, izmantojot formātu, kurš atbalsta tranzītu."
+msgstr "Atlasiet, cik kanālus atbalsta audio savienojums vai cik skaļruņu ir pieslēgti ar analogajiem savienojumiem. Šo iestatījumu nepiemēro tranzītaudio. Piezīme - SPDIF atbalsta tikai 2.0 kanālus, taču tik un tā spēj izvadīt daudzkanālu audio, izmantojot formātu, kurš atbalsta tranzītaudio."
 
 msgctxt "#36363"
 msgid "Boost AC3 streams that have been downmixed to 2 channels."
 msgstr "Palielināt AC3 plūsmas, kas samiksētas līdz 2 kanāliem."
+
+msgctxt "#36364"
+msgid "Select to enable upmixing of 2 channel audio to the number of audio channels specified by the channel configuration."
+msgstr "Atlasīt, lai palielinātu 2 audio kanālus līdz skaitam, kas norādīts kanālu konfigurācijā. "
 
 msgctxt "#36365"
 msgid "Select this option if your receiver is capable of decoding AC3 streams."
@@ -11983,7 +12327,7 @@ msgstr "Atlasīt maksimālo audio kanālu/skaļruņu skaitu, kas pieejams atkod�
 
 msgctxt "#36368"
 msgid "Select to enable the passthrough audio options for playback of encoded audio such as Dolby Digital."
-msgstr "Atlasīt, lai ieslēgtu audio tranzīta opcijas kodēta audio atskaņošanai, piemēram, Dolby Digital."
+msgstr "Atlasīt, lai ieslēgtu tranzītaudio opcijas kodēta audio atskaņošanai, piemēram, Dolby Digital."
 
 msgctxt "#36369"
 msgid "Select this option if your receiver is capable of decoding TrueHD streams."
@@ -11993,29 +12337,37 @@ msgctxt "#36370"
 msgid "Select this option if your receiver is capable of decoding DTS-HD streams."
 msgstr "Atlasiet šo opciju, ja Jūsu atskaņotājs spēj atkodēt DTS-HD straumes."
 
+msgctxt "#36371"
+msgid "Select the device to be used for playback of audio that has been decoded such as mp3."
+msgstr "Atlasīt ierīci, kuru izmantot atkodēta audio, piemēram, mp3, atskaņošanai."
+
 msgctxt "#36372"
 msgid "Select the device to be used for playback of encoded formats, these are any of the formats below in the 'capable receiver' options."
 msgstr "Atlasīt ierīci, kuru izmantot kodētu formātu atskaņošanai. Tie ir jeburi formāti zem 'spējīgs uztvērējs' opcijām."
 
 msgctxt "#36373"
 msgid "Configure how interface sounds are handled, such as menu navigation and important notifications."
-msgstr "Konfigurēt, kā apstrādā saskarnes skaņas, piem., izvēlnes navigāciju un svarīgus paziņojumus."
+msgstr "Konfigurēt, kā apstrādā saskarnes skaņas, piemēram, izvēlnes navigāciju un svarīgus paziņojumus."
 
 msgctxt "#36374"
 msgid "Category containing settings for how input devices are handled."
 msgstr "Kategorija, kas satur iestatījumus ievades ierīču darbībai."
+
+msgctxt "#36375"
+msgid "Configure any attached peripheral devices."
+msgstr "Konfigurē visas pievienotās perifērās ierīces."
 
 msgctxt "#36376"
 msgid "When activated, your keyboard arrows will move the selection on the virtual keyboard. When deactivated, they will move the cursor from your text."
 msgstr "Kad aktivizēts, tastatūras bultas kustinās atlasīto uz virtuālās tastatūras. Kad neaktivizēts, bultas kustinās kursoru no teksta."
 
 msgctxt "#36377"
-msgid "Use a mouse or touch screen device to control XBMC. Note: disabling will cause you to lose control over XBMC when no keyboard or remote is present."
-msgstr "Izmantot peli vai skārienekrāna ierīci XBMC kontrolei. Piezīme: izslēgšana radīs kontroles zaudēšanu pār XBMC, ja nav pieslēgta tastatūra vai pults."
+msgid "Use a mouse or touch screen device to control Kodi. Note: disabling will cause you to lose control over Kodi when no keyboard or remote is present."
+msgstr "Izmantot peli vai skārienekrāna ierīci Kodi kontrolei. Piezīme: izslēgšana radīs kontroles zaudēšanu pār Kodi, ja nav pieslēgta tastatūra vai pults."
 
 msgctxt "#36378"
-msgid "Use a joystick to control XBMC."
-msgstr "Izmantot kursorsviru, lai kontrolētu XMBC."
+msgid "Use a joystick to control Kodi."
+msgstr "Izmantot kursorsviru, lai kontrolētu Kodi."
 
 msgctxt "#36379"
 msgid "Category containing settings for internet access."
@@ -12023,7 +12375,7 @@ msgstr "Kategorija, kas satur iestatījumus interneta piekļuvei."
 
 msgctxt "#36380"
 msgid "If your internet connection uses a proxy, configure it here."
-msgstr "Ja interneta pieslēgums notiek ar starpniekserveri, konfigurējiet to šeit."
+msgstr "Ja interneta savienojums notiek ar starpniekserveri, konfigurējiet to šeit."
 
 msgctxt "#36381"
 msgid "Configure which proxy type is used."
@@ -12046,20 +12398,24 @@ msgid "Configure the proxy server password."
 msgstr "Konfigurēt starpniekservera paroli."
 
 msgctxt "#36386"
-msgid "If you have limited bandwidth available, XBMC will try to keep within these limits."
-msgstr "Ja ir ierobežots datu pieslēgums, XBMC mēģinās iekļauties ierobežojumu ietvaros."
+msgid "If you have limited bandwidth available, Kodi will try to keep within these limits."
+msgstr "Ja ir ierobežots datu pieslēgums, Kodi mēģinās iekļauties ierobežojumu ietvaros."
 
 msgctxt "#36387"
 msgid "Category containing settings for power saving."
 msgstr "Kategorija, kas satur iestatījumus enerģijas taupīšanai."
 
+msgctxt "#36388"
+msgid "Turn off display when idle. Useful for TVs that turn off when there is no display signal detected."
+msgstr "Izslēgt ekrānu gaidīšanas laikā. Noder TV, kuri izslēdzas, ja nav atrasts pārraidītais signāls. "
+
 msgctxt "#36389"
-msgid "Define how long XBMC should idle before shutting down."
-msgstr "Noteikt, cik ilgi XBMC jābūt gaidīšanas laikā, pirms notiek izslēgšana."
+msgid "Define how long Kodi should idle before shutting down."
+msgstr "Noteikt, cik ilgi Kodi jābūt gaidīšanas laikā, pirms notiek izslēgšana."
 
 msgctxt "#36390"
-msgid "Define what action XBMC should do when it has been idle for a long period of time."
-msgstr "Noteikt, kādu darbību izpildīt XBMC, kad tas ilgi bijis gaidīšanas laikā."
+msgid "Define what action Kodi should do when it has been idle for a long period of time."
+msgstr "Noteikt, kādu darbību izpildīt Kodi, kad tas ilgi bijis gaidīšanas laikā."
 
 msgctxt "#36391"
 msgid "Category containing settings for debugging functions."
@@ -12070,12 +12426,8 @@ msgid "Turn debug logging on or off. Useful for troubleshooting."
 msgstr "Ieslēgt vai izslēgt atkļūdošanas reģistrēšanu. Noder problēmu risināšanai."
 
 msgctxt "#36393"
-msgid "Folder used to save screenshots taken within XBMC."
-msgstr "Mape, kurā saglabā ekrānattēlus, kas uzņemti no XBMC."
-
-msgctxt "#36394"
-msgid "Specify additional libraries to be included in the debug log."
-msgstr "Norādīt papildbibliotēkas, kuras iekļaut atkļūdošanas žurnālā."
+msgid "Folder used to save screenshots taken within Kodi."
+msgstr "Mape, kurā saglabā ekrānattēlus, kas uzņemti no Kodi."
 
 msgctxt "#36395"
 msgid "Category containing settings for the master lock function."
@@ -12085,9 +12437,13 @@ msgctxt "#36396"
 msgid "Define the PIN code used for the master lock."
 msgstr "Noteikt PIN, kas tiek izmantots galvenajā slēdzenē."
 
+msgctxt "#36397"
+msgid "If enabled, the master lock code is required to unlock Kodi on startup."
+msgstr "Ja ieslēgts, uzsākot Kodi, tiks pieprasīts galvenais slēdzenes kods atbloķēšanai."
+
 msgctxt "#36398"
-msgid "Define the maximum number of retries before XBMC is closed down."
-msgstr "Noteikt maksimālo mēģinājumu skaitu, pirms tiek aizvērts XBMC."
+msgid "Define the maximum number of retries before Kodi is closed down."
+msgstr "Noteikt maksimālo mēģinājumu skaitu, pirms tiek aizvērts Kodi."
 
 msgctxt "#36399"
 msgid "Category containing settings for the cache function."
@@ -12161,6 +12517,14 @@ msgctxt "#36416"
 msgid "Specify the type of remote used."
 msgstr "Norādīt izmantotās pults veidu."
 
+msgctxt "#36417"
+msgid "Always run an Kodi helper so that the remote can be used to start Kodi."
+msgstr "Vienmēr darbināt Kodi palīgu, lai varētu ieslēgt Kodi ar pulti."
+
+msgctxt "#36418"
+msgid "Specify the delay between button sequences on a universal remote."
+msgstr "Norādīt aizkavi starp pogu secībām universālajā pultī."
+
 msgctxt "#36419"
 msgid "Define locations used for retrieving weather information."
 msgstr "Noteikt atrašanās vietas, kuras izmanto laikapstākļu informācijas izgūšanai."
@@ -12193,17 +12557,37 @@ msgctxt "#36428"
 msgid "Record"
 msgstr "Ierakstīt"
 
+msgctxt "#36429"
+msgid "Select this if the audio out connection only supports multichannel audio as Dolby Digital 5.1, such as an SPDIF connection.  If your system supports LPCM multichannel sound via HDMI, leave this disabled."
+msgstr "Atlasiet šo, ja audio izejas savienojums atbalsta daudzkanālu audio tikai ar Dolby Digital 5.1, piemēram, SPDIF savienojumā. Ja šī sistēma atbalsta LPCM daudzkanālu skaņu HDMI, atstājiet šo izslēgtu."
+
+msgctxt "#36430"
+msgid "Configure how video processing will be accelerated. This includes things like decoding and scaling."
+msgstr "Konfigurēt, kā video apstrāde tiks paātrināta. Tas iekļauj tādas lietas kā atkodēšana un mērogošana."
+
+msgctxt "#36431"
+msgid "Defines whether video decoding should be performed in software (requires more CPU) or with hardware acceleration where possible."
+msgstr "Nosaka, vai video atkodēšanu izpildīt ar programmatūru (prasa vairāk CPU) vai ar aparatūras paātrinājumu, ja tas ir pieejams."
+
+msgctxt "#36434"
+msgid "Allow hardware acceleration (MMAL)"
+msgstr "Atļaut aparatūras paātrinājumu (MMAL)"
+
+msgctxt "#36435"
+msgid "Use DVDPlayer for decoding of video files with MMAL acceleration."
+msgstr "Izmantot DVDPlayer ar paratūras paātrinājumu MMAL video failu atkodēšanai."
+
 msgctxt "#36500"
-msgid "Stereoscopic mode (current)"
-msgstr "Stereoskopiskais režīms (pašreizējais)"
+msgid "Stereoscopic 3D mode (current)"
+msgstr "Stereoskopiskais 3D režīms (pašreizējais)"
 
 msgctxt "#36501"
-msgid "Stereoscopic mode"
-msgstr "Stereoskopiskais režīms"
+msgid "Stereoscopic 3D mode"
+msgstr "Stereoskopiskais 3D režīms"
 
 msgctxt "#36502"
-msgid "None"
-msgstr "Nav"
+msgid "Disabled"
+msgstr "Izslēgts"
 
 msgctxt "#36503"
 msgid "Over/Under"
@@ -12230,20 +12614,16 @@ msgid "Hardware Based"
 msgstr "Ar aparatūru"
 
 msgctxt "#36509"
-msgid "Monoscopic - 2D"
-msgstr "Monoskopisks - 2D"
+msgid "Monoscopic (2D)"
+msgstr "Monoskopisks (2D)"
 
 msgctxt "#36520"
-msgid "Playback mode of stereoscopic videos."
-msgstr "Stereoskopisko video atskaņošanas režīms."
+msgid "Playback mode of stereoscopic 3D videos"
+msgstr "Stereoskopisko 3D video atskaņošanas režīms"
 
 msgctxt "#36521"
 msgid "Ask me"
 msgstr "Prasīt man"
-
-msgctxt "#36522"
-msgid "Use preferred mode"
-msgstr "Izmantot vēlamo režīmu"
 
 msgctxt "#36523"
 msgid "Maximum sampling rate for spdif or sampling rate for fixed output configuration."
@@ -12257,25 +12637,13 @@ msgctxt "#36525"
 msgid "Same as movie (autodetect)"
 msgstr "Tāds kā filmai (autonoteikt)"
 
-msgctxt "#36526"
-msgid "Disable stereoscopic mode when playback is stopped"
-msgstr "Izslēgt stereoskopisko režīmu, ja atskaņošana apturēta"
-
 msgctxt "#36527"
-msgid "This video is stereoscopic. Select playback mode"
-msgstr "Šis video ir stereoskopisks. Atlasiet atskaņošanas režīmu"
+msgid "Select playback mode"
+msgstr "Atlasīt atskaņošanas režīmu"
 
 msgctxt "#36528"
-msgid "Select stereoscopic mode"
-msgstr "Atlasīt stereoskopisko režīmu"
-
-msgctxt "#36529"
-msgid "Mono (2D)"
-msgstr "Mono (2D)"
-
-msgctxt "#36530"
-msgid "Preferred mode"
-msgstr "Vēlamais režīms"
+msgid "Select stereoscopic 3D mode"
+msgstr "Atlasīt stereoskopisko 3D režīmu"
 
 msgctxt "#36531"
 msgid "Select alternate mode..."
@@ -12286,24 +12654,12 @@ msgid "Same as movie"
 msgstr "Tāds kā filmai"
 
 msgctxt "#36533"
-msgid "Select how audio is downmixed, for example from 5.1 to 2.0: [Enabled] maintains the dynamic range of the original audio source when downmixed however volume will be lower [Disabled] maintains volume level of the original audio source however the dynamic range is compressed. Note - Dynamic range is the difference between the quietest and loudest sounds in a audio source."
-msgstr "Atlasīt, kā audio ir samiksēts, piemēram, no 5.1 uz 2.0: [Ieslēgts] patur sākotnējā audio avota skaļuma diapazonu samiksējot, tomēr skaļums būs mazāks [Izslēgts] patur sākotnējā audio avota skaļuma līmeni, taču skaļuma diapazons tiek saspiests. Piezīme - Skaļuma diapazons ir starpība starp klusākajām un skaļākajām skaņām audio avotā."
+msgid "Select how audio is downmixed, for example from 5.1 to 2.0: [Enabled] maintains volume level of the original audio source however the dynamic range is compressed. [Disabled] maintains the dynamic range of the original audio source when downmixed however volume will be lower. Note - Dynamic range is the difference between the quietest and loudest sounds in an audio source. Enable this setting if movie dialogues are barely audible."
+msgstr "Atlasīt, kā audio ir lejupmiksēts, piemēram, no 5.1 uz 2.0: [Ieslēgts] patur sākotnējā audio avota skaļuma līmeni lejupmiksējot, tomēr skaļuma diapazons tiks saspiests. [Izslēgts] lejupmiksējot patur sākotnējā audio avota skaļuma diapazonu, taču skaļuma līmenis būs mazāks. \nPiezīme - Skaļuma diapazons ir starpība starp klusākajām un skaļākajām skaņām audio avotā. Ieslēdziet šo iestatījumu, ja dialogi filmā ir knapi dzirdami."
 
-msgctxt "#36535"
-msgid "Stereoscopic mode of video"
-msgstr "Video stereoskopiskais režīms"
-
-msgctxt "#36536"
-msgid "Stereoscopic mode inverted"
-msgstr "Apgriezti stereoskopiskais režīms"
-
-msgctxt "#36537"
-msgid "Set playback mode of stereoscopic 3D videos."
-msgstr "Iestatīt stereoskopisko 3D video atskaņošanas režīmu."
-
-msgctxt "#36540"
-msgid "The preferred stereoscopic 3D mode."
-msgstr "Vēlamais stereoskopiskais 3D režīms."
+msgctxt "#36539"
+msgid "Changes the stereoscopic 3D mode of the user interface."
+msgstr "Mainīt lietotāja saskarnes stereoskopisko 3D režīmu."
 
 msgctxt "#36541"
 msgid "Allows volume control from AirPlay clients."
@@ -12321,17 +12677,13 @@ msgctxt "#36544"
 msgid "Enable hardware decoding of video files."
 msgstr "Ieslēgt video failu atkodēšanu ar aparatūru."
 
-msgctxt "#36545"
-msgid "Subtitle stereoscopic depth"
-msgstr "Subtitru stereoskopiskais dziļums"
+msgctxt "#36546"
+msgid "Sets the visual depth of subtitles for stereoscopic 3D videos. The higher the value, the closer the subtitles will appear to the viewer."
+msgstr "Iestata subtitru vizuālo dziļumu stereoskopiskajos 3D video. Jo lielāka vērtība, jo subtitri izskatīsies tuvāki skatītājam."
 
 msgctxt "#36547"
 msgid "Use higher quality textures for covers and fanart (uses more memory)"
 msgstr "Izmantot labākas kvalitātes tekstūras plakātiem un fanumākslai (izmanto vairāk atmiņas)"
-
-msgctxt "#36548"
-msgid "Limits resolution of GUI to save memory. Does not affect video playback. Use 1080 for unlimited. Requires restart."
-msgstr "Ierobežo GUI izšķirtspēju, lai taupītu atmiņu. Neietekmē video atskaņošanu. Izmantošanai bez ierobežojuma 1080. Nepieciešams pārstartēt."
 
 msgctxt "#36600"
 msgid "Category containing the settings for how the music library is handled."
@@ -12348,6 +12700,58 @@ msgstr "Kategorija, kas satur iestatījumus AirPlay servisa darbībai."
 msgctxt "#36603"
 msgid "Category containing settings for how video output is handled."
 msgstr "Kategorija, kas satur iestatījumus video izvades darbībai."
+
+msgctxt "#36901"
+msgid "movies"
+msgstr "filmas"
+
+msgctxt "#36902"
+msgid "TV show"
+msgstr "TV pārraide"
+
+msgctxt "#36903"
+msgid "TV shows"
+msgstr "TV pārraides"
+
+msgctxt "#36904"
+msgid "season"
+msgstr "sezona"
+
+msgctxt "#36906"
+msgid "episode"
+msgstr "sērija"
+
+msgctxt "#36907"
+msgid "episodes"
+msgstr "sērijas"
+
+msgctxt "#36910"
+msgid "set"
+msgstr "Iestatīt"
+
+msgctxt "#36911"
+msgid "sets"
+msgstr "Kopumi"
+
+msgctxt "#36912"
+msgid "video"
+msgstr "Video"
+
+msgctxt "#36913"
+msgid "videos"
+msgstr "Video"
+
+msgctxt "#36918"
+msgid "album"
+msgstr "Albums"
+
+msgctxt "#36920"
+msgid "song"
+msgstr "Dziesma"
+
+msgctxt "#36921"
+msgid "songs"
+msgstr "Dziesmas"
 
 msgctxt "#37000"
 msgid "(Visually Impaired)"
@@ -12412,3 +12816,7 @@ msgstr "Vai apturēt atskaņošanu uz attālinātās ierīces?"
 msgctxt "#37024"
 msgid "Select this if the audio out connection only supports multichannel audio as Dolby Digital 5.1, this allows multichannel audio such as AAC5.1 or FLAC5.1 to be listened to in 5.1 surround sound. Note - Not recommended on Pi as this requires a lot of CPU."
 msgstr "Atlasiet šo, ja audio izejas savienojums atbalsta tikai daudzkanālu audio ar Dolby Digital 5.1 - tas ļaus daudzkanālu audio AAC5.1 vai FLAC5.1 formātā klausīties ar 5.1 visaptverošu skaņu. Piezīme - Nav vēlams uz Pi, jo tas prasa lielu CPU jaudu."
+
+msgctxt "#37026"
+msgid "Auto"
+msgstr "Auto"

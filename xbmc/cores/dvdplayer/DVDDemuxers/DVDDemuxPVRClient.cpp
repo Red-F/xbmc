@@ -119,7 +119,6 @@ bool CDVDDemuxPVRClient::Open(CDVDInputStream* pInput)
   if (!g_PVRClients->GetPlayingClient(m_pvrClient))
     return false;
 
-  RequestStreams();
   return true;
 }
 
@@ -328,9 +327,7 @@ void CDVDDemuxPVRClient::RequestStreams()
       if (stm)
       {
         st = dynamic_cast<CDemuxStreamAudioPVRClient*>(stm);
-        if (!st
-            || (st->codec != (AVCodecID)props.stream[i].iCodecId)
-            || (st->iChannels != props.stream[i].iChannels))
+        if (!st || (st->codec != (AVCodecID)props.stream[i].iCodecId))
           DisposeStream(i);
       }
       if (!m_streams[i])
@@ -347,6 +344,7 @@ void CDVDDemuxPVRClient::RequestStreams()
       st->iBitsPerSample  = props.stream[i].iBitsPerSample;
       m_streams[i] = st;
       st->m_parser_split = true;
+      st->changes++;
     }
     else if (props.stream[i].iCodecType == XBMC_CODEC_TYPE_VIDEO)
     {
@@ -459,7 +457,7 @@ std::string CDVDDemuxPVRClient::GetFileName()
     return "";
 }
 
-void CDVDDemuxPVRClient::GetStreamCodecName(int iStreamId, CStdString &strName)
+void CDVDDemuxPVRClient::GetStreamCodecName(int iStreamId, std::string &strName)
 {
   CDemuxStream *stream = GetStream(iStreamId);
   if (stream)

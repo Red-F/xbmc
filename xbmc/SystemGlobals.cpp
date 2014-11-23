@@ -19,6 +19,7 @@
  */
 #include "system.h"
 #include "cores/VideoRenderers/RenderManager.h"
+#include "cores/DataCacheCore.h"
 #include "input/MouseStat.h"
 #include "Application.h"
 #include "GUILargeTextureManager.h"
@@ -28,7 +29,6 @@
 #include "filesystem/DllLibCurl.h"
 #include "filesystem/DirectoryCache.h"
 #include "GUIPassword.h"
-#include "LangInfo.h"
 #include "utils/LangCodeExpander.h"
 #include "PartyModeManager.h"
 #include "PlayListPlayer.h"
@@ -53,7 +53,6 @@
 #endif
 
   CXBMCRenderManager g_renderManager;
-  CLangInfo          g_langInfo;
   CLangCodeExpander  g_LangCodeExpander;
   CLocalizeStrings   g_localizeStrings;
   CLocalizeStrings   g_localizeStringsTemp;
@@ -86,4 +85,6 @@
   CRarManager g_RarManager;
 #endif
   CZipManager g_ZipManager;
+
+  CDataCacheCore g_dataCacheCore;
 

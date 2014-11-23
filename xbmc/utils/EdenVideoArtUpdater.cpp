@@ -186,13 +186,13 @@ void CEdenVideoArtUpdater::Process()
         continue;
       int idSeason = db.AddSeason(item->GetVideoInfoTag()->m_iDbId, j->first);
       map<string, string> seasonArt;
-      if (idSeason > -1 && !db.GetArtForItem(idSeason, "season", seasonArt))
+      if (idSeason > -1 && !db.GetArtForItem(idSeason, MediaTypeSeason, seasonArt))
       {
         std::string cachedSeason = GetCachedSeasonThumb(j->first, item->GetVideoInfoTag()->m_strPath);
         std::string type;
         std::string originalUrl = j->second.begin()->second;
         if (CacheTexture(originalUrl, cachedSeason, "", type))
-          db.SetArtForItem(idSeason, "season", type, originalUrl);
+          db.SetArtForItem(idSeason, MediaTypeSeason, type, originalUrl);
       }
     }
 
@@ -274,7 +274,7 @@ void CEdenVideoArtUpdater::Process()
   }
   handle->MarkFinished();
 
-  ANNOUNCEMENT::CAnnouncementManager::Announce(ANNOUNCEMENT::VideoLibrary, "xbmc", "OnScanFinished");
+  ANNOUNCEMENT::CAnnouncementManager::Get().Announce(ANNOUNCEMENT::VideoLibrary, "xbmc", "OnScanFinished");
 
   items.Clear();
 }
@@ -341,7 +341,7 @@ CStdString CEdenVideoArtUpdater::GetCachedSeasonThumb(int season, const CStdStri
   else if (season == 0)
     label = g_localizeStrings.Get(20381);
   else
-    label = StringUtils::Format(g_localizeStrings.Get(20358), season);
+    label = StringUtils::Format(g_localizeStrings.Get(20358).c_str(), season);
   return GetThumb("season" + path + label, CProfilesManager::Get().GetVideoThumbFolder(), true);
 }
 

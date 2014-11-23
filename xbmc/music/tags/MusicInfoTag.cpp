@@ -24,6 +24,7 @@
 #include "utils/StringUtils.h"
 #include "settings/AdvancedSettings.h"
 #include "utils/Variant.h"
+#include "utils/Archive.h"
 
 using namespace MUSIC_INFO;
 
@@ -157,7 +158,7 @@ int CMusicInfoTag::GetDiscNumber() const
   return (m_iTrack >> 16);
 }
 
-int CMusicInfoTag::GetTrackAndDiskNumber() const
+int CMusicInfoTag::GetTrackAndDiscNumber() const
 {
   return m_iTrack;
 }
@@ -373,14 +374,14 @@ void CMusicInfoTag::SetTrackNumber(int iTrack)
   m_iTrack = (m_iTrack & 0xffff0000) | (iTrack & 0xffff);
 }
 
-void CMusicInfoTag::SetPartOfSet(int iPartOfSet)
+void CMusicInfoTag::SetDiscNumber(int iDiscNumber)
 {
-  m_iTrack = (m_iTrack & 0xffff) | (iPartOfSet << 16);
+  m_iTrack = (m_iTrack & 0xffff) | (iDiscNumber << 16);
 }
 
-void CMusicInfoTag::SetTrackAndDiskNumber(int iTrackAndDisc)
+void CMusicInfoTag::SetTrackAndDiscNumber(int iTrackAndDisc)
 {
-  m_iTrack=iTrackAndDisc;
+  m_iTrack = iTrackAndDisc;
 }
 
 void CMusicInfoTag::SetDuration(int iSec)
@@ -523,7 +524,7 @@ void CMusicInfoTag::SetArtist(const CArtist& artist)
   SetAlbumArtist(artist.strArtist);
   SetGenre(artist.genre);
   m_iDbId = artist.idArtist;
-  m_type = "artist";
+  m_type = MediaTypeArtist;
   m_bLoaded = true;
 }
 
@@ -542,7 +543,7 @@ void CMusicInfoTag::SetAlbum(const CAlbum& album)
   SetReleaseDate(stTime);
   m_iTimesPlayed = album.iTimesPlayed;
   m_iDbId = album.idAlbum;
-  m_type = "album";
+  m_type = MediaTypeAlbum;
   m_bLoaded = true;
 }
 
@@ -566,7 +567,7 @@ void CMusicInfoTag::SetSong(const CSong& song)
   m_iTrack = song.iTrack;
   m_iDuration = song.iDuration;
   m_iDbId = song.idSong;
-  m_type = "song";
+  m_type = MediaTypeSong;
   m_bLoaded = true;
   m_iTimesPlayed = song.iTimesPlayed;
   m_iAlbumId = song.idAlbum;
@@ -576,7 +577,7 @@ void CMusicInfoTag::Serialize(CVariant& value) const
 {
   value["url"] = m_strURL;
   value["title"] = m_strTitle;
-  if (m_type.compare("artist") == 0 && m_artist.size() == 1)
+  if (m_type.compare(MediaTypeArtist) == 0 && m_artist.size() == 1)
     value["artist"] = m_artist[0];
   else
     value["artist"] = m_artist;
@@ -597,7 +598,7 @@ void CMusicInfoTag::Serialize(CVariant& value) const
   value["comment"] = m_strComment;
   value["rating"] = (int)(m_rating - '0');
   value["playcount"] = m_iTimesPlayed;
-  value["lastplayed"] = m_lastPlayed.IsValid() ? m_lastPlayed.GetAsDBDateTime() : StringUtils::EmptyString;
+  value["lastplayed"] = m_lastPlayed.IsValid() ? m_lastPlayed.GetAsDBDateTime() : StringUtils::Empty;
   value["lyrics"] = m_strLyrics;
   value["albumid"] = m_iAlbumId;
   value["compilationartist"] = m_bCompilation;
@@ -625,7 +626,7 @@ void CMusicInfoTag::ToSortable(SortItem& sortable, Field field) const
   case FieldComment:     sortable[FieldComment] = m_strComment; break;
   case FieldRating:      sortable[FieldRating] = (float)(m_rating - '0'); break;
   case FieldPlaycount:   sortable[FieldPlaycount] = m_iTimesPlayed; break;
-  case FieldLastPlayed:  sortable[FieldLastPlayed] = m_lastPlayed.IsValid() ? m_lastPlayed.GetAsDBDateTime() : StringUtils::EmptyString; break;
+  case FieldLastPlayed:  sortable[FieldLastPlayed] = m_lastPlayed.IsValid() ? m_lastPlayed.GetAsDBDateTime() : StringUtils::Empty; break;
   case FieldListeners:   sortable[FieldListeners] = m_listeners; break;
   case FieldId:          sortable[FieldId] = (int64_t)m_iDbId; break;
   default: break;
