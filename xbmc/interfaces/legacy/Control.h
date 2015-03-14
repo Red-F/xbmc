@@ -22,7 +22,7 @@
 
 #include "guilib/GUIControl.h"
 #include "guilib/GUIFont.h"
-#include "guilib/Key.h"
+#include "input/Key.h"
 
 #include "Alternative.h"
 #include "Tuple.h"
@@ -919,6 +919,19 @@ namespace XBMCAddon
        *   - self.textbox.scroll(10)
        */
       virtual void scroll(long id) throw(UnimplementedException);
+
+      // autoScroll() Method
+      /**
+       * autoScroll(delay, time, repeat) -- Set autoscrolling times.
+       *
+       * delay           : integer - Scroll delay (in ms)
+       * time            : integer - Scroll time (in ms)
+       * repeat          : integer - Repeat time
+       *
+       * example:
+       *   - self.textbox.autoScroll(1, 2, 1)
+       */
+      virtual void autoScroll(int delay, int time, int repeat) throw(UnimplementedException);
 
 #ifndef SWIG
       std::string strFont;

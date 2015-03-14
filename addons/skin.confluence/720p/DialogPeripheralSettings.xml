@@ -31,7 +31,6 @@
 			<width>620</width>
 			<height>30</height>
 			<font>font13_title</font>
-			<label>$LOCALIZE[5]</label>
 			<align>center</align>
 			<aligny>center</aligny>
 			<textcolor>selected</textcolor>
@@ -132,7 +131,6 @@
 			<height>2</height>
 			<texture>separator2.png</texture>
 		</control>
-
 		<control type="group" id="9000">
 			<left>40</left>
 			<top>505</top>

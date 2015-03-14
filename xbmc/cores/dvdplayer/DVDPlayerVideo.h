@@ -33,7 +33,6 @@
 #endif
 
 class CDemuxStreamVideo;
-class CDVDOverlayCodecCC;
 
 #define VIDEO_PICTURE_QUEUE_SIZE 1
 
@@ -132,7 +131,6 @@ protected:
 #ifdef HAS_VIDEO_PLAYBACK
   void ProcessOverlays(DVDVideoPicture* pSource, double pts);
 #endif
-  void ProcessVideoUserData(DVDVideoUserData* pVideoUserData, double pts);
   void OpenStream(CDVDStreamInfo &hint, CDVDVideoCodec* codec);
 
   CDVDMessageQueue m_messageQueue;
@@ -149,7 +147,7 @@ protected:
 
   void   ResetFrameRateCalc();
   void   CalcFrameRate();
-  int    CalcDropRequirement(double pts);
+  int    CalcDropRequirement(double pts, bool updateOnly);
 
   double m_fFrameRate;       //framerate of the video currently playing
   bool   m_bCalcFrameRate;  //if we should calculate the framerate from the timestamps
@@ -196,7 +194,6 @@ protected:
   // classes
   CDVDStreamInfo m_hints;
   CDVDVideoCodec* m_pVideoCodec;
-  CDVDOverlayCodecCC* m_pOverlayCodecCC;
 
   DVDVideoPicture* m_pTempOverlayPicture;
 

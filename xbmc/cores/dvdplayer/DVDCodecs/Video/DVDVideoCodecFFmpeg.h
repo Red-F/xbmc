@@ -44,7 +44,7 @@ public:
     public:
              IHardwareDecoder() {}
     virtual ~IHardwareDecoder() {};
-    virtual bool Open      (AVCodecContext* avctx, const enum PixelFormat, unsigned int surfaces) = 0;
+    virtual bool Open      (AVCodecContext* avctx, AVCodecContext* mainctx, const enum PixelFormat, unsigned int surfaces) = 0;
     virtual int  Decode    (AVCodecContext* avctx, AVFrame* frame) = 0;
     virtual bool GetPicture(AVCodecContext* avctx, AVFrame* frame, DVDVideoPicture* picture) = 0;
     virtual int  Check     (AVCodecContext* avctx) = 0;
@@ -52,7 +52,6 @@ public:
     virtual unsigned GetAllowedReferences() { return 0; }
     virtual bool CanSkipDeint() {return false; }
     virtual const std::string Name() = 0;
-    virtual CCriticalSection* Section() { return NULL; }
   };
 
   CDVDVideoCodecFFmpeg();
@@ -73,12 +72,7 @@ public:
 
   bool               IsHardwareAllowed()                     { return !m_bSoftware; }
   IHardwareDecoder * GetHardware()                           { return m_pHardware; };
-  void               SetHardware(IHardwareDecoder* hardware) 
-  {
-    SAFE_RELEASE(m_pHardware);
-    m_pHardware = hardware;
-    UpdateName();
-  }
+  void               SetHardware(IHardwareDecoder* hardware);
 
 protected:
   static enum PixelFormat GetFormat(struct AVCodecContext * avctx, const PixelFormat * fmt);
@@ -86,6 +80,7 @@ protected:
   int  FilterOpen(const std::string& filters, bool scale);
   void FilterClose();
   int  FilterProcess(AVFrame* frame);
+  void DisposeHWDecoders();
 
   void UpdateName()
   {
@@ -118,14 +113,14 @@ protected:
   unsigned int m_uSurfacesCount;
 
   std::string m_name;
-  bool              m_bSoftware;
-  bool  m_isSWCodec;
+  bool m_bSoftware;
   IHardwareDecoder *m_pHardware;
+  std::vector<IHardwareDecoder*> m_disposeDecoders;
   int m_iLastKeyframe;
   double m_dts;
   bool   m_started;
   std::vector<PixelFormat> m_formats;
-  double m_decoderPts, m_decoderInterval;
+  double m_decoderPts;
   int    m_skippedDeint;
   bool   m_requestSkipDeint;
   int    m_codecControlFlags;

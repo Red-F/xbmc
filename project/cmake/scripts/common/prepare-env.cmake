@@ -41,6 +41,14 @@ if(NOT EXISTS "${XBMC_INCLUDE_DIR}/")
   file(MAKE_DIRECTORY ${XBMC_INCLUDE_DIR})
 endif()
 
+# make sure C++11 is always set
+if(NOT WIN32)
+  string(REGEX MATCH "-std=(gnu|c)\\+\\+11" cxx11flag "${CMAKE_CXX_FLAGS}")
+  if(NOT cxx11flag)
+    set(CXX11_SWITCH "-std=c++11")
+  endif()
+endif()
+
 # kodi-config.cmake.in (further down) expects a "prefix" variable
 get_filename_component(prefix "${DEPENDS_PATH}" ABSOLUTE)
 
@@ -63,9 +71,11 @@ foreach(binding ${bindings})
   # copy the header file to include/kodi
   file(COPY ${APP_ROOT}/${header} DESTINATION ${KODI_INCLUDE_DIR})
 
-  # auto-generate header files for backwards comaptibility to xbmc with deprecation warning
+  # auto-generate header files for backwards compatibility to xbmc with deprecation warning
+  # but only do it if the file doesn't already exist
   get_filename_component(headerfile ${header} NAME)
-  file(WRITE ${XBMC_INCLUDE_DIR}/${headerfile}
+  if (NOT EXISTS "${XBMC_INCLUDE_DIR}/${headerfile}")
+    file(WRITE ${XBMC_INCLUDE_DIR}/${headerfile}
 "#pragma once
 #define DEPRECATION_WARNING \"Including xbmc/${headerfile} has been deprecated, please use kodi/${headerfile}\"
 #ifdef _MSC_VER
@@ -74,4 +84,5 @@ foreach(binding ${bindings})
   #warning DEPRECATION_WARNING
 #endif
 #include \"kodi/${headerfile}\"")
+  endif()
 endforeach()

@@ -39,6 +39,7 @@
 #include "filesystem/SpecialProtocol.h"
 #include "addons/IAddon.h"
 #include "addons/AddonManager.h"
+#include "addons/AudioDecoder.h"
 #include "addons/GUIDialogAddonSettings.h"
 #include "CompileInfo.h"
 #if defined(TARGET_DARWIN_IOS)
@@ -115,8 +116,10 @@ void CAdvancedSettings::Initialize()
   m_limiterHold = 0.025f;
   m_limiterRelease = 0.1f;
 
+  m_seekSteps = { 7, 15, 30, 60, 180, 300, 600, 900, 1800 };
+
   m_omxHWAudioDecode = false;
-  m_omxDecodeStartWithValidFrame = false;
+  m_omxDecodeStartWithValidFrame = true;
 
   m_karaokeSyncDelayCDG = 0.0f;
   m_karaokeSyncDelayLRC = 0.0f;
@@ -131,9 +134,6 @@ void CAdvancedSettings::Initialize()
 
   m_videoSubsDelayRange = 60;
   m_videoAudioDelayRange = 10;
-  m_videoSmallStepBackSeconds = 7;
-  m_videoSmallStepBackTries = 3;
-  m_videoSmallStepBackDelay = 300;
   m_videoUseTimeSeeking = true;
   m_videoTimeSeekForward = 30;
   m_videoTimeSeekBackward = -30;
@@ -143,6 +143,7 @@ void CAdvancedSettings::Initialize()
   m_videoPercentSeekBackward = -2;
   m_videoPercentSeekForwardBig = 10;
   m_videoPercentSeekBackwardBig = -10;
+
   m_videoBlackBarColour = 0;
   m_videoPPFFmpegDeint = "linblenddeint";
   m_videoPPFFmpegPostProc = "ha:128:7,va,dr";
@@ -152,6 +153,7 @@ void CAdvancedSettings::Initialize()
   m_videoIgnorePercentAtEnd   = 8.0f;
   m_videoPlayCountMinimumPercent = 90.0f;
   m_videoVDPAUScaling = -1;
+  m_videoVAAPIforced = false;
   m_videoNonLinStretchRatio = 0.5f;
   m_videoEnableHighQualityHwScalers = false;
   m_videoAutoScaleMaxFps = 30.0f;
@@ -168,6 +170,7 @@ void CAdvancedSettings::Initialize()
   m_videoFpsDetect = 1;
   m_videoBusyDialogDelay_ms = 500;
   m_stagefrightConfig.useAVCcodec = -1;
+  m_stagefrightConfig.useHEVCcodec = -1;
   m_stagefrightConfig.useVC1codec = -1;
   m_stagefrightConfig.useVPXcodec = -1;
   m_stagefrightConfig.useMP4codec = -1;
@@ -264,7 +267,6 @@ void CAdvancedSettings::Initialize()
   m_musicThumbs = "folder.jpg|Folder.jpg|folder.JPG|Folder.JPG|cover.jpg|Cover.jpg|cover.jpeg|thumb.jpg|Thumb.jpg|thumb.JPG|Thumb.JPG";
   m_fanartImages = "fanart.jpg|fanart.png";
 
-  m_bMusicLibraryHideAllItems = false;
   m_bMusicLibraryAllItemsOnBottom = false;
   m_bMusicLibraryAlbumsSortByArtistThenYear = false;
   m_bMusicLibraryCleanOnUpdate = false;
@@ -275,30 +277,16 @@ void CAdvancedSettings::Initialize()
   m_musicItemSeparator = " / ";
   m_videoItemSeparator = " / ";
 
-  m_bVideoLibraryHideAllItems = false;
   m_bVideoLibraryAllItemsOnBottom = false;
   m_iVideoLibraryRecentlyAddedItems = 25;
   m_bVideoLibraryHideEmptySeries = false;
   m_bVideoLibraryCleanOnUpdate = false;
+  m_bVideoLibraryUseFastHash = true;
   m_bVideoLibraryExportAutoThumbs = false;
   m_bVideoLibraryImportWatchedState = false;
   m_bVideoLibraryImportResumePoint = false;
   m_bVideoScannerIgnoreErrors = false;
   m_iVideoLibraryDateAdded = 1; // prefer mtime over ctime and current time
-
-  m_iTuxBoxStreamtsPort = 31339;
-  m_bTuxBoxAudioChannelSelection = false;
-  m_bTuxBoxSubMenuSelection = false;
-  m_bTuxBoxPictureIcon= true;
-  m_bTuxBoxSendAllAPids= false;
-  m_iTuxBoxEpgRequestTime = 10; //seconds
-  m_iTuxBoxDefaultSubMenu = 4;
-  m_iTuxBoxDefaultRootMenu = 0; //default TV Mode
-  m_iTuxBoxZapWaitTime = 0; // Time in sec. Default 0:OFF
-  m_bTuxBoxZapstream = true;
-  m_iTuxBoxZapstreamPort = 31344;
-
-  m_iMythMovieLength = 0; // 0 == Off
 
   m_iEpgLingerTime = 60 * 24;           /* keep 24 hours by default */
   m_iEpgUpdateCheckInterval = 300; /* check if tables need to be updated every 5 minutes */
@@ -405,11 +393,11 @@ void CAdvancedSettings::Initialize()
   m_extraLogLevels = 0;
 
   #if defined(TARGET_DARWIN)
-    CStdString logDir = getenv("HOME");
+    std::string logDir = getenv("HOME");
     #if defined(TARGET_DARWIN_OSX)
     logDir += "/Library/Logs/";
     #else // ios/atv2
-    logDir += "/" + CStdString(CDarwinUtils::GetAppRootFolder()) + "/";
+    logDir += "/" + std::string(CDarwinUtils::GetAppRootFolder()) + "/";
     #endif
     m_logFolder = logDir;
   #else
@@ -439,7 +427,7 @@ bool CAdvancedSettings::Load()
   return true;
 }
 
-void CAdvancedSettings::ParseSettingsFile(const CStdString &file)
+void CAdvancedSettings::ParseSettingsFile(const std::string &file)
 {
   CXBMCTinyXML advancedXML;
   if (!CFile::Exists(file))
@@ -549,10 +537,6 @@ void CAdvancedSettings::ParseSettingsFile(const CStdString &file)
     XMLUtils::GetInt(pElement, "ignoresecondsatstart", m_videoIgnoreSecondsAtStart, 0, 900);
     XMLUtils::GetFloat(pElement, "ignorepercentatend", m_videoIgnorePercentAtEnd, 0, 100.0f);
 
-    XMLUtils::GetInt(pElement, "smallstepbackseconds", m_videoSmallStepBackSeconds, 1, INT_MAX);
-    XMLUtils::GetInt(pElement, "smallstepbacktries", m_videoSmallStepBackTries, 1, 10);
-    XMLUtils::GetInt(pElement, "smallstepbackdelay", m_videoSmallStepBackDelay, 100, 5000); //MS
-
     XMLUtils::GetBoolean(pElement, "usetimeseeking", m_videoUseTimeSeeking);
     XMLUtils::GetInt(pElement, "timeseekforward", m_videoTimeSeekForward, 0, 6000);
     XMLUtils::GetInt(pElement, "timeseekbackward", m_videoTimeSeekBackward, -6000, 0);
@@ -584,6 +568,9 @@ void CAdvancedSettings::ParseSettingsFile(const CStdString &file)
     XMLUtils::GetString(pElement,"ppffmpegdeinterlacing",m_videoPPFFmpegDeint);
     XMLUtils::GetString(pElement,"ppffmpegpostprocessing",m_videoPPFFmpegPostProc);
     XMLUtils::GetInt(pElement,"vdpauscaling",m_videoVDPAUScaling);
+    // There is a large amount of drivers implementing VAAPI in a non stable way
+    // the forcevaapienabled setting let's the user decide to use it nevertheless
+    XMLUtils::GetBoolean(pElement, "forcevaapienabled", m_videoVAAPIforced);
     XMLUtils::GetFloat(pElement, "nonlinearstretchratio", m_videoNonLinStretchRatio, 0.01f, 1.0f);
     XMLUtils::GetBoolean(pElement,"enablehighqualityhwscalers", m_videoEnableHighQualityHwScalers);
     XMLUtils::GetFloat(pElement,"autoscalemaxfps",m_videoAutoScaleMaxFps, 0.0f, 1000.0f);
@@ -597,6 +584,7 @@ void CAdvancedSettings::ParseSettingsFile(const CStdString &file)
     if (pStagefrightElem)
     {
       XMLUtils::GetInt(pStagefrightElem,"useavccodec",m_stagefrightConfig.useAVCcodec, -1, 1);
+      XMLUtils::GetInt(pStagefrightElem,"usehevccodec",m_stagefrightConfig.useHEVCcodec, -1, 1);
       XMLUtils::GetInt(pStagefrightElem,"usevc1codec",m_stagefrightConfig.useVC1codec, -1, 1);
       XMLUtils::GetInt(pStagefrightElem,"usevpxcodec",m_stagefrightConfig.useVPXcodec, -1, 1);
       XMLUtils::GetInt(pStagefrightElem,"usemp4codec",m_stagefrightConfig.useMP4codec, -1, 1);
@@ -741,7 +729,6 @@ void CAdvancedSettings::ParseSettingsFile(const CStdString &file)
   pElement = pRootElement->FirstChildElement("musiclibrary");
   if (pElement)
   {
-    XMLUtils::GetBoolean(pElement, "hideallitems", m_bMusicLibraryHideAllItems);
     XMLUtils::GetInt(pElement, "recentlyaddeditems", m_iMusicLibraryRecentlyAddedItems, 1, INT_MAX);
     XMLUtils::GetBoolean(pElement, "prioritiseapetags", m_prioritiseAPEv2tags);
     XMLUtils::GetBoolean(pElement, "allitemsonbottom", m_bMusicLibraryAllItemsOnBottom);
@@ -755,11 +742,11 @@ void CAdvancedSettings::ParseSettingsFile(const CStdString &file)
   pElement = pRootElement->FirstChildElement("videolibrary");
   if (pElement)
   {
-    XMLUtils::GetBoolean(pElement, "hideallitems", m_bVideoLibraryHideAllItems);
     XMLUtils::GetBoolean(pElement, "allitemsonbottom", m_bVideoLibraryAllItemsOnBottom);
     XMLUtils::GetInt(pElement, "recentlyaddeditems", m_iVideoLibraryRecentlyAddedItems, 1, INT_MAX);
     XMLUtils::GetBoolean(pElement, "hideemptyseries", m_bVideoLibraryHideEmptySeries);
     XMLUtils::GetBoolean(pElement, "cleanonupdate", m_bVideoLibraryCleanOnUpdate);
+    XMLUtils::GetBoolean(pElement, "usefasthash", m_bVideoLibraryUseFastHash);
     XMLUtils::GetString(pElement, "itemseparator", m_videoItemSeparator);
     XMLUtils::GetBoolean(pElement, "exportautothumbs", m_bVideoLibraryExportAutoThumbs);
     XMLUtils::GetBoolean(pElement, "importwatchedstate", m_bVideoLibraryImportWatchedState);
@@ -871,30 +858,6 @@ void CAdvancedSettings::ParseSettingsFile(const CStdString &file)
   XMLUtils::GetBoolean(pRootElement,"virtualshares", m_bVirtualShares);
   XMLUtils::GetUInt(pRootElement, "packagefoldersize", m_addonPackageFolderSize);
 
-  //Tuxbox
-  pElement = pRootElement->FirstChildElement("tuxbox");
-  if (pElement)
-  {
-    XMLUtils::GetInt(pElement, "streamtsport", m_iTuxBoxStreamtsPort, 0, 65535);
-    XMLUtils::GetBoolean(pElement, "audiochannelselection", m_bTuxBoxAudioChannelSelection);
-    XMLUtils::GetBoolean(pElement, "submenuselection", m_bTuxBoxSubMenuSelection);
-    XMLUtils::GetBoolean(pElement, "pictureicon", m_bTuxBoxPictureIcon);
-    XMLUtils::GetBoolean(pElement, "sendallaudiopids", m_bTuxBoxSendAllAPids);
-    XMLUtils::GetInt(pElement, "epgrequesttime", m_iTuxBoxEpgRequestTime, 0, 3600);
-    XMLUtils::GetInt(pElement, "defaultsubmenu", m_iTuxBoxDefaultSubMenu, 1, 4);
-    XMLUtils::GetInt(pElement, "defaultrootmenu", m_iTuxBoxDefaultRootMenu, 0, 4);
-    XMLUtils::GetInt(pElement, "zapwaittime", m_iTuxBoxZapWaitTime, 0, 120);
-    XMLUtils::GetBoolean(pElement, "zapstream", m_bTuxBoxZapstream);
-    XMLUtils::GetInt(pElement, "zapstreamport", m_iTuxBoxZapstreamPort, 0, 65535);
-  }
-
-  // Myth TV
-  pElement = pRootElement->FirstChildElement("myth");
-  if (pElement)
-  {
-    XMLUtils::GetInt(pElement, "movielength", m_iMythMovieLength);
-  }
-
   // EPG
   pElement = pRootElement->FirstChildElement("epg");
   if (pElement)
@@ -952,7 +915,7 @@ void CAdvancedSettings::ParseSettingsFile(const CStdString &file)
 
   // TODO: Should cache path be given in terms of our predefined paths??
   //       Are we even going to have predefined paths??
-  CStdString tmp;
+  std::string tmp;
   if (XMLUtils::GetPath(pRootElement, "cachepath", tmp))
     m_cachePath = tmp;
   URIUtils::AddSlashAtEnd(m_cachePath);
@@ -996,7 +959,7 @@ void CAdvancedSettings::ParseSettingsFile(const CStdString &file)
     TiXmlNode* pSubstitute = pPathSubstitution->FirstChildElement("substitute");
     while (pSubstitute)
     {
-      CStdString strFrom, strTo;
+      std::string strFrom, strTo;
       TiXmlNode* pFrom = pSubstitute->FirstChild("from");
       if (pFrom)
         strFrom = CSpecialProtocol::TranslatePath(pFrom->FirstChild()->Value()).c_str();
@@ -1108,6 +1071,7 @@ void CAdvancedSettings::ParseSettingsFile(const CStdString &file)
     XMLUtils::GetString(pDatabase, "ca", m_databaseVideo.ca);
     XMLUtils::GetString(pDatabase, "capath", m_databaseVideo.capath);
     XMLUtils::GetString(pDatabase, "ciphers", m_databaseVideo.ciphers);
+    XMLUtils::GetBoolean(pDatabase, "compression", m_databaseVideo.compression);
   }
 
   pDatabase = pRootElement->FirstChildElement("musicdatabase");
@@ -1124,6 +1088,7 @@ void CAdvancedSettings::ParseSettingsFile(const CStdString &file)
     XMLUtils::GetString(pDatabase, "ca", m_databaseMusic.ca);
     XMLUtils::GetString(pDatabase, "capath", m_databaseMusic.capath);
     XMLUtils::GetString(pDatabase, "ciphers", m_databaseMusic.ciphers);
+    XMLUtils::GetBoolean(pDatabase, "compression", m_databaseMusic.compression);
   }
 
   pDatabase = pRootElement->FirstChildElement("tvdatabase");
@@ -1140,6 +1105,7 @@ void CAdvancedSettings::ParseSettingsFile(const CStdString &file)
     XMLUtils::GetString(pDatabase, "ca", m_databaseTV.ca);
     XMLUtils::GetString(pDatabase, "capath", m_databaseTV.capath);
     XMLUtils::GetString(pDatabase, "ciphers", m_databaseTV.ciphers);
+    XMLUtils::GetBoolean(pDatabase, "compression", m_databaseTV.compression);
   }
 
   pDatabase = pRootElement->FirstChildElement("epgdatabase");
@@ -1156,6 +1122,7 @@ void CAdvancedSettings::ParseSettingsFile(const CStdString &file)
     XMLUtils::GetString(pDatabase, "ca", m_databaseEpg.ca);
     XMLUtils::GetString(pDatabase, "capath", m_databaseEpg.capath);
     XMLUtils::GetString(pDatabase, "ciphers", m_databaseEpg.ciphers);
+    XMLUtils::GetBoolean(pDatabase, "compression", m_databaseEpg.compression);
   }
 
   pElement = pRootElement->FirstChildElement("enablemultimediakeys");
@@ -1170,6 +1137,16 @@ void CAdvancedSettings::ParseSettingsFile(const CStdString &file)
     XMLUtils::GetBoolean(pElement, "visualizedirtyregions", m_guiVisualizeDirtyRegions);
     XMLUtils::GetInt(pElement, "algorithmdirtyregions",     m_guiAlgorithmDirtyRegions);
     XMLUtils::GetInt(pElement, "nofliptimeout",             m_guiDirtyRegionNoFlipTimeout);
+  }
+
+  std::string seekSteps;
+  XMLUtils::GetString(pRootElement, "seeksteps", seekSteps);
+  if (!seekSteps.empty())
+  {
+    m_seekSteps.clear();
+    std::vector<string> steps = StringUtils::Split(seekSteps, ',');
+    for(std::vector<string>::iterator it = steps.begin(); it != steps.end(); ++it)
+      m_seekSteps.push_back(atoi((*it).c_str()));
   }
 
   // load in the settings overrides
@@ -1229,18 +1206,18 @@ void CAdvancedSettings::GetCustomTVRegexps(TiXmlElement *pRootElement, SETTINGS_
         int iDefaultSeason = 1;
         if (pRegExp->ToElement())
         {
-          CStdString byDate = XMLUtils::GetAttribute(pRegExp->ToElement(), "bydate");
+          std::string byDate = XMLUtils::GetAttribute(pRegExp->ToElement(), "bydate");
           if (byDate == "true")
           {
             bByDate = true;
           }
-          CStdString defaultSeason = XMLUtils::GetAttribute(pRegExp->ToElement(), "defaultseason");
+          std::string defaultSeason = XMLUtils::GetAttribute(pRegExp->ToElement(), "defaultseason");
           if(!defaultSeason.empty())
           {
             iDefaultSeason = atoi(defaultSeason.c_str());
           }
         }
-        CStdString regExp = pRegExp->FirstChild()->Value();
+        std::string regExp = pRegExp->FirstChild()->Value();
         if (iAction == 2)
           settings.insert(settings.begin() + i++, 1, TVShowRegexp(bByDate,regExp,iDefaultSeason));
         else
@@ -1281,7 +1258,7 @@ void CAdvancedSettings::GetCustomRegexps(TiXmlElement *pRootElement, std::vector
     {
       if (pRegExp->FirstChild())
       {
-        CStdString regExp = pRegExp->FirstChild()->Value();
+        std::string regExp = pRegExp->FirstChild()->Value();
         if (iAction == 2)
           settings.insert(settings.begin() + i++, 1, regExp);
         else
@@ -1294,9 +1271,9 @@ void CAdvancedSettings::GetCustomRegexps(TiXmlElement *pRootElement, std::vector
   }
 }
 
-void CAdvancedSettings::GetCustomExtensions(TiXmlElement *pRootElement, CStdString& extensions)
+void CAdvancedSettings::GetCustomExtensions(TiXmlElement *pRootElement, std::string& extensions)
 {
-  CStdString extraExtensions;
+  std::string extraExtensions;
   if (XMLUtils::GetString(pRootElement, "add", extraExtensions) && !extraExtensions.empty())
     extensions += "|" + extraExtensions;
   if (XMLUtils::GetString(pRootElement, "remove", extraExtensions) && !extraExtensions.empty())
@@ -1311,7 +1288,7 @@ void CAdvancedSettings::GetCustomExtensions(TiXmlElement *pRootElement, CStdStri
   }
 }
 
-void CAdvancedSettings::AddSettingsFile(const CStdString &filename)
+void CAdvancedSettings::AddSettingsFile(const std::string &filename)
 {
   m_settingsFiles.push_back(filename);
 }
@@ -1359,7 +1336,6 @@ void CAdvancedSettings::SettingOptionsLoggingComponentsFiller(const CSetting *se
 {
   list.push_back(std::make_pair(g_localizeStrings.Get(669), LOGSAMBA));
   list.push_back(std::make_pair(g_localizeStrings.Get(670), LOGCURL));
-  list.push_back(std::make_pair(g_localizeStrings.Get(671), LOGCMYTH));
   list.push_back(std::make_pair(g_localizeStrings.Get(672), LOGFFMPEG));
   list.push_back(std::make_pair(g_localizeStrings.Get(676), LOGAUDIO));
   list.push_back(std::make_pair(g_localizeStrings.Get(680), LOGVIDEO));
@@ -1393,4 +1369,20 @@ void CAdvancedSettings::setExtraLogLevel(const std::vector<CVariant> &components
 
     m_extraLogLevels |= static_cast<int>(it->asInteger());
   }
+}
+
+std::string CAdvancedSettings::GetMusicExtensions() const
+{
+  std::string result(m_musicExtensions);
+
+  VECADDONS codecs;
+  CAddonMgr::Get().GetAddons(ADDON_AUDIODECODER, codecs);
+  for (size_t i=0;i<codecs.size();++i)
+  {
+    std::shared_ptr<CAudioDecoder> dec(std::static_pointer_cast<CAudioDecoder>(codecs[i]));
+    result += '|';
+    result += dec->GetExtensions();
+  }
+
+  return result;
 }

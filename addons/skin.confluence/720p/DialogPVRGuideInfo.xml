@@ -181,9 +181,9 @@
 				<control type="textbox" id="400">
 					<description>Plot value</description>
 					<left>40</left>
-					<top>275</top>
+					<top>277</top>
 					<width>710</width>
-					<height>285</height>
+					<height>283</height>
 					<font>font13</font>
 					<align>justify</align>
 					<textcolor>white</textcolor>
@@ -213,6 +213,11 @@
 						<description>Switch to Channel</description>
 						<include>ButtonInfoDialogsCommonValues</include>
 						<label>19165</label>
+					</control>
+					<control type="button" id="8">
+						<description>Play recording</description>
+						<include>ButtonInfoDialogsCommonValues</include>
+						<label>19687</label>
 					</control>
 					<control type="button" id="6">
 						<description>Record</description>

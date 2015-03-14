@@ -64,7 +64,7 @@ bool CAddonsDirectory::GetDirectory(const CURL& url, CFileItemList &items)
   if (path.GetHostName() == "enabled")
   { // grab all enabled addons, including enabled repositories
     reposAsFolders = false;
-    CAddonMgr::Get().GetAllAddons(addons, true, true);
+    CAddonMgr::Get().GetAllAddons(addons, true);
     items.SetProperty("reponame",g_localizeStrings.Get(24062));
     items.SetLabel(g_localizeStrings.Get(24062));
   }
@@ -72,7 +72,7 @@ bool CAddonsDirectory::GetDirectory(const CURL& url, CFileItemList &items)
   { // grab all disabled addons, including disabled repositories
     reposAsFolders = false;
     groupAddons = false;
-    CAddonMgr::Get().GetAllAddons(addons, false, true);
+    CAddonMgr::Get().GetAllAddons(addons, false);
     items.SetProperty("reponame",g_localizeStrings.Get(24039));
     items.SetLabel(g_localizeStrings.Get(24039));
   }
@@ -287,7 +287,7 @@ bool CAddonsDirectory::GetScriptsAndPlugins(const std::string &content, VECADDON
   CAddonMgr::Get().GetAddons(ADDON_PLUGIN, tempAddons);
   for (unsigned i=0; i<tempAddons.size(); i++)
   {
-    PluginPtr plugin = boost::dynamic_pointer_cast<CPluginSource>(tempAddons[i]);
+    PluginPtr plugin = std::dynamic_pointer_cast<CPluginSource>(tempAddons[i]);
     if (plugin && plugin->Provides(type))
       addons.push_back(tempAddons[i]);
   }
@@ -295,7 +295,7 @@ bool CAddonsDirectory::GetScriptsAndPlugins(const std::string &content, VECADDON
   CAddonMgr::Get().GetAddons(ADDON_SCRIPT, tempAddons);
   for (unsigned i=0; i<tempAddons.size(); i++)
   {
-    PluginPtr plugin = boost::dynamic_pointer_cast<CPluginSource>(tempAddons[i]);
+    PluginPtr plugin = std::dynamic_pointer_cast<CPluginSource>(tempAddons[i]);
     if (plugin && plugin->Provides(type))
       addons.push_back(tempAddons[i]);
   }
@@ -315,7 +315,7 @@ bool CAddonsDirectory::GetScriptsAndPlugins(const std::string &content, CFileIte
     CFileItemPtr item(FileItemFromAddon(addons[i], 
                       addons[i]->Type()==ADDON_PLUGIN?"plugin://":"script://",
                       addons[i]->Type() == ADDON_PLUGIN));
-    PluginPtr plugin = boost::dynamic_pointer_cast<CPluginSource>(addons[i]);
+    PluginPtr plugin = std::dynamic_pointer_cast<CPluginSource>(addons[i]);
     if (plugin->ProvidesSeveral())
     {
       CURL url = item->GetURL();
